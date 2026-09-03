@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="ATPL Deck">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png?v=2">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=2">
+  <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-precomposed.png?v=2">
+  <link rel="icon" type="image/png" href="favicon.png?v=2">
+  <link rel="shortcut icon" href="favicon.png?v=2">
+  <title>ATPL Flight Deck | Centro de Control de Estudio EASA</title>
+  <style>
+    :root {
+      --bg-main: #0d1117;
+      --bg-card: #161b22;
+      --bg-card-hover: #1f242c;
+      --border-color: #30363d;
+      --text-main: #c9d1d9;
+      --text-muted: #8b949e;
+      --accent-blue: #58a6ff;
+      --accent-cyan: #39c5bb;
+      --pass-green: #3fb950;
+      --warn-yellow: #d29922;
+      --danger-red: #f85149;
+      --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-family: var(--font-family);
+      line-height: 1.5;
+      padding: 24px;
+    }
+
+    .container { max-width: 1320px; margin: 0 auto; }
+
+    /* Header */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .brand { display: flex; align-items: center; gap: 14px; }
+    .brand-icon {
+      font-size: 28px;
+      background: linear-gradient(135deg, #1f6feb, #388bfd);
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(31,111,235,0.3);
+    }
+    .brand-text h1 { font-size: 20px; font-weight: 700; color: #fff; }
+    .brand-text p { font-size: 13px; color: var(--text-muted); }
+
+    .shift-badge {
+      background-color: #21262d;
+      border: 1px solid var(--border-color);
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .shift-badge .dot {
+      width: 10px; height: 10px; border-radius: 50%; background-color: var(--pass-green);
+      box-shadow: 0 0 8px var(--pass-green);
+    }
+
+    /* KPI Cards */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .kpi-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 16px 20px;
+      position: relative;
+    }
+    .kpi-title { font-size: 12px; text-transform: uppercase; color: var(--text-muted); font-weight: 600; }
+    .kpi-value { font-size: 24px; font-weight: 700; color: #fff; margin: 8px 0 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .kpi-sub { font-size: 12px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    /* Progress bar */
+    .progress-bar-bg {
+      background-color: #21262d;
+      height: 8px;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #1f6feb, #3fb950);
+      width: 0%;
+      transition: width 0.4s ease;
+    }
+
+    /* Sittings Tabs */
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 8px;
+    }
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 10px 18px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .tab-btn:hover { color: #fff; background-color: var(--bg-card); }
+    .tab-btn.active {
+      color: #fff;
+      background-color: #1f6feb;
+      box-shadow: 0 2px 8px rgba(31,111,235,0.4);
+    }
+
+    /* Subject filters */
+    .subject-pills {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .pill {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      padding: 6px 14px;
+      border-radius: 16px;
+      font-size: 13px;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: all 0.2s;
+    }
+    .pill:hover, .pill.active {
+      background-color: #30363d;
+      color: #fff;
+      border-color: var(--accent-blue);
+    }
+
+    /* Filter & Search Bar */
+    .control-bar {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 16px;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+    .search-box {
+      position: relative;
+      flex: 1;
+      min-width: 280px;
+      max-width: 500px;
+    }
+    .search-box input {
+      width: 100%;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: #fff;
+      padding: 8px 14px 8px 36px;
+      border-radius: 6px;
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .search-box input:focus {
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 0 2px rgba(88,166,255,0.2);
+    }
+    .search-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 14px;
+      pointer-events: none;
+    }
+    .filter-controls {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+    .select-filter {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      outline: none;
+      cursor: pointer;
+    }
+    .select-filter:focus { border-color: var(--accent-blue); }
+    .badge-counter {
+      font-size: 12px;
+      color: var(--text-muted);
+      background: #21262d;
+      padding: 6px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      white-space: nowrap;
+    }
+
+    /* Topics Table */
+    .table-container {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-bottom: 30px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 13px;
+      min-width: 800px;
+    }
+    th {
+      background-color: #1c2128;
+      color: var(--text-muted);
+      font-weight: 600;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border-color);
+      white-space: nowrap;
+    }
+    td {
+      padding: 12px 16px;
+      border-bottom: 1px solid #21262d;
+      vertical-align: middle;
+    }
+    tr:hover { background-color: var(--bg-card-hover); }
+
+    .tag-diff {
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .tag-diff.Alta { background-color: rgba(248, 81, 73, 0.15); color: #ff7b72; }
+    .tag-diff.Media { background-color: rgba(210, 153, 34, 0.15); color: #d29922; }
+    .tag-diff.Baja { background-color: rgba(63, 185, 80, 0.15); color: #3fb950; }
+
+    .tag-status {
+      padding: 3px 8px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .tag-status.completed { background-color: rgba(63, 185, 80, 0.2); color: #56d364; }
+    .tag-status.studying { background-color: rgba(56, 139, 253, 0.2); color: #79c0ff; }
+    .tag-status.not_started { background-color: rgba(110, 118, 129, 0.2); color: #8b949e; }
+
+    .btn-summary {
+      background-color: #21262d;
+      border: 1px solid var(--border-color);
+      color: var(--accent-blue);
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .btn-summary:hover {
+      background-color: #30363d;
+      border-color: var(--accent-blue);
+      color: #fff;
+    }
+
+    /* AviationExam Target Widget */
+    .aviation-box {
+      background: linear-gradient(135deg, rgba(31, 111, 235, 0.08), rgba(57, 197, 187, 0.05));
+      border: 1px solid rgba(56, 139, 253, 0.3);
+      border-radius: 8px;
+      padding: 18px 20px;
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .aviation-title { font-size: 16px; font-weight: 600; color: #fff; margin-bottom: 4px; }
+    .aviation-desc { font-size: 13px; color: var(--text-muted); }
+    .aviation-scale {
+      display: flex;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      flex-wrap: wrap;
+    }
+    .scale-item {
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+
+    /* Master Guides Container */
+    .master-guides-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <div class="brand-icon">✈️</div>
+        <div class="brand-text">
+          <h1>ATPL Flight Deck & Study Control</h1>
+          <p>Preparación EASA Modular Oficial | Sistema adaptado a turnos de 12h</p>
+        </div>
+      </div>
+      <div class="shift-badge">
+        <div class="dot"></div>
+        <span>Temario Oficial Íntegro EASA · 14 Asignaturas · 168 Capítulos · 13 Libros Maestros</span>
+      </div>
+    </header>
+
+    <!-- AviationExam Safety Scale -->
+    <div class="aviation-box">
+      <div>
+        <div class="aviation-title">🎯 Criterio de Seguridad Oficial AviationExam & EASA ECQB</div>
+        <div class="aviation-desc">El aprobado oficial es 75%, pero nuestro margen mínimo para asegurar a la primera es ≥ 90%. Todos los 168 capítulos incluyen test explicados y ejercicios paso a paso ("Para Dummies").</div>
+      </div>
+      <div class="aviation-scale">
+        <div class="scale-item" style="background: rgba(248, 81, 73, 0.2); color: #ff7b72;">&lt; 75% No preparado</div>
+        <div class="scale-item" style="background: rgba(210, 153, 34, 0.2); color: #e3b341;">75-84% Zona Riesgo</div>
+        <div class="scale-item" style="background: rgba(56, 139, 253, 0.2); color: #79c0ff;">85-89% Buen Nivel</div>
+        <div class="scale-item" style="background: rgba(63, 185, 80, 0.2); color: #56d364;">≥ 90% Listo para Examen</div>
+      </div>
+    </div>
+
+    <!-- Dynamic KPIs -->
+    <div class="kpi-grid" id="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-title" id="kpi-sitting-title">Módulo de Estudio</div>
+        <div class="kpi-value" id="kpi-sitting-val" style="color: var(--accent-blue);">Convocatoria 1</div>
+        <div class="kpi-sub" id="kpi-sitting-sub">010 Air Law · 040 HPL · 090 Comms</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title" id="kpi-progress-title">Progreso Real (Temas)</div>
+        <div class="kpi-value" id="kpi-progress" style="color: var(--pass-green);">0%</div>
+        <div class="progress-bar" style="margin-top: 10px;">
+          <div class="progress-fill" id="kpi-progress-bar" style="width: 0%; background-color: var(--pass-green);"></div>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Temas Estudiados</div>
+        <div class="kpi-value" id="kpi-topics">0 / 45</div>
+        <div class="kpi-sub" id="kpi-topics-sub">Convocatoria 1</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Manuales Maestros Leídos</div>
+        <div class="kpi-value" id="kpi-manuals" style="color: var(--accent-blue);">0 / 3</div>
+        <div class="kpi-sub" id="kpi-manuals-sub">Libros Maestros (C1)</div>
+      </div>
+    </div>
+
+    <!-- Sittings Tabs -->
+    <div class="tabs" id="sittings-tabs">
+      <button class="tab-btn active" data-sitting="1" onclick="selectSitting(1)">Convocatoria 1 (010 / 040 / 090)</button>
+      <button class="tab-btn" data-sitting="2" onclick="selectSitting(2)">Convocatoria 2 (021 / 022 / 081)</button>
+      <button class="tab-btn" data-sitting="3" onclick="selectSitting(3)">Convocatoria 3 (031 / 032 / 033)</button>
+      <button class="tab-btn" data-sitting="4" onclick="selectSitting(4)">Convocatoria 4 (050 / 061 / 062 / 070)</button>
+      <button class="tab-btn" data-sitting="all" onclick="selectSitting('all')">🌐 Visión Global (168 Temas / 14 Asignaturas)</button>
+    </div>
+
+    <!-- Subject Filter Pills -->
+    <div class="subject-pills" id="subject-pills">
+      <!-- Populated dynamically -->
+    </div>
+
+    <!-- Master Guides Dynamic Container -->
+    <div id="master-guides-container" style="margin-bottom: 24px; display: flex; flex-direction: column; gap: 12px;">
+      <!-- Populated dynamically based on sitting and subject filter -->
+    </div>
+
+    <!-- Search and Control Bar -->
+    <div class="control-bar">
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="table-search" placeholder="Buscar por tema, palabra clave (ej: altimeter, stall, bernoulli, etops, dme, metar)..." oninput="handleSearch(this.value)">
+      </div>
+      <div class="filter-controls">
+        <select class="select-filter" id="difficulty-filter" onchange="handleDifficulty(this.value)">
+          <option value="all">Todas las dificultades</option>
+          <option value="Alta">Dificultad: Alta</option>
+          <option value="Media">Dificultad: Media</option>
+          <option value="Baja">Dificultad: Baja</option>
+        </select>
+        <span class="badge-counter" id="topic-count-badge">Cargando temas...</span>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 40px; text-align: center;">✅</th>
+            <th style="width: 50px;">Cap.</th>
+            <th style="width: 70px;">Código</th>
+            <th>Tema / Capítulo Oficial (CAE Oxford & EASA)</th>
+            <th style="width: 120px;">Págs (Resumen)</th>
+            <th style="width: 90px;">Dificultad</th>
+            <th style="width: 80px;">Prioridad</th>
+            <th style="width: 110px;">⏱️ T. Estimado</th>
+            <th style="width: 160px;">Resumen Técnico</th>
+          </tr>
+        </thead>
+        <tbody id="topics-tbody">
+          <!-- Populated dynamically -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Script de datos offline -->
+  <script src="data.js"></script>
+  <script>
+    let appData = window.ATPL_DATA || null;
+    let currentSitting = 1;
+    let currentSubject = 'all';
+    let searchQuery = '';
+    let currentDifficulty = 'all';
+
+    // Estado local para los Ticks de Progreso (Guardado en navegador)
+    let studiedTopics = JSON.parse(localStorage.getItem('atpl_studied_topics')) || [];
+    let studiedGuides = JSON.parse(localStorage.getItem('atpl_studied_guides')) || [];
+    let studiedScores = JSON.parse(localStorage.getItem('atpl_studied_scores')) || {};
+
+    function saveScore(element, topicId) {
+      const val = element.value;
+      studiedScores[topicId] = val;
+      localStorage.setItem('atpl_studied_scores', JSON.stringify(studiedScores));
+      
+      let sColor = '#fff'; let bColor = '#444';
+      if (val) {
+        const n = parseInt(val);
+        if (n >= 85) { sColor = '#10b981'; bColor = '#10b981'; } // Green (Ready)
+        else if (n >= 75) { sColor = '#fbbf24'; bColor = '#fbbf24'; } // Yellow (Review)
+        else { sColor = '#ef4444'; bColor = '#ef4444'; } // Red (Fail)
+      }
+      element.style.color = sColor;
+      element.style.borderColor = bColor;
+    }
+
+    function toggleTopicTick(topicId) {
+      if (studiedTopics.includes(topicId)) {
+        studiedTopics = studiedTopics.filter(id => id !== topicId);
+      } else {
+        studiedTopics.push(topicId);
+      }
+      localStorage.setItem('atpl_studied_topics', JSON.stringify(studiedTopics));
+      updateKPIs();
+    }
+
+    function toggleGuideTick(guideCode) {
+      if (studiedGuides.includes(guideCode)) {
+        studiedGuides = studiedGuides.filter(c => c !== guideCode);
+      } else {
+        studiedGuides.push(guideCode);
+      }
+      localStorage.setItem('atpl_studied_guides', JSON.stringify(studiedGuides));
+      updateKPIs();
+    }
+
+    async function loadData() {
+      if (window.ATPL_DATA) {
+        appData = window.ATPL_DATA;
+        renderDashboard();
+        return;
+      }
+      try {
+        const response = await fetch('data.json');
+        appData = await response.json();
+        renderDashboard();
+      } catch (err) {
+        console.log('Esperando datos...');
+      }
+    }
+
+    const SITTING_INFO = {
+      1: {
+        title: 'Convocatoria 1',
+        name: 'Normativa, Factores Humanos y Comunicaciones',
+        subs: '010 Air Law · 040 Human Performance · 090 Communications',
+        codes: ['010', '040', '090'],
+        total: 45
+      },
+      2: {
+        title: 'Convocatoria 2',
+        name: 'Sistemas, Instrumentación y Aerodinámica',
+        subs: '021 AGK Systems · 022 Instrumentation · 081 Principles of Flight',
+        codes: ['021', '022', '081'],
+        total: 50
+      },
+      3: {
+        title: 'Convocatoria 3',
+        name: 'Masa, Rendimiento y Planificación de Vuelo',
+        subs: '031 Mass & Balance · 032 Performance · 033 Flight Planning',
+        codes: ['031', '032', '033'],
+        total: 25
+      },
+      4: {
+        title: 'Convocatoria 4',
+        name: 'Meteorología, Navegación y Procedimientos Operacionales',
+        subs: '050 Meteorology · 061 Gen Nav · 062 Radio Nav · 070 Ops Procedures',
+        codes: ['050', '061', '062', '070'],
+        total: 48
+      },
+      'all': {
+        title: 'Visión Global',
+        name: 'Totalidad del Plan de Estudios ATPL EASA',
+        subs: '14 Asignaturas Oficiales EASA · 168 Capítulos · 13 Libros Maestros (427 Págs)',
+        codes: ['010', '040', '090', '021', '022', '081', '031', '032', '033', '050', '061', '062', '070'],
+        total: 168
+      }
+    };
+
+    const ALL_MASTER_GUIDES = [
+      // Convocatoria 1
+      {
+        sitting: 1,
+        code: '010',
+        icon: '📘',
+        title: 'LIBRO MAESTRO CONSOLIDADO | 010 AIR LAW COMPLETO',
+        desc: 'Los 25 capítulos unificados en un solo volumen continuo (82 páginas) con avisos de examen AviationExam, tablas oficiales OACI y test razonados.',
+        link: '../resumenes/convocatoria_1/010_air_law/010_AIR_LAW_MASTER_COMPLETE_STUDY_GUIDE.pdf',
+        btnText: '📥 Abrir Manual (PDF 82 Págs)'
+      },
+      {
+        sitting: 1,
+        code: '040',
+        icon: '🧠',
+        title: 'LIBRO MAESTRO CONSOLIDADO | 040 HUMAN PERFORMANCE COMPLETO',
+        desc: 'Los 13 capítulos unificados en un solo volumen continuo (43 páginas) con fisiología, leyes de gases, tablas TUC, ilusiones sensoriales, modelos SHELL/Swiss Cheese y CRM.',
+        link: '../resumenes/convocatoria_1/040_human_performance/040_HUMAN_PERFORMANCE_MASTER_COMPLETE_STUDY_GUIDE.pdf',
+        btnText: '📥 Abrir Manual (PDF 43 Págs)'
+      },
+      {
+        sitting: 1,
+        code: '090',
+        icon: '📻',
+        title: 'LIBRO MAESTRO CONSOLIDADO | 090 COMMUNICATIONS COMPLETO',
+        desc: 'Los 7 capítulos unificados en un solo volumen continuo (23 páginas) con fraseología ICAO, propagación VHF/HF, emergencias MAYDAY/PAN PAN y fallo de radio.',
+        link: '../resumenes/convocatoria_1/090_communications/090_COMMUNICATIONS_MASTER_COMPLETE_STUDY_GUIDE.pdf',
+        btnText: '📥 Abrir Manual (PDF 23 Págs)'
+      },
+      // Convocatoria 2
+      {
+        sitting: 2,
+        code: '021',
+        icon: '🛠️',
+        title: 'LIBRO MAESTRO CONSOLIDADO | 021 AGK - SYSTEMS & POWERPLANT',
+        desc: 'Los 22 capítulos unificados de Estructuras, Hidráulica, Tren, Mandos, Neumática, Presurización, Electricidad CC/CA, Motores de Pistón y Turbinas de Gas (55 páginas continuas).',
+        link: '../resumenes/convocatoria_2/021_agk_airframe_systems_powerplant/021_AGK_MASTER_COMPLETE_STUDY_GUIDE.pdf',
+        btnText: '📥 Abrir Manual (PDF 55 Págs)'
+      },
+      {
+        sitting: 2,
+        code: '022',
+        icon: '🎛️',
+        title: 'LIBRO MAESTRO CONSOLIDADO | 022 INSTRUMENTATION COMPLETO',
+        desc: 'Los 14 capítulos unificados de Pitot-Estática, Instrumentos Giroscópicos, Magnetismo, IRS/Láser, FMS, Pantallas EFIS, Alertas EGPWS/TCAS y Piloto Automático con ejercicios paso a paso (31 páginas continuas).',
+        link: '../resumenes/convocatoria_2/022_instrumentation/022_INSTRUMENTATION_MASTER_COMPLETE_STUDY_GUIDE.pdf',
+        btnText: '📥 Abrir Manual (PDF 31 Págs)'
+      },
+      {
+        sitting: 2,
+        code: '081',
+        icon: '✈️',
+        title: 'LIBRO MAESTRO CONSOLIDADO | 081 PRINCIPLES OF FLIGHT COMPLETO',
+        desc: 'Los 14 capítulos unificados de Aerodinámica Subsónica, Resistencia Inducida/Parásita, Transónico, Ondas de Choque, Estabilidad, Mandos y Mecánica de Vuelo con ejercicios paso a paso (29 páginas continuas).',
+        link: '../resumenes/convocatoria_2/081_principles_of_flight/081_POF_MASTER_COMPLETE_STUDY_GUIDE.pdf',
+        btnText: '📥 Abrir Manual (PDF 29 Págs)'
+      },
+      // Convocatoria 3
+      {
+        sitting: 3,
+        code: '031',
+        icon: '⚖️',
+        title: 'LIBRO MAESTRO CONSOLIDADO | 031 MASS & BALANCE COMPLETO',
+        desc: 'Los 7 capítulos unificados de Masas Límite, Centro de Gravedad, % MAC, Desplazamiento de Carga, Combustible, Límites de Suelo y Hoja de Carga y Trimado con ejercicios paso a paso (19 páginas continuas).',
+        link: '../resumenes/convocatoria_3/031_mass_and_balance/031_MASS_AND_BALANCE_MASTER_COMPLETE_STUDY_GUIDE.pdf',
+        btnText: '📥 Abrir Manual (PDF 19 Págs)'
+      },
+      {
+        sitting: 3,
+        code: '032',
+        icon: '🚀',
+        title: 'LIBRO MAESTRO CONSOLIDADO | 032 PERFORMANCE COMPLETO',
+        desc: 'Los 10 capítulos unificados de Atmósfera/Viento, Aviones Clase B Pistón, Velocidades Clase A CS-25, Campo Equilibrado, Segmentos de Ascenso, Crucero OEI, Aterrizaje y Empuje Flexible (24 páginas continuas).',
+        link: '../resumenes/convocatoria_3/032_performance/032_PERFORMANCE_MASTER_COMPLETE_STUDY_GUIDE.pdf',
+        btnText: '📥 Abrir Manual (PDF 24 Págs)'
+      },
+      {
+        sitting: 3,
+        code: '033',
+        icon: '🗺️',
+        title: 'LIBRO MAESTRO CONSOLIDADO | 033 FLIGHT PLANNING COMPLETO',
+        desc: 'Los 12 capítulos unificados de Cartas VFR/IFR, Rutas, Combustible MRJT, PNR/PET y Planes de Vuelo ATS (21 páginas continuas).',
+        link: '../resumenes/convocatoria_3/033_flight_planning_monitoring/033_FLIGHT_PLANNING_MASTER_COMPLETE_STUDY_GUIDE.pdf',
+        btnText: '📥 Abrir Manual (PDF 21 Págs)'
+      },
+      // Convocatoria 4
+      {
+        sitting: 4,
+        code: '050',
+        icon: '☁️',
+        title: 'LIBRO MAESTRO CONSOLIDADO | 050 METEOROLOGY COMPLETO',
+        desc: 'Los 16 capítulos unificados de Atmósfera, Viento, Termodinámica, Nubes, Frentes, Engelamiento, Tormentas, Climatología Global y Mensajes METAR/TAF (31 páginas continuas).',
+        link: '../resumenes/convocatoria_4/050_meteorology/050_METEOROLOGY_MASTER_COMPLETE_STUDY_GUIDE.pdf',
+        btnText: '📥 Abrir Manual (PDF 31 Págs)'
+      },
+      {
+        sitting: 4,
+        code: '061',
+        icon: '🧭',
+        title: 'LIBRO MAESTRO CONSOLIDADO | 061 GENERAL NAVIGATION COMPLETO',
+        desc: 'Los 13 capítulos unificados de Tierra, Cartografía Lamber/Polar/Mercator, Magnetismo, Giróscopos de Dirección, Vuelo In-flight y Navegación Astronómica (25 páginas continuas).',
+        link: '../resumenes/convocatoria_4/061_general_navigation/061_GENERAL_NAVIGATION_MASTER_COMPLETE_STUDY_GUIDE.pdf',
+        btnText: '📥 Abrir Manual (PDF 25 Págs)'
+      },
+      {
+        sitting: 4,
+        code: '062',
+        icon: '📡',
+        title: 'LIBRO MAESTRO CONSOLIDADO | 062 RADIO NAVIGATION & PBN',
+        desc: 'Los 11 capítulos unificados de Propagación, VDF, NDB/ADF, VOR, ILS/MLS, Radar, DME, Sistemas RNAV y FMS/GNSS (24 páginas continuas).',
+        link: '../resumenes/convocatoria_4/062_radio_navigation_pbn/062_RADIO_NAVIGATION_MASTER_COMPLETE_STUDY_GUIDE.pdf',
+        btnText: '📥 Abrir Manual (PDF 24 Págs)'
+      },
+      {
+        sitting: 4,
+        code: '070',
+        icon: '📋',
+        title: 'LIBRO MAESTRO CONSOLIDADO | 070 OPERATIONAL PROCEDURES',
+        desc: 'Los 12 capítulos unificados de Anexo 6, Requisitos Especiales (RVSM, ETOPS, PBN), Extinción de Incendios, Cizalladura y Mercancías Peligrosas (20 páginas continuas).',
+        link: '../resumenes/convocatoria_4/070_operational_procedures/070_OPERATIONAL_PROCEDURES_MASTER_COMPLETE_STUDY_GUIDE.pdf',
+        btnText: '📥 Abrir Manual (PDF 20 Págs)'
+      }
+    ];
+
+    function updateKPIs() {
+      if (!appData) return;
+      const sInfo = SITTING_INFO[currentSitting];
+
+      // Computar progreso REAL basado en los Ticks de LocalStorage
+      let pool = appData.topics;
+      if (currentSitting !== 'all') {
+        pool = pool.filter(t => sInfo.codes.includes(t.subject_code));
+      }
+
+      const totalTopics = pool.length;
+      const completedTopics = pool.filter(t => studiedTopics.includes(t.id)).length;
+      const pct = totalTopics > 0 ? ((completedTopics / totalTopics) * 100).toFixed(1) : 0;
+
+      const totalGuides = sInfo.codes.length;
+      const completedGuides = sInfo.codes.filter(c => studiedGuides.includes(c)).length;
+
+      // Card 1: Sitting info
+      document.getElementById('kpi-sitting-title').textContent = currentSitting === 'all' ? 'Visión Global' : 'Módulo Actual';
+      document.getElementById('kpi-sitting-val').textContent = sInfo.title;
+      document.getElementById('kpi-sitting-sub').textContent = sInfo.subs;
+
+      // Card 2: Progress (Real)
+      document.getElementById('kpi-progress-title').textContent = currentSitting === 'all' ? 'Progreso Real Global' : `Progreso Real ${sInfo.title}`;
+      document.getElementById('kpi-progress').textContent = pct + '%';
+      document.getElementById('kpi-progress-bar').style.width = pct + '%';
+
+      // Card 3: Completed topics
+      document.getElementById('kpi-topics').textContent = `${completedTopics} / ${totalTopics}`;
+      document.getElementById('kpi-topics-sub').textContent = currentSitting === 'all' ? 'Todos los Temas' : sInfo.title;
+
+      // Card 4: Manuals
+      document.getElementById('kpi-manuals').textContent = `${completedGuides} / ${totalGuides}`;
+      document.getElementById('kpi-manuals-sub').textContent = currentSitting === 'all' ? 'Libros Maestros (Todos)' : `Libros Maestros (C${currentSitting})`;
+    }
+
+    function renderDashboard() {
+      if (!appData) return;
+      updateKPIs();
+      updateBannerVisibility();
+      renderPills();
+      renderTopics();
+    }
+
+    function selectSitting(s) {
+      currentSitting = s;
+      currentSubject = 'all';
+      document.querySelectorAll('.tab-btn').forEach((b) => {
+        const val = b.getAttribute('data-sitting');
+        b.classList.toggle('active', val == s);
+      });
+      updateKPIs();
+      updateBannerVisibility();
+      renderPills();
+      renderTopics();
+    }
+
+    function updateBannerVisibility() {
+      const container = document.getElementById('master-guides-container');
+      if (!container) return;
+      container.innerHTML = '';
+
+      let guides = [];
+      if (currentSitting === 'all') {
+        guides = ALL_MASTER_GUIDES;
+      } else {
+        guides = ALL_MASTER_GUIDES.filter(g => g.sitting === currentSitting);
+      }
+
+      const filteredGuides = currentSubject === 'all' 
+        ? guides 
+        : guides.filter(g => g.code === currentSubject);
+
+      if (filteredGuides.length === 0) return;
+
+      // Header label for section
+      const bannerHeader = document.createElement('div');
+      bannerHeader.style.cssText = 'font-size: 13px; font-weight: 700; text-transform: uppercase; color: var(--accent-blue); letter-spacing: 0.8px; margin-bottom: 4px; display: flex; align-items: center; gap: 8px;';
+      bannerHeader.innerHTML = `📚 MANUALES MAESTROS CONSOLIDADOS (${filteredGuides.length} disponibles · Descarga directa PDF)`;
+      container.appendChild(bannerHeader);
+
+      const gridWrapper = document.createElement('div');
+      gridWrapper.className = currentSitting === 'all' && currentSubject === 'all' ? 'master-guides-grid' : 'master-guides-column';
+      gridWrapper.style.cssText = currentSitting === 'all' && currentSubject === 'all' 
+        ? 'display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 12px;' 
+        : 'display: flex; flex-direction: column; gap: 10px;';
+
+      filteredGuides.forEach(g => {
+        const card = document.createElement('div');
+        card.style.cssText = 'background: linear-gradient(135deg, rgba(30, 58, 138, 0.45), rgba(15, 23, 42, 0.75)); border: 1px solid #3b82f6; border-radius: 10px; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);';
+        const currentScore = studiedScores[g.code] || '';
+        let sColor = '#fff'; let bColor = '#3b82f6';
+        if (currentScore) {
+           const n = parseInt(currentScore);
+           if (n >= 85) { sColor = '#10b981'; bColor = '#10b981'; } 
+           else if (n >= 75) { sColor = '#fbbf24'; bColor = '#fbbf24'; } 
+           else { sColor = '#ef4444'; bColor = '#ef4444'; } 
+        }
+
+        const scoreInput = `
+        <div style="display: flex; align-items: center; gap: 8px; background: rgba(0,0,0,0.4); padding: 6px 12px; border-radius: 8px; border: 1px solid ${bColor};">
+          <span style="font-size: 11px; color: #94a3b8; font-weight: 700; letter-spacing: 0.5px;">AVIATION EXAM:</span>
+          <input type="number" min="0" max="100" placeholder="--%" value="${currentScore}" onkeyup="saveScore(this, '${g.code}')" onchange="saveScore(this, '${g.code}')" style="width: 45px; background: transparent; border: none; color: ${sColor}; font-weight: bold; text-align: center; font-size: 15px; outline: none; transition: color 0.2s;">
+        </div>`;
+
+        card.innerHTML = `
+          <div style="display: flex; align-items: center; gap: 14px; flex: 1; min-width: 250px;">
+            <input type="checkbox" style="transform: scale(1.6); cursor: pointer; margin-right: 4px; accent-color: var(--pass-green);" onchange="toggleGuideTick('${g.code}')" ${studiedGuides.includes(g.code) ? 'checked' : ''}>
+            <div style="font-size: 26px;">${g.icon}</div>
+            <div>
+              <div style="color: #93c5fd; font-weight: 700; font-size: 13px; letter-spacing: 0.5px;">${g.title}</div>
+              <div style="color: #94a3b8; font-size: 12px; margin-top: 3px; line-height: 1.4;">${g.desc}</div>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
+            ${scoreInput}
+            <a href="${g.link}" target="_blank" class="btn-summary" style="background: #2563eb; color: #fff; font-weight: 700; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-size: 12px; white-space: nowrap; border: 1px solid #60a5fa; box-shadow: 0 0 10px rgba(37,99,235,0.4);">
+              ${g.btnText}
+            </a>
+          </div>
+        `;
+        gridWrapper.appendChild(card);
+      });
+
+      container.appendChild(gridWrapper);
+    }
+
+    function renderPills() {
+      const pillsContainer = document.getElementById('subject-pills');
+      pillsContainer.innerHTML = '';
+
+      if (!appData) return;
+      const sInfo = SITTING_INFO[currentSitting];
+      const subjectsToShow = currentSitting === 'all' 
+        ? appData.subjects 
+        : appData.subjects.filter(s => sInfo.codes.includes(s.code));
+
+      const totalChaptersCount = subjectsToShow.reduce((acc, sub) => {
+        const count = appData.topics.filter(t => t.subject_code === sub.code).length;
+        return acc + count;
+      }, 0);
+
+      const allBtn = document.createElement('div');
+      allBtn.className = `pill ${currentSubject === 'all' ? 'active' : ''}`;
+      allBtn.textContent = `Todas las asignaturas (${totalChaptersCount})`;
+      allBtn.onclick = () => { currentSubject = 'all'; updateBannerVisibility(); renderPills(); renderTopics(); };
+      pillsContainer.appendChild(allBtn);
+
+      subjectsToShow.forEach(sub => {
+        const count = appData.topics.filter(t => t.subject_code === sub.code).length;
+        const p = document.createElement('div');
+        p.className = `pill ${currentSubject === sub.code ? 'active' : ''}`;
+        p.textContent = `[${sub.code}] ${sub.name} (${count})`;
+        p.onclick = () => { currentSubject = sub.code; updateBannerVisibility(); renderPills(); renderTopics(); };
+        pillsContainer.appendChild(p);
+      });
+    }
+
+    function handleSearch(val) {
+      searchQuery = val.trim().toLowerCase();
+      renderTopics();
+    }
+
+    function handleDifficulty(val) {
+      currentDifficulty = val;
+      renderTopics();
+    }
+
+    function renderTopics() {
+      const tbody = document.getElementById('topics-tbody');
+      tbody.innerHTML = '';
+      if (!appData) return;
+
+      const sInfo = SITTING_INFO[currentSitting];
+      let pool = appData.topics.filter(t => sInfo.codes.includes(t.subject_code));
+
+      if (currentSubject !== 'all') {
+        pool = pool.filter(t => t.subject_code === currentSubject);
+      }
+
+      if (currentDifficulty !== 'all') {
+        pool = pool.filter(t => t.difficulty === currentDifficulty);
+      }
+
+      if (searchQuery) {
+        pool = pool.filter(t => 
+          t.title.toLowerCase().includes(searchQuery) ||
+          t.subject_code.toLowerCase().includes(searchQuery) ||
+          String(t.chapter_num).includes(searchQuery)
+        );
+      }
+
+      // Update counter badge
+      const badge = document.getElementById('topic-count-badge');
+      if (badge) {
+        badge.textContent = `Mostrando ${pool.length} de ${appData.topics.length} temas`;
+      }
+
+      if (pool.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="9" style="text-align: center; color: var(--text-muted); padding: 30px;">
+          No se encontraron temas que coincidan con los filtros de búsqueda seleccionados.
+        </td></tr>`;
+        return;
+      }
+
+      pool.forEach(t => {
+        const tr = document.createElement('tr');
+        
+        const pagesInt = t.summary_pages || 1; 
+        const mins = pagesInt * 12; // Estimamos 12 minutos por página técnica real del PDF
+        const hoursStr = Math.floor(mins/60) > 0 ? `${Math.floor(mins/60)}h ` : '';
+        const minsStr = `${mins%60}m`;
+        const timeEst = `<span style="color: #94a3b8; font-size: 13px; font-weight: 500;" title="${pagesInt} páginas reales del PDF">⏱️ ${hoursStr}${minsStr}</span>`;
+
+        const summaryLink = t.summary_file ? 
+          `<a href="../${t.summary_file}" target="_blank" class="btn-summary">📄 Ver Resumen (PDF)</a>` : 
+          `<span style="color: var(--text-muted); font-size: 11px;">En redacción</span>`;
+
+        tr.innerHTML = `
+          <td style="text-align: center;">
+            <input type="checkbox" style="transform: scale(1.3); cursor: pointer; accent-color: var(--pass-green);" onchange="toggleTopicTick(${t.id})" ${studiedTopics.includes(t.id) ? 'checked' : ''}>
+          </td>
+          <td><strong>${t.chapter_num}</strong></td>
+          <td><span style="color: var(--accent-blue); font-weight: 600;">${t.subject_code}</span></td>
+          <td>${t.title}</td>
+          <td style="color: var(--text-muted);">${t.summary_pages ? `${t.summary_pages} págs` : '—'}</td>
+          <td><span class="tag-diff ${t.difficulty}">${t.difficulty}</span></td>
+          <td>${t.priority}</td>
+          <td>${timeEst}</td>
+          <td>${summaryLink}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Inicializar al cargar
+    loadData();
+  </script>
+</body>
+</html>

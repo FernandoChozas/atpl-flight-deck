@@ -19,8 +19,8 @@ def make_png(width, height, get_pixel):
     for y in range(height):
         raw_data.append(0) # Filter type 0
         for x in range(width):
-            r, g, b, a = get_pixel(x, y)
-            raw_data.extend([int(r), int(g), int(b), int(a)])
+            r, g, b, _ = get_pixel(x, y)
+            raw_data.extend([int(r), int(g), int(b)]) # 3 bytes (RGB, STRICTLY NO ALPHA FOR APPLE)
     
     def chunk(tag, data):
         c = struct.pack('>I', len(data)) + tag + data
@@ -28,7 +28,8 @@ def make_png(width, height, get_pixel):
         return c + struct.pack('>I', crc)
     
     header = b'\x89PNG\r\n\x1a\n'
-    ihdr = chunk(b'IHDR', struct.pack('>IIBBBBB', width, height, 8, 6, 0, 0, 0))
+    # Color type 2 = RGB (no alpha)
+    ihdr = chunk(b'IHDR', struct.pack('>IIBBBBB', width, height, 8, 2, 0, 0, 0))
     idat = chunk(b'IDAT', zlib.compress(bytes(raw_data), 9))
     iend = chunk(b'IEND', b'')
     return header + ihdr + idat + iend

@@ -174,7 +174,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_1/010_air_law/010_ch01_international_agreements.pdf",
       "notes": null,
-      "summary_pages": 6
+      "summary_pages": 6,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_1/010_air_law/pdf_en/010_ch01_air_law_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_1/010_air_law/pdf_es/010_ch01_air_law_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_1/010_air_law/podcasts_en/010_ch01_air_law_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_1/010_air_law/podcasts_es/010_ch01_air_law_podcast_ES.mp3"
     },
     {
       "id": 2,
@@ -191,7 +195,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_1/010_air_law/010_ch02_airworthiness.pdf",
       "notes": null,
-      "summary_pages": 4
+      "summary_pages": 4,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_1/010_air_law/pdf_en/010_ch02_air_law_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_1/010_air_law/pdf_es/010_ch02_air_law_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_1/010_air_law/podcasts_en/010_ch02_air_law_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_1/010_air_law/podcasts_es/010_ch02_air_law_podcast_ES.mp3"
     },
     {
       "id": 3,
@@ -208,7 +216,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_1/010_air_law/010_ch03_registration_marks.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_1/010_air_law/pdf_en/010_ch03_air_law_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_1/010_air_law/pdf_es/010_ch03_air_law_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_1/010_air_law/podcasts_en/010_ch03_air_law_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_1/010_air_law/podcasts_es/010_ch03_air_law_podcast_ES.mp3"
     },
     {
       "id": 4,
@@ -225,7 +237,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_1/010_air_law/010_ch04_flight_crew_licensing.pdf",
       "notes": null,
-      "summary_pages": 4
+      "summary_pages": 4,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_1/010_air_law/pdf_en/010_ch04_air_law_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_1/010_air_law/pdf_es/010_ch04_air_law_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_1/010_air_law/podcasts_en/010_ch04_air_law_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_1/010_air_law/podcasts_es/010_ch04_air_law_podcast_ES.mp3"
     },
     {
       "id": 5,
@@ -242,7 +258,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_1/010_air_law/010_ch05_rules_of_the_air.pdf",
       "notes": null,
-      "summary_pages": 4
+      "summary_pages": 4,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_1/010_air_law/pdf_en/010_ch05_air_law_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_1/010_air_law/pdf_es/010_ch05_air_law_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_1/010_air_law/podcasts_en/010_ch05_air_law_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_1/010_air_law/podcasts_es/010_ch05_air_law_podcast_ES.mp3"
     },
     {
       "id": 6,
@@ -259,7 +279,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_1/010_air_law/010_ch06_departures.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_1/010_air_law/pdf_en/010_ch06_air_law_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_1/010_air_law/pdf_es/010_ch06_air_law_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_1/010_air_law/podcasts_en/010_ch06_air_law_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_1/010_air_law/podcasts_es/010_ch06_air_law_podcast_ES.mp3"
     },
     {
       "id": 7,
@@ -276,7 +300,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_1/010_air_law/010_ch07_approach_procedures.pdf",
       "notes": null,
-      "summary_pages": 4
+      "summary_pages": 4,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_1/010_air_law/pdf_en/010_ch07_air_law_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_1/010_air_law/pdf_es/010_ch07_air_law_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_1/010_air_law/podcasts_en/010_ch07_air_law_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_1/010_air_law/podcasts_es/010_ch07_air_law_podcast_ES.mp3"
     },
     {
       "id": 8,
@@ -293,7 +321,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_1/010_air_law/010_ch08_circling_approach.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_1/010_air_law/pdf_en/010_ch08_air_law_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_1/010_air_law/pdf_es/010_ch08_air_law_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_1/010_air_law/podcasts_en/010_ch08_air_law_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_1/010_air_law/podcasts_es/010_ch08_air_law_podcast_ES.mp3"
     },
     {
       "id": 9,
@@ -310,7 +342,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_1/010_air_law/010_ch09_holding_procedures.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_1/010_air_law/pdf_en/010_ch09_air_law_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_1/010_air_law/pdf_es/010_ch09_air_law_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_1/010_air_law/podcasts_en/010_ch09_air_law_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_1/010_air_law/podcasts_es/010_ch09_air_law_podcast_ES.mp3"
     },
     {
       "id": 10,
@@ -327,7 +363,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_1/010_air_law/010_ch10_altimeter_setting.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_1/010_air_law/pdf_en/010_ch10_air_law_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_1/010_air_law/pdf_es/010_ch10_air_law_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_1/010_air_law/podcasts_en/010_ch10_air_law_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_1/010_air_law/podcasts_es/010_ch10_air_law_podcast_ES.mp3"
     },
     {
       "id": 11,
@@ -344,7 +384,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_1/010_air_law/010_ch11_parallel_runways.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_1/010_air_law/pdf_en/010_ch11_air_law_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_1/010_air_law/pdf_es/010_ch11_air_law_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_1/010_air_law/podcasts_en/010_ch11_air_law_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_1/010_air_law/podcasts_es/010_ch11_air_law_podcast_ES.mp3"
     },
     {
       "id": 12,
@@ -361,7 +405,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_1/010_air_law/010_ch12_ssr_acas.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_1/010_air_law/pdf_en/010_ch12_air_law_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_1/010_air_law/pdf_es/010_ch12_air_law_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_1/010_air_law/podcasts_en/010_ch12_air_law_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_1/010_air_law/podcasts_es/010_ch12_air_law_podcast_ES.mp3"
     },
     {
       "id": 13,
@@ -378,7 +426,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_1/010_air_law/010_ch13_airspace.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_1/010_air_law/pdf_en/010_ch13_air_law_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_1/010_air_law/pdf_es/010_ch13_air_law_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_1/010_air_law/podcasts_en/010_ch13_air_law_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_1/010_air_law/podcasts_es/010_ch13_air_law_podcast_ES.mp3"
     },
     {
       "id": 14,
@@ -395,7 +447,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_1/010_air_law/010_ch14_air_traffic_services.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_1/010_air_law/pdf_en/010_ch14_air_law_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_1/010_air_law/pdf_es/010_ch14_air_law_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_1/010_air_law/podcasts_en/010_ch14_air_law_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_1/010_air_law/podcasts_es/010_ch14_air_law_podcast_ES.mp3"
     },
     {
       "id": 15,
@@ -412,7 +468,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_1/010_air_law/010_ch15_separation.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_1/010_air_law/pdf_en/010_ch15_air_law_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_1/010_air_law/pdf_es/010_ch15_air_law_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_1/010_air_law/podcasts_en/010_ch15_air_law_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_1/010_air_law/podcasts_es/010_ch15_air_law_podcast_ES.mp3"
     },
     {
       "id": 16,
@@ -429,7 +489,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_1/010_air_law/010_ch16_control_aircraft.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_1/010_air_law/pdf_en/010_ch16_air_law_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_1/010_air_law/pdf_es/010_ch16_air_law_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_1/010_air_law/podcasts_en/010_ch16_air_law_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_1/010_air_law/podcasts_es/010_ch16_air_law_podcast_ES.mp3"
     },
     {
       "id": 17,
@@ -446,7 +510,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_1/010_air_law/010_ch17_ais.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_1/010_air_law/pdf_en/010_ch17_air_law_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_1/010_air_law/pdf_es/010_ch17_air_law_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_1/010_air_law/podcasts_en/010_ch17_air_law_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_1/010_air_law/podcasts_es/010_ch17_air_law_podcast_ES.mp3"
     },
     {
       "id": 18,
@@ -463,7 +531,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_1/010_air_law/010_ch18_aerodromes_characteristics.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_1/010_air_law/pdf_en/010_ch18_air_law_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_1/010_air_law/pdf_es/010_ch18_air_law_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_1/010_air_law/podcasts_en/010_ch18_air_law_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_1/010_air_law/podcasts_es/010_ch18_air_law_podcast_ES.mp3"
     },
     {
       "id": 19,
@@ -480,7 +552,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_1/010_air_law/010_ch19_visual_aids_markings.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_1/010_air_law/pdf_en/010_ch19_air_law_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_1/010_air_law/pdf_es/010_ch19_air_law_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_1/010_air_law/podcasts_en/010_ch19_air_law_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_1/010_air_law/podcasts_es/010_ch19_air_law_podcast_ES.mp3"
     },
     {
       "id": 20,
@@ -497,7 +573,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_1/010_air_law/010_ch20_aerodrome_lighting.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_1/010_air_law/pdf_en/010_ch20_air_law_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_1/010_air_law/pdf_es/010_ch20_air_law_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_1/010_air_law/podcasts_en/010_ch20_air_law_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_1/010_air_law/podcasts_es/010_ch20_air_law_podcast_ES.mp3"
     },
     {
       "id": 21,
@@ -514,7 +594,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_1/010_air_law/010_ch21_obstacle_marking_services.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_1/010_air_law/pdf_en/010_ch21_air_law_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_1/010_air_law/pdf_es/010_ch21_air_law_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_1/010_air_law/podcasts_en/010_ch21_air_law_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_1/010_air_law/podcasts_es/010_ch21_air_law_podcast_ES.mp3"
     },
     {
       "id": 22,
@@ -531,7 +615,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_1/010_air_law/010_ch22_facilitation.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_1/010_air_law/pdf_en/010_ch22_air_law_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_1/010_air_law/pdf_es/010_ch22_air_law_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_1/010_air_law/podcasts_en/010_ch22_air_law_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_1/010_air_law/podcasts_es/010_ch22_air_law_podcast_ES.mp3"
     },
     {
       "id": 23,
@@ -548,7 +636,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_1/010_air_law/010_ch23_sar.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_1/010_air_law/pdf_en/010_ch23_air_law_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_1/010_air_law/pdf_es/010_ch23_air_law_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_1/010_air_law/podcasts_en/010_ch23_air_law_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_1/010_air_law/podcasts_es/010_ch23_air_law_podcast_ES.mp3"
     },
     {
       "id": 24,
@@ -565,7 +657,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_1/010_air_law/010_ch24_security.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_1/010_air_law/pdf_en/010_ch24_air_law_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_1/010_air_law/pdf_es/010_ch24_air_law_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_1/010_air_law/podcasts_en/010_ch24_air_law_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_1/010_air_law/podcasts_es/010_ch24_air_law_podcast_ES.mp3"
     },
     {
       "id": 25,
@@ -582,7 +678,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_1/010_air_law/010_ch25_accident_investigation.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_1/010_air_law/pdf_en/010_ch25_air_law_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_1/010_air_law/pdf_es/010_ch25_air_law_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_1/010_air_law/podcasts_en/010_ch25_air_law_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_1/010_air_law/podcasts_es/010_ch25_air_law_podcast_ES.mp3"
     },
     {
       "id": 46,
@@ -599,7 +699,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_2/021_agk_airframe_systems_powerplant/021_ch01_fuselage_wings_surfaces.pdf",
       "notes": null,
-      "summary_pages": 4
+      "summary_pages": 4,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_2/021_agk_systems/pdf_en/021_ch01_agk_systems_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_2/021_agk_systems/pdf_es/021_ch01_agk_systems_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_2/021_agk_systems/podcasts_en/021_ch01_agk_systems_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_2/021_agk_systems/podcasts_es/021_ch01_agk_systems_podcast_ES.mp3"
     },
     {
       "id": 47,
@@ -616,7 +720,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_2/021_agk_airframe_systems_powerplant/021_ch02_basic_hydraulics.pdf",
       "notes": null,
-      "summary_pages": 4
+      "summary_pages": 4,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_2/021_agk_systems/pdf_en/021_ch02_agk_systems_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_2/021_agk_systems/pdf_es/021_ch02_agk_systems_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_2/021_agk_systems/podcasts_en/021_ch02_agk_systems_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_2/021_agk_systems/podcasts_es/021_ch02_agk_systems_podcast_ES.mp3"
     },
     {
       "id": 48,
@@ -633,7 +741,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_2/021_agk_airframe_systems_powerplant/021_ch03_landing_gear_brakes.pdf",
       "notes": null,
-      "summary_pages": 4
+      "summary_pages": 4,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_2/021_agk_systems/pdf_en/021_ch03_agk_systems_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_2/021_agk_systems/pdf_es/021_ch03_agk_systems_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_2/021_agk_systems/podcasts_en/021_ch03_agk_systems_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_2/021_agk_systems/podcasts_es/021_ch03_agk_systems_podcast_ES.mp3"
     },
     {
       "id": 49,
@@ -650,7 +762,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_2/021_agk_airframe_systems_powerplant/021_ch04_flight_controls.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_2/021_agk_systems/pdf_en/021_ch04_agk_systems_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_2/021_agk_systems/pdf_es/021_ch04_agk_systems_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_2/021_agk_systems/podcasts_en/021_ch04_agk_systems_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_2/021_agk_systems/podcasts_es/021_ch04_agk_systems_podcast_ES.mp3"
     },
     {
       "id": 50,
@@ -667,7 +783,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_2/021_agk_airframe_systems_powerplant/021_ch05_pneumatics_air_conditioning.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_2/021_agk_systems/pdf_en/021_ch05_agk_systems_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_2/021_agk_systems/pdf_es/021_ch05_agk_systems_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_2/021_agk_systems/podcasts_en/021_ch05_agk_systems_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_2/021_agk_systems/podcasts_es/021_ch05_agk_systems_podcast_ES.mp3"
     },
     {
       "id": 51,
@@ -684,7 +804,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_2/021_agk_airframe_systems_powerplant/021_ch06_pressurisation_systems.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_2/021_agk_systems/pdf_en/021_ch06_agk_systems_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_2/021_agk_systems/pdf_es/021_ch06_agk_systems_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_2/021_agk_systems/podcasts_en/021_ch06_agk_systems_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_2/021_agk_systems/podcasts_es/021_ch06_agk_systems_podcast_ES.mp3"
     },
     {
       "id": 52,
@@ -701,7 +825,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_2/021_agk_airframe_systems_powerplant/021_ch07_ice_rain_protection.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_2/021_agk_systems/pdf_en/021_ch07_agk_systems_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_2/021_agk_systems/pdf_es/021_ch07_agk_systems_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_2/021_agk_systems/podcasts_en/021_ch07_agk_systems_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_2/021_agk_systems/podcasts_es/021_ch07_agk_systems_podcast_ES.mp3"
     },
     {
       "id": 53,
@@ -718,7 +846,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_2/021_agk_airframe_systems_powerplant/021_ch08_oxygen_equipment.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_2/021_agk_systems/pdf_en/021_ch08_agk_systems_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_2/021_agk_systems/pdf_es/021_ch08_agk_systems_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_2/021_agk_systems/podcasts_en/021_ch08_agk_systems_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_2/021_agk_systems/podcasts_es/021_ch08_agk_systems_podcast_ES.mp3"
     },
     {
       "id": 54,
@@ -735,7 +867,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_2/021_agk_airframe_systems_powerplant/021_ch09_smoke_fire_protection.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_2/021_agk_systems/pdf_en/021_ch09_agk_systems_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_2/021_agk_systems/pdf_es/021_ch09_agk_systems_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_2/021_agk_systems/podcasts_en/021_ch09_agk_systems_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_2/021_agk_systems/podcasts_es/021_ch09_agk_systems_podcast_ES.mp3"
     },
     {
       "id": 55,
@@ -752,7 +888,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_2/021_agk_airframe_systems_powerplant/021_ch10_fuel_systems.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_2/021_agk_systems/pdf_en/021_ch10_agk_systems_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_2/021_agk_systems/pdf_es/021_ch10_agk_systems_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_2/021_agk_systems/podcasts_en/021_ch10_agk_systems_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_2/021_agk_systems/podcasts_es/021_ch10_agk_systems_podcast_ES.mp3"
     },
     {
       "id": 56,
@@ -769,7 +909,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_2/021_agk_airframe_systems_powerplant/021_ch11_dc_principles_circuits.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_2/021_agk_systems/pdf_en/021_ch11_agk_systems_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_2/021_agk_systems/pdf_es/021_ch11_agk_systems_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_2/021_agk_systems/podcasts_en/021_ch11_agk_systems_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_2/021_agk_systems/podcasts_es/021_ch11_agk_systems_podcast_ES.mp3"
     },
     {
       "id": 57,
@@ -786,7 +930,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_2/021_agk_airframe_systems_powerplant/021_ch12_batteries_lead_acid_nicad.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_2/021_agk_systems/pdf_en/021_ch12_agk_systems_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_2/021_agk_systems/pdf_es/021_ch12_agk_systems_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_2/021_agk_systems/podcasts_en/021_ch12_agk_systems_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_2/021_agk_systems/podcasts_es/021_ch12_agk_systems_podcast_ES.mp3"
     },
     {
       "id": 58,
@@ -803,7 +951,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_2/021_agk_airframe_systems_powerplant/021_ch13_magnetism_dc_generation.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_2/021_agk_systems/pdf_en/021_ch13_agk_systems_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_2/021_agk_systems/pdf_es/021_ch13_agk_systems_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_2/021_agk_systems/podcasts_en/021_ch13_agk_systems_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_2/021_agk_systems/podcasts_es/021_ch13_agk_systems_podcast_ES.mp3"
     },
     {
       "id": 59,
@@ -820,7 +972,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_2/021_agk_airframe_systems_powerplant/021_ch14_ac_generation_csd_idg.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_2/021_agk_systems/pdf_en/021_ch14_agk_systems_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_2/021_agk_systems/pdf_es/021_ch14_agk_systems_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_2/021_agk_systems/podcasts_en/021_ch14_agk_systems_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_2/021_agk_systems/podcasts_es/021_ch14_agk_systems_podcast_ES.mp3"
     },
     {
       "id": 60,
@@ -837,7 +993,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_2/021_agk_airframe_systems_powerplant/021_ch15_ac_distribution_inverters.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_2/021_agk_systems/pdf_en/021_ch15_agk_systems_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_2/021_agk_systems/pdf_es/021_ch15_agk_systems_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_2/021_agk_systems/podcasts_en/021_ch15_agk_systems_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_2/021_agk_systems/podcasts_es/021_ch15_agk_systems_podcast_ES.mp3"
     },
     {
       "id": 61,
@@ -854,7 +1014,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_2/021_agk_airframe_systems_powerplant/021_ch16_semiconductors_logic_buses.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_2/021_agk_systems/pdf_en/021_ch16_agk_systems_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_2/021_agk_systems/pdf_es/021_ch16_agk_systems_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_2/021_agk_systems/podcasts_en/021_ch16_agk_systems_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_2/021_agk_systems/podcasts_es/021_ch16_agk_systems_podcast_ES.mp3"
     },
     {
       "id": 62,
@@ -871,7 +1035,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_2/021_agk_airframe_systems_powerplant/021_ch17_piston_engines_cycles.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_2/021_agk_systems/pdf_en/021_ch17_agk_systems_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_2/021_agk_systems/pdf_es/021_ch17_agk_systems_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_2/021_agk_systems/podcasts_en/021_ch17_agk_systems_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_2/021_agk_systems/podcasts_es/021_ch17_agk_systems_podcast_ES.mp3"
     },
     {
       "id": 63,
@@ -888,7 +1056,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_2/021_agk_airframe_systems_powerplant/021_ch18_piston_fuels_carburation.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_2/021_agk_systems/pdf_en/021_ch18_agk_systems_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_2/021_agk_systems/pdf_es/021_ch18_agk_systems_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_2/021_agk_systems/podcasts_en/021_ch18_agk_systems_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_2/021_agk_systems/podcasts_es/021_ch18_agk_systems_podcast_ES.mp3"
     },
     {
       "id": 64,
@@ -905,7 +1077,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_2/021_agk_airframe_systems_powerplant/021_ch19_propellers_governors.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_2/021_agk_systems/pdf_en/021_ch19_agk_systems_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_2/021_agk_systems/pdf_es/021_ch19_agk_systems_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_2/021_agk_systems/podcasts_en/021_ch19_agk_systems_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_2/021_agk_systems/podcasts_es/021_ch19_agk_systems_podcast_ES.mp3"
     },
     {
       "id": 65,
@@ -922,7 +1098,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_2/021_agk_airframe_systems_powerplant/021_ch20_gas_turbines_compressors.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_2/021_agk_systems/pdf_en/021_ch20_agk_systems_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_2/021_agk_systems/pdf_es/021_ch20_agk_systems_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_2/021_agk_systems/podcasts_en/021_ch20_agk_systems_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_2/021_agk_systems/podcasts_es/021_ch20_agk_systems_podcast_ES.mp3"
     },
     {
       "id": 66,
@@ -939,7 +1119,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_2/021_agk_airframe_systems_powerplant/021_ch21_combustion_turbines_exhaust.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_2/021_agk_systems/pdf_en/021_ch21_agk_systems_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_2/021_agk_systems/pdf_es/021_ch21_agk_systems_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_2/021_agk_systems/podcasts_en/021_ch21_agk_systems_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_2/021_agk_systems/podcasts_es/021_ch21_agk_systems_podcast_ES.mp3"
     },
     {
       "id": 67,
@@ -956,7 +1140,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_2/021_agk_airframe_systems_powerplant/021_ch22_fadec_engine_monitoring.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_2/021_agk_systems/pdf_en/021_ch22_agk_systems_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_2/021_agk_systems/pdf_es/021_ch22_agk_systems_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_2/021_agk_systems/podcasts_en/021_ch22_agk_systems_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_2/021_agk_systems/podcasts_es/021_ch22_agk_systems_podcast_ES.mp3"
     },
     {
       "id": 68,
@@ -973,7 +1161,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_2/022_instrumentation/022_ch01_pitot_static_temperature.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_2/022_instrumentation/pdf_en/022_ch01_instrumentation_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_2/022_instrumentation/pdf_es/022_ch01_instrumentation_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_2/022_instrumentation/podcasts_en/022_ch01_instrumentation_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_2/022_instrumentation/podcasts_es/022_ch01_instrumentation_podcast_ES.mp3"
     },
     {
       "id": 69,
@@ -990,7 +1182,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_2/022_instrumentation/022_ch02_altimeter_vsi.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_2/022_instrumentation/pdf_en/022_ch02_instrumentation_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_2/022_instrumentation/pdf_es/022_ch02_instrumentation_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_2/022_instrumentation/podcasts_en/022_ch02_instrumentation_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_2/022_instrumentation/podcasts_es/022_ch02_instrumentation_podcast_ES.mp3"
     },
     {
       "id": 70,
@@ -1007,7 +1203,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_2/022_instrumentation/022_ch03_asi_machmeter.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_2/022_instrumentation/pdf_en/022_ch03_instrumentation_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_2/022_instrumentation/pdf_es/022_ch03_instrumentation_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_2/022_instrumentation/podcasts_en/022_ch03_instrumentation_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_2/022_instrumentation/podcasts_es/022_ch03_instrumentation_podcast_ES.mp3"
     },
     {
       "id": 71,
@@ -1024,7 +1224,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_2/022_instrumentation/022_ch04_air_data_computer_adiru.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_2/022_instrumentation/pdf_en/022_ch04_instrumentation_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_2/022_instrumentation/pdf_es/022_ch04_instrumentation_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_2/022_instrumentation/podcasts_en/022_ch04_instrumentation_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_2/022_instrumentation/podcasts_es/022_ch04_instrumentation_podcast_ES.mp3"
     },
     {
       "id": 72,
@@ -1041,7 +1245,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_2/022_instrumentation/022_ch05_magnetism_direct_reading_compass.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_2/022_instrumentation/pdf_en/022_ch05_instrumentation_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_2/022_instrumentation/pdf_es/022_ch05_instrumentation_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_2/022_instrumentation/podcasts_en/022_ch05_instrumentation_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_2/022_instrumentation/podcasts_es/022_ch05_instrumentation_podcast_ES.mp3"
     },
     {
       "id": 73,
@@ -1058,7 +1266,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_2/022_instrumentation/022_ch06_gyroscopic_principles_instruments.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_2/022_instrumentation/pdf_en/022_ch06_instrumentation_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_2/022_instrumentation/pdf_es/022_ch06_instrumentation_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_2/022_instrumentation/podcasts_en/022_ch06_instrumentation_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_2/022_instrumentation/podcasts_es/022_ch06_instrumentation_podcast_ES.mp3"
     },
     {
       "id": 74,
@@ -1075,7 +1287,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_2/022_instrumentation/022_ch07_inertial_navigation_irs.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_2/022_instrumentation/pdf_en/022_ch07_instrumentation_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_2/022_instrumentation/pdf_es/022_ch07_instrumentation_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_2/022_instrumentation/podcasts_en/022_ch07_instrumentation_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_2/022_instrumentation/podcasts_es/022_ch07_instrumentation_podcast_ES.mp3"
     },
     {
       "id": 75,
@@ -1092,7 +1308,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_2/022_instrumentation/022_ch08_radio_altimeter.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_2/022_instrumentation/pdf_en/022_ch08_instrumentation_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_2/022_instrumentation/pdf_es/022_ch08_instrumentation_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_2/022_instrumentation/podcasts_en/022_ch08_instrumentation_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_2/022_instrumentation/podcasts_es/022_ch08_instrumentation_podcast_ES.mp3"
     },
     {
       "id": 76,
@@ -1109,7 +1329,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_2/022_instrumentation/022_ch09_electronic_flight_displays_efis.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_2/022_instrumentation/pdf_en/022_ch09_instrumentation_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_2/022_instrumentation/pdf_es/022_ch09_instrumentation_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_2/022_instrumentation/podcasts_en/022_ch09_instrumentation_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_2/022_instrumentation/podcasts_es/022_ch09_instrumentation_podcast_ES.mp3"
     },
     {
       "id": 77,
@@ -1126,7 +1350,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_2/022_instrumentation/022_ch10_flight_management_system_fms.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_2/022_instrumentation/pdf_en/022_ch10_instrumentation_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_2/022_instrumentation/pdf_es/022_ch10_instrumentation_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_2/022_instrumentation/podcasts_en/022_ch10_instrumentation_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_2/022_instrumentation/podcasts_es/022_ch10_instrumentation_podcast_ES.mp3"
     },
     {
       "id": 78,
@@ -1143,7 +1371,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_2/022_instrumentation/022_ch11_aerodynamic_stall_warning.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_2/022_instrumentation/pdf_en/022_ch11_instrumentation_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_2/022_instrumentation/pdf_es/022_ch11_instrumentation_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_2/022_instrumentation/podcasts_en/022_ch11_instrumentation_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_2/022_instrumentation/podcasts_es/022_ch11_instrumentation_podcast_ES.mp3"
     },
     {
       "id": 79,
@@ -1160,7 +1392,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_2/022_instrumentation/022_ch12_gpws_egpws.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_2/022_instrumentation/pdf_en/022_ch12_instrumentation_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_2/022_instrumentation/pdf_es/022_ch12_instrumentation_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_2/022_instrumentation/podcasts_en/022_ch12_instrumentation_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_2/022_instrumentation/podcasts_es/022_ch12_instrumentation_podcast_ES.mp3"
     },
     {
       "id": 80,
@@ -1177,7 +1413,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_2/022_instrumentation/022_ch13_tcas_ii.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_2/022_instrumentation/pdf_en/022_ch13_instrumentation_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_2/022_instrumentation/pdf_es/022_ch13_instrumentation_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_2/022_instrumentation/podcasts_en/022_ch13_instrumentation_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_2/022_instrumentation/podcasts_es/022_ch13_instrumentation_podcast_ES.mp3"
     },
     {
       "id": 81,
@@ -1194,7 +1434,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_2/022_instrumentation/022_ch14_afcs_autopilot_flight_director.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_2/022_instrumentation/pdf_en/022_ch14_instrumentation_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_2/022_instrumentation/pdf_es/022_ch14_instrumentation_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_2/022_instrumentation/podcasts_en/022_ch14_instrumentation_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_2/022_instrumentation/podcasts_es/022_ch14_instrumentation_podcast_ES.mp3"
     },
     {
       "id": 96,
@@ -1211,7 +1455,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_3/031_mass_and_balance/031_ch01_definitions_mass_limits.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_3/031_mass_and_balance/pdf_en/031_ch01_mass_and_balance_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_3/031_mass_and_balance/pdf_es/031_ch01_mass_and_balance_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_3/031_mass_and_balance/podcasts_en/031_ch01_mass_and_balance_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_3/031_mass_and_balance/podcasts_es/031_ch01_mass_and_balance_podcast_ES.mp3"
     },
     {
       "id": 97,
@@ -1228,7 +1476,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_3/031_mass_and_balance/031_ch02_cg_datum_moments.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_3/031_mass_and_balance/pdf_en/031_ch02_mass_and_balance_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_3/031_mass_and_balance/pdf_es/031_ch02_mass_and_balance_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_3/031_mass_and_balance/podcasts_en/031_ch02_mass_and_balance_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_3/031_mass_and_balance/podcasts_es/031_ch02_mass_and_balance_podcast_ES.mp3"
     },
     {
       "id": 98,
@@ -1245,7 +1497,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_3/031_mass_and_balance/031_ch03_cg_mac_calculations.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_3/031_mass_and_balance/pdf_en/031_ch03_mass_and_balance_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_3/031_mass_and_balance/pdf_es/031_ch03_mass_and_balance_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_3/031_mass_and_balance/podcasts_en/031_ch03_mass_and_balance_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_3/031_mass_and_balance/podcasts_es/031_ch03_mass_and_balance_podcast_ES.mp3"
     },
     {
       "id": 99,
@@ -1262,7 +1518,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_3/031_mass_and_balance/031_ch04_mass_shifts_additions.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_3/031_mass_and_balance/pdf_en/031_ch04_mass_and_balance_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_3/031_mass_and_balance/pdf_es/031_ch04_mass_and_balance_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_3/031_mass_and_balance/podcasts_en/031_ch04_mass_and_balance_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_3/031_mass_and_balance/podcasts_es/031_ch04_mass_and_balance_podcast_ES.mp3"
     },
     {
       "id": 100,
@@ -1279,7 +1539,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_3/031_mass_and_balance/031_ch05_fuel_management_cg.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_3/031_mass_and_balance/pdf_en/031_ch05_mass_and_balance_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_3/031_mass_and_balance/pdf_es/031_ch05_mass_and_balance_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_3/031_mass_and_balance/podcasts_en/031_ch05_mass_and_balance_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_3/031_mass_and_balance/podcasts_es/031_ch05_mass_and_balance_podcast_ES.mp3"
     },
     {
       "id": 101,
@@ -1296,7 +1560,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_3/031_mass_and_balance/031_ch06_standard_passenger_baggage_masses.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_3/031_mass_and_balance/pdf_en/031_ch06_mass_and_balance_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_3/031_mass_and_balance/pdf_es/031_ch06_mass_and_balance_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_3/031_mass_and_balance/podcasts_en/031_ch06_mass_and_balance_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_3/031_mass_and_balance/podcasts_es/031_ch06_mass_and_balance_podcast_ES.mp3"
     },
     {
       "id": 102,
@@ -1313,7 +1581,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_3/031_mass_and_balance/031_ch07_load_trim_sheet.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_3/031_mass_and_balance/pdf_en/031_ch07_mass_and_balance_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_3/031_mass_and_balance/pdf_es/031_ch07_mass_and_balance_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_3/031_mass_and_balance/podcasts_en/031_ch07_mass_and_balance_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_3/031_mass_and_balance/podcasts_es/031_ch07_mass_and_balance_podcast_ES.mp3"
     },
     {
       "id": 103,
@@ -1330,7 +1602,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_3/032_performance/032_ch01_general_performance_atmosphere_wind.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_3/032_performance/pdf_en/032_ch01_performance_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_3/032_performance/pdf_es/032_ch01_performance_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_3/032_performance/podcasts_en/032_ch01_performance_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_3/032_performance/podcasts_es/032_ch01_performance_podcast_ES.mp3"
     },
     {
       "id": 104,
@@ -1347,7 +1623,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_3/032_performance/032_ch02_single_engine_piston_performance.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_3/032_performance/pdf_en/032_ch02_performance_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_3/032_performance/pdf_es/032_ch02_performance_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_3/032_performance/podcasts_en/032_ch02_performance_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_3/032_performance/podcasts_es/032_ch02_performance_podcast_ES.mp3"
     },
     {
       "id": 105,
@@ -1364,7 +1644,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_3/032_performance/032_ch03_multi_engine_class_b_takeoff_climb.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_3/032_performance/pdf_en/032_ch03_performance_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_3/032_performance/pdf_es/032_ch03_performance_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_3/032_performance/podcasts_en/032_ch03_performance_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_3/032_performance/podcasts_es/032_ch03_performance_podcast_ES.mp3"
     },
     {
       "id": 106,
@@ -1381,7 +1665,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_3/032_performance/032_ch04_class_b_enroute_landing.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_3/032_performance/pdf_en/032_ch04_performance_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_3/032_performance/pdf_es/032_ch04_performance_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_3/032_performance/podcasts_en/032_ch04_performance_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_3/032_performance/podcasts_es/032_ch04_performance_podcast_ES.mp3"
     },
     {
       "id": 107,
@@ -1398,7 +1686,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_3/032_performance/032_ch05_class_a_takeoff_speeds.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_3/032_performance/pdf_en/032_ch05_performance_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_3/032_performance/pdf_es/032_ch05_performance_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_3/032_performance/podcasts_en/032_ch05_performance_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_3/032_performance/podcasts_es/032_ch05_performance_podcast_ES.mp3"
     },
     {
       "id": 108,
@@ -1415,7 +1707,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_3/032_performance/032_ch06_class_a_takeoff_distances_balanced_field.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_3/032_performance/pdf_en/032_ch06_performance_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_3/032_performance/pdf_es/032_ch06_performance_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_3/032_performance/podcasts_en/032_ch06_performance_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_3/032_performance/podcasts_es/032_ch06_performance_podcast_ES.mp3"
     },
     {
       "id": 109,
@@ -1432,7 +1728,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_3/032_performance/032_ch07_class_a_takeoff_climb_segments.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_3/032_performance/pdf_en/032_ch07_performance_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_3/032_performance/pdf_es/032_ch07_performance_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_3/032_performance/podcasts_en/032_ch07_performance_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_3/032_performance/podcasts_es/032_ch07_performance_podcast_ES.mp3"
     },
     {
       "id": 110,
@@ -1449,7 +1749,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_3/032_performance/032_ch08_class_a_enroute_engine_out_driftdown.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_3/032_performance/pdf_en/032_ch08_performance_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_3/032_performance/pdf_es/032_ch08_performance_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_3/032_performance/podcasts_en/032_ch08_performance_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_3/032_performance/podcasts_es/032_ch08_performance_podcast_ES.mp3"
     },
     {
       "id": 111,
@@ -1466,7 +1770,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_3/032_performance/032_ch09_class_a_landing_performance.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_3/032_performance/pdf_en/032_ch09_performance_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_3/032_performance/pdf_es/032_ch09_performance_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_3/032_performance/podcasts_en/032_ch09_performance_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_3/032_performance/podcasts_es/032_ch09_performance_podcast_ES.mp3"
     },
     {
       "id": 112,
@@ -1483,7 +1791,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_3/032_performance/032_ch10_reduced_thrust_flexible_takeoff.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_3/032_performance/pdf_en/032_ch10_performance_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_3/032_performance/pdf_es/032_ch10_performance_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_3/032_performance/podcasts_en/032_ch10_performance_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_3/032_performance/podcasts_es/032_ch10_performance_podcast_ES.mp3"
     },
     {
       "id": 113,
@@ -1500,7 +1812,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_3/033_flight_planning_monitoring/033_ch01_vfr_flight_planning_navigation.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_3/033_flight_planning/pdf_en/033_ch01_flight_planning_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_3/033_flight_planning/pdf_es/033_ch01_flight_planning_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_3/033_flight_planning/podcasts_en/033_ch01_flight_planning_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_3/033_flight_planning/podcasts_es/033_ch01_flight_planning_podcast_ES.mp3"
     },
     {
       "id": 114,
@@ -1517,7 +1833,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_3/033_flight_planning_monitoring/033_ch02_ifr_fuel_policy_easa.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_3/033_flight_planning/pdf_en/033_ch02_flight_planning_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_3/033_flight_planning/pdf_es/033_ch02_flight_planning_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_3/033_flight_planning/podcasts_en/033_ch02_flight_planning_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_3/033_flight_planning/podcasts_es/033_ch02_flight_planning_podcast_ES.mp3"
     },
     {
       "id": 115,
@@ -1534,7 +1854,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_3/033_flight_planning_monitoring/033_ch03_critical_points_pnr_etp.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_3/033_flight_planning/pdf_en/033_ch03_flight_planning_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_3/033_flight_planning/pdf_es/033_ch03_flight_planning_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_3/033_flight_planning/podcasts_en/033_ch03_flight_planning_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_3/033_flight_planning/podcasts_es/033_ch03_flight_planning_podcast_ES.mp3"
     },
     {
       "id": 116,
@@ -1551,7 +1875,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_3/033_flight_planning_monitoring/033_ch04_icao_ats_flight_plan_form.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_3/033_flight_planning/pdf_en/033_ch04_flight_planning_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_3/033_flight_planning/pdf_es/033_ch04_flight_planning_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_3/033_flight_planning/podcasts_en/033_ch04_flight_planning_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_3/033_flight_planning/podcasts_es/033_ch04_flight_planning_podcast_ES.mp3"
     },
     {
       "id": 117,
@@ -1568,7 +1896,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_3/033_flight_planning_monitoring/033_ch05_jeppesen_enroute_charts_airspace.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_3/033_flight_planning/pdf_en/033_ch05_flight_planning_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_3/033_flight_planning/pdf_es/033_ch05_flight_planning_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_3/033_flight_planning/podcasts_en/033_ch05_flight_planning_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_3/033_flight_planning/podcasts_es/033_ch05_flight_planning_podcast_ES.mp3"
     },
     {
       "id": 118,
@@ -1585,7 +1917,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_3/033_flight_planning_monitoring/033_ch06_standard_departures_arrivals_sids_stars.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_3/033_flight_planning/pdf_en/033_ch06_flight_planning_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_3/033_flight_planning/pdf_es/033_ch06_flight_planning_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_3/033_flight_planning/podcasts_en/033_ch06_flight_planning_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_3/033_flight_planning/podcasts_es/033_ch06_flight_planning_podcast_ES.mp3"
     },
     {
       "id": 119,
@@ -1602,7 +1938,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_3/033_flight_planning_monitoring/033_ch07_meteorological_charts_wintem_sigwx.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_3/033_flight_planning/pdf_en/033_ch07_flight_planning_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_3/033_flight_planning/pdf_es/033_ch07_flight_planning_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_3/033_flight_planning/podcasts_en/033_ch07_flight_planning_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_3/033_flight_planning/podcasts_es/033_ch07_flight_planning_podcast_ES.mp3"
     },
     {
       "id": 120,
@@ -1619,7 +1959,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_3/033_flight_planning_monitoring/033_ch08_inflight_monitoring_reộng_dpp.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_3/033_flight_planning/pdf_en/033_ch08_flight_planning_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_3/033_flight_planning/pdf_es/033_ch08_flight_planning_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_3/033_flight_planning/podcasts_en/033_ch08_flight_planning_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_3/033_flight_planning/podcasts_es/033_ch08_flight_planning_podcast_ES.mp3"
     },
     {
       "id": 26,
@@ -1636,7 +1980,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_1/040_human_performance/040_ch01_human_factors_concepts.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_1/040_human_performance/pdf_en/040_ch01_human_performance_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_1/040_human_performance/pdf_es/040_ch01_human_performance_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_1/040_human_performance/podcasts_en/040_ch01_human_performance_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_1/040_human_performance/podcasts_es/040_ch01_human_performance_podcast_ES.mp3"
     },
     {
       "id": 27,
@@ -1653,7 +2001,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_1/040_human_performance/040_ch02_aviation_physiology_gas_laws.pdf",
       "notes": null,
-      "summary_pages": 4
+      "summary_pages": 4,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_1/040_human_performance/pdf_en/040_ch02_human_performance_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_1/040_human_performance/pdf_es/040_ch02_human_performance_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_1/040_human_performance/podcasts_en/040_ch02_human_performance_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_1/040_human_performance/podcasts_es/040_ch02_human_performance_podcast_ES.mp3"
     },
     {
       "id": 28,
@@ -1670,7 +2022,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_1/040_human_performance/040_ch03_hypoxia_hyperventilation.pdf",
       "notes": null,
-      "summary_pages": 4
+      "summary_pages": 4,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_1/040_human_performance/pdf_en/040_ch03_human_performance_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_1/040_human_performance/pdf_es/040_ch03_human_performance_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_1/040_human_performance/podcasts_en/040_ch03_human_performance_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_1/040_human_performance/podcasts_es/040_ch03_human_performance_podcast_ES.mp3"
     },
     {
       "id": 29,
@@ -1687,7 +2043,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_1/040_human_performance/040_ch04_dcs_barotrauma.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_1/040_human_performance/pdf_en/040_ch04_human_performance_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_1/040_human_performance/pdf_es/040_ch04_human_performance_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_1/040_human_performance/podcasts_en/040_ch04_human_performance_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_1/040_human_performance/podcasts_es/040_ch04_human_performance_podcast_ES.mp3"
     },
     {
       "id": 30,
@@ -1704,7 +2064,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_1/040_human_performance/040_ch05_vision_illusions.pdf",
       "notes": null,
-      "summary_pages": 4
+      "summary_pages": 4,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_1/040_human_performance/pdf_en/040_ch05_human_performance_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_1/040_human_performance/pdf_es/040_ch05_human_performance_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_1/040_human_performance/podcasts_en/040_ch05_human_performance_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_1/040_human_performance/podcasts_es/040_ch05_human_performance_podcast_ES.mp3"
     },
     {
       "id": 31,
@@ -1721,7 +2085,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_1/040_human_performance/040_ch06_hearing_vestibular.pdf",
       "notes": null,
-      "summary_pages": 4
+      "summary_pages": 4,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_1/040_human_performance/pdf_en/040_ch06_human_performance_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_1/040_human_performance/pdf_es/040_ch06_human_performance_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_1/040_human_performance/podcasts_en/040_ch06_human_performance_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_1/040_human_performance/podcasts_es/040_ch06_human_performance_podcast_ES.mp3"
     },
     {
       "id": 32,
@@ -1738,7 +2106,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_1/040_human_performance/040_ch07_toxic_hazards_health.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_1/040_human_performance/pdf_en/040_ch07_human_performance_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_1/040_human_performance/pdf_es/040_ch07_human_performance_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_1/040_human_performance/podcasts_en/040_ch07_human_performance_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_1/040_human_performance/podcasts_es/040_ch07_human_performance_podcast_ES.mp3"
     },
     {
       "id": 33,
@@ -1755,7 +2127,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_1/040_human_performance/040_ch08_information_processing_memory.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_1/040_human_performance/pdf_en/040_ch08_human_performance_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_1/040_human_performance/pdf_es/040_ch08_human_performance_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_1/040_human_performance/podcasts_en/040_ch08_human_performance_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_1/040_human_performance/podcasts_es/040_ch08_human_performance_podcast_ES.mp3"
     },
     {
       "id": 34,
@@ -1772,7 +2148,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_1/040_human_performance/040_ch09_human_error_reliability.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_1/040_human_performance/pdf_en/040_ch09_human_performance_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_1/040_human_performance/pdf_es/040_ch09_human_performance_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_1/040_human_performance/podcasts_en/040_ch09_human_performance_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_1/040_human_performance/podcasts_es/040_ch09_human_performance_podcast_ES.mp3"
     },
     {
       "id": 35,
@@ -1789,7 +2169,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_1/040_human_performance/040_ch10_decision_making_judgement.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_1/040_human_performance/pdf_en/040_ch10_human_performance_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_1/040_human_performance/pdf_es/040_ch10_human_performance_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_1/040_human_performance/podcasts_en/040_ch10_human_performance_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_1/040_human_performance/podcasts_es/040_ch10_human_performance_podcast_ES.mp3"
     },
     {
       "id": 36,
@@ -1806,7 +2190,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_1/040_human_performance/040_ch11_stress_workload.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_1/040_human_performance/pdf_en/040_ch11_human_performance_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_1/040_human_performance/pdf_es/040_ch11_human_performance_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_1/040_human_performance/podcasts_en/040_ch11_human_performance_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_1/040_human_performance/podcasts_es/040_ch11_human_performance_podcast_ES.mp3"
     },
     {
       "id": 37,
@@ -1823,7 +2211,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_1/040_human_performance/040_ch12_fatigue_sleep_circadian.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_1/040_human_performance/pdf_en/040_ch12_human_performance_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_1/040_human_performance/pdf_es/040_ch12_human_performance_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_1/040_human_performance/podcasts_en/040_ch12_human_performance_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_1/040_human_performance/podcasts_es/040_ch12_human_performance_podcast_ES.mp3"
     },
     {
       "id": 38,
@@ -1840,7 +2232,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_1/040_human_performance/040_ch13_communication_crm.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_1/040_human_performance/pdf_en/040_ch13_human_performance_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_1/040_human_performance/pdf_es/040_ch13_human_performance_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_1/040_human_performance/podcasts_en/040_ch13_human_performance_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_1/040_human_performance/podcasts_es/040_ch13_human_performance_podcast_ES.mp3"
     },
     {
       "id": 121,
@@ -1857,7 +2253,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_4/050_meteorology/050_ch01_atmosphere_structure_composition.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_4/050_meteorology/pdf_en/050_ch01_meteorology_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_4/050_meteorology/pdf_es/050_ch01_meteorology_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_4/050_meteorology/podcasts_en/050_ch01_meteorology_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_4/050_meteorology/podcasts_es/050_ch01_meteorology_podcast_ES.mp3"
     },
     {
       "id": 122,
@@ -1874,7 +2274,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_4/050_meteorology/050_ch02_pressure_altimetry_qcodes.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_4/050_meteorology/pdf_en/050_ch02_meteorology_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_4/050_meteorology/pdf_es/050_ch02_meteorology_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_4/050_meteorology/podcasts_en/050_ch02_meteorology_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_4/050_meteorology/podcasts_es/050_ch02_meteorology_podcast_ES.mp3"
     },
     {
       "id": 123,
@@ -1891,7 +2295,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_4/050_meteorology/050_ch03_density_temperature_inversions.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_4/050_meteorology/pdf_en/050_ch03_meteorology_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_4/050_meteorology/pdf_es/050_ch03_meteorology_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_4/050_meteorology/podcasts_en/050_ch03_meteorology_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_4/050_meteorology/podcasts_es/050_ch03_meteorology_podcast_ES.mp3"
     },
     {
       "id": 124,
@@ -1908,7 +2316,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_4/050_meteorology/050_ch04_moisture_humidity_adiabatic_processes.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_4/050_meteorology/pdf_en/050_ch04_meteorology_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_4/050_meteorology/pdf_es/050_ch04_meteorology_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_4/050_meteorology/podcasts_en/050_ch04_meteorology_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_4/050_meteorology/podcasts_es/050_ch04_meteorology_podcast_ES.mp3"
     },
     {
       "id": 125,
@@ -1925,7 +2337,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_4/050_meteorology/050_ch05_wind_dynamics_global_circulation.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_4/050_meteorology/pdf_en/050_ch05_meteorology_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_4/050_meteorology/pdf_es/050_ch05_meteorology_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_4/050_meteorology/podcasts_en/050_ch05_meteorology_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_4/050_meteorology/podcasts_es/050_ch05_meteorology_podcast_ES.mp3"
     },
     {
       "id": 126,
@@ -1942,7 +2358,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_4/050_meteorology/050_ch06_jet_streams_cat.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_4/050_meteorology/pdf_en/050_ch06_meteorology_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_4/050_meteorology/pdf_es/050_ch06_meteorology_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_4/050_meteorology/podcasts_en/050_ch06_meteorology_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_4/050_meteorology/podcasts_es/050_ch06_meteorology_podcast_ES.mp3"
     },
     {
       "id": 127,
@@ -1959,7 +2379,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_4/050_meteorology/050_ch07_cloud_classification_fog_mist.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_4/050_meteorology/pdf_en/050_ch07_meteorology_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_4/050_meteorology/pdf_es/050_ch07_meteorology_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_4/050_meteorology/podcasts_en/050_ch07_meteorology_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_4/050_meteorology/podcasts_es/050_ch07_meteorology_podcast_ES.mp3"
     },
     {
       "id": 128,
@@ -1976,7 +2400,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_4/050_meteorology/050_ch08_precipitation_freezing_rain.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_4/050_meteorology/pdf_en/050_ch08_meteorology_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_4/050_meteorology/pdf_es/050_ch08_meteorology_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_4/050_meteorology/podcasts_en/050_ch08_meteorology_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_4/050_meteorology/podcasts_es/050_ch08_meteorology_podcast_ES.mp3"
     },
     {
       "id": 129,
@@ -1993,7 +2421,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_4/050_meteorology/050_ch09_air_masses_frontal_systems.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_4/050_meteorology/pdf_en/050_ch09_meteorology_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_4/050_meteorology/pdf_es/050_ch09_meteorology_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_4/050_meteorology/podcasts_en/050_ch09_meteorology_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_4/050_meteorology/podcasts_es/050_ch09_meteorology_podcast_ES.mp3"
     },
     {
       "id": 130,
@@ -2010,7 +2442,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_4/050_meteorology/050_ch10_pressure_systems_depressions_anticyclones.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_4/050_meteorology/pdf_en/050_ch10_meteorology_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_4/050_meteorology/pdf_es/050_ch10_meteorology_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_4/050_meteorology/podcasts_en/050_ch10_meteorology_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_4/050_meteorology/podcasts_es/050_ch10_meteorology_podcast_ES.mp3"
     },
     {
       "id": 131,
@@ -2027,7 +2463,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_4/050_meteorology/050_ch11_icing_turbulence_mountain_waves.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_4/050_meteorology/pdf_en/050_ch11_meteorology_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_4/050_meteorology/pdf_es/050_ch11_meteorology_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_4/050_meteorology/podcasts_en/050_ch11_meteorology_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_4/050_meteorology/podcasts_es/050_ch11_meteorology_podcast_ES.mp3"
     },
     {
       "id": 132,
@@ -2044,7 +2484,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_4/050_meteorology/050_ch12_thunderstorms_microbursts_windshear.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_4/050_meteorology/pdf_en/050_ch12_meteorology_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_4/050_meteorology/pdf_es/050_ch12_meteorology_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_4/050_meteorology/podcasts_en/050_ch12_meteorology_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_4/050_meteorology/podcasts_es/050_ch12_meteorology_podcast_ES.mp3"
     },
     {
       "id": 133,
@@ -2061,7 +2505,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_4/050_meteorology/050_ch13_tropical_meteorology_climatology.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_4/050_meteorology/pdf_en/050_ch13_meteorology_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_4/050_meteorology/pdf_es/050_ch13_meteorology_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_4/050_meteorology/podcasts_en/050_ch13_meteorology_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_4/050_meteorology/podcasts_es/050_ch13_meteorology_podcast_ES.mp3"
     },
     {
       "id": 134,
@@ -2078,7 +2526,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_4/050_meteorology/050_ch14_metar_taf_sigmet_charts.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_4/050_meteorology/pdf_en/050_ch14_meteorology_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_4/050_meteorology/pdf_es/050_ch14_meteorology_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_4/050_meteorology/podcasts_en/050_ch14_meteorology_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_4/050_meteorology/podcasts_es/050_ch14_meteorology_podcast_ES.mp3"
     },
     {
       "id": 135,
@@ -2095,7 +2547,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_4/061_general_navigation/061_ch01_earth_geometry_coordinates_distance.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_4/061_general_navigation/pdf_en/061_ch01_general_navigation_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_4/061_general_navigation/pdf_es/061_ch01_general_navigation_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_4/061_general_navigation/podcasts_en/061_ch01_general_navigation_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_4/061_general_navigation/podcasts_es/061_ch01_general_navigation_podcast_ES.mp3"
     },
     {
       "id": 136,
@@ -2112,7 +2568,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_4/061_general_navigation/061_ch02_great_circles_rhumb_lines_convergence.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_4/061_general_navigation/pdf_en/061_ch02_general_navigation_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_4/061_general_navigation/pdf_es/061_ch02_general_navigation_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_4/061_general_navigation/podcasts_en/061_ch02_general_navigation_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_4/061_general_navigation/podcasts_es/061_ch02_general_navigation_podcast_ES.mp3"
     },
     {
       "id": 137,
@@ -2129,7 +2589,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_4/061_general_navigation/061_ch03_magnetism_variation_deviation_compass.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_4/061_general_navigation/pdf_en/061_ch03_general_navigation_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_4/061_general_navigation/pdf_es/061_ch03_general_navigation_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_4/061_general_navigation/podcasts_en/061_ch03_general_navigation_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_4/061_general_navigation/podcasts_es/061_ch03_general_navigation_podcast_ES.mp3"
     },
     {
       "id": 138,
@@ -2146,7 +2610,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_4/061_general_navigation/061_ch04_aeronautical_charts_principles.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_4/061_general_navigation/pdf_en/061_ch04_general_navigation_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_4/061_general_navigation/pdf_es/061_ch04_general_navigation_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_4/061_general_navigation/podcasts_en/061_ch04_general_navigation_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_4/061_general_navigation/podcasts_es/061_ch04_general_navigation_podcast_ES.mp3"
     },
     {
       "id": 139,
@@ -2163,7 +2631,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_4/061_general_navigation/061_ch05_mercator_transverse_projections.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_4/061_general_navigation/pdf_en/061_ch05_general_navigation_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_4/061_general_navigation/pdf_es/061_ch05_general_navigation_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_4/061_general_navigation/podcasts_en/061_ch05_general_navigation_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_4/061_general_navigation/podcasts_es/061_ch05_general_navigation_podcast_ES.mp3"
     },
     {
       "id": 140,
@@ -2180,7 +2652,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_4/061_general_navigation/061_ch06_lambert_conformal_conic.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_4/061_general_navigation/pdf_en/061_ch06_general_navigation_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_4/061_general_navigation/pdf_es/061_ch06_general_navigation_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_4/061_general_navigation/podcasts_en/061_ch06_general_navigation_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_4/061_general_navigation/podcasts_es/061_ch06_general_navigation_podcast_ES.mp3"
     },
     {
       "id": 141,
@@ -2197,7 +2673,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_4/061_general_navigation/061_ch07_polar_stereographic_projection.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_4/061_general_navigation/pdf_en/061_ch07_general_navigation_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_4/061_general_navigation/pdf_es/061_ch07_general_navigation_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_4/061_general_navigation/podcasts_en/061_ch07_general_navigation_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_4/061_general_navigation/podcasts_es/061_ch07_general_navigation_podcast_ES.mp3"
     },
     {
       "id": 142,
@@ -2214,7 +2694,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_4/061_general_navigation/061_ch08_grid_navigation_polar.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_4/061_general_navigation/pdf_en/061_ch08_general_navigation_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_4/061_general_navigation/pdf_es/061_ch08_general_navigation_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_4/061_general_navigation/podcasts_en/061_ch08_general_navigation_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_4/061_general_navigation/podcasts_es/061_ch08_general_navigation_podcast_ES.mp3"
     },
     {
       "id": 143,
@@ -2231,7 +2715,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_4/061_general_navigation/061_ch09_dead_reckoning_flight_computer.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_4/061_general_navigation/pdf_en/061_ch09_general_navigation_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_4/061_general_navigation/pdf_es/061_ch09_general_navigation_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_4/061_general_navigation/podcasts_en/061_ch09_general_navigation_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_4/061_general_navigation/podcasts_es/061_ch09_general_navigation_podcast_ES.mp3"
     },
     {
       "id": 144,
@@ -2248,7 +2736,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_4/061_general_navigation/061_ch10_inflight_navigation_1in60_rule.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_4/061_general_navigation/pdf_en/061_ch10_general_navigation_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_4/061_general_navigation/pdf_es/061_ch10_general_navigation_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_4/061_general_navigation/podcasts_en/061_ch10_general_navigation_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_4/061_general_navigation/podcasts_es/061_ch10_general_navigation_podcast_ES.mp3"
     },
     {
       "id": 145,
@@ -2265,7 +2757,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_4/061_general_navigation/061_ch11_time_systems_solar_twilight.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_4/061_general_navigation/pdf_en/061_ch11_general_navigation_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_4/061_general_navigation/pdf_es/061_ch11_general_navigation_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_4/061_general_navigation/podcasts_en/061_ch11_general_navigation_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_4/061_general_navigation/podcasts_es/061_ch11_general_navigation_podcast_ES.mp3"
     },
     {
       "id": 146,
@@ -2282,7 +2778,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_4/061_general_navigation/061_ch12_inertial_navigation_mechanics.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_4/061_general_navigation/pdf_en/061_ch12_general_navigation_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_4/061_general_navigation/pdf_es/061_ch12_general_navigation_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_4/061_general_navigation/podcasts_en/061_ch12_general_navigation_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_4/061_general_navigation/podcasts_es/061_ch12_general_navigation_podcast_ES.mp3"
     },
     {
       "id": 147,
@@ -2299,7 +2799,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_4/062_radio_navigation_pbn/062_ch01_radio_propagation_antennas.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_4/062_radio_navigation_pbn/pdf_en/062_ch01_radio_navigation_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_4/062_radio_navigation_pbn/pdf_es/062_ch01_radio_navigation_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_4/062_radio_navigation_pbn/podcasts_en/062_ch01_radio_navigation_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_4/062_radio_navigation_pbn/podcasts_es/062_ch01_radio_navigation_podcast_ES.mp3"
     },
     {
       "id": 148,
@@ -2316,7 +2820,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_4/062_radio_navigation_pbn/062_ch02_ndb_adf_principles_errors.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_4/062_radio_navigation_pbn/pdf_en/062_ch02_radio_navigation_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_4/062_radio_navigation_pbn/pdf_es/062_ch02_radio_navigation_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_4/062_radio_navigation_pbn/podcasts_en/062_ch02_radio_navigation_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_4/062_radio_navigation_pbn/podcasts_es/062_ch02_radio_navigation_podcast_ES.mp3"
     },
     {
       "id": 149,
@@ -2333,7 +2841,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_4/062_radio_navigation_pbn/062_ch03_vor_dvor_principles_errors.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_4/062_radio_navigation_pbn/pdf_en/062_ch03_radio_navigation_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_4/062_radio_navigation_pbn/pdf_es/062_ch03_radio_navigation_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_4/062_radio_navigation_pbn/podcasts_en/062_ch03_radio_navigation_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_4/062_radio_navigation_pbn/podcasts_es/062_ch03_radio_navigation_podcast_ES.mp3"
     },
     {
       "id": 150,
@@ -2350,7 +2862,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_4/062_radio_navigation_pbn/062_ch04_dme_principles_slant_range.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_4/062_radio_navigation_pbn/pdf_en/062_ch04_radio_navigation_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_4/062_radio_navigation_pbn/pdf_es/062_ch04_radio_navigation_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_4/062_radio_navigation_pbn/podcasts_en/062_ch04_radio_navigation_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_4/062_radio_navigation_pbn/podcasts_es/062_ch04_radio_navigation_podcast_ES.mp3"
     },
     {
       "id": 151,
@@ -2367,7 +2883,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_4/062_radio_navigation_pbn/062_ch05_ils_localizer_glide_path.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_4/062_radio_navigation_pbn/pdf_en/062_ch05_radio_navigation_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_4/062_radio_navigation_pbn/pdf_es/062_ch05_radio_navigation_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_4/062_radio_navigation_pbn/podcasts_en/062_ch05_radio_navigation_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_4/062_radio_navigation_pbn/podcasts_es/062_ch05_radio_navigation_podcast_ES.mp3"
     },
     {
       "id": 152,
@@ -2384,7 +2904,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_4/062_radio_navigation_pbn/062_ch06_mls_gls_sbas_landing.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_4/062_radio_navigation_pbn/pdf_en/062_ch06_radio_navigation_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_4/062_radio_navigation_pbn/pdf_es/062_ch06_radio_navigation_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_4/062_radio_navigation_pbn/podcasts_en/062_ch06_radio_navigation_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_4/062_radio_navigation_pbn/podcasts_es/062_ch06_radio_navigation_podcast_ES.mp3"
     },
     {
       "id": 153,
@@ -2401,7 +2925,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_4/062_radio_navigation_pbn/062_ch07_primary_radar_weather_radar.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_4/062_radio_navigation_pbn/pdf_en/062_ch07_radio_navigation_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_4/062_radio_navigation_pbn/pdf_es/062_ch07_radio_navigation_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_4/062_radio_navigation_pbn/podcasts_en/062_ch07_radio_navigation_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_4/062_radio_navigation_pbn/podcasts_es/062_ch07_radio_navigation_podcast_ES.mp3"
     },
     {
       "id": 154,
@@ -2418,7 +2946,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_4/062_radio_navigation_pbn/062_ch08_ssr_transponders_mode_s_adsb.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_4/062_radio_navigation_pbn/pdf_en/062_ch08_radio_navigation_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_4/062_radio_navigation_pbn/pdf_es/062_ch08_radio_navigation_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_4/062_radio_navigation_pbn/podcasts_en/062_ch08_radio_navigation_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_4/062_radio_navigation_pbn/podcasts_es/062_ch08_radio_navigation_podcast_ES.mp3"
     },
     {
       "id": 155,
@@ -2435,7 +2967,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_4/062_radio_navigation_pbn/062_ch09_gnss_gps_galileo_principles.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_4/062_radio_navigation_pbn/pdf_en/062_ch09_radio_navigation_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_4/062_radio_navigation_pbn/pdf_es/062_ch09_radio_navigation_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_4/062_radio_navigation_pbn/podcasts_en/062_ch09_radio_navigation_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_4/062_radio_navigation_pbn/podcasts_es/062_ch09_radio_navigation_podcast_ES.mp3"
     },
     {
       "id": 156,
@@ -2452,7 +2988,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_4/062_radio_navigation_pbn/062_ch10_raim_satellite_integrity_augmentation.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_4/062_radio_navigation_pbn/pdf_en/062_ch10_radio_navigation_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_4/062_radio_navigation_pbn/pdf_es/062_ch10_radio_navigation_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_4/062_radio_navigation_pbn/podcasts_en/062_ch10_radio_navigation_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_4/062_radio_navigation_pbn/podcasts_es/062_ch10_radio_navigation_podcast_ES.mp3"
     },
     {
       "id": 157,
@@ -2469,7 +3009,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_4/062_radio_navigation_pbn/062_ch11_pbn_specifications_rnav_rnp.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_4/062_radio_navigation_pbn/pdf_en/062_ch11_radio_navigation_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_4/062_radio_navigation_pbn/pdf_es/062_ch11_radio_navigation_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_4/062_radio_navigation_pbn/podcasts_en/062_ch11_radio_navigation_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_4/062_radio_navigation_pbn/podcasts_es/062_ch11_radio_navigation_podcast_ES.mp3"
     },
     {
       "id": 158,
@@ -2486,7 +3030,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_4/062_radio_navigation_pbn/062_ch12_rnav_architecture_fms_sensors.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_4/062_radio_navigation_pbn/pdf_en/062_ch12_radio_navigation_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_4/062_radio_navigation_pbn/pdf_es/062_ch12_radio_navigation_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_4/062_radio_navigation_pbn/podcasts_en/062_ch12_radio_navigation_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_4/062_radio_navigation_pbn/podcasts_es/062_ch12_radio_navigation_podcast_ES.mp3"
     },
     {
       "id": 159,
@@ -2503,7 +3051,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_4/070_operational_procedures/070_ch01_easa_airops_framework.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_4/070_operational_procedures/pdf_en/070_ch01_operational_procedures_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_4/070_operational_procedures/pdf_es/070_ch01_operational_procedures_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_4/070_operational_procedures/podcasts_en/070_ch01_operational_procedures_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_4/070_operational_procedures/podcasts_es/070_ch01_operational_procedures_podcast_ES.mp3"
     },
     {
       "id": 160,
@@ -2520,7 +3072,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_4/070_operational_procedures/070_ch02_crew_composition_ftl_limits.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_4/070_operational_procedures/pdf_en/070_ch02_operational_procedures_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_4/070_operational_procedures/pdf_es/070_ch02_operational_procedures_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_4/070_operational_procedures/podcasts_en/070_ch02_operational_procedures_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_4/070_operational_procedures/podcasts_es/070_ch02_operational_procedures_podcast_ES.mp3"
     },
     {
       "id": 161,
@@ -2537,7 +3093,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_4/070_operational_procedures/070_ch03_aom_lvo_all_weather_ops.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_4/070_operational_procedures/pdf_en/070_ch03_operational_procedures_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_4/070_operational_procedures/pdf_es/070_ch03_operational_procedures_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_4/070_operational_procedures/podcasts_en/070_ch03_operational_procedures_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_4/070_operational_procedures/podcasts_es/070_ch03_operational_procedures_podcast_ES.mp3"
     },
     {
       "id": 162,
@@ -2554,7 +3114,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_4/070_operational_procedures/070_ch04_pans_ops_departures_circling.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_4/070_operational_procedures/pdf_en/070_ch04_operational_procedures_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_4/070_operational_procedures/pdf_es/070_ch04_operational_procedures_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_4/070_operational_procedures/podcasts_en/070_ch04_operational_procedures_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_4/070_operational_procedures/podcasts_es/070_ch04_operational_procedures_podcast_ES.mp3"
     },
     {
       "id": 163,
@@ -2571,7 +3135,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_4/070_operational_procedures/070_ch05_etops_edto_regulations.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_4/070_operational_procedures/pdf_en/070_ch05_operational_procedures_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_4/070_operational_procedures/pdf_es/070_ch05_operational_procedures_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_4/070_operational_procedures/podcasts_en/070_ch05_operational_procedures_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_4/070_operational_procedures/podcasts_es/070_ch05_operational_procedures_podcast_ES.mp3"
     },
     {
       "id": 164,
@@ -2588,7 +3156,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_4/070_operational_procedures/070_ch06_rvsm_nat_hla_contingency.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_4/070_operational_procedures/pdf_en/070_ch06_operational_procedures_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_4/070_operational_procedures/pdf_es/070_ch06_operational_procedures_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_4/070_operational_procedures/podcasts_en/070_ch06_operational_procedures_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_4/070_operational_procedures/podcasts_es/070_ch06_operational_procedures_podcast_ES.mp3"
     },
     {
       "id": 165,
@@ -2605,7 +3177,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_4/070_operational_procedures/070_ch07_inflight_emergencies_descent_evac.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_4/070_operational_procedures/pdf_en/070_ch07_operational_procedures_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_4/070_operational_procedures/pdf_es/070_ch07_operational_procedures_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_4/070_operational_procedures/podcasts_en/070_ch07_operational_procedures_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_4/070_operational_procedures/podcasts_es/070_ch07_operational_procedures_podcast_ES.mp3"
     },
     {
       "id": 166,
@@ -2622,7 +3198,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_4/070_operational_procedures/070_ch08_windshear_volcanic_ash_wake_turbulence.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_4/070_operational_procedures/pdf_en/070_ch08_operational_procedures_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_4/070_operational_procedures/pdf_es/070_ch08_operational_procedures_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_4/070_operational_procedures/podcasts_en/070_ch08_operational_procedures_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_4/070_operational_procedures/podcasts_es/070_ch08_operational_procedures_podcast_ES.mp3"
     },
     {
       "id": 167,
@@ -2639,7 +3219,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_4/070_operational_procedures/070_ch09_ground_deicing_antiicing_holdover.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_4/070_operational_procedures/pdf_en/070_ch09_operational_procedures_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_4/070_operational_procedures/pdf_es/070_ch09_operational_procedures_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_4/070_operational_procedures/podcasts_en/070_ch09_operational_procedures_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_4/070_operational_procedures/podcasts_es/070_ch09_operational_procedures_podcast_ES.mp3"
     },
     {
       "id": 168,
@@ -2656,7 +3240,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_4/070_operational_procedures/070_ch10_dangerous_goods_icao_iata.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_4/070_operational_procedures/pdf_en/070_ch10_operational_procedures_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_4/070_operational_procedures/pdf_es/070_ch10_operational_procedures_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_4/070_operational_procedures/podcasts_en/070_ch10_operational_procedures_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_4/070_operational_procedures/podcasts_es/070_ch10_operational_procedures_podcast_ES.mp3"
     },
     {
       "id": 82,
@@ -2673,7 +3261,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_2/081_principles_of_flight/081_ch01_subsonic_airflow_bernoulli.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_2/081_principles_of_flight/pdf_en/081_ch01_principles_of_flight_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_2/081_principles_of_flight/pdf_es/081_ch01_principles_of_flight_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_2/081_principles_of_flight/podcasts_en/081_ch01_principles_of_flight_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_2/081_principles_of_flight/podcasts_es/081_ch01_principles_of_flight_podcast_ES.mp3"
     },
     {
       "id": 83,
@@ -2690,7 +3282,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_2/081_principles_of_flight/081_ch02_airfoil_geometry_lift_moments.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_2/081_principles_of_flight/pdf_en/081_ch02_principles_of_flight_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_2/081_principles_of_flight/pdf_es/081_ch02_principles_of_flight_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_2/081_principles_of_flight/podcasts_en/081_ch02_principles_of_flight_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_2/081_principles_of_flight/podcasts_es/081_ch02_principles_of_flight_podcast_ES.mp3"
     },
     {
       "id": 84,
@@ -2707,7 +3303,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_2/081_principles_of_flight/081_ch03_lift_drag_polar_curves.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_2/081_principles_of_flight/pdf_en/081_ch03_principles_of_flight_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_2/081_principles_of_flight/pdf_es/081_ch03_principles_of_flight_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_2/081_principles_of_flight/podcasts_en/081_ch03_principles_of_flight_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_2/081_principles_of_flight/podcasts_es/081_ch03_principles_of_flight_podcast_ES.mp3"
     },
     {
       "id": 85,
@@ -2724,7 +3324,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_2/081_principles_of_flight/081_ch04_3d_airflow_induced_drag.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_2/081_principles_of_flight/pdf_en/081_ch04_principles_of_flight_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_2/081_principles_of_flight/pdf_es/081_ch04_principles_of_flight_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_2/081_principles_of_flight/podcasts_en/081_ch04_principles_of_flight_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_2/081_principles_of_flight/podcasts_es/081_ch04_principles_of_flight_podcast_ES.mp3"
     },
     {
       "id": 86,
@@ -2741,7 +3345,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_2/081_principles_of_flight/081_ch05_total_drag_vmd_ground_effect.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_2/081_principles_of_flight/pdf_en/081_ch05_principles_of_flight_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_2/081_principles_of_flight/pdf_es/081_ch05_principles_of_flight_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_2/081_principles_of_flight/podcasts_en/081_ch05_principles_of_flight_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_2/081_principles_of_flight/podcasts_es/081_ch05_principles_of_flight_podcast_ES.mp3"
     },
     {
       "id": 87,
@@ -2758,7 +3366,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_2/081_principles_of_flight/081_ch06_stalling_boundary_layer.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_2/081_principles_of_flight/pdf_en/081_ch06_principles_of_flight_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_2/081_principles_of_flight/pdf_es/081_ch06_principles_of_flight_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_2/081_principles_of_flight/podcasts_en/081_ch06_principles_of_flight_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_2/081_principles_of_flight/podcasts_es/081_ch06_principles_of_flight_podcast_ES.mp3"
     },
     {
       "id": 88,
@@ -2775,7 +3387,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_2/081_principles_of_flight/081_ch07_high_lift_devices_flaps_slats.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_2/081_principles_of_flight/pdf_en/081_ch07_principles_of_flight_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_2/081_principles_of_flight/pdf_es/081_ch07_principles_of_flight_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_2/081_principles_of_flight/podcasts_en/081_ch07_principles_of_flight_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_2/081_principles_of_flight/podcasts_es/081_ch07_principles_of_flight_podcast_ES.mp3"
     },
     {
       "id": 89,
@@ -2792,7 +3408,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_2/081_principles_of_flight/081_ch08_transonic_mach_mcrit.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_2/081_principles_of_flight/pdf_en/081_ch08_principles_of_flight_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_2/081_principles_of_flight/pdf_es/081_ch08_principles_of_flight_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_2/081_principles_of_flight/podcasts_en/081_ch08_principles_of_flight_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_2/081_principles_of_flight/podcasts_es/081_ch08_principles_of_flight_podcast_ES.mp3"
     },
     {
       "id": 90,
@@ -2809,7 +3429,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_2/081_principles_of_flight/081_ch09_swept_wings_area_rule.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_2/081_principles_of_flight/pdf_en/081_ch09_principles_of_flight_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_2/081_principles_of_flight/pdf_es/081_ch09_principles_of_flight_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_2/081_principles_of_flight/podcasts_en/081_ch09_principles_of_flight_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_2/081_principles_of_flight/podcasts_es/081_ch09_principles_of_flight_podcast_ES.mp3"
     },
     {
       "id": 91,
@@ -2826,7 +3450,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_2/081_principles_of_flight/081_ch10_stability_fundamentals.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_2/081_principles_of_flight/pdf_en/081_ch10_principles_of_flight_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_2/081_principles_of_flight/pdf_es/081_ch10_principles_of_flight_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_2/081_principles_of_flight/podcasts_en/081_ch10_principles_of_flight_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_2/081_principles_of_flight/podcasts_es/081_ch10_principles_of_flight_podcast_ES.mp3"
     },
     {
       "id": 92,
@@ -2843,7 +3471,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_2/081_principles_of_flight/081_ch11_longitudinal_stability_cg.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_2/081_principles_of_flight/pdf_en/081_ch11_principles_of_flight_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_2/081_principles_of_flight/pdf_es/081_ch11_principles_of_flight_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_2/081_principles_of_flight/podcasts_en/081_ch11_principles_of_flight_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_2/081_principles_of_flight/podcasts_es/081_ch11_principles_of_flight_podcast_ES.mp3"
     },
     {
       "id": 93,
@@ -2860,7 +3492,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_2/081_principles_of_flight/081_ch12_directional_lateral_stability.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_2/081_principles_of_flight/pdf_en/081_ch12_principles_of_flight_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_2/081_principles_of_flight/pdf_es/081_ch12_principles_of_flight_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_2/081_principles_of_flight/podcasts_en/081_ch12_principles_of_flight_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_2/081_principles_of_flight/podcasts_es/081_ch12_principles_of_flight_podcast_ES.mp3"
     },
     {
       "id": 94,
@@ -2877,7 +3513,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_2/081_principles_of_flight/081_ch13_flight_controls_tabs_balance.pdf",
       "notes": null,
-      "summary_pages": 2
+      "summary_pages": 2,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_2/081_principles_of_flight/pdf_en/081_ch13_principles_of_flight_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_2/081_principles_of_flight/pdf_es/081_ch13_principles_of_flight_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_2/081_principles_of_flight/podcasts_en/081_ch13_principles_of_flight_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_2/081_principles_of_flight/podcasts_es/081_ch13_principles_of_flight_podcast_ES.mp3"
     },
     {
       "id": 95,
@@ -2894,7 +3534,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_2/081_principles_of_flight/081_ch14_flight_mechanics_vn_diagram.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_2/081_principles_of_flight/pdf_en/081_ch14_principles_of_flight_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_2/081_principles_of_flight/pdf_es/081_ch14_principles_of_flight_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_2/081_principles_of_flight/podcasts_en/081_ch14_principles_of_flight_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_2/081_principles_of_flight/podcasts_es/081_ch14_principles_of_flight_podcast_ES.mp3"
     },
     {
       "id": 39,
@@ -2911,7 +3555,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_1/090_communications/090_ch01_general_procedures_phraseology.pdf",
       "notes": null,
-      "summary_pages": 4
+      "summary_pages": 4,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_1/090_communications/pdf_en/090_ch01_communications_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_1/090_communications/pdf_es/090_ch01_communications_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_1/090_communications/podcasts_en/090_ch01_communications_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_1/090_communications/podcasts_es/090_ch01_communications_podcast_ES.mp3"
     },
     {
       "id": 40,
@@ -2928,7 +3576,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_1/090_communications/090_ch02_propagation_frequency_bands.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_1/090_communications/pdf_en/090_ch02_communications_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_1/090_communications/pdf_es/090_ch02_communications_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_1/090_communications/podcasts_en/090_ch02_communications_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_1/090_communications/podcasts_es/090_ch02_communications_podcast_ES.mp3"
     },
     {
       "id": 41,
@@ -2945,7 +3597,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_1/090_communications/090_ch03_aerodrome_control.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_1/090_communications/pdf_en/090_ch03_communications_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_1/090_communications/pdf_es/090_ch03_communications_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_1/090_communications/podcasts_en/090_ch03_communications_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_1/090_communications/podcasts_es/090_ch03_communications_podcast_ES.mp3"
     },
     {
       "id": 42,
@@ -2962,7 +3618,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_1/090_communications/090_ch04_approach_enroute_control.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_1/090_communications/pdf_en/090_ch04_communications_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_1/090_communications/pdf_es/090_ch04_communications_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_1/090_communications/podcasts_en/090_ch04_communications_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_1/090_communications/podcasts_es/090_ch04_communications_podcast_ES.mp3"
     },
     {
       "id": 43,
@@ -2979,7 +3639,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_1/090_communications/090_ch05_weather_broadcasts.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_1/090_communications/pdf_en/090_ch05_communications_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_1/090_communications/pdf_es/090_ch05_communications_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_1/090_communications/podcasts_en/090_ch05_communications_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_1/090_communications/podcasts_es/090_ch05_communications_podcast_ES.mp3"
     },
     {
       "id": 44,
@@ -2996,7 +3660,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_1/090_communications/090_ch06_distress_urgency_procedures.pdf",
       "notes": null,
-      "summary_pages": 3
+      "summary_pages": 3,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_1/090_communications/pdf_en/090_ch06_communications_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_1/090_communications/pdf_es/090_ch06_communications_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_1/090_communications/podcasts_en/090_ch06_communications_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_1/090_communications/podcasts_es/090_ch06_communications_podcast_ES.mp3"
     },
     {
       "id": 45,
@@ -3013,7 +3681,11 @@ window.ATPL_DATA = {
       "next_review": null,
       "summary_file": "resumenes/convocatoria_1/090_communications/090_ch07_communications_failure.pdf",
       "notes": null,
-      "summary_pages": 4
+      "summary_pages": 4,
+      "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_1/090_communications/pdf_en/090_ch07_communications_notebooklm_EN.pdf",
+      "notebooklm_pdf_es": "../notebooklm_pilot/convocatoria_1/090_communications/pdf_es/090_ch07_communications_notebooklm_ES.pdf",
+      "podcast_en": "../notebooklm_pilot/convocatoria_1/090_communications/podcasts_en/090_ch07_communications_podcast_EN.mp3",
+      "podcast_es": "../notebooklm_pilot/convocatoria_1/090_communications/podcasts_es/090_ch07_communications_podcast_ES.mp3"
     }
   ],
   "recent_tests": []

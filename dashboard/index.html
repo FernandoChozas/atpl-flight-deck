@@ -333,6 +333,260 @@
       grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
       gap: 12px;
     }
+
+    /* ═══════════════════════════════════════════════════════════
+       OPCIÓN A — Cockpit Audio Player (Spotify-style persistent bar)
+    ═══════════════════════════════════════════════════════════ */
+    #cockpit-player {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: linear-gradient(135deg, #0d1117ee, #161b22f5);
+      border-top: 1px solid #30363d;
+      backdrop-filter: blur(14px);
+      z-index: 1000;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      transform: translateY(100%);
+      transition: transform 0.35s ease;
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.6);
+    }
+    #cockpit-player.visible { transform: translateY(0); }
+    #cockpit-player .player-info {
+      flex: 1; min-width: 200px;
+    }
+    #cockpit-player .player-title {
+      font-size: 13px; font-weight: 700; color: #fff;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 300px;
+    }
+    #cockpit-player .player-sub {
+      font-size: 11px; color: #8b949e; margin-top: 2px;
+    }
+    #cockpit-player .player-controls {
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    }
+    .player-btn {
+      background: #21262d; border: 1px solid #30363d;
+      color: #c9d1d9; border-radius: 6px; cursor: pointer;
+      padding: 6px 10px; font-size: 13px; font-weight: 600;
+      transition: all 0.2s; white-space: nowrap;
+    }
+    .player-btn:hover { background: #30363d; color: #fff; border-color: #58a6ff; }
+    .player-btn.active { background: #1f6feb; color: #fff; border-color: #388bfd; }
+    #cockpit-progress {
+      width: 100%; height: 4px; background: #21262d;
+      border-radius: 2px; margin-top: 6px; cursor: pointer; position: relative;
+    }
+    #cockpit-progress-fill {
+      height: 100%; background: linear-gradient(90deg, #1f6feb, #39c5bb);
+      border-radius: 2px; width: 0%; transition: width 0.5s linear;
+      pointer-events: none;
+    }
+    #cockpit-time { font-size: 11px; color: #8b949e; white-space: nowrap; }
+    .lang-badge {
+      padding: 3px 8px; border-radius: 10px; font-size: 11px; font-weight: 700;
+      border: 1px solid; cursor: pointer; transition: all 0.2s;
+    }
+    .lang-badge.en { color: #79c0ff; border-color: #388bfd; background: rgba(56,139,253,0.12); }
+    .lang-badge.es { color: #56d364; border-color: #3fb950; background: rgba(63,185,80,0.12); }
+    .lang-badge:hover { filter: brightness(1.3); }
+
+    /* Audio action buttons in table rows */
+    .btn-audio {
+      background: #161b22; border: 1px solid #30363d;
+      color: #8b949e; border-radius: 5px; cursor: pointer;
+      padding: 4px 8px; font-size: 11px; font-weight: 600;
+      transition: all 0.15s; white-space: nowrap;
+    }
+    .btn-audio:hover { background: #21262d; color: #fff; border-color: #58a6ff; }
+    .btn-audio.playing { color: #39c5bb; border-color: #39c5bb; background: rgba(57,197,187,0.1); }
+
+    /* ═══════════════════════════════════════════════════════════
+       OPCIÓN B — PDF Modal bilingüe
+    ═══════════════════════════════════════════════════════════ */
+    #pdf-modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.65); z-index: 2000;
+      justify-content: center; align-items: center;
+    }
+    #pdf-modal-overlay.open { display: flex; }
+    #pdf-modal {
+      background: #161b22; border: 1px solid #30363d;
+      border-radius: 14px; padding: 28px 32px;
+      max-width: 440px; width: 90%; text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+      animation: modalPop 0.2s ease;
+    }
+    @keyframes modalPop { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    #pdf-modal h3 { font-size: 17px; color: #fff; margin-bottom: 8px; }
+    #pdf-modal p { font-size: 13px; color: #8b949e; margin-bottom: 22px; }
+    .pdf-choice-btn {
+      display: block; width: 100%; padding: 14px 20px;
+      border-radius: 10px; font-size: 15px; font-weight: 700;
+      cursor: pointer; text-decoration: none; margin-bottom: 12px;
+      transition: all 0.2s; border: 1px solid;
+    }
+    .pdf-choice-btn.en {
+      background: rgba(56,139,253,0.15); color: #79c0ff; border-color: #388bfd;
+    }
+    .pdf-choice-btn.en:hover { background: rgba(56,139,253,0.3); }
+    .pdf-choice-btn.es {
+      background: rgba(63,185,80,0.15); color: #56d364; border-color: #3fb950;
+    }
+    .pdf-choice-btn.es:hover { background: rgba(63,185,80,0.3); }
+    .pdf-cancel-btn {
+      background: transparent; border: none; color: #6e7681;
+      font-size: 13px; cursor: pointer; margin-top: 4px;
+      padding: 6px 12px; border-radius: 6px; transition: color 0.2s;
+    }
+    .pdf-cancel-btn:hover { color: #c9d1d9; }
+
+    /* ═══════════════════════════════════════════════════════════
+       OPCIÓN D — AeroQuiz panel
+    ═══════════════════════════════════════════════════════════ */
+    #quiz-modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.7); z-index: 2001;
+      justify-content: center; align-items: center;
+    }
+    #quiz-modal-overlay.open { display: flex; }
+    #quiz-modal {
+      background: #0d1117; border: 1px solid #30363d;
+      border-radius: 16px; padding: 28px; max-width: 560px; width: 92%;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+      animation: modalPop 0.2s ease;
+    }
+    #quiz-modal .quiz-header {
+      display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;
+    }
+    #quiz-modal .quiz-subject { font-size: 12px; font-weight: 700; color: #79c0ff; letter-spacing: 0.8px; }
+    #quiz-modal .quiz-q {
+      font-size: 16px; color: #c9d1d9; font-weight: 600; line-height: 1.5;
+      margin-bottom: 20px; min-height: 70px;
+    }
+    .quiz-opt {
+      display: block; width: 100%; padding: 11px 16px;
+      background: #161b22; border: 1px solid #30363d;
+      border-radius: 8px; color: #c9d1d9; font-size: 13px;
+      cursor: pointer; margin-bottom: 8px; text-align: left;
+      transition: all 0.15s; font-weight: 500;
+    }
+    .quiz-opt:hover { background: #21262d; border-color: #58a6ff; color: #fff; }
+    .quiz-opt.correct { background: rgba(63,185,80,0.2) !important; border-color: #3fb950 !important; color: #56d364 !important; }
+    .quiz-opt.wrong { background: rgba(248,81,73,0.2) !important; border-color: #f85149 !important; color: #ff7b72 !important; }
+    #quiz-explanation {
+      display: none; margin-top: 16px; padding: 14px 16px;
+      background: rgba(56,139,253,0.1); border: 1px solid rgba(56,139,253,0.3);
+      border-radius: 8px; font-size: 12px; color: #79c0ff; line-height: 1.6;
+    }
+    #quiz-explanation.visible { display: block; }
+    .quiz-nav { display: flex; gap: 10px; margin-top: 16px; justify-content: flex-end; }
+    .quiz-nav-btn {
+      background: #21262d; border: 1px solid #30363d; color: #c9d1d9;
+      border-radius: 8px; padding: 8px 16px; font-size: 13px; font-weight: 600;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .quiz-nav-btn:hover { background: #30363d; color: #fff; }
+    .quiz-nav-btn.primary { background: #1f6feb; border-color: #388bfd; color: #fff; }
+    .quiz-nav-btn.primary:hover { background: #388bfd; }
+    .btn-quiz {
+      background: #161b22; border: 1px solid #30363d;
+      color: #e3b341; border-radius: 5px; cursor: pointer;
+      padding: 4px 8px; font-size: 11px; font-weight: 600;
+      transition: all 0.15s; white-space: nowrap;
+    }
+    .btn-quiz:hover { background: rgba(210,153,34,0.15); border-color: #e3b341; color: #fff; }
+
+    /* ═══════════════════════════════════════════════════════════
+       OPCIÓN E — ATC Chatbot
+    ═══════════════════════════════════════════════════════════ */
+    #atc-fab {
+      position: fixed; bottom: 80px; right: 20px;
+      width: 56px; height: 56px; border-radius: 50%;
+      background: linear-gradient(135deg, #1f6feb, #0d4bab);
+      border: 2px solid #388bfd;
+      box-shadow: 0 4px 20px rgba(31,111,235,0.5);
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      font-size: 22px; z-index: 1100; transition: all 0.2s;
+      animation: radarPulse 2.5s infinite;
+    }
+    #atc-fab:hover { transform: scale(1.1); box-shadow: 0 6px 26px rgba(31,111,235,0.7); }
+    @keyframes radarPulse {
+      0%, 100% { box-shadow: 0 4px 20px rgba(31,111,235,0.5); }
+      50% { box-shadow: 0 4px 30px rgba(31,111,235,0.85); }
+    }
+    #atc-panel {
+      position: fixed; bottom: 148px; right: 20px;
+      width: 340px; max-height: 480px;
+      background: #0d1117; border: 1px solid #30363d;
+      border-radius: 16px; box-shadow: 0 16px 50px rgba(0,0,0,0.7);
+      z-index: 1099; display: none; flex-direction: column;
+      overflow: hidden; animation: slideUp 0.25s ease;
+    }
+    @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    #atc-panel.open { display: flex; }
+    .atc-header {
+      background: linear-gradient(135deg, #1f6feb22, #161b22);
+      border-bottom: 1px solid #30363d;
+      padding: 14px 16px; display: flex; align-items: center; gap: 10px;
+    }
+    .atc-radar { font-size: 22px; animation: spin 6s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .atc-header-text h4 { font-size: 14px; font-weight: 700; color: #fff; }
+    .atc-header-text p { font-size: 11px; color: #8b949e; margin-top: 2px; }
+    .atc-badge {
+      margin-left: auto; font-size: 10px; font-weight: 700;
+      background: rgba(56,139,253,0.2); color: #79c0ff;
+      border: 1px solid #388bfd; border-radius: 8px; padding: 2px 8px;
+    }
+    #atc-messages {
+      flex: 1; overflow-y: auto; padding: 14px; display: flex;
+      flex-direction: column; gap: 10px;
+    }
+    .atc-msg {
+      max-width: 85%; padding: 10px 13px; border-radius: 12px;
+      font-size: 13px; line-height: 1.5;
+    }
+    .atc-msg.atc {
+      background: rgba(31,111,235,0.15); border: 1px solid rgba(56,139,253,0.25);
+      color: #c9d1d9; align-self: flex-start; border-bottom-left-radius: 4px;
+    }
+    .atc-msg.user {
+      background: #21262d; border: 1px solid #30363d;
+      color: #e6edf3; align-self: flex-end; border-bottom-right-radius: 4px;
+    }
+    .atc-msg.typing { opacity: 0.6; font-style: italic; }
+    #atc-quick-btns {
+      padding: 8px 14px; display: flex; gap: 6px; flex-wrap: wrap;
+      border-top: 1px solid #21262d;
+    }
+    .atc-quick {
+      background: #161b22; border: 1px solid #30363d; color: #8b949e;
+      border-radius: 12px; padding: 5px 10px; font-size: 11px;
+      cursor: pointer; transition: all 0.15s; white-space: nowrap;
+    }
+    .atc-quick:hover { border-color: #58a6ff; color: #fff; }
+    #atc-input-area {
+      padding: 10px 14px; border-top: 1px solid #30363d;
+      display: flex; gap: 8px; align-items: center;
+    }
+    #atc-input {
+      flex: 1; background: #161b22; border: 1px solid #30363d;
+      color: #c9d1d9; border-radius: 8px; padding: 8px 12px; font-size: 13px;
+      outline: none; transition: border-color 0.2s;
+    }
+    #atc-input:focus { border-color: #58a6ff; }
+    #atc-send {
+      background: #1f6feb; border: none; color: #fff;
+      border-radius: 8px; padding: 8px 14px; cursor: pointer;
+      font-size: 16px; transition: background 0.2s; flex-shrink: 0;
+    }
+    #atc-send:hover { background: #388bfd; }
+
+    /* Padding bottom to avoid content hiding behind player */
+    body.player-active { padding-bottom: 80px; }
   </style>
 </head>
 <body>
@@ -341,7 +595,7 @@
       <div class="brand">
         <div class="brand-icon">✈️</div>
         <div class="brand-text">
-          <h1>ATPL Flight Deck & Study Control <span style="font-size: 11px; font-weight: 600; color: #38bdf8; background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.3); padding: 2px 8px; border-radius: 12px; vertical-align: middle; margin-left: 8px;">v2.6 Live</span></h1>
+          <h1>ATPL Flight Deck & Study Control <span style="font-size: 11px; font-weight: 600; color: #38bdf8; background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.3); padding: 2px 8px; border-radius: 12px; vertical-align: middle; margin-left: 8px;">v3.0 Live</span></h1>
           <p>Preparación EASA Modular Oficial | Sistema adaptado a turnos de 12h</p>
         </div>
       </div>
@@ -436,13 +690,15 @@
             <th style="width: 50px;">Cap.</th>
             <th style="width: 70px;">Código</th>
             <th>Tema / Capítulo Oficial (CAE Oxford & EASA)</th>
-            <th style="width: 120px;">Págs (Resumen)</th>
+            <th style="width: 90px;">Págs</th>
             <th style="width: 90px;">Dificultad</th>
             <th style="width: 80px;">Prioridad</th>
             <th style="width: 110px;">⏱️ T. Estimado</th>
-            <th style="width: 160px;">Resumen Técnico</th>
+            <th style="width: 150px;">Resumen Técnico</th>
+            <th style="width: 200px;">🎧 Audio · 📥 PDF · ⚡ Quiz</th>
           </tr>
         </thead>
+
         <tbody id="topics-tbody">
           <!-- Populated dynamically -->
         </tbody>
@@ -876,7 +1132,7 @@
       }
 
       if (pool.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="9" style="text-align: center; color: var(--text-muted); padding: 30px;">
+        tbody.innerHTML = `<tr><td colspan="10" style="text-align: center; color: var(--text-muted); padding: 30px;">
           No se encontraron temas que coincidan con los filtros de búsqueda seleccionados.
         </td></tr>`;
         return;
@@ -892,8 +1148,21 @@
         const timeEst = `<span style="color: #94a3b8; font-size: 13px; font-weight: 500;" title="${pagesInt} páginas reales del PDF">⏱️ ${hoursStr}${minsStr}</span>`;
 
         const summaryLink = t.summary_file ? 
-          `<a href="../${t.summary_file}" target="_blank" class="btn-summary">📄 Ver Resumen (PDF)</a>` : 
+          `<a href="../${t.summary_file}" target="_blank" class="btn-summary">📄 Ver Resumen</a>` : 
           `<span style="color: var(--text-muted); font-size: 11px;">En redacción</span>`;
+
+        // Action buttons: Audio EN/ES, PDF download (bilingual modal), AeroQuiz
+        const titleShort = t.title.replace(/"/g, '&quot;').substring(0, 60);
+        const audioEN = t.podcast_en 
+          ? `<button class="btn-audio" data-topic="${t.id}" data-lang="en" onclick="playPodcast(${t.id},'en','${titleShort}','${t.subject_code}',${t.chapter_num})" title="Escuchar en inglés">🇬🇧 EN</button>` 
+          : `<span style="color:#444;font-size:10px;">—EN</span>`;
+        const audioES = t.podcast_es 
+          ? `<button class="btn-audio" data-topic="${t.id}" data-lang="es" onclick="playPodcast(${t.id},'es','${titleShort}','${t.subject_code}',${t.chapter_num})" title="Escuchar en español">🇪🇸 ES</button>` 
+          : `<span style="color:#444;font-size:10px;">—ES</span>`;
+        const pdfBtn = (t.notebooklm_pdf_en || t.notebooklm_pdf_es)
+          ? `<button class="btn-summary" onclick="openPdfModal(${t.id},'${titleShort}')" title="Descargar PDF bilingüe NotebookLM" style="color:#e3b341;border-color:#6b5e30;">📥 PDF</button>`
+          : '';
+        const quizBtn = `<button class="btn-quiz" onclick="openQuiz('${t.subject_code}','${titleShort}')" title="AeroQuiz — Test rápido ECQB">⚡ Test</button>`;
 
         tr.innerHTML = `
           <td style="text-align: center;">
@@ -907,6 +1176,14 @@
           <td>${t.priority}</td>
           <td>${timeEst}</td>
           <td>${summaryLink}</td>
+          <td style="white-space: nowrap;">
+            <div style="display:flex; gap:4px; flex-wrap:wrap; align-items:center;">
+              ${audioEN}
+              ${audioES}
+              ${pdfBtn}
+              ${quizBtn}
+            </div>
+          </td>
         `;
         tbody.appendChild(tr);
       });
@@ -914,6 +1191,441 @@
 
     // Inicializar al cargar
     loadData();
+  </script>
+
+  <!-- ═══════════════════════════════════════════════════════
+       OPCIÓN A — Cockpit Audio Player (Spotify-style bottom bar)
+  ═══════════════════════════════════════════════════════════ -->
+  <div id="cockpit-player">
+    <div style="font-size:22px;">🎧</div>
+    <div class="player-info">
+      <div class="player-title" id="player-title">—</div>
+      <div class="player-sub" id="player-sub">ATPL Cockpit Audio</div>
+      <div id="cockpit-progress" onclick="seekAudio(event)">
+        <div id="cockpit-progress-fill"></div>
+      </div>
+    </div>
+    <div class="player-controls">
+      <span class="lang-badge en" id="player-lang-badge">🇬🇧 EN</span>
+      <span id="cockpit-time">0:00 / 0:00</span>
+      <button class="player-btn" onclick="skipAudio(-15)" title="Retroceder 15s">⏮ 15s</button>
+      <button class="player-btn" id="play-pause-btn" onclick="togglePlayPause()">▶ Play</button>
+      <button class="player-btn" onclick="skipAudio(15)" title="Avanzar 15s">15s ⏭</button>
+      <select id="speed-select" class="player-btn" onchange="setSpeed(this.value)" style="padding: 5px 8px; font-size: 12px;">
+        <option value="1">1×</option>
+        <option value="1.25">1.25×</option>
+        <option value="1.5">1.5×</option>
+        <option value="2">2×</option>
+      </select>
+      <button class="player-btn" onclick="closePlayer()" title="Cerrar">✕</button>
+    </div>
+  </div>
+  <audio id="cockpit-audio"></audio>
+
+  <!-- ═══════════════════════════════════════════════════════
+       OPCIÓN B — PDF Modal Bilingüe
+  ═══════════════════════════════════════════════════════════ -->
+  <div id="pdf-modal-overlay" onclick="closePdfModal(event)">
+    <div id="pdf-modal">
+      <h3>📥 Descargar PDF NotebookLM</h3>
+      <p id="pdf-modal-topic">Selecciona el idioma del resumen técnico generado por IA</p>
+      <a id="pdf-btn-en" href="#" target="_blank" class="pdf-choice-btn en">
+        🇬🇧 &nbsp;Inglés (EN) — English Version
+      </a>
+      <a id="pdf-btn-es" href="#" target="_blank" class="pdf-choice-btn es">
+        🇪🇸 &nbsp;Español (ES) — Versión en Español
+      </a>
+      <button class="pdf-cancel-btn" onclick="closePdfModal()">Cancelar</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       OPCIÓN D — AeroQuiz Modal
+  ═══════════════════════════════════════════════════════════ -->
+  <div id="quiz-modal-overlay" onclick="closeQuiz(event)">
+    <div id="quiz-modal">
+      <div class="quiz-header">
+        <span class="quiz-subject" id="quiz-subject-label">AEROQUIZ ⚡</span>
+        <span style="font-size: 12px; color: #6e7681;" id="quiz-counter">1/5</span>
+      </div>
+      <div class="quiz-q" id="quiz-question">Cargando pregunta...</div>
+      <div id="quiz-options"></div>
+      <div id="quiz-explanation"></div>
+      <div class="quiz-nav">
+        <button class="quiz-nav-btn" onclick="closeQuiz()">✕ Cerrar</button>
+        <button class="quiz-nav-btn primary" id="quiz-next-btn" onclick="nextQuizQuestion()" style="display:none;">
+          Siguiente →
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       OPCIÓN E — ATC Chatbot (Controlador Aéreo Virtual)
+  ═══════════════════════════════════════════════════════════ -->
+  <button id="atc-fab" onclick="toggleATC()" title="ATC — Controlador Aéreo ATPL">🛰️</button>
+
+  <div id="atc-panel">
+    <div class="atc-header">
+      <div class="atc-radar">📡</div>
+      <div class="atc-header-text">
+        <h4>ATC — Control de Área</h4>
+        <p>Controlador Aéreo Virtual ATPL</p>
+      </div>
+      <span class="atc-badge">DEMO</span>
+    </div>
+    <div id="atc-messages">
+      <div class="atc-msg atc">
+        ✈️ <strong>ATPL Center, ATC en línea.</strong><br>
+        Soy tu controlador aéreo de estudio. Pregúntame sobre cualquier concepto ATPL — Air Law, Meteorología, Navegación, Sistemas...<br><br>
+        <span style="font-size: 11px; color: #6e7681;">⚙️ Modo demo. Para conectar Gemini API, pulsa ℹ️</span>
+      </div>
+    </div>
+    <div id="atc-quick-btns">
+      <button class="atc-quick" onclick="sendATCQuick('¿Qué es el RVSM?')">RVSM</button>
+      <button class="atc-quick" onclick="sendATCQuick('Explícame el METAR')">METAR</button>
+      <button class="atc-quick" onclick="sendATCQuick('¿Qué es el QNH?')">QNH</button>
+      <button class="atc-quick" onclick="sendATCQuick('Diferencia VFR vs IFR')">VFR/IFR</button>
+      <button class="atc-quick" onclick="sendATCQuick('¿Qué es ETOPS?')">ETOPS</button>
+      <button class="atc-quick" onclick="sendATCQuick('ℹ️ ¿Cómo activo Gemini?')">ℹ️ Gemini</button>
+    </div>
+    <div id="atc-input-area">
+      <input id="atc-input" type="text" placeholder="Pregunta sobre ATPL..." onkeydown="if(event.key==='Enter') sendATC()">
+      <button id="atc-send" onclick="sendATC()">➤</button>
+    </div>
+  </div>
+
+  <script>
+  // ═══════════════════════════════════════════════════════════════
+  //  OPCIÓN A — Cockpit Audio Player Logic
+  // ═══════════════════════════════════════════════════════════════
+  const audio = document.getElementById('cockpit-audio');
+  let currentTopicId = null;
+  let currentLang = null;
+
+  function playPodcast(topicId, lang, title, subjectCode, chapterNum) {
+    const topic = (window.ATPL_DATA.topics || []).find(t => t.id === topicId);
+    if (!topic) return;
+    const src = lang === 'en' ? topic.podcast_en : topic.podcast_es;
+    if (!src) { alert('Audio no disponible para este capítulo'); return; }
+
+    currentTopicId = topicId;
+    currentLang = lang;
+
+    // Update all playing button states
+    document.querySelectorAll('.btn-audio').forEach(b => b.classList.remove('playing'));
+    const activeBtn = document.querySelector(`.btn-audio[data-topic="${topicId}"][data-lang="${lang}"]`);
+    if (activeBtn) activeBtn.classList.add('playing');
+
+    // Set source and play
+    audio.src = src;
+    audio.playbackRate = parseFloat(document.getElementById('speed-select').value);
+    audio.play().catch(e => console.log('Audio play error:', e));
+
+    // Update player UI
+    document.getElementById('player-title').textContent = `[${subjectCode}] Ch.${chapterNum} — ${title.substring(0, 50)}...`;
+    document.getElementById('player-sub').textContent = lang === 'en' ? '🇬🇧 English Podcast — Ryan & Sonia' : '🇪🇸 Podcast Español — Álvaro & Elvira';
+    document.getElementById('player-lang-badge').className = `lang-badge ${lang}`;
+    document.getElementById('player-lang-badge').textContent = lang === 'en' ? '🇬🇧 EN' : '🇪🇸 ES';
+    document.getElementById('play-pause-btn').textContent = '⏸ Pause';
+
+    const player = document.getElementById('cockpit-player');
+    player.classList.add('visible');
+    document.body.classList.add('player-active');
+  }
+
+  function togglePlayPause() {
+    if (audio.paused) {
+      audio.play();
+      document.getElementById('play-pause-btn').textContent = '⏸ Pause';
+    } else {
+      audio.pause();
+      document.getElementById('play-pause-btn').textContent = '▶ Play';
+    }
+  }
+
+  function skipAudio(secs) {
+    audio.currentTime = Math.max(0, audio.currentTime + secs);
+  }
+
+  function setSpeed(val) {
+    audio.playbackRate = parseFloat(val);
+  }
+
+  function closePlayer() {
+    audio.pause();
+    document.getElementById('cockpit-player').classList.remove('visible');
+    document.body.classList.remove('player-active');
+    document.querySelectorAll('.btn-audio').forEach(b => b.classList.remove('playing'));
+    currentTopicId = null;
+  }
+
+  function seekAudio(e) {
+    const bar = document.getElementById('cockpit-progress');
+    const pct = e.offsetX / bar.offsetWidth;
+    audio.currentTime = pct * audio.duration;
+  }
+
+  function fmtTime(s) {
+    if (isNaN(s)) return '0:00';
+    const m = Math.floor(s / 60);
+    const sec = Math.floor(s % 60);
+    return `${m}:${sec.toString().padStart(2, '0')}`;
+  }
+
+  audio.addEventListener('timeupdate', () => {
+    const pct = audio.duration ? (audio.currentTime / audio.duration) * 100 : 0;
+    document.getElementById('cockpit-progress-fill').style.width = pct + '%';
+    document.getElementById('cockpit-time').textContent = `${fmtTime(audio.currentTime)} / ${fmtTime(audio.duration)}`;
+  });
+
+  audio.addEventListener('ended', () => {
+    document.getElementById('play-pause-btn').textContent = '▶ Play';
+    document.querySelectorAll('.btn-audio').forEach(b => b.classList.remove('playing'));
+  });
+
+  audio.addEventListener('pause', () => {
+    document.getElementById('play-pause-btn').textContent = '▶ Play';
+  });
+
+  audio.addEventListener('play', () => {
+    document.getElementById('play-pause-btn').textContent = '⏸ Pause';
+  });
+
+  // ═══════════════════════════════════════════════════════════════
+  //  OPCIÓN B — PDF Modal Bilingüe
+  // ═══════════════════════════════════════════════════════════════
+  function openPdfModal(topicId, title) {
+    const topic = (window.ATPL_DATA.topics || []).find(t => t.id === topicId);
+    if (!topic) return;
+    document.getElementById('pdf-modal-topic').textContent = `Capítulo: ${title.substring(0, 60)}`;
+    const en = topic.notebooklm_pdf_en || '';
+    const es = topic.notebooklm_pdf_es || '';
+    document.getElementById('pdf-btn-en').href = en ? `../${en}` : '#';
+    document.getElementById('pdf-btn-en').style.opacity = en ? '1' : '0.4';
+    document.getElementById('pdf-btn-es').href = es ? `../${es}` : '#';
+    document.getElementById('pdf-btn-es').style.opacity = es ? '1' : '0.4';
+    document.getElementById('pdf-modal-overlay').classList.add('open');
+  }
+
+  function closePdfModal(e) {
+    if (!e || e.target === document.getElementById('pdf-modal-overlay')) {
+      document.getElementById('pdf-modal-overlay').classList.remove('open');
+    }
+  }
+
+  // ═══════════════════════════════════════════════════════════════
+  //  OPCIÓN D — AeroQuiz
+  // ═══════════════════════════════════════════════════════════════
+  const QUIZ_BANK = {
+    "010": [
+      { q: "¿Cuál es el mínimo de visibilidad para VFR en espacio aéreo Clase G por debajo de 3000 ft AMSL?", opts: ["1.5 km", "3 km", "5 km", "8 km"], ans: 0, exp: "SERA.5005: Para vuelo VFR en Clase G por debajo de 3000 ft AMSL o 1000 ft sobre el terreno (lo que sea mayor), la visibilidad mínima es 1.5 km para aeronaves en velocidad ≤140 kt." },
+      { q: "¿Con qué ángulo de inclinación debe interceptarse una aeronave intrusa según ICAO?", opts: ["10°", "20°", "30°", "45°"], ans: 2, exp: "ICAO Annex 2 señala que la aeronave interceptora debe aproximarse por el flanco izquierdo con un ángulo de 30° para no causar confusión." },
+      { q: "¿Cuál es la altitud de transición estándar en España (SFC a FL)?", opts: ["FL050", "FL065", "FL080", "FL100"], ans: 2, exp: "En España la altitud de transición es FL080 (según AIP España ENR 1.7). Por encima se usa QNE (altímetro en 1013 hPa)." },
+      { q: "¿Qué documento prueba la aeronavegabilidad de una aeronave?", opts: ["Permiso de vuelo", "Certificado de Aeronavegabilidad (C of A)", "Certificado de matrícula", "Manual de vuelo"], ans: 1, exp: "El Certificado de Aeronavegabilidad (Certificate of Airworthiness - CofA) es el documento oficial ICAO (Anexo 8) que certifica que la aeronave cumple las normas de diseño y fabricación." },
+      { q: "Según ICAO, ¿qué regla de prioridad aplica entre dos aeronaves en vuelo nivelado que convergen?", opts: ["La más pesada tiene prioridad", "La que tiene la otra a la derecha cede el paso", "La que va más lento cede el paso", "La aeronave de motor cede ante la de vela"], ans: 1, exp: "ICAO Annex 2, Rule 3.2.2: Cuando dos aeronaves convergen aproximadamente al mismo nivel, la que tenga la otra a su derecha debe ceder el paso." }
+    ],
+    "040": [
+      { q: "¿Cuál es el TUC (Tiempo Útil de Consciencia) a FL350 sin presurización?", opts: ["30-60 segundos", "90 segundos", "3-5 minutos", "10 minutos"], ans: 0, exp: "A FL350 (35000 ft) el TUC es de aproximadamente 30-60 segundos. A mayor altitud, menos oxígeno disponible y más corto el tiempo de consciencia útil antes de la hipoxia incapacitante." },
+      { q: "¿Qué modelo de gestión de errores describe las 'barreras defensivas' en aviación?", opts: ["Modelo SHELL", "Modelo del Queso Suizo (Reason)", "Modelo CRM", "Modelo PEAR"], ans: 1, exp: "El Modelo del Queso Suizo de James Reason describe cómo las defensas del sistema tienen 'agujeros' y cuando se alinean, un accidente puede ocurrir. Es la base del SMS moderno." },
+      { q: "¿Qué tipo de ilusión somatogravítica puede ocurrir durante aceleración lineal?", opts: ["Sensación de cabeceo hacia arriba", "Sensación de giro", "La Noria (Leans)", "Desorientación por vibración"], ans: 0, exp: "La ilusión somatogravítica ocurre cuando la aceleración lineal (resultante de la fuerza de inercia + gravedad) es interpretada por el otolito como inclinación de nariz arriba." },
+      { q: "¿Qué ley de los gases relaciona presión, volumen y temperatura?", opts: ["Ley de Boyle", "Ley de Charles", "Ley de Dalton", "Ley del Gas Ideal (PV=nRT)"], ans: 3, exp: "La Ley del Gas Ideal (PV=nRT) combina las leyes de Boyle (P·V=cte a T constante) y Charles (V/T=cte a P constante). Es fundamental para entender la fisiología de altura." }
+    ],
+    "090": [
+      { q: "¿Cuál es la frecuencia internacional de emergencia en VHF?", opts: ["118.0 MHz", "121.5 MHz", "123.45 MHz", "126.9 MHz"], ans: 1, exp: "121.5 MHz es la frecuencia internacional de socorro en VHF (Guard). También se monitoriza en COSPAS-SARSAT y por los balises ELT/PLB." },
+      { q: "¿Qué frase fonética se usa para declarar una emergencia urgente (no peligro inmediato)?", opts: ["MAYDAY MAYDAY MAYDAY", "PAN PAN PAN PAN PAN PAN", "SECURITE", "EMERGENCY"], ans: 1, exp: "PAN PAN (repetido 3 veces) indica una situación urgente pero sin peligro inmediato de vida. MAYDAY es para peligro inmediato. SÉCURITÉ es para avisos de seguridad a la navegación." },
+      { q: "El QNH es la presión ajustada al...", opts: ["Nivel de vuelo", "Nivel del aeródromo", "Nivel del mar (MSL)", "Temperatura estándar"], ans: 2, exp: "QNH es la presión reducida al nivel del mar (MSL) usando las condiciones actuales. Con QNH, el altímetro indica la altitud sobre MSL en el aeródromo." }
+    ],
+    "050": [
+      { q: "¿Qué tipo de nubes están asociadas con actividad convectiva severa (CB)?", opts: ["Cirrus", "Cumulonimbus", "Altostratus", "Stratus"], ans: 1, exp: "Los Cumulonimbus (CB) son nubes de desarrollo vertical extremo asociadas con thunderstorms, cizalladura severa, granizo, turbulencia y engelamiento." },
+      { q: "¿Qué gradiente térmico define la atmósfera estándar (ISA) en la troposfera?", opts: ["2°C/1000 ft", "2°C/100 m", "1.98°C/1000 ft ≈ 6.5°C/km", "3°C/km"], ans: 2, exp: "La ISA define un gradiente de -1.98°C por 1000 ft (≈ -6.5°C por km) en la troposfera hasta la tropopausa a 36089 ft (FL360), donde empieza la estratosfera." },
+      { q: "Un METAR informa 'BKN020'. ¿Qué significa?", opts: ["Cielo despejado a 2000 ft", "Nubes rotas entre 1000 y 2000 ft", "Nubes rotas a 2000 ft AGL", "Nubes dispersas a 200 ft"], ans: 2, exp: "BKN = Broken (5/8 a 7/8 de cobertura). 020 = altura de la base en centenas de pies = 2000 ft AGL. Codificación METAR: FEW(1-2), SCT(3-4), BKN(5-7), OVC(8/8)." }
+    ],
+    "061": [
+      { q: "¿Cuál es la convergencia de los meridianos en una proyección de Lambert en el paralelo estándar?", opts: ["0° (meridianos paralelos)", "Igual al ángulo de inclinación del cono", "Factor de convergencia × diferencia de longitud", "Exactamente igual al ángulo real"], ans: 2, exp: "En Lambert Conformal Conic, la convergencia de meridianos = Factor de convergencia (sin del paralelo estándar) × diferencia de longitud. En Mercator es 0 (meridianos paralelos)." },
+      { q: "¿Qué es la variación magnética (o declinación)?", opts: ["Diferencia entre Norte Verdadero y Norte Magnético", "Error del compás magnético", "Desviación causada por metales del avión", "Ángulo entre la proa y el rumbo magnético"], ans: 0, exp: "La variación magnética (declinación) es el ángulo entre el Norte Verdadero (geográfico) y el Norte Magnético. Es positiva al Este (E+) y negativa al Oeste. TC = MC ± Var." }
+    ],
+    "062": [
+      { q: "¿Cuál es la frecuencia de operación de un VOR?", opts: ["190-1750 kHz", "75 MHz", "108-117.95 MHz", "960-1215 MHz"], ans: 2, exp: "El VOR opera en la banda VHF entre 108.00 y 117.95 MHz. El DME opera en la banda UHF (962-1213 MHz). El NDB/ADF opera en LF/MF (190-1750 kHz)." },
+      { q: "¿Qué significa RNAV 1 en PBN?", opts: ["Precisión total de 1 NM en el 95% del tiempo", "Precisión lateral ≤1 NM en el 95% del tiempo de vuelo", "Velocidad vertical ≤1 ft/min", "Altura de decisión 100 ft"], ans: 1, exp: "RNAV 1: El track de la aeronave debe permanecer dentro de ±1 NM del track deseado durante el 95% del tiempo. Es el estándar para SIDs y STARs en Europa (P-RNAV)." }
+    ],
+    "021": [
+      { q: "¿Qué tipo de motor tiene mayor relación empuje/peso?", opts: ["Motor de pistón radial", "Turbohélice", "Turbofan de alto bypass", "Turbojet puro"], ans: 3, exp: "El turbojet puro tiene una excelente relación empuje/peso y eficiencia a alta velocidad (Mach >0.85), aunque es más ruidoso y consume más. El turbofan de alto bypass es más eficiente a velocidades subsónicas moderadas." },
+      { q: "¿Qué sistema hidráulico actúa típicamente como sistema de emergencia en un A320?", opts: ["Sistema Azul (Blue)", "Sistema Amarillo (Yellow)", "Sistema Verde (Green)", "Sistema PTU"], ans: 0, exp: "En el A320, el sistema Blue (azul) es el más pequeño y actúa como sistema de emergencia. Es alimentado por la RAT (Ram Air Turbine) en caso de pérdida de energía eléctrica y de los otros sistemas." }
+    ],
+    "022": [
+      { q: "¿Qué instrumento mide directamente la velocidad aerodinámica (IAS)?", opts: ["Altímetro barométrico", "Anemómetro/Indicador de velocidad (ASI)", "Variómetro", "Giróscopo direccional"], ans: 1, exp: "El ASI (Air Speed Indicator) mide la presión dinámica (pitot minus static) y la convierte en velocidad indicada (IAS). No corrige por densidad, por lo que difiere de TAS a altitudes elevadas." },
+      { q: "¿Cuál es la precesión giroscópica?", opts: ["Tendencia del giróscopo a mantener su posición en el espacio", "La reacción a una fuerza aplicada ocurre 90° después en la dirección de rotación", "La deriva del gyro por fricción", "El eje del giróscopo se alinea con la gravedad"], ans: 1, exp: "La precesión giroscópica: cuando se aplica una fuerza a un giróscopo en rotación, la reacción aparece 90° después en la dirección del giro. Esto explica los errores del DI en virajes y la tendencia al guiñado." }
+    ],
+    "081": [
+      { q: "¿Qué ocurre con el ángulo de ataque crítico si se incrementa la velocidad de vuelo?", opts: ["Aumenta", "Disminuye", "Permanece constante", "Depende del flap"], ans: 2, exp: "El ángulo de ataque crítico (stall angle) es una característica aerodinámica del perfil alar. No depende de la velocidad, peso, altitud ni configuración de flaps — siempre ocurre al mismo AoA (~15-20° para perfiles típicos)." },
+      { q: "¿Cómo se llama el efecto que produce sustentación adicional en aeronaves en configuración flap?", opts: ["Efecto Bernoulli puro", "Efecto Coanda / Fowler effect", "Efecto Magnus", "Sustentación inducida"], ans: 1, exp: "Los flaps Fowler aumentan la cuerda y la superficie alar, incrementando el CLmax. El efecto Coanda mantiene el flujo adherido a la superficie curvada. Juntos permiten velocidades de aproximación más bajas." }
+    ],
+    "031": [
+      { q: "¿Qué significa MAC en el contexto de Mass & Balance?", opts: ["Maximum Allowable Configuration", "Mean Aerodynamic Chord", "Mass Accuracy Control", "Minimum Approach Clearance"], ans: 1, exp: "MAC (Mean Aerodynamic Chord) es la cuerda media aerodinámica del ala. El %MAC indica la posición del CG expresada como porcentaje de la MAC, medido desde el borde de ataque. Los límites de CG se expresan en %MAC." }
+    ],
+    "032": [
+      { q: "¿Qué velocidad garantiza el despegue incluso con fallo de motor en V1?", opts: ["VMCG", "VR", "V2", "VLOF"], ans: 2, exp: "V2 es la velocidad de seguridad al despegue (Takeoff Safety Speed). Es la mínima velocidad a la que la aeronave cumple los gradientes de ascenso con un motor inoperativo (OEI) en el primer segmento." }
+    ],
+    "033": [
+      { q: "¿Qué es el PNR (Point of No Return)?", opts: ["El punto donde el combustible llega a reservas mínimas", "El último punto desde el que la aeronave puede retornar a la salida con combustible suficiente", "El punto equidistante entre origen y destino", "El waypoint de desvío más cercano"], ans: 1, exp: "El PNR (Point of No Return) o PSR (Point of Safe Return) es el último punto desde el cual la aeronave puede regresar al punto de salida con las reservas de combustible mínimas requeridas." }
+    ],
+    "070": [
+      { q: "¿Qué significa ETOPS-180 para una aeronave bimotor?", opts: ["Puede volar 180 minutos con los dos motores", "Puede desviarse hasta 180 minutos de vuelo con un motor inoperativo desde el punto de igual tiempo", "Requiere 180 millas de la ruta al aeropuerto de desvío", "Puede operar 180 días sin inspección"], ans: 1, exp: "ETOPS-180 autoriza vuelos sobre aguas u otras rutas remotas hasta 180 minutos de vuelo (con un motor inoperativo a velocidad de largo alcance) desde el aeropuerto de desvío más cercano adecuado." },
+      { q: "¿Cuál es la altura mínima de vuelo sobre obstáculos en zona despoblada según EASA OPS?", opts: ["150 ft / 50 m", "300 ft / 100 m", "500 ft / 150 m", "1000 ft / 300 m"], ans: 2, exp: "EASA OPS (EU) CAT.OP.MPA.110: La altura mínima sobre obstáculos en zonas despobladas es 500 ft (150 m). En zonas congestionadas es 1000 ft sobre el obstáculo más alto en un radio de 600 m." }
+    ]
+  };
+
+  let quizTopicCode = null;
+  let quizQuestions = [];
+  let quizCurrentIdx = 0;
+  let quizAnswered = false;
+
+  function openQuiz(subjectCode, topicTitle) {
+    quizTopicCode = subjectCode;
+    const bank = QUIZ_BANK[subjectCode];
+    if (!bank || bank.length === 0) {
+      alert(`AeroQuiz: Banco de preguntas para ${subjectCode} próximamente disponible.`);
+      return;
+    }
+    // Shuffle and take up to 5
+    quizQuestions = [...bank].sort(() => Math.random() - 0.5).slice(0, Math.min(5, bank.length));
+    quizCurrentIdx = 0;
+    quizAnswered = false;
+    showQuizQuestion();
+    document.getElementById('quiz-modal-overlay').classList.add('open');
+  }
+
+  function showQuizQuestion() {
+    const q = quizQuestions[quizCurrentIdx];
+    quizAnswered = false;
+    document.getElementById('quiz-subject-label').textContent = `⚡ AEROQUIZ — ${quizTopicCode}`;
+    document.getElementById('quiz-counter').textContent = `${quizCurrentIdx + 1} / ${quizQuestions.length}`;
+    document.getElementById('quiz-question').textContent = q.q;
+
+    const optsEl = document.getElementById('quiz-options');
+    optsEl.innerHTML = '';
+    q.opts.forEach((opt, i) => {
+      const labels = ['[A]', '[B]', '[C]', '[D]'];
+      const btn = document.createElement('button');
+      btn.className = 'quiz-opt';
+      btn.textContent = `${labels[i]}  ${opt}`;
+      btn.onclick = () => answerQuiz(i, btn);
+      optsEl.appendChild(btn);
+    });
+
+    document.getElementById('quiz-explanation').className = '';
+    document.getElementById('quiz-explanation').style.display = 'none';
+    document.getElementById('quiz-next-btn').style.display = 'none';
+  }
+
+  function answerQuiz(selectedIdx, btnEl) {
+    if (quizAnswered) return;
+    quizAnswered = true;
+    const q = quizQuestions[quizCurrentIdx];
+    const allOpts = document.querySelectorAll('.quiz-opt');
+
+    allOpts.forEach((b, i) => {
+      b.disabled = true;
+      if (i === q.ans) b.classList.add('correct');
+      else if (i === selectedIdx) b.classList.add('wrong');
+    });
+
+    const expEl = document.getElementById('quiz-explanation');
+    expEl.style.display = 'block';
+    expEl.className = 'visible';
+    expEl.innerHTML = `<strong>✈️ Justificación EASA:</strong><br>${q.exp}`;
+
+    const nextBtn = document.getElementById('quiz-next-btn');
+    if (quizCurrentIdx < quizQuestions.length - 1) {
+      nextBtn.textContent = 'Siguiente →';
+      nextBtn.style.display = 'block';
+    } else {
+      nextBtn.textContent = '✅ Finalizar';
+      nextBtn.style.display = 'block';
+    }
+  }
+
+  function nextQuizQuestion() {
+    quizCurrentIdx++;
+    if (quizCurrentIdx >= quizQuestions.length) {
+      closeQuiz();
+      return;
+    }
+    showQuizQuestion();
+  }
+
+  function closeQuiz(e) {
+    if (!e || e.target === document.getElementById('quiz-modal-overlay')) {
+      document.getElementById('quiz-modal-overlay').classList.remove('open');
+    }
+  }
+
+  // ═══════════════════════════════════════════════════════════════
+  //  OPCIÓN E — ATC Chatbot Logic (Demo Mode)
+  // ═══════════════════════════════════════════════════════════════
+  let atcOpen = false;
+
+  const ATC_RESPONSES = {
+    "rvsm": "🛫 <strong>RVSM (Reduced Vertical Separation Minima)</strong><br>Desde 1997 en Europa, entre FL290 y FL410, la separación vertical mínima se redujo de 2000 ft a 1000 ft. Esto permite más niveles de vuelo (FL290, 300, 310...) y mayor eficiencia. Requiere equipamiento aviónico certificado y aprobación operacional de la aeronave.",
+    "metar": "🌦️ <strong>METAR — Meteorological Aerodrome Report</strong><br>Informe meteorológico de observación de aeródromo emitido cada 30 min (hora en punto y media hora). Incluye: hora (Z), viento (ej: 27015KT), visibilidad, tiempo significativo, nubes (FEW/SCT/BKN/OVC), temperatura y punto de rocío, QNH, y comentarios REMARK.",
+    "qnh": "🌡️ <strong>QNH</strong><br>Presión reducida al nivel del mar (MSL) usando condiciones actuales. Con QNH en el altímetro, el instrumento indica la altitud sobre MSL. En el aeródromo, indica la elevación del aeródromo. Vs. QFE (indica 0 en la pista) y QNE (1013.25 hPa, indica nivel de vuelo).",
+    "vfr": "✈️ <strong>VFR vs IFR</strong><br>• <strong>VFR</strong> (Visual Flight Rules): el piloto navega con referencias visuales externas. Requiere VMC (Visual Meteorological Conditions).<br>• <strong>IFR</strong> (Instrument Flight Rules): navegación por instrumentos, independiente de la visibilidad exterior. Requiere rating IR y plan de vuelo IFR.",
+    "etops": "🌊 <strong>ETOPS (Extended-range Twin-engine Operations)</strong><br>Permite a bimotores operar rutas que superen los 60 minutos de vuelo desde el aeródromo adecuado más cercano. ETOPS-180 = hasta 180 min con OEI (One Engine Inoperative). Requiere aprobación operacional, equipamiento redundante y aeronaves certificadas ETOPS.",
+    "gemini": "⚙️ <strong>Activar ATC con Gemini AI</strong><br>Para conectar el chatbot ATC a la API real de Gemini:<br>1. Obtén una API Key en <code>ai.google.dev</code><br>2. En <code>dashboard/index.html</code>, localiza la función <code>sendATC()</code><br>3. Sustituye la lógica de respuesta demo por una llamada fetch a <code>https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent</code><br>4. Incluye el contexto ATPL en el system prompt.<br><br>Dime cuando estés listo y te guío paso a paso 🚀",
+    "default": "📡 <strong>ATC Centro en escucha.</strong><br>Puedo ayudarte con conceptos de Air Law, Meteorología, Navegación, Sistemas de aeronave, Instrumentación, Rendimiento, y más. Intenta preguntar sobre: METAR, QNH, RVSM, VOR, ILS, TCAS, altimetría, reglas de vuelo...<br><br><span style='font-size:11px;color:#6e7681;'>Modo demo activo — respuestas predefinidas.</span>"
+  };
+
+  function toggleATC() {
+    atcOpen = !atcOpen;
+    const panel = document.getElementById('atc-panel');
+    if (atcOpen) panel.classList.add('open');
+    else panel.classList.remove('open');
+  }
+
+  function getATCResponse(msg) {
+    const m = msg.toLowerCase();
+    if (m.includes('rvsm')) return ATC_RESPONSES.rvsm;
+    if (m.includes('metar') || m.includes('taf')) return ATC_RESPONSES.metar;
+    if (m.includes('qnh') || m.includes('qfe') || m.includes('qne')) return ATC_RESPONSES.qnh;
+    if (m.includes('vfr') || m.includes('ifr')) return ATC_RESPONSES.vfr;
+    if (m.includes('etops')) return ATC_RESPONSES.etops;
+    if (m.includes('gemini') || m.includes('api') || m.includes('activ')) return ATC_RESPONSES.gemini;
+    return ATC_RESPONSES.default;
+  }
+
+  function addATCMessage(html, sender) {
+    const msgs = document.getElementById('atc-messages');
+    const div = document.createElement('div');
+    div.className = `atc-msg ${sender}`;
+    div.innerHTML = html;
+    msgs.appendChild(div);
+    msgs.scrollTop = msgs.scrollHeight;
+    return div;
+  }
+
+  function sendATCQuick(text) {
+    document.getElementById('atc-input').value = text;
+    sendATC();
+  }
+
+  function sendATC() {
+    const input = document.getElementById('atc-input');
+    const msg = input.value.trim();
+    if (!msg) return;
+    input.value = '';
+
+    addATCMessage(msg, 'user');
+
+    // Typing indicator
+    const typingDiv = addATCMessage('⬤⬤⬤ Procesando...', 'atc typing');
+
+    setTimeout(() => {
+      typingDiv.remove();
+      const response = getATCResponse(msg);
+      addATCMessage(response, 'atc');
+    }, 700 + Math.random() * 600);
+  }
   </script>
 </body>
 </html>

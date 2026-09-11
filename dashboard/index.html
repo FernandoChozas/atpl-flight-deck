@@ -411,6 +411,35 @@
       transition: all 0.15s; white-space: nowrap;
       display: inline-flex; align-items: center; justify-content: center; gap: 4px;
     }
+
+    /* Master Guides Audio Controls */
+    .btn-master-audio {
+      background: #161b22;
+      border: 1px solid #30363d;
+      color: #c9d1d9;
+      border-radius: 6px;
+      padding: 5px 11px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s;
+    }
+    .btn-master-audio:hover {
+      background: #21262d;
+      color: #fff;
+      border-color: #39c5bb;
+      box-shadow: 0 0 10px rgba(57, 197, 187, 0.25);
+    }
+    .btn-master-audio.playing {
+      background: rgba(57, 197, 187, 0.2);
+      color: #39c5bb;
+      border-color: #39c5bb;
+      box-shadow: 0 0 12px rgba(57, 197, 187, 0.4);
+    }
+
     .btn-pdf-topic:hover {
       background: rgba(88, 166, 255, 0.15); border-color: #58a6ff; color: #fff;
     }
@@ -822,13 +851,14 @@
     };
 
     const ALL_MASTER_GUIDES = [
-      // Convocatoria 1
       {
         sitting: 1, code: '010', icon: '📘',
         title: 'LIBRO MAESTRO CONSOLIDADO | 010 AIR LAW COMPLETO',
         desc: 'Todos los capítulos unificados con avisos de examen AviationExam, tablas oficiales OACI y test razonados.',
         notebooklm_en: '../notebooklm_pilot/convocatoria_1/010_air_law/010_AIR_LAW_MASTER_NOTEBOOKLM_EN.pdf',
         notebooklm_es: '../notebooklm_pilot/convocatoria_1/010_air_law/010_AIR_LAW_MASTER_NOTEBOOKLM_ES.pdf',
+        podcast_en: '../notebooklm_pilot/convocatoria_1/010_air_law/010_AIR_LAW_MASTER_PODCAST_EN.mp3',
+        podcast_es: '../notebooklm_pilot/convocatoria_1/010_air_law/010_AIR_LAW_MASTER_PODCAST_ES.mp3',
       },
       {
         sitting: 1, code: '040', icon: '🧠',
@@ -836,6 +866,8 @@
         desc: 'Todos los capítulos unificados con fisiología, leyes de gases, tablas TUC, ilusiones sensoriales, modelos SHELL/Swiss Cheese y CRM.',
         notebooklm_en: '../notebooklm_pilot/convocatoria_1/040_human_performance/040_HUMAN_PERFORMANCE_MASTER_NOTEBOOKLM_EN.pdf',
         notebooklm_es: '../notebooklm_pilot/convocatoria_1/040_human_performance/040_HUMAN_PERFORMANCE_MASTER_NOTEBOOKLM_ES.pdf',
+        podcast_en: '../notebooklm_pilot/convocatoria_1/040_human_performance/040_HUMAN_PERFORMANCE_MASTER_PODCAST_EN.mp3',
+        podcast_es: '../notebooklm_pilot/convocatoria_1/040_human_performance/040_HUMAN_PERFORMANCE_MASTER_PODCAST_ES.mp3',
       },
       {
         sitting: 1, code: '090', icon: '📻',
@@ -843,14 +875,17 @@
         desc: 'Todos los capítulos unificados con fraseología ICAO, propagación VHF/HF, emergencias MAYDAY/PAN PAN y fallo de radio.',
         notebooklm_en: '../notebooklm_pilot/convocatoria_1/090_communications/090_COMMUNICATIONS_MASTER_NOTEBOOKLM_EN.pdf',
         notebooklm_es: '../notebooklm_pilot/convocatoria_1/090_communications/090_COMMUNICATIONS_MASTER_NOTEBOOKLM_ES.pdf',
+        podcast_en: '../notebooklm_pilot/convocatoria_1/090_communications/090_COMMUNICATIONS_MASTER_PODCAST_EN.mp3',
+        podcast_es: '../notebooklm_pilot/convocatoria_1/090_communications/090_COMMUNICATIONS_MASTER_PODCAST_ES.mp3',
       },
-      // Convocatoria 2
       {
         sitting: 2, code: '021', icon: '🛠️',
         title: 'LIBRO MAESTRO CONSOLIDADO | 021 AGK - SYSTEMS & POWERPLANT',
         desc: 'Todos los capítulos unificados de Estructuras, Hidráulica, Tren, Mandos, Neumática, Presurización, Electricidad CC/CA, Motores de Pistón y Turbinas de Gas.',
         notebooklm_en: '../notebooklm_pilot/convocatoria_2/021_agk_systems/021_AGK_MASTER_NOTEBOOKLM_EN.pdf',
         notebooklm_es: '../notebooklm_pilot/convocatoria_2/021_agk_systems/021_AGK_MASTER_NOTEBOOKLM_ES.pdf',
+        podcast_en: '../notebooklm_pilot/convocatoria_2/021_agk_systems/021_AGK_MASTER_PODCAST_EN.mp3',
+        podcast_es: '../notebooklm_pilot/convocatoria_2/021_agk_systems/021_AGK_MASTER_PODCAST_ES.mp3',
       },
       {
         sitting: 2, code: '022', icon: '🎛️',
@@ -858,6 +893,8 @@
         desc: 'Todos los capítulos unificados de Pitot-Estática, Instrumentos Giroscópicos, Magnetismo, IRS/Láser, FMS, Pantallas EFIS, Alertas EGPWS/TCAS y Piloto Automático.',
         notebooklm_en: '../notebooklm_pilot/convocatoria_2/022_instrumentation/022_INSTRUMENTATION_MASTER_NOTEBOOKLM_EN.pdf',
         notebooklm_es: '../notebooklm_pilot/convocatoria_2/022_instrumentation/022_INSTRUMENTATION_MASTER_NOTEBOOKLM_ES.pdf',
+        podcast_en: '../notebooklm_pilot/convocatoria_2/022_instrumentation/022_INSTRUMENTATION_MASTER_PODCAST_EN.mp3',
+        podcast_es: '../notebooklm_pilot/convocatoria_2/022_instrumentation/022_INSTRUMENTATION_MASTER_PODCAST_ES.mp3',
       },
       {
         sitting: 2, code: '081', icon: '✈️',
@@ -865,14 +902,17 @@
         desc: 'Todos los capítulos unificados de Aerodinámica Subsónica, Resistencia Inducida/Parásita, Transónico, Ondas de Choque, Estabilidad, Mandos y Mecánica de Vuelo.',
         notebooklm_en: '../notebooklm_pilot/convocatoria_2/081_principles_of_flight/081_PRINCIPLES_OF_FLIGHT_MASTER_NOTEBOOKLM_EN.pdf',
         notebooklm_es: '../notebooklm_pilot/convocatoria_2/081_principles_of_flight/081_PRINCIPLES_OF_FLIGHT_MASTER_NOTEBOOKLM_ES.pdf',
+        podcast_en: '../notebooklm_pilot/convocatoria_2/081_principles_of_flight/081_PRINCIPLES_OF_FLIGHT_MASTER_PODCAST_EN.mp3',
+        podcast_es: '../notebooklm_pilot/convocatoria_2/081_principles_of_flight/081_PRINCIPLES_OF_FLIGHT_MASTER_PODCAST_ES.mp3',
       },
-      // Convocatoria 3
       {
         sitting: 3, code: '031', icon: '⚖️',
         title: 'LIBRO MAESTRO CONSOLIDADO | 031 MASS & BALANCE COMPLETO',
         desc: 'Todos los capítulos unificados de Masas Límite, Centro de Gravedad, % MAC, Desplazamiento de Carga, Combustible y Hoja de Carga.',
         notebooklm_en: '../notebooklm_pilot/convocatoria_3/031_mass_and_balance/031_MASS_AND_BALANCE_MASTER_NOTEBOOKLM_EN.pdf',
         notebooklm_es: '../notebooklm_pilot/convocatoria_3/031_mass_and_balance/031_MASS_AND_BALANCE_MASTER_NOTEBOOKLM_ES.pdf',
+        podcast_en: '../notebooklm_pilot/convocatoria_3/031_mass_and_balance/031_MASS_AND_BALANCE_MASTER_PODCAST_EN.mp3',
+        podcast_es: '../notebooklm_pilot/convocatoria_3/031_mass_and_balance/031_MASS_AND_BALANCE_MASTER_PODCAST_ES.mp3',
       },
       {
         sitting: 3, code: '032', icon: '🚀',
@@ -880,6 +920,8 @@
         desc: 'Todos los capítulos unificados de Atmósfera/Viento, Velocidades CS-25, Campo Equilibrado, Segmentos de Ascenso, Crucero OEI, Aterrizaje y Empuje Flexible.',
         notebooklm_en: '../notebooklm_pilot/convocatoria_3/032_performance/032_PERFORMANCE_MASTER_NOTEBOOKLM_EN.pdf',
         notebooklm_es: '../notebooklm_pilot/convocatoria_3/032_performance/032_PERFORMANCE_MASTER_NOTEBOOKLM_ES.pdf',
+        podcast_en: '../notebooklm_pilot/convocatoria_3/032_performance/032_PERFORMANCE_MASTER_PODCAST_EN.mp3',
+        podcast_es: '../notebooklm_pilot/convocatoria_3/032_performance/032_PERFORMANCE_MASTER_PODCAST_ES.mp3',
       },
       {
         sitting: 3, code: '033', icon: '🗺️',
@@ -887,14 +929,17 @@
         desc: 'Todos los capítulos unificados de Cartas VFR/IFR, Rutas, Combustible MRJT, PNR/PET y Planes de Vuelo ATS.',
         notebooklm_en: '../notebooklm_pilot/convocatoria_3/033_flight_planning/033_FLIGHT_PLANNING_MASTER_NOTEBOOKLM_EN.pdf',
         notebooklm_es: '../notebooklm_pilot/convocatoria_3/033_flight_planning/033_FLIGHT_PLANNING_MASTER_NOTEBOOKLM_ES.pdf',
+        podcast_en: '../notebooklm_pilot/convocatoria_3/033_flight_planning/033_FLIGHT_PLANNING_MASTER_PODCAST_EN.mp3',
+        podcast_es: '../notebooklm_pilot/convocatoria_3/033_flight_planning/033_FLIGHT_PLANNING_MASTER_PODCAST_ES.mp3',
       },
-      // Convocatoria 4
       {
         sitting: 4, code: '050', icon: '☁️',
         title: 'LIBRO MAESTRO CONSOLIDADO | 050 METEOROLOGY COMPLETO',
         desc: 'Todos los capítulos unificados de Atmósfera, Viento, Termodinámica, Nubes, Frentes, Engelamiento, Tormentas, Climatología Global y Mensajes METAR/TAF.',
         notebooklm_en: '../notebooklm_pilot/convocatoria_4/050_meteorology/050_METEOROLOGY_MASTER_NOTEBOOKLM_EN.pdf',
         notebooklm_es: '../notebooklm_pilot/convocatoria_4/050_meteorology/050_METEOROLOGY_MASTER_NOTEBOOKLM_ES.pdf',
+        podcast_en: '../notebooklm_pilot/convocatoria_4/050_meteorology/050_METEOROLOGY_MASTER_PODCAST_EN.mp3',
+        podcast_es: '../notebooklm_pilot/convocatoria_4/050_meteorology/050_METEOROLOGY_MASTER_PODCAST_ES.mp3',
       },
       {
         sitting: 4, code: '061', icon: '🧭',
@@ -902,6 +947,8 @@
         desc: 'Todos los capítulos unificados de Tierra, Cartografía Lambert/Polar/Mercator, Magnetismo, Giróscopos, Vuelo In-flight y Navegación Astronómica.',
         notebooklm_en: '../notebooklm_pilot/convocatoria_4/061_general_navigation/061_GENERAL_NAVIGATION_MASTER_NOTEBOOKLM_EN.pdf',
         notebooklm_es: '../notebooklm_pilot/convocatoria_4/061_general_navigation/061_GENERAL_NAVIGATION_MASTER_NOTEBOOKLM_ES.pdf',
+        podcast_en: '../notebooklm_pilot/convocatoria_4/061_general_navigation/061_GENERAL_NAVIGATION_MASTER_PODCAST_EN.mp3',
+        podcast_es: '../notebooklm_pilot/convocatoria_4/061_general_navigation/061_GENERAL_NAVIGATION_MASTER_PODCAST_ES.mp3',
       },
       {
         sitting: 4, code: '062', icon: '📡',
@@ -909,6 +956,8 @@
         desc: 'Todos los capítulos unificados de Propagación, VDF, NDB/ADF, VOR, ILS/MLS, Radar, DME, Sistemas RNAV y FMS/GNSS.',
         notebooklm_en: '../notebooklm_pilot/convocatoria_4/062_radio_navigation_pbn/062_RADIO_NAVIGATION_MASTER_NOTEBOOKLM_EN.pdf',
         notebooklm_es: '../notebooklm_pilot/convocatoria_4/062_radio_navigation_pbn/062_RADIO_NAVIGATION_MASTER_NOTEBOOKLM_ES.pdf',
+        podcast_en: '../notebooklm_pilot/convocatoria_4/062_radio_navigation_pbn/062_RADIO_NAVIGATION_MASTER_PODCAST_EN.mp3',
+        podcast_es: '../notebooklm_pilot/convocatoria_4/062_radio_navigation_pbn/062_RADIO_NAVIGATION_MASTER_PODCAST_ES.mp3',
       },
       {
         sitting: 4, code: '070', icon: '📋',
@@ -916,7 +965,9 @@
         desc: 'Todos los capítulos unificados de Anexo 6, Requisitos Especiales (RVSM, ETOPS, PBN), Extinción de Incendios, Cizalladura y Mercancías Peligrosas.',
         notebooklm_en: '../notebooklm_pilot/convocatoria_4/070_operational_procedures/070_OPERATIONAL_PROCEDURES_MASTER_NOTEBOOKLM_EN.pdf',
         notebooklm_es: '../notebooklm_pilot/convocatoria_4/070_operational_procedures/070_OPERATIONAL_PROCEDURES_MASTER_NOTEBOOKLM_ES.pdf',
-      }
+        podcast_en: '../notebooklm_pilot/convocatoria_4/070_operational_procedures/070_OPERATIONAL_PROCEDURES_MASTER_PODCAST_EN.mp3',
+        podcast_es: '../notebooklm_pilot/convocatoria_4/070_operational_procedures/070_OPERATIONAL_PROCEDURES_MASTER_PODCAST_ES.mp3',
+      },
     ];
 
     function updateKPIs() {
@@ -997,7 +1048,7 @@
       // Header label for section
       const bannerHeader = document.createElement('div');
       bannerHeader.style.cssText = 'font-size: 13px; font-weight: 700; text-transform: uppercase; color: var(--accent-blue); letter-spacing: 0.8px; margin-bottom: 4px; display: flex; align-items: center; gap: 8px;';
-      bannerHeader.innerHTML = `📚 MANUALES MAESTROS CONSOLIDADOS (${filteredGuides.length} disponibles · Descarga directa PDF)`;
+      bannerHeader.innerHTML = `📚 MANUALES MAESTROS & PODCASTS COMPLETOS (${filteredGuides.length} disponibles · PDF + Audio EN/ES)`;
       container.appendChild(bannerHeader);
 
       const gridWrapper = document.createElement('div');
@@ -1025,18 +1076,31 @@
         </div>`;
 
         card.innerHTML = `
-          <div style="display: flex; align-items: center; gap: 14px; flex: 1; min-width: 250px;">
+          <div style="display: flex; align-items: center; gap: 14px; flex: 1; min-width: 280px;">
             <input type="checkbox" style="transform: scale(1.6); cursor: pointer; margin-right: 4px; accent-color: var(--pass-green);" onchange="toggleGuideTick('${g.code}')" ${studiedGuides.includes(g.code) ? 'checked' : ''}>
-            <div style="font-size: 26px;">${g.icon}</div>
+            <div style="font-size: 28px;">${g.icon}</div>
             <div>
-              <div style="color: #93c5fd; font-weight: 700; font-size: 13px; letter-spacing: 0.5px;">${g.title}</div>
+              <div style="color: #93c5fd; font-weight: 700; font-size: 13.5px; letter-spacing: 0.5px;">${g.title}</div>
               <div style="color: #94a3b8; font-size: 12px; margin-top: 3px; line-height: 1.4;">${g.desc}</div>
             </div>
           </div>
-          <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
+          <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
             ${scoreInput}
-            <button onclick="openMasterPdfModal('${g.code}')" class="btn-summary" style="background: #2563eb; color: #fff; font-weight: 700; padding: 8px 16px; border-radius: 8px; font-size: 12px; white-space: nowrap; border: 1px solid #60a5fa; box-shadow: 0 0 10px rgba(37,99,235,0.4); cursor: pointer;">
-              📥 Descargar Manual (EN / ES)
+            <!-- Master Podcast Audio Capsule -->
+            <div style="display: flex; align-items: center; gap: 6px; background: rgba(0,0,0,0.45); padding: 6px 12px; border-radius: 8px; border: 1px solid rgba(57, 197, 187, 0.35);">
+              <span style="font-size: 11px; color: #39c5bb; font-weight: 700; letter-spacing: 0.5px; display: flex; align-items: center; gap: 4px;">
+                🎧 AUDIO:
+              </span>
+              <button class="btn-master-audio" data-master-code="${g.code}" data-lang="en" onclick="playMasterPodcast('${g.code}', 'en')" title="Escuchar Podcast Maestro Completo en Inglés (Ryan & Sonia)">
+                🇬🇧 EN
+              </button>
+              <button class="btn-master-audio" data-master-code="${g.code}" data-lang="es" onclick="playMasterPodcast('${g.code}', 'es')" title="Escuchar Podcast Maestro Completo en Español (Álvaro & Elvira)">
+                🇪🇸 ES
+              </button>
+            </div>
+            <!-- PDF Download Button -->
+            <button onclick="openMasterPdfModal('${g.code}')" class="btn-summary" style="background: #2563eb; color: #fff; font-weight: 700; padding: 8px 16px; border-radius: 8px; font-size: 12px; white-space: nowrap; border: 1px solid #60a5fa; box-shadow: 0 0 10px rgba(37,99,235,0.4); cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+              📥 PDF Manual (EN / ES)
             </button>
           </div>
         `;
@@ -1285,6 +1349,39 @@
   let currentTopicId = null;
   let currentLang = null;
 
+  // ═══════════════════════════════════════════════════════════════
+  //  Play Master Full Podcast (Cockpit Audio Player)
+  // ═══════════════════════════════════════════════════════════════
+  function playMasterPodcast(code, lang) {
+    const guide = ALL_MASTER_GUIDES.find(g => g.code === code);
+    if (!guide) return;
+    const src = lang === 'en' ? guide.podcast_en : guide.podcast_es;
+    if (!src) { alert('Audio no disponible para este manual'); return; }
+
+    currentTopicId = 'master_' + code;
+    currentLang = lang;
+
+    // Remove active state from all audio buttons
+    document.querySelectorAll('.btn-audio, .btn-master-audio').forEach(b => b.classList.remove('playing'));
+    const activeBtn = document.querySelector(`.btn-master-audio[data-master-code="${code}"][data-lang="${lang}"]`);
+    if (activeBtn) activeBtn.classList.add('playing');
+
+    audio.src = src;
+    audio.playbackRate = parseFloat(document.getElementById('speed-select').value);
+    audio.play().catch(e => console.log('Audio play error:', e));
+
+    const cleanTitle = guide.title.replace('LIBRO MAESTRO CONSOLIDADO | ', '');
+    document.getElementById('player-title').textContent = `[${code}] PODCAST MAESTRO — ${cleanTitle}`;
+    document.getElementById('player-sub').textContent = lang === 'en' ? '🇬🇧 Master Podcast Completo — Ryan & Sonia' : '🇪🇸 Podcast Maestro Completo — Álvaro & Elvira';
+    document.getElementById('player-lang-badge').className = `lang-badge ${lang}`;
+    document.getElementById('player-lang-badge').textContent = lang === 'en' ? '🇬🇧 EN' : '🇪🇸 ES';
+    document.getElementById('play-pause-btn').textContent = '⏸ Pause';
+
+    const player = document.getElementById('cockpit-player');
+    player.classList.add('visible');
+    document.body.classList.add('player-active');
+  }
+
   function playPodcast(topicId, lang) {
     const topic = (window.ATPL_DATA.topics || []).find(t => t.id === topicId);
     if (!topic) return;
@@ -1295,7 +1392,7 @@
     currentLang = lang;
 
     // Update all playing button states
-    document.querySelectorAll('.btn-audio').forEach(b => b.classList.remove('playing'));
+    document.querySelectorAll('.btn-audio, .btn-master-audio').forEach(b => b.classList.remove('playing'));
     const activeBtn = document.querySelector(`.btn-audio[data-topic="${topicId}"][data-lang="${lang}"]`);
     if (activeBtn) activeBtn.classList.add('playing');
 
@@ -1338,7 +1435,7 @@
     audio.pause();
     document.getElementById('cockpit-player').classList.remove('visible');
     document.body.classList.remove('player-active');
-    document.querySelectorAll('.btn-audio').forEach(b => b.classList.remove('playing'));
+    document.querySelectorAll('.btn-audio, .btn-master-audio').forEach(b => b.classList.remove('playing'));
     currentTopicId = null;
   }
 
@@ -1363,7 +1460,7 @@
 
   audio.addEventListener('ended', () => {
     document.getElementById('play-pause-btn').textContent = '▶ Play';
-    document.querySelectorAll('.btn-audio').forEach(b => b.classList.remove('playing'));
+    document.querySelectorAll('.btn-audio, .btn-master-audio').forEach(b => b.classList.remove('playing'));
   });
 
   audio.addEventListener('pause', () => {

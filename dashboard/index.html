@@ -714,38 +714,46 @@
     #pilot-modal-overlay {
       display: none; position: fixed; inset: 0;
       background: var(--modal-overlay); z-index: 2002;
-      justify-content: center; align-items: flex-start;
-      overflow-y: auto; -webkit-overflow-scrolling: touch;
+      justify-content: center; align-items: center;
       padding: max(16px, env(safe-area-inset-top)) 14px max(16px, env(safe-area-inset-bottom)) 14px;
-      backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
+      backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+      cursor: pointer;
+      touch-action: manipulation;
     }
     #pilot-modal-overlay.open { display: flex; }
     #pilot-modal {
       background: var(--modal-bg); border: 1px solid var(--border-color);
-      border-radius: 16px; padding: 18px 18px; max-width: 520px; width: 100%;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+      border-radius: 16px; max-width: 520px; width: 100%;
+      max-height: min(88vh, 88dvh);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.7);
       animation: modalPop 0.2s ease;
-      margin: auto 0;
-      max-height: calc(100vh - 36px);
-      max-height: calc(100dvh - 36px);
-      overflow-y: auto; -webkit-overflow-scrolling: touch;
+      cursor: default;
+      display: flex; flex-direction: column;
+      overflow: hidden;
       position: relative;
     }
     .pilot-modal-header {
-      display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;
-      padding-bottom: 10px; border-bottom: 1px solid var(--border-color);
-      position: sticky; top: -18px; background: var(--modal-bg); z-index: 10;
+      flex-shrink: 0;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 14px 18px; background: var(--bg-card);
+      border-bottom: 1px solid var(--border-color);
     }
     .pilot-modal-header h3 { font-size: 16px; font-weight: 700; color: var(--text-title); }
+    .pilot-modal-body {
+      flex: 1; min-height: 0;
+      overflow-y: auto; -webkit-overflow-scrolling: touch;
+      padding: 16px 18px;
+    }
     .modal-close-icon {
-      background: rgba(255,255,255,0.08); border: 1px solid var(--border-color);
-      font-size: 18px; color: var(--text-title); width: 36px; height: 36px;
+      background: rgba(255,255,255,0.12); border: 1px solid var(--border-color);
+      font-size: 20px; color: var(--text-title); width: 44px; height: 44px;
       border-radius: 50%; cursor: pointer; display: flex;
       align-items: center; justify-content: center; flex-shrink: 0;
-      transition: all 0.2s;
+      transition: all 0.2s; touch-action: manipulation;
+      user-select: none; -webkit-user-select: none;
     }
     .modal-close-icon:hover, .modal-close-icon:active {
-      background: rgba(248,81,73,0.25); color: #ff7b72; border-color: #ff7b72;
+      background: rgba(248,81,73,0.3); color: #ff7b72; border-color: #ff7b72;
     }
     .pilot-box {
       background: var(--bg-card-hover); border: 1px solid var(--border-color);
@@ -1301,18 +1309,24 @@
       const devNameInput = document.getElementById('dev-pilot-name-input');
       if (devNameInput) devNameInput.value = currentPilot;
       document.querySelectorAll('.active-pilot-label').forEach(el => el.textContent = currentPilot);
-      
-      const sharePreview = document.getElementById('share-link-preview');
-      if (sharePreview) sharePreview.value = getOfficialShareUrl();
 
+      refreshShareUrlInputs();
       updatePilotSelectOptions();
-      document.getElementById('pilot-modal-overlay').classList.add('open');
+
+      const overlay = document.getElementById('pilot-modal-overlay');
+      if (overlay) {
+        overlay.style.display = 'flex';
+        overlay.classList.add('open');
+      }
     }
 
     function closePilotModal(forceClose) {
-      if (forceClose === true || !forceClose || forceClose.target === document.getElementById('pilot-modal-overlay')) {
-        const overlay = document.getElementById('pilot-modal-overlay');
-        if (overlay) overlay.classList.remove('open');
+      const overlay = document.getElementById('pilot-modal-overlay');
+      if (!overlay) return;
+
+      if (forceClose === true || !forceClose || (forceClose && forceClose.target && forceClose.target === overlay)) {
+        overlay.style.display = 'none';
+        overlay.classList.remove('open');
       }
     }
 
@@ -1321,11 +1335,11 @@
       if (!input) return;
       const raw = input.value.trim().toUpperCase().replace(/[^A-Z0-9_\-\s]/g, '').trim();
       if (!raw) {
-        alert('Por favor, introduce un nombre o Call Sign válido.');
+        showToastNotification('⚠️ Por favor, introduce un nombre o Call Sign válido.');
         return;
       }
       if (raw === currentPilot) {
-        alert(`Tu nombre ya es "${currentPilot}".`);
+        showToastNotification(`ℹ️ Tu nombre ya es "${currentPilot}".`);
         return;
       }
 
@@ -1365,28 +1379,86 @@
       showToastNotification(`✅ ¡Nombre actualizado a: ${currentPilot}!`);
     }
 
-    // ─── SHARE WITH FRIENDS (PROFESSIONAL WEB LINK) ───
-    function getOfficialShareUrl() {
-      // If browsing through HTTP/HTTPS (Netlify, custom domain, web server):
+    // ─── SHARE WITH FRIENDS (CONFIGURABLE & ONLINE AUTO-DETECTED) ───
+    function getStoredAppUrl() {
+      // 1. If currently browsing online (HTTP/HTTPS): auto-detect and persist
       if (window.location.protocol === 'http:' || window.location.protocol === 'https:') {
-        const origin = window.location.origin;
-        const path = window.location.pathname.replace(/\/dashboard\/.*$/, '/dashboard').replace(/\/$/, '');
-        return `${origin}${path}/?invite=friend`;
+        const detected = window.location.origin + window.location.pathname.replace(/\/dashboard\/.*$/, '').replace(/\/$/, '');
+        localStorage.setItem('atpl_custom_app_url', detected);
+        return detected;
       }
-      // If opened locally via file:///... (Mac Finder, iPhone Files, iCloud Drive):
-      // NEVER share file:/// paths! Return official online web URL:
-      return 'https://atpl-flight-deck.netlify.app/dashboard/?invite=friend';
+      // 2. If stored previously in local storage:
+      const stored = localStorage.getItem('atpl_custom_app_url');
+      if (stored && stored.trim()) {
+        return stored.trim().replace(/\/+$/, '');
+      }
+      return '';
+    }
+
+    function getOfficialShareUrl() {
+      const baseUrl = getStoredAppUrl();
+      if (baseUrl) {
+        return `${baseUrl}/dashboard/?invite=friend`;
+      }
+      return '';
+    }
+
+    function refreshShareUrlInputs() {
+      const storedUrl = getStoredAppUrl();
+      const customInput = document.getElementById('custom-app-url-input');
+      if (customInput) {
+        customInput.value = storedUrl;
+      }
+      const preview = document.getElementById('share-link-preview');
+      if (preview) {
+        if (storedUrl) {
+          preview.value = `${storedUrl}/dashboard/?invite=friend`;
+        } else {
+          preview.value = 'Configura tu URL web arriba para generar el enlace oficial';
+        }
+      }
+    }
+
+    function saveCustomAppUrl() {
+      const input = document.getElementById('custom-app-url-input');
+      if (!input) return;
+      let val = input.value.trim();
+      if (!val) {
+        localStorage.removeItem('atpl_custom_app_url');
+        refreshShareUrlInputs();
+        showToastNotification('ℹ️ URL web eliminada.');
+        return;
+      }
+      if (!val.startsWith('http://') && !val.startsWith('https://')) {
+        val = 'https://' + val;
+      }
+      val = val.replace(/\/+$/, '').replace(/\/dashboard.*$/, '');
+      localStorage.setItem('atpl_custom_app_url', val);
+      refreshShareUrlInputs();
+      showToastNotification(`✅ URL guardada: ${val}`);
     }
 
     async function shareAppWithFriends() {
-      const url = getOfficialShareUrl();
+      let shareUrl = getOfficialShareUrl();
+      if (!shareUrl) {
+        const entered = prompt('Para compartir con tus amigos por internet, introduce la dirección de tu web o Netlify (ej: https://tu-sitio.netlify.app):');
+        if (!entered || !entered.trim()) return;
+        let clean = entered.trim();
+        if (!clean.startsWith('http://') && !clean.startsWith('https://')) {
+          clean = 'https://' + clean;
+        }
+        clean = clean.replace(/\/+$/, '').replace(/\/dashboard.*$/, '');
+        localStorage.setItem('atpl_custom_app_url', clean);
+        refreshShareUrlInputs();
+        shareUrl = `${clean}/dashboard/?invite=friend`;
+      }
+
       const shareData = {
         title: 'ATPL Flight Deck — Preparación Modular EASA',
         text: 'Accede al Flight Deck de estudio ATPL con resúmenes técnicos, podcasts y copiloto ATC IA.',
-        url: url
+        url: shareUrl
       };
 
-      // Only attempt Web Share API on HTTP/HTTPS where browser will not freeze on file:// protocol
       if (navigator.share && (window.location.protocol === 'https:' || window.location.protocol === 'http:')) {
         try {
           await navigator.share(shareData);
@@ -1397,25 +1469,33 @@
         }
       }
 
-      // Safe copy to clipboard
       copyCleanShareUrl();
     }
 
     function copyCleanShareUrl() {
-      const url = getOfficialShareUrl();
+      let shareUrl = getOfficialShareUrl();
+      if (!shareUrl) {
+        const entered = prompt('Para generar el enlace de tus amigos, introduce la dirección de tu web o Netlify (ej: https://tu-sitio.netlify.app):');
+        if (!entered || !entered.trim()) return;
+        let clean = entered.trim();
+        if (!clean.startsWith('http://') && !clean.startsWith('https://')) {
+          clean = 'https://' + clean;
+        }
+        clean = clean.replace(/\/+$/, '').replace(/\/dashboard.*$/, '');
+        localStorage.setItem('atpl_custom_app_url', clean);
+        refreshShareUrlInputs();
+        shareUrl = `${clean}/dashboard/?invite=friend`;
+      }
+
       if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(url).then(() => {
-          showToastNotification('📋 ¡Enlace web copiado al portapapeles! Listo para enviar por WhatsApp o Telegram.');
+        navigator.clipboard.writeText(shareUrl).then(() => {
+          showToastNotification('📋 ¡Enlace copiado al portapapeles! Listo para enviar por WhatsApp o Telegram.');
         }).catch(() => {
-          promptFallback(url);
+          prompt('Copia este enlace profesional para tus amigos:', shareUrl);
         });
       } else {
-        promptFallback(url);
+        prompt('Copia este enlace profesional para tus amigos:', shareUrl);
       }
-    }
-
-    function promptFallback(url) {
-      prompt('Copia este enlace profesional para compartirlo con tus amigos:', url);
     }
 
     function showToastNotification(msg) {
@@ -2030,6 +2110,7 @@
   ═══════════════════════════════════════════════════════════ -->
   <div id="pilot-modal-overlay" onclick="closePilotModal(event)">
     <div id="pilot-modal" onclick="event.stopPropagation()">
+      <!-- HEADER FIJO (SIEMPRE VISIBLE EN IPHONE, NUNCA SE DESPLAZA) -->
       <div class="pilot-modal-header">
         <div style="display: flex; align-items: center; gap: 10px;">
           <span style="font-size: 24px;">👑</span>
@@ -2041,80 +2122,90 @@
             <p style="margin: 2px 0 0 0; font-size: 11px; color: var(--text-muted);">Gestión de perfil, sincronización multi-dispositivo y control de amigos</p>
           </div>
         </div>
-        <button class="modal-close-icon" onclick="closePilotModal(true)" title="Cerrar modal" aria-label="Cerrar modal">✕</button>
+        <button type="button" class="modal-close-icon" onclick="closePilotModal(true)" ontouchend="closePilotModal(true); event.preventDefault();" title="Cerrar modal" aria-label="Cerrar modal">✕</button>
       </div>
 
-      <!-- Sección 1: Mi Identidad de Piloto (Call Sign) -->
-      <div class="pilot-box" style="margin-bottom: 12px;">
-        <label style="font-size:12px; font-weight:700; color:var(--text-title); display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-          <span>👨‍✈️ Mi Nombre / Call Sign de Piloto:</span>
-          <span style="font-size:11px; color:var(--accent-blue); font-weight:normal;">✏️ Puedes cambiarlo cuando quieras</span>
-        </label>
-        <div class="pilot-input-row" style="display:flex; gap:8px;">
-          <input type="text" id="dev-pilot-name-input" value="EC-CHOZAS" placeholder="Tu nombre o Call Sign (ej: EC-CHOZAS)" style="flex:1; padding:9px 12px; background:var(--bg-card); border:1px solid var(--border-color); color:var(--text-main); border-radius:8px; font-weight:700; font-size:13px; outline:none;">
-          <button class="btn-sync-action" onclick="saveDeveloperPilotName()" style="background:#238636; border-color:#2ea043; white-space:nowrap;" title="Guardar nuevo nombre y migrar progreso">💾 Guardar Nombre</button>
-        </div>
-        <p class="pilot-sync-desc" id="sync-timestamp-label" style="margin-top:8px;">🟢 Sincronizado en la nube (Mac, iPad, iPhone)</p>
-      </div>
-
-      <!-- Sección 2: Compartir con Amigos (Perfiles Aislados) -->
-      <div class="pilot-box" style="margin-bottom: 12px; background: rgba(56,139,253,0.06); border: 1px solid rgba(56,139,253,0.25);">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-          <strong style="color:var(--text-title); font-size:13px;">👥 Compartir con Amigos (Enlace Oficial)</strong>
-          <span style="font-size:11px; background:rgba(46,160,67,0.15); color:#56d364; padding:2px 8px; border-radius:10px; font-weight:600;">100% Protegido</span>
-        </div>
-        <p style="font-size:12px; color:var(--text-muted); line-height:1.45; margin-bottom:8px;">
-          Tus amigos accederán como <strong>Piloto Invitado</strong> en su propia sesión independiente. Sus notas y progresos <strong>nunca alterarán tu cuenta</strong> de <code><span class="active-pilot-label">EC-CHOZAS</span></code>.
-        </p>
-
-        <!-- Previsualización del enlace oficial -->
-        <label style="font-size:11px; color:var(--text-muted); display:block; margin-bottom:4px; font-weight:600;">Enlace profesional a compartir:</label>
-        <div style="display:flex; gap:6px; margin-bottom:10px;">
-          <input type="text" id="share-link-preview" readonly value="" style="flex:1; padding:7px 10px; background:var(--bg-card); border:1px solid var(--border-color); color:var(--accent-blue); border-radius:6px; font-size:11px; font-family:ui-monospace, monospace; outline:none;" onclick="this.select()">
+      <!-- CUERPO DESPLAZABLE (SOLO EL CONTENIDO HACE SCROLL) -->
+      <div class="pilot-modal-body">
+        <!-- Sección 1: Mi Identidad de Piloto (Call Sign) -->
+        <div class="pilot-box" style="margin-bottom: 12px;">
+          <label style="font-size:12px; font-weight:700; color:var(--text-title); display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <span>👨‍✈️ Mi Nombre / Call Sign de Piloto:</span>
+            <span style="font-size:11px; color:var(--accent-blue); font-weight:normal;">✏️ Puedes cambiarlo cuando quieras</span>
+          </label>
+          <div class="pilot-input-row" style="display:flex; gap:8px;">
+            <input type="text" id="dev-pilot-name-input" value="EC-CHOZAS" placeholder="Tu nombre o Call Sign (ej: EC-CHOZAS)" style="flex:1; padding:9px 12px; background:var(--bg-card); border:1px solid var(--border-color); color:var(--text-main); border-radius:8px; font-weight:700; font-size:13px; outline:none;">
+            <button type="button" class="btn-sync-action" onclick="saveDeveloperPilotName()" style="background:#238636; border-color:#2ea043; white-space:nowrap;" title="Guardar nuevo nombre y migrar progreso">💾 Guardar Nombre</button>
+          </div>
+          <p class="pilot-sync-desc" id="sync-timestamp-label" style="margin-top:8px;">🟢 Sincronizado en la nube (Mac, iPad, iPhone)</p>
         </div>
 
-        <div style="display:flex; gap:8px; flex-wrap:wrap;">
-          <button type="button" class="btn-sync-action" onclick="shareAppWithFriends()" style="flex:1; min-width:140px; background:rgba(31,111,235,0.25); border:1px solid #388bfd; color:#79c0ff; justify-content:center; display:inline-flex; align-items:center; gap:6px;">
-            🔗 Enviar por WhatsApp / Compartir
+        <!-- Sección 2: Compartir con Amigos (Perfiles Aislados) -->
+        <div class="pilot-box" style="margin-bottom: 12px; background: rgba(56,139,253,0.06); border: 1px solid rgba(56,139,253,0.25);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <strong style="color:var(--text-title); font-size:13px;">👥 Compartir con Amigos (Enlace Oficial)</strong>
+            <span style="font-size:11px; background:rgba(46,160,67,0.15); color:#56d364; padding:2px 8px; border-radius:10px; font-weight:600;">100% Protegido</span>
+          </div>
+          <p style="font-size:12px; color:var(--text-muted); line-height:1.45; margin-bottom:8px;">
+            Tus amigos accederán como <strong>Piloto Invitado</strong> en su propia sesión independiente. Sus notas y progresos <strong>nunca alterarán tu cuenta</strong> de <code><span class="active-pilot-label">EC-CHOZAS</span></code>.
+          </p>
+
+          <!-- Dirección Web Configurable -->
+          <label style="font-size:11px; color:var(--text-muted); display:block; margin-bottom:4px; font-weight:600;">🌐 Dirección Web de la App (Netlify o Dominio):</label>
+          <div style="display:flex; gap:6px; margin-bottom:8px;">
+            <input type="url" id="custom-app-url-input" placeholder="Ej: https://tu-sitio.netlify.app" style="flex:1; padding:7px 10px; background:var(--bg-card); border:1px solid var(--border-color); color:var(--text-main); border-radius:6px; font-size:12px; outline:none;">
+            <button type="button" class="btn-sync-action" onclick="saveCustomAppUrl()" style="padding:7px 12px; font-size:11px; white-space:nowrap; background:#238636; border-color:#2ea043; touch-action:manipulation;">💾 Guardar URL</button>
+          </div>
+
+          <!-- Previsualización del enlace oficial -->
+          <label style="font-size:11px; color:var(--text-muted); display:block; margin-bottom:4px; font-weight:600;">🔗 Enlace de invitación para enviar a amigos:</label>
+          <div style="display:flex; gap:6px; margin-bottom:10px;">
+            <input type="text" id="share-link-preview" readonly value="" style="flex:1; padding:7px 10px; background:var(--bg-card); border:1px solid var(--border-color); color:var(--accent-blue); border-radius:6px; font-size:11px; font-family:ui-monospace, monospace; outline:none;" onclick="this.select()">
+          </div>
+
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button type="button" class="btn-sync-action" onclick="shareAppWithFriends()" style="flex:1; min-width:140px; background:rgba(31,111,235,0.25); border:1px solid #388bfd; color:#79c0ff; justify-content:center; display:inline-flex; align-items:center; gap:6px; touch-action:manipulation;">
+              🔗 Enviar por WhatsApp / Compartir
+            </button>
+            <button type="button" class="btn-sync-action" onclick="copyCleanShareUrl()" style="flex:1; min-width:140px; background:var(--bg-card); border:1px solid var(--border-color); color:var(--text-main); justify-content:center; display:inline-flex; align-items:center; gap:6px; touch-action:manipulation;">
+              📋 Copiar Enlace Directo
+            </button>
+          </div>
+        </div>
+
+        <!-- Sección 3: Apple iCloud Direct Backup -->
+        <div class="icloud-sync-box">
+          <h4 style="font-size:13px; font-weight:700; color:var(--text-title); margin-bottom:4px;">🍏 Sincronización en la Nube y Copia iCloud Drive</h4>
+          <p style="font-size:12px; color:var(--text-muted); margin-bottom:10px;">Sincroniza tus progresos en tiempo real o guarda un archivo JSON de respaldo en tu iCloud:</p>
+          <div class="icloud-btns-row" style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button type="button" class="btn-sync-action" onclick="forceSyncCloud()" style="flex:1; min-width:140px; justify-content:center; display:inline-flex; align-items:center; gap:4px; touch-action:manipulation;">
+              🔄 Forzar Sincronización
+            </button>
+            <button type="button" class="btn-icloud export" onclick="exportProgressToICloud()" style="flex:1; min-width:140px; justify-content:center; touch-action:manipulation;">
+              📥 Guardar en iCloud
+            </button>
+            <button type="button" class="btn-icloud import" onclick="document.getElementById('icloud-file-input').click()" style="flex:1; min-width:140px; justify-content:center; touch-action:manipulation;">
+              📤 Cargar desde iCloud
+            </button>
+            <input type="file" id="icloud-file-input" accept=".json" style="display:none" onchange="importProgressFromICloud(event)">
+          </div>
+        </div>
+
+        <!-- Sección 4: Selector de Perfil / Modo Desarrollador -->
+        <div style="margin-top:12px; padding-top:10px; border-top:1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:11px; color:var(--text-muted);">Probar otros perfiles:</span>
+            <select id="pilot-select" onchange="onPilotSelectChange(this.value)" style="padding:4px 8px; font-size:11px; background:var(--bg-card); border:1px solid var(--border-color); color:var(--text-main); border-radius:6px; cursor:pointer;">
+            </select>
+          </div>
+        </div>
+
+        <!-- Botón de Cerrar inferior grande para iPhone -->
+        <div style="margin-top:16px; margin-bottom:6px;">
+          <button type="button" class="btn-sync-action" onclick="closePilotModal(true)" ontouchend="closePilotModal(true); event.preventDefault();" style="width:100%; justify-content:center; background:rgba(255,255,255,0.08); border:1px solid var(--border-color); color:var(--text-title); padding:13px; font-size:14px; font-weight:700; border-radius:8px; touch-action:manipulation;">
+            ✕ Cerrar Panel
           </button>
-          <button type="button" class="btn-sync-action" onclick="copyCleanShareUrl()" style="flex:1; min-width:140px; background:var(--bg-card); border:1px solid var(--border-color); color:var(--text-main); justify-content:center; display:inline-flex; align-items:center; gap:6px;">
-            📋 Copiar Enlace Directo
-          </button>
         </div>
-      </div>
-
-      <!-- Sección 3: Apple iCloud Direct Backup -->
-      <div class="icloud-sync-box">
-        <h4 style="font-size:13px; font-weight:700; color:var(--text-title); margin-bottom:4px;">🍏 Sincronización en la Nube y Copia iCloud Drive</h4>
-        <p style="font-size:12px; color:var(--text-muted); margin-bottom:10px;">Sincroniza tus progresos en tiempo real o guarda un archivo JSON de respaldo en tu iCloud:</p>
-        <div class="icloud-btns-row" style="display:flex; gap:8px; flex-wrap:wrap;">
-          <button class="btn-sync-action" onclick="forceSyncCloud()" style="flex:1; min-width:140px; justify-content:center; display:inline-flex; align-items:center; gap:4px;">
-            🔄 Forzar Sincronización
-          </button>
-          <button class="btn-icloud export" onclick="exportProgressToICloud()" style="flex:1; min-width:140px; justify-content:center;">
-            📥 Guardar en iCloud
-          </button>
-          <button class="btn-icloud import" onclick="document.getElementById('icloud-file-input').click()" style="flex:1; min-width:140px; justify-content:center;">
-            📤 Cargar desde iCloud
-          </button>
-          <input type="file" id="icloud-file-input" accept=".json" style="display:none" onchange="importProgressFromICloud(event)">
-        </div>
-      </div>
-
-      <!-- Sección 4: Selector de Perfil / Modo Desarrollador -->
-      <div style="margin-top:12px; padding-top:10px; border-top:1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
-        <div style="display:flex; align-items:center; gap:8px;">
-          <span style="font-size:11px; color:var(--text-muted);">Probar otros perfiles:</span>
-          <select id="pilot-select" onchange="onPilotSelectChange(this.value)" style="padding:4px 8px; font-size:11px; background:var(--bg-card); border:1px solid var(--border-color); color:var(--text-main); border-radius:6px; cursor:pointer;">
-          </select>
-        </div>
-      </div>
-
-      <!-- Botón de Cerrar inferior grande para iPhone -->
-      <div style="margin-top:14px;">
-        <button class="btn-sync-action" onclick="closePilotModal(true)" style="width:100%; justify-content:center; background:rgba(255,255,255,0.08); border:1px solid var(--border-color); color:var(--text-title); padding:11px; font-size:13px; font-weight:700; border-radius:8px;">
-          ✕ Cerrar Panel
-        </button>
       </div>
     </div>
   </div>

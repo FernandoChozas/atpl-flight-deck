@@ -1,5 +1,7 @@
 .DS_Store
 *.pdf
 !resumenes/**/*.pdf
+!notebooklm_pilot/**/*.pdf
+notebooklm_pilot/_archive_pilot_v1/
 __pycache__/
 *.pyc

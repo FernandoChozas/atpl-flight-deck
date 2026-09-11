@@ -1294,10 +1294,10 @@
     <div id="pdf-modal">
       <h3>📥 Descargar PDF NotebookLM</h3>
       <p id="pdf-modal-topic">Selecciona el idioma del resumen técnico generado por IA</p>
-      <a id="pdf-btn-en" href="#" target="_blank" class="pdf-choice-btn en">
+      <a id="pdf-btn-en" href="#" target="_blank" rel="noopener noreferrer" class="pdf-choice-btn en" onclick="openPdfChoice(event, 'en')">
         🇬🇧 &nbsp;Inglés (EN) — English Version
       </a>
-      <a id="pdf-btn-es" href="#" target="_blank" class="pdf-choice-btn es">
+      <a id="pdf-btn-es" href="#" target="_blank" rel="noopener noreferrer" class="pdf-choice-btn es" onclick="openPdfChoice(event, 'es')">
         🇪🇸 &nbsp;Español (ES) — Versión en Español
       </a>
       <button class="pdf-cancel-btn" onclick="closePdfModal()">Cancelar</button>
@@ -1518,6 +1518,26 @@
     document.getElementById('pdf-btn-es').href = es || '#';
     document.getElementById('pdf-btn-es').style.opacity = es ? '1' : '0.35';
     document.getElementById('pdf-modal-overlay').classList.add('open');
+  }
+
+  function openPdfChoice(e, lang) {
+    const btn = document.getElementById(lang === 'en' ? 'pdf-btn-en' : 'pdf-btn-es');
+    const url = btn ? btn.getAttribute('href') : null;
+    if (!url || url === '#' || url === '') {
+      if (e) e.preventDefault();
+      return;
+    }
+    // Close modal immediately
+    document.getElementById('pdf-modal-overlay').classList.remove('open');
+
+    // Detect iOS standalone PWA or standalone display mode
+    const isStandalone = (window.navigator && window.navigator.standalone === true) || 
+                         (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches);
+
+    if (isStandalone) {
+      if (e) e.preventDefault();
+      window.location.href = url;
+    }
   }
 
   function closePdfModal(e) {

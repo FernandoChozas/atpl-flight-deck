@@ -393,15 +393,27 @@
     .lang-badge.es { color: #56d364; border-color: #3fb950; background: rgba(63,185,80,0.12); }
     .lang-badge:hover { filter: brightness(1.3); }
 
-    /* Audio action buttons in table rows */
+    /* Action buttons in table rows */
     .btn-audio {
       background: #161b22; border: 1px solid #30363d;
       color: #8b949e; border-radius: 5px; cursor: pointer;
       padding: 4px 8px; font-size: 11px; font-weight: 600;
       transition: all 0.15s; white-space: nowrap;
+      display: inline-flex; align-items: center; justify-content: center;
     }
     .btn-audio:hover { background: #21262d; color: #fff; border-color: #58a6ff; }
-    .btn-audio.playing { color: #39c5bb; border-color: #39c5bb; background: rgba(57,197,187,0.1); }
+    .btn-audio.playing { color: #39c5bb; border-color: #39c5bb; background: rgba(57,197,187,0.15); box-shadow: 0 0 8px rgba(57,197,187,0.3); }
+
+    .btn-pdf-topic {
+      background: #161b22; border: 1px solid rgba(88, 166, 255, 0.4);
+      color: #58a6ff; border-radius: 6px; cursor: pointer;
+      padding: 4px 10px; font-size: 11px; font-weight: 600;
+      transition: all 0.15s; white-space: nowrap;
+      display: inline-flex; align-items: center; justify-content: center; gap: 4px;
+    }
+    .btn-pdf-topic:hover {
+      background: rgba(88, 166, 255, 0.15); border-color: #58a6ff; color: #fff;
+    }
 
     /* ═══════════════════════════════════════════════════════════
        OPCIÓN B — PDF Modal bilingüe
@@ -687,15 +699,15 @@
         <thead>
           <tr>
             <th style="width: 40px; text-align: center;">✅</th>
-            <th style="width: 50px;">Cap.</th>
-            <th style="width: 70px;">Código</th>
+            <th style="width: 45px; text-align: center;">Cap.</th>
+            <th style="width: 65px;">Código</th>
             <th>Tema / Capítulo Oficial (CAE Oxford & EASA)</th>
-            <th style="width: 90px;">Págs</th>
-            <th style="width: 90px;">Dificultad</th>
-            <th style="width: 80px;">Prioridad</th>
-            <th style="width: 110px;">⏱️ T. Estimado</th>
-            <th style="width: 150px;">Resumen Técnico</th>
-            <th style="width: 200px;">🎧 Audio · 📥 PDF · ⚡ Quiz</th>
+            <th style="width: 70px; text-align: center;">Págs</th>
+            <th style="width: 80px; text-align: center;">Dificultad</th>
+            <th style="width: 75px; text-align: center;">Prioridad</th>
+            <th style="width: 100px; text-align: center;">⏱️ T. Estimado</th>
+            <th style="width: 100px; text-align: center;">📥 PDF</th>
+            <th style="width: 170px; text-align: center;">🎧 Audio · ⚡ Quiz</th>
           </tr>
         </thead>
 
@@ -812,124 +824,98 @@
     const ALL_MASTER_GUIDES = [
       // Convocatoria 1
       {
-        sitting: 1,
-        code: '010',
-        icon: '📘',
+        sitting: 1, code: '010', icon: '📘',
         title: 'LIBRO MAESTRO CONSOLIDADO | 010 AIR LAW COMPLETO',
-        desc: 'Los 25 capítulos unificados en un solo volumen continuo (82 páginas) con avisos de examen AviationExam, tablas oficiales OACI y test razonados.',
-        link: '../resumenes/convocatoria_1/010_air_law/010_AIR_LAW_MASTER_COMPLETE_STUDY_GUIDE.pdf',
-        btnText: '📥 Abrir Manual (PDF 82 Págs)'
+        desc: 'Todos los capítulos unificados con avisos de examen AviationExam, tablas oficiales OACI y test razonados.',
+        notebooklm_en: '../notebooklm_pilot/convocatoria_1/010_air_law/010_AIR_LAW_MASTER_NOTEBOOKLM_EN.pdf',
+        notebooklm_es: '../notebooklm_pilot/convocatoria_1/010_air_law/010_AIR_LAW_MASTER_NOTEBOOKLM_ES.pdf',
       },
       {
-        sitting: 1,
-        code: '040',
-        icon: '🧠',
+        sitting: 1, code: '040', icon: '🧠',
         title: 'LIBRO MAESTRO CONSOLIDADO | 040 HUMAN PERFORMANCE COMPLETO',
-        desc: 'Los 13 capítulos unificados en un solo volumen continuo (43 páginas) con fisiología, leyes de gases, tablas TUC, ilusiones sensoriales, modelos SHELL/Swiss Cheese y CRM.',
-        link: '../resumenes/convocatoria_1/040_human_performance/040_HUMAN_PERFORMANCE_MASTER_COMPLETE_STUDY_GUIDE.pdf',
-        btnText: '📥 Abrir Manual (PDF 43 Págs)'
+        desc: 'Todos los capítulos unificados con fisiología, leyes de gases, tablas TUC, ilusiones sensoriales, modelos SHELL/Swiss Cheese y CRM.',
+        notebooklm_en: '../notebooklm_pilot/convocatoria_1/040_human_performance/040_HUMAN_PERFORMANCE_MASTER_NOTEBOOKLM_EN.pdf',
+        notebooklm_es: '../notebooklm_pilot/convocatoria_1/040_human_performance/040_HUMAN_PERFORMANCE_MASTER_NOTEBOOKLM_ES.pdf',
       },
       {
-        sitting: 1,
-        code: '090',
-        icon: '📻',
+        sitting: 1, code: '090', icon: '📻',
         title: 'LIBRO MAESTRO CONSOLIDADO | 090 COMMUNICATIONS COMPLETO',
-        desc: 'Los 7 capítulos unificados en un solo volumen continuo (23 páginas) con fraseología ICAO, propagación VHF/HF, emergencias MAYDAY/PAN PAN y fallo de radio.',
-        link: '../resumenes/convocatoria_1/090_communications/090_COMMUNICATIONS_MASTER_COMPLETE_STUDY_GUIDE.pdf',
-        btnText: '📥 Abrir Manual (PDF 23 Págs)'
+        desc: 'Todos los capítulos unificados con fraseología ICAO, propagación VHF/HF, emergencias MAYDAY/PAN PAN y fallo de radio.',
+        notebooklm_en: '../notebooklm_pilot/convocatoria_1/090_communications/090_COMMUNICATIONS_MASTER_NOTEBOOKLM_EN.pdf',
+        notebooklm_es: '../notebooklm_pilot/convocatoria_1/090_communications/090_COMMUNICATIONS_MASTER_NOTEBOOKLM_ES.pdf',
       },
       // Convocatoria 2
       {
-        sitting: 2,
-        code: '021',
-        icon: '🛠️',
+        sitting: 2, code: '021', icon: '🛠️',
         title: 'LIBRO MAESTRO CONSOLIDADO | 021 AGK - SYSTEMS & POWERPLANT',
-        desc: 'Los 22 capítulos unificados de Estructuras, Hidráulica, Tren, Mandos, Neumática, Presurización, Electricidad CC/CA, Motores de Pistón y Turbinas de Gas (55 páginas continuas).',
-        link: '../resumenes/convocatoria_2/021_agk_airframe_systems_powerplant/021_AGK_MASTER_COMPLETE_STUDY_GUIDE.pdf',
-        btnText: '📥 Abrir Manual (PDF 55 Págs)'
+        desc: 'Todos los capítulos unificados de Estructuras, Hidráulica, Tren, Mandos, Neumática, Presurización, Electricidad CC/CA, Motores de Pistón y Turbinas de Gas.',
+        notebooklm_en: '../notebooklm_pilot/convocatoria_2/021_agk_systems/021_AGK_MASTER_NOTEBOOKLM_EN.pdf',
+        notebooklm_es: '../notebooklm_pilot/convocatoria_2/021_agk_systems/021_AGK_MASTER_NOTEBOOKLM_ES.pdf',
       },
       {
-        sitting: 2,
-        code: '022',
-        icon: '🎛️',
+        sitting: 2, code: '022', icon: '🎛️',
         title: 'LIBRO MAESTRO CONSOLIDADO | 022 INSTRUMENTATION COMPLETO',
-        desc: 'Los 14 capítulos unificados de Pitot-Estática, Instrumentos Giroscópicos, Magnetismo, IRS/Láser, FMS, Pantallas EFIS, Alertas EGPWS/TCAS y Piloto Automático con ejercicios paso a paso (31 páginas continuas).',
-        link: '../resumenes/convocatoria_2/022_instrumentation/022_INSTRUMENTATION_MASTER_COMPLETE_STUDY_GUIDE.pdf',
-        btnText: '📥 Abrir Manual (PDF 31 Págs)'
+        desc: 'Todos los capítulos unificados de Pitot-Estática, Instrumentos Giroscópicos, Magnetismo, IRS/Láser, FMS, Pantallas EFIS, Alertas EGPWS/TCAS y Piloto Automático.',
+        notebooklm_en: '../notebooklm_pilot/convocatoria_2/022_instrumentation/022_INSTRUMENTATION_MASTER_NOTEBOOKLM_EN.pdf',
+        notebooklm_es: '../notebooklm_pilot/convocatoria_2/022_instrumentation/022_INSTRUMENTATION_MASTER_NOTEBOOKLM_ES.pdf',
       },
       {
-        sitting: 2,
-        code: '081',
-        icon: '✈️',
+        sitting: 2, code: '081', icon: '✈️',
         title: 'LIBRO MAESTRO CONSOLIDADO | 081 PRINCIPLES OF FLIGHT COMPLETO',
-        desc: 'Los 14 capítulos unificados de Aerodinámica Subsónica, Resistencia Inducida/Parásita, Transónico, Ondas de Choque, Estabilidad, Mandos y Mecánica de Vuelo con ejercicios paso a paso (29 páginas continuas).',
-        link: '../resumenes/convocatoria_2/081_principles_of_flight/081_POF_MASTER_COMPLETE_STUDY_GUIDE.pdf',
-        btnText: '📥 Abrir Manual (PDF 29 Págs)'
+        desc: 'Todos los capítulos unificados de Aerodinámica Subsónica, Resistencia Inducida/Parásita, Transónico, Ondas de Choque, Estabilidad, Mandos y Mecánica de Vuelo.',
+        notebooklm_en: '../notebooklm_pilot/convocatoria_2/081_principles_of_flight/081_PRINCIPLES_OF_FLIGHT_MASTER_NOTEBOOKLM_EN.pdf',
+        notebooklm_es: '../notebooklm_pilot/convocatoria_2/081_principles_of_flight/081_PRINCIPLES_OF_FLIGHT_MASTER_NOTEBOOKLM_ES.pdf',
       },
       // Convocatoria 3
       {
-        sitting: 3,
-        code: '031',
-        icon: '⚖️',
+        sitting: 3, code: '031', icon: '⚖️',
         title: 'LIBRO MAESTRO CONSOLIDADO | 031 MASS & BALANCE COMPLETO',
-        desc: 'Los 7 capítulos unificados de Masas Límite, Centro de Gravedad, % MAC, Desplazamiento de Carga, Combustible, Límites de Suelo y Hoja de Carga y Trimado con ejercicios paso a paso (19 páginas continuas).',
-        link: '../resumenes/convocatoria_3/031_mass_and_balance/031_MASS_AND_BALANCE_MASTER_COMPLETE_STUDY_GUIDE.pdf',
-        btnText: '📥 Abrir Manual (PDF 19 Págs)'
+        desc: 'Todos los capítulos unificados de Masas Límite, Centro de Gravedad, % MAC, Desplazamiento de Carga, Combustible y Hoja de Carga.',
+        notebooklm_en: '../notebooklm_pilot/convocatoria_3/031_mass_and_balance/031_MASS_AND_BALANCE_MASTER_NOTEBOOKLM_EN.pdf',
+        notebooklm_es: '../notebooklm_pilot/convocatoria_3/031_mass_and_balance/031_MASS_AND_BALANCE_MASTER_NOTEBOOKLM_ES.pdf',
       },
       {
-        sitting: 3,
-        code: '032',
-        icon: '🚀',
+        sitting: 3, code: '032', icon: '🚀',
         title: 'LIBRO MAESTRO CONSOLIDADO | 032 PERFORMANCE COMPLETO',
-        desc: 'Los 10 capítulos unificados de Atmósfera/Viento, Aviones Clase B Pistón, Velocidades Clase A CS-25, Campo Equilibrado, Segmentos de Ascenso, Crucero OEI, Aterrizaje y Empuje Flexible (24 páginas continuas).',
-        link: '../resumenes/convocatoria_3/032_performance/032_PERFORMANCE_MASTER_COMPLETE_STUDY_GUIDE.pdf',
-        btnText: '📥 Abrir Manual (PDF 24 Págs)'
+        desc: 'Todos los capítulos unificados de Atmósfera/Viento, Velocidades CS-25, Campo Equilibrado, Segmentos de Ascenso, Crucero OEI, Aterrizaje y Empuje Flexible.',
+        notebooklm_en: '../notebooklm_pilot/convocatoria_3/032_performance/032_PERFORMANCE_MASTER_NOTEBOOKLM_EN.pdf',
+        notebooklm_es: '../notebooklm_pilot/convocatoria_3/032_performance/032_PERFORMANCE_MASTER_NOTEBOOKLM_ES.pdf',
       },
       {
-        sitting: 3,
-        code: '033',
-        icon: '🗺️',
+        sitting: 3, code: '033', icon: '🗺️',
         title: 'LIBRO MAESTRO CONSOLIDADO | 033 FLIGHT PLANNING COMPLETO',
-        desc: 'Los 12 capítulos unificados de Cartas VFR/IFR, Rutas, Combustible MRJT, PNR/PET y Planes de Vuelo ATS (21 páginas continuas).',
-        link: '../resumenes/convocatoria_3/033_flight_planning_monitoring/033_FLIGHT_PLANNING_MASTER_COMPLETE_STUDY_GUIDE.pdf',
-        btnText: '📥 Abrir Manual (PDF 21 Págs)'
+        desc: 'Todos los capítulos unificados de Cartas VFR/IFR, Rutas, Combustible MRJT, PNR/PET y Planes de Vuelo ATS.',
+        notebooklm_en: '../notebooklm_pilot/convocatoria_3/033_flight_planning/033_FLIGHT_PLANNING_MASTER_NOTEBOOKLM_EN.pdf',
+        notebooklm_es: '../notebooklm_pilot/convocatoria_3/033_flight_planning/033_FLIGHT_PLANNING_MASTER_NOTEBOOKLM_ES.pdf',
       },
       // Convocatoria 4
       {
-        sitting: 4,
-        code: '050',
-        icon: '☁️',
+        sitting: 4, code: '050', icon: '☁️',
         title: 'LIBRO MAESTRO CONSOLIDADO | 050 METEOROLOGY COMPLETO',
-        desc: 'Los 16 capítulos unificados de Atmósfera, Viento, Termodinámica, Nubes, Frentes, Engelamiento, Tormentas, Climatología Global y Mensajes METAR/TAF (31 páginas continuas).',
-        link: '../resumenes/convocatoria_4/050_meteorology/050_METEOROLOGY_MASTER_COMPLETE_STUDY_GUIDE.pdf',
-        btnText: '📥 Abrir Manual (PDF 31 Págs)'
+        desc: 'Todos los capítulos unificados de Atmósfera, Viento, Termodinámica, Nubes, Frentes, Engelamiento, Tormentas, Climatología Global y Mensajes METAR/TAF.',
+        notebooklm_en: '../notebooklm_pilot/convocatoria_4/050_meteorology/050_METEOROLOGY_MASTER_NOTEBOOKLM_EN.pdf',
+        notebooklm_es: '../notebooklm_pilot/convocatoria_4/050_meteorology/050_METEOROLOGY_MASTER_NOTEBOOKLM_ES.pdf',
       },
       {
-        sitting: 4,
-        code: '061',
-        icon: '🧭',
+        sitting: 4, code: '061', icon: '🧭',
         title: 'LIBRO MAESTRO CONSOLIDADO | 061 GENERAL NAVIGATION COMPLETO',
-        desc: 'Los 13 capítulos unificados de Tierra, Cartografía Lamber/Polar/Mercator, Magnetismo, Giróscopos de Dirección, Vuelo In-flight y Navegación Astronómica (25 páginas continuas).',
-        link: '../resumenes/convocatoria_4/061_general_navigation/061_GENERAL_NAVIGATION_MASTER_COMPLETE_STUDY_GUIDE.pdf',
-        btnText: '📥 Abrir Manual (PDF 25 Págs)'
+        desc: 'Todos los capítulos unificados de Tierra, Cartografía Lambert/Polar/Mercator, Magnetismo, Giróscopos, Vuelo In-flight y Navegación Astronómica.',
+        notebooklm_en: '../notebooklm_pilot/convocatoria_4/061_general_navigation/061_GENERAL_NAVIGATION_MASTER_NOTEBOOKLM_EN.pdf',
+        notebooklm_es: '../notebooklm_pilot/convocatoria_4/061_general_navigation/061_GENERAL_NAVIGATION_MASTER_NOTEBOOKLM_ES.pdf',
       },
       {
-        sitting: 4,
-        code: '062',
-        icon: '📡',
+        sitting: 4, code: '062', icon: '📡',
         title: 'LIBRO MAESTRO CONSOLIDADO | 062 RADIO NAVIGATION & PBN',
-        desc: 'Los 11 capítulos unificados de Propagación, VDF, NDB/ADF, VOR, ILS/MLS, Radar, DME, Sistemas RNAV y FMS/GNSS (24 páginas continuas).',
-        link: '../resumenes/convocatoria_4/062_radio_navigation_pbn/062_RADIO_NAVIGATION_MASTER_COMPLETE_STUDY_GUIDE.pdf',
-        btnText: '📥 Abrir Manual (PDF 24 Págs)'
+        desc: 'Todos los capítulos unificados de Propagación, VDF, NDB/ADF, VOR, ILS/MLS, Radar, DME, Sistemas RNAV y FMS/GNSS.',
+        notebooklm_en: '../notebooklm_pilot/convocatoria_4/062_radio_navigation_pbn/062_RADIO_NAVIGATION_MASTER_NOTEBOOKLM_EN.pdf',
+        notebooklm_es: '../notebooklm_pilot/convocatoria_4/062_radio_navigation_pbn/062_RADIO_NAVIGATION_MASTER_NOTEBOOKLM_ES.pdf',
       },
       {
-        sitting: 4,
-        code: '070',
-        icon: '📋',
+        sitting: 4, code: '070', icon: '📋',
         title: 'LIBRO MAESTRO CONSOLIDADO | 070 OPERATIONAL PROCEDURES',
-        desc: 'Los 12 capítulos unificados de Anexo 6, Requisitos Especiales (RVSM, ETOPS, PBN), Extinción de Incendios, Cizalladura y Mercancías Peligrosas (20 páginas continuas).',
-        link: '../resumenes/convocatoria_4/070_operational_procedures/070_OPERATIONAL_PROCEDURES_MASTER_COMPLETE_STUDY_GUIDE.pdf',
-        btnText: '📥 Abrir Manual (PDF 20 Págs)'
+        desc: 'Todos los capítulos unificados de Anexo 6, Requisitos Especiales (RVSM, ETOPS, PBN), Extinción de Incendios, Cizalladura y Mercancías Peligrosas.',
+        notebooklm_en: '../notebooklm_pilot/convocatoria_4/070_operational_procedures/070_OPERATIONAL_PROCEDURES_MASTER_NOTEBOOKLM_EN.pdf',
+        notebooklm_es: '../notebooklm_pilot/convocatoria_4/070_operational_procedures/070_OPERATIONAL_PROCEDURES_MASTER_NOTEBOOKLM_ES.pdf',
       }
     ];
 
@@ -1049,9 +1035,9 @@
           </div>
           <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
             ${scoreInput}
-            <a href="${g.link}" target="_blank" class="btn-summary" style="background: #2563eb; color: #fff; font-weight: 700; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-size: 12px; white-space: nowrap; border: 1px solid #60a5fa; box-shadow: 0 0 10px rgba(37,99,235,0.4);">
-              ${g.btnText}
-            </a>
+            <button onclick="openMasterPdfModal('${g.code}')" class="btn-summary" style="background: #2563eb; color: #fff; font-weight: 700; padding: 8px 16px; border-radius: 8px; font-size: 12px; white-space: nowrap; border: 1px solid #60a5fa; box-shadow: 0 0 10px rgba(37,99,235,0.4); cursor: pointer;">
+              📥 Descargar Manual (EN / ES)
+            </button>
           </div>
         `;
         gridWrapper.appendChild(card);
@@ -1147,40 +1133,36 @@
         const minsStr = `${mins%60}m`;
         const timeEst = `<span style="color: #94a3b8; font-size: 13px; font-weight: 500;" title="${pagesInt} páginas reales del PDF">⏱️ ${hoursStr}${minsStr}</span>`;
 
-        const summaryLink = t.summary_file ? 
-          `<a href="../${t.summary_file}" target="_blank" class="btn-summary">📄 Ver Resumen</a>` : 
-          `<span style="color: var(--text-muted); font-size: 11px;">En redacción</span>`;
+        // PDF modal button (bilingual NotebookLM PDF)
+        const pdfColBtn = (t.notebooklm_pdf_en || t.notebooklm_pdf_es)
+          ? `<button class="btn-pdf-topic" onclick="openPdfModal(${t.id})" title="Descargar PDF NotebookLM (EN o ES)">📥 PDF</button>`
+          : `<span style="color:var(--text-muted);font-size:11px;">—</span>`;
 
-        // Action buttons: Audio EN/ES, PDF download (bilingual modal), AeroQuiz
-        const titleShort = t.title.replace(/"/g, '&quot;').substring(0, 60);
+        // Audio & Quiz action buttons
         const audioEN = t.podcast_en 
-          ? `<button class="btn-audio" data-topic="${t.id}" data-lang="en" onclick="playPodcast(${t.id},'en','${titleShort}','${t.subject_code}',${t.chapter_num})" title="Escuchar en inglés">🇬🇧 EN</button>` 
-          : `<span style="color:#444;font-size:10px;">—EN</span>`;
+          ? `<button class="btn-audio" data-topic="${t.id}" data-lang="en" onclick="playPodcast(${t.id},'en')" title="Podcast en inglés (Ryan & Sonia)">🇬🇧 EN</button>` 
+          : `<span style="color:#444;font-size:11px;padding:2px 6px;">—</span>`;
         const audioES = t.podcast_es 
-          ? `<button class="btn-audio" data-topic="${t.id}" data-lang="es" onclick="playPodcast(${t.id},'es','${titleShort}','${t.subject_code}',${t.chapter_num})" title="Escuchar en español">🇪🇸 ES</button>` 
-          : `<span style="color:#444;font-size:10px;">—ES</span>`;
-        const pdfBtn = (t.notebooklm_pdf_en || t.notebooklm_pdf_es)
-          ? `<button class="btn-summary" onclick="openPdfModal(${t.id},'${titleShort}')" title="Descargar PDF bilingüe NotebookLM" style="color:#e3b341;border-color:#6b5e30;">📥 PDF</button>`
-          : '';
-        const quizBtn = `<button class="btn-quiz" onclick="openQuiz('${t.subject_code}','${titleShort}')" title="AeroQuiz — Test rápido ECQB">⚡ Test</button>`;
+          ? `<button class="btn-audio" data-topic="${t.id}" data-lang="es" onclick="playPodcast(${t.id},'es')" title="Podcast en español (Álvaro & Elvira)">🇪🇸 ES</button>` 
+          : `<span style="color:#444;font-size:11px;padding:2px 6px;">—</span>`;
+        const quizBtn = `<button class="btn-quiz" onclick="openQuiz('${t.subject_code}')" title="AeroQuiz ECQB — Test rápido del tema">⚡ Test</button>`;
 
         tr.innerHTML = `
           <td style="text-align: center;">
             <input type="checkbox" style="transform: scale(1.3); cursor: pointer; accent-color: var(--pass-green);" onchange="toggleTopicTick(${t.id})" ${studiedTopics.includes(t.id) ? 'checked' : ''}>
           </td>
-          <td><strong>${t.chapter_num}</strong></td>
+          <td style="text-align: center;"><strong>${t.chapter_num}</strong></td>
           <td><span style="color: var(--accent-blue); font-weight: 600;">${t.subject_code}</span></td>
           <td>${t.title}</td>
-          <td style="color: var(--text-muted);">${t.summary_pages ? `${t.summary_pages} págs` : '—'}</td>
-          <td><span class="tag-diff ${t.difficulty}">${t.difficulty}</span></td>
-          <td>${t.priority}</td>
-          <td>${timeEst}</td>
-          <td>${summaryLink}</td>
-          <td style="white-space: nowrap;">
-            <div style="display:flex; gap:4px; flex-wrap:wrap; align-items:center;">
+          <td style="color: var(--text-muted); text-align: center;">${t.summary_pages ? `${t.summary_pages} págs` : '—'}</td>
+          <td style="text-align: center;"><span class="tag-diff ${t.difficulty}">${t.difficulty}</span></td>
+          <td style="text-align: center;">${t.priority}</td>
+          <td style="text-align: center;">${timeEst}</td>
+          <td style="text-align: center;">${pdfColBtn}</td>
+          <td style="text-align: center;">
+            <div style="display: inline-flex; gap: 6px; align-items: center; justify-content: center; white-space: nowrap;">
               ${audioEN}
               ${audioES}
-              ${pdfBtn}
               ${quizBtn}
             </div>
           </td>
@@ -1303,7 +1285,7 @@
   let currentTopicId = null;
   let currentLang = null;
 
-  function playPodcast(topicId, lang, title, subjectCode, chapterNum) {
+  function playPodcast(topicId, lang) {
     const topic = (window.ATPL_DATA.topics || []).find(t => t.id === topicId);
     if (!topic) return;
     const src = lang === 'en' ? topic.podcast_en : topic.podcast_es;
@@ -1323,7 +1305,7 @@
     audio.play().catch(e => console.log('Audio play error:', e));
 
     // Update player UI
-    document.getElementById('player-title').textContent = `[${subjectCode}] Ch.${chapterNum} — ${title.substring(0, 50)}...`;
+    document.getElementById('player-title').textContent = `[${topic.subject_code}] Ch.${topic.chapter_num} — ${topic.title}`;
     document.getElementById('player-sub').textContent = lang === 'en' ? '🇬🇧 English Podcast — Ryan & Sonia' : '🇪🇸 Podcast Español — Álvaro & Elvira';
     document.getElementById('player-lang-badge').className = `lang-badge ${lang}`;
     document.getElementById('player-lang-badge').textContent = lang === 'en' ? '🇬🇧 EN' : '🇪🇸 ES';
@@ -1395,16 +1377,30 @@
   // ═══════════════════════════════════════════════════════════════
   //  OPCIÓN B — PDF Modal Bilingüe
   // ═══════════════════════════════════════════════════════════════
-  function openPdfModal(topicId, title) {
+  // Open bilingual modal for MASTER GUIDES
+  function openMasterPdfModal(code) {
+    const guide = ALL_MASTER_GUIDES.find(g => g.code === code);
+    if (!guide) return;
+    document.getElementById('pdf-modal-topic').textContent = guide.title;
+    const en = guide.notebooklm_en || '';
+    const es = guide.notebooklm_es || '';
+    document.getElementById('pdf-btn-en').href = en || '#';
+    document.getElementById('pdf-btn-en').style.opacity = en ? '1' : '0.35';
+    document.getElementById('pdf-btn-es').href = es || '#';
+    document.getElementById('pdf-btn-es').style.opacity = es ? '1' : '0.35';
+    document.getElementById('pdf-modal-overlay').classList.add('open');
+  }
+
+  function openPdfModal(topicId) {
     const topic = (window.ATPL_DATA.topics || []).find(t => t.id === topicId);
     if (!topic) return;
-    document.getElementById('pdf-modal-topic').textContent = `Capítulo: ${title.substring(0, 60)}`;
+    document.getElementById('pdf-modal-topic').textContent = `[${topic.subject_code}] Cap. ${topic.chapter_num}: ${topic.title}`;
     const en = topic.notebooklm_pdf_en || '';
     const es = topic.notebooklm_pdf_es || '';
-    document.getElementById('pdf-btn-en').href = en ? `../${en}` : '#';
-    document.getElementById('pdf-btn-en').style.opacity = en ? '1' : '0.4';
-    document.getElementById('pdf-btn-es').href = es ? `../${es}` : '#';
-    document.getElementById('pdf-btn-es').style.opacity = es ? '1' : '0.4';
+    document.getElementById('pdf-btn-en').href = en || '#';
+    document.getElementById('pdf-btn-en').style.opacity = en ? '1' : '0.35';
+    document.getElementById('pdf-btn-es').href = es || '#';
+    document.getElementById('pdf-btn-es').style.opacity = es ? '1' : '0.35';
     document.getElementById('pdf-modal-overlay').classList.add('open');
   }
 
@@ -1481,7 +1477,7 @@
   let quizCurrentIdx = 0;
   let quizAnswered = false;
 
-  function openQuiz(subjectCode, topicTitle) {
+  function openQuiz(subjectCode) {
     quizTopicCode = subjectCode;
     const bank = QUIZ_BANK[subjectCode];
     if (!bank || bank.length === 0) {

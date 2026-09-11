@@ -3,5 +3,10 @@
 !resumenes/**/*.pdf
 !notebooklm_pilot/**/*.pdf
 notebooklm_pilot/_archive_pilot_v1/
+libros_oxford_fuente/
+scratch/
 __pycache__/
 *.pyc
+*.py
+*.db
+.netlify/

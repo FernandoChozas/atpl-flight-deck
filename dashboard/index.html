@@ -1342,9 +1342,7 @@
       updateKPIs();
       renderTopics();
       pushPilotDataToCloud();
-      alert(`✅ ¡Identificador actualizado con éxito a: ${currentPilot}!
-
-Todos tus progresos y sincronización en la nube se han transferido a tu nuevo nombre.`);
+      alert(`✅ ¡Identificador actualizado con éxito a: ${currentPilot}!\n\nTodos tus progresos y sincronización en la nube se han transferido a tu nuevo nombre.`);
     }
 
     // ─── SHARE WITH FRIENDS ───
@@ -1374,11 +1372,7 @@ Todos tus progresos y sincronización en la nube se han transferido a tu nuevo n
       const url = getCleanShareUrl();
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(url).then(() => {
-          alert('📋 ¡Enlace copiado al portapapeles!
-
-' + url + '
-
-Pásaselo a tus amigos por WhatsApp, Telegram o AirDrop. Entrarán con su propio perfil independiente y nunca afectarán a tu progreso.');
+          alert(`📋 ¡Enlace copiado al portapapeles!\n\n${url}\n\nPásaselo a tus amigos por WhatsApp, Telegram o AirDrop. Entrarán con su propio perfil independiente y nunca afectarán a tu progreso.`);
         }).catch(() => {
           prompt('Copia este enlace para enviarlo a tus amigos:', url);
         });

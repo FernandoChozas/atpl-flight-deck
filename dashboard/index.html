@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="robots" content="noindex, nofollow">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
     <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="ATPL Deck">
@@ -708,6 +708,22 @@
     }
     .btn-quiz:hover { background: rgba(210,153,34,0.15); border-color: #e3b341; color: #fff; }
 
+    
+    /* ═══════════════════════════════════════════════════════════
+       COCKPIT SECURITY GATEKEEPER (CABINA PRIVADA)
+    ═══════════════════════════════════════════════════════════ */
+    #cockpit-gate-screen {
+      position: fixed; inset: 0; background: #0b0f19; z-index: 99999;
+      display: none; align-items: center; justify-content: center; padding: 20px;
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    }
+    .gate-card {
+      background: var(--bg-card, #161b22); border: 1px solid var(--border-color, #30363d);
+      border-radius: 18px; padding: 32px 26px; max-width: 420px; width: 100%;
+      text-align: center; box-shadow: 0 25px 70px rgba(0,0,0,0.8);
+      animation: modalPop 0.25s ease;
+    }
+
     /* ═══════════════════════════════════════════════════════════
        PILOT PROFILE & CLOUD / ICLOUD SYNC MODAL
     ═══════════════════════════════════════════════════════════ */
@@ -1379,7 +1395,100 @@
       showToastNotification(`✅ ¡Nombre actualizado a: ${currentPilot}!`);
     }
 
-    // ─── SHARE WITH FRIENDS (CONFIGURABLE & ONLINE AUTO-DETECTED) ───
+    // ─── COCKPIT GATEKEEPER & PRIVATE PIN SECURITY ───
+    const MASTER_DEFAULT_PIN = 'ATPL-2026';
+
+    function getFlightPin() {
+      return (localStorage.getItem('atpl_flight_pin') || MASTER_DEFAULT_PIN).trim();
+    }
+
+    function saveCustomAccessPin() {
+      const input = document.getElementById('custom-access-pin-input');
+      if (!input) return;
+      const val = input.value.trim();
+      if (!val) {
+        showToastNotification('⚠️ El PIN no puede estar vacío.');
+        return;
+      }
+      localStorage.setItem('atpl_flight_pin', val);
+      refreshShareUrlInputs();
+      showToastNotification(`🔑 Nuevo PIN de cabina guardado: ${val}`);
+    }
+
+    function checkGateAuthorization() {
+      // 1. Master Developer (EC-CHOZAS) or local file protocol is always authorized
+      if (currentPilot === 'EC-CHOZAS' || window.location.protocol === 'file:') {
+        localStorage.setItem('atpl_flight_authorized', 'true');
+        hideGateScreen();
+        return true;
+      }
+
+      // 2. Secret PIN passed in URL query param: auto-unlock and remember
+      const queryPin = urlParams.get('pin') || urlParams.get('key') || urlParams.get('access') || urlParams.get('token');
+      const activePin = getFlightPin();
+      if (queryPin && queryPin.trim().toUpperCase() === activePin.toUpperCase()) {
+        localStorage.setItem('atpl_flight_authorized', 'true');
+        if (!localStorage.getItem('atpl_friend_initialized')) {
+          localStorage.setItem('atpl_active_pilot', 'PILOTO INVITADO');
+          localStorage.setItem('atpl_friend_initialized', 'true');
+          currentPilot = 'PILOTO INVITADO';
+        }
+        hideGateScreen();
+        return true;
+      }
+
+      // 3. Previously authorized device
+      if (localStorage.getItem('atpl_flight_authorized') === 'true') {
+        hideGateScreen();
+        return true;
+      }
+
+      // 4. Locked: show secure gate screen
+      showGateScreen();
+      return false;
+    }
+
+    function showGateScreen() {
+      const gate = document.getElementById('cockpit-gate-screen');
+      if (gate) gate.style.display = 'flex';
+      const container = document.querySelector('.container');
+      if (container) container.style.display = 'none';
+    }
+
+    function hideGateScreen() {
+      const gate = document.getElementById('cockpit-gate-screen');
+      if (gate) gate.style.display = 'none';
+      const container = document.querySelector('.container');
+      if (container) container.style.display = 'block';
+    }
+
+    function verifyGatePin() {
+      const input = document.getElementById('gate-pin-input');
+      const err = document.getElementById('gate-error-msg');
+      if (!input) return;
+      const val = input.value.trim().toUpperCase();
+      const activePin = getFlightPin().toUpperCase();
+      if (val === activePin) {
+        localStorage.setItem('atpl_flight_authorized', 'true');
+        if (!localStorage.getItem('atpl_friend_initialized')) {
+          localStorage.setItem('atpl_active_pilot', 'PILOTO INVITADO');
+          localStorage.setItem('atpl_friend_initialized', 'true');
+          currentPilot = 'PILOTO INVITADO';
+          loadActivePilotState();
+        }
+        hideGateScreen();
+        showToastNotification('✅ ¡Cabina autorizada con éxito!');
+      } else {
+        if (err) {
+          err.style.display = 'block';
+          err.textContent = '⚠️ PIN de vuelo incorrecto. Solicítalo al administrador.';
+        }
+        input.value = '';
+        input.focus();
+      }
+    }
+
+    // ─── SHARE WITH FRIENDS (CONFIGURABLE, ONLINE AUTO-DETECTED & PIN-LOCKED) ───
     function getStoredAppUrl() {
       // 1. If currently browsing online (HTTP/HTTPS): auto-detect and persist
       if (window.location.protocol === 'http:' || window.location.protocol === 'https:') {
@@ -1397,8 +1506,9 @@
 
     function getOfficialShareUrl() {
       const baseUrl = getStoredAppUrl();
+      const pin = getFlightPin();
       if (baseUrl) {
-        return `${baseUrl}/dashboard/?invite=friend`;
+        return `${baseUrl}/dashboard/?invite=friend&pin=${encodeURIComponent(pin)}`;
       }
       return '';
     }
@@ -1409,12 +1519,16 @@
       if (customInput) {
         customInput.value = storedUrl;
       }
+      const pinInput = document.getElementById('custom-access-pin-input');
+      if (pinInput) {
+        pinInput.value = getFlightPin();
+      }
       const preview = document.getElementById('share-link-preview');
       if (preview) {
         if (storedUrl) {
-          preview.value = `${storedUrl}/dashboard/?invite=friend`;
+          preview.value = getOfficialShareUrl();
         } else {
-          preview.value = 'Configura tu URL web arriba para generar el enlace oficial';
+          preview.value = 'Configura tu URL web arriba para generar el enlace oficial con PIN';
         }
       }
     }
@@ -2157,6 +2271,13 @@
             <button type="button" class="btn-sync-action" onclick="saveCustomAppUrl()" style="padding:7px 12px; font-size:11px; white-space:nowrap; background:#238636; border-color:#2ea043; touch-action:manipulation;">💾 Guardar URL</button>
           </div>
 
+          <!-- PIN Secreto de Cabina -->
+          <label style="font-size:11px; color:var(--text-muted); display:block; margin-bottom:4px; font-weight:600;">🔑 PIN Secreto de Acceso (Solo para invitados):</label>
+          <div style="display:flex; gap:6px; margin-bottom:8px;">
+            <input type="text" id="custom-access-pin-input" value="ATPL-2026" placeholder="PIN de Vuelo (ej: ATPL-2026)" style="flex:1; padding:7px 10px; background:var(--bg-card); border:1px solid var(--border-color); color:var(--text-main); border-radius:6px; font-size:12px; font-weight:700; outline:none;">
+            <button type="button" class="btn-sync-action" onclick="saveCustomAccessPin()" style="padding:7px 12px; font-size:11px; white-space:nowrap; background:#238636; border-color:#2ea043; touch-action:manipulation;">💾 Cambiar PIN</button>
+          </div>
+
           <!-- Previsualización del enlace oficial -->
           <label style="font-size:11px; color:var(--text-muted); display:block; margin-bottom:4px; font-weight:600;">🔗 Enlace de invitación para enviar a amigos:</label>
           <div style="display:flex; gap:6px; margin-bottom:10px;">
@@ -2795,5 +2916,30 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
     }, 450 + Math.random() * 350);
   }
   </script>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       COCKPIT SECURITY GATE (PANTALLA DE BLOQUEO PRIVADO)
+  ═══════════════════════════════════════════════════════════ -->
+  <div id="cockpit-gate-screen">
+    <div class="gate-card">
+      <div style="font-size: 48px; margin-bottom: 12px;">🔒</div>
+      <h2 style="font-size: 20px; font-weight: 800; color: #fff; margin: 0 0 6px 0;">ATPL Flight Deck</h2>
+      <div style="margin-bottom: 14px;">
+        <span style="font-size: 11px; font-weight: 700; background: rgba(218,54,51,0.2); color: #f85149; border: 1px solid rgba(218,54,51,0.4); padding: 3px 12px; border-radius: 12px; text-transform: uppercase; letter-spacing: 0.5px;">Cabina Privada · Acceso Restringido</span>
+      </div>
+      <p style="font-size: 13px; color: #8b949e; line-height: 1.5; margin: 0 0 20px 0;">
+        Este simulador y entorno de estudio ATPL es de uso estrictamente privado. Si eres un alumno o piloto autorizado, introduce el PIN de vuelo:
+      </p>
+
+      <form onsubmit="event.preventDefault(); verifyGatePin();" style="display: flex; flex-direction: column; gap: 10px;">
+        <input type="password" id="gate-pin-input" placeholder="Introduce el PIN de Vuelo" autocomplete="current-password" style="width: 100%; padding: 13px; background: #0d1117; border: 1px solid #30363d; color: #fff; border-radius: 8px; font-size: 16px; text-align: center; font-weight: 700; letter-spacing: 3px; outline: none; box-sizing: border-box;">
+        <button type="button" onclick="verifyGatePin()" style="width: 100%; padding: 13px; background: #238636; border: 1px solid #2ea043; color: #fff; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; touch-action: manipulation;">
+          🔓 Desbloquear Cabina
+        </button>
+      </form>
+      <p id="gate-error-msg" style="color: #f85149; font-size: 12px; margin-top: 12px; display: none; font-weight: 600;">⚠️ PIN incorrecto. Solicítalo al administrador.</p>
+    </div>
+  </div>
+
 </body>
 </html>

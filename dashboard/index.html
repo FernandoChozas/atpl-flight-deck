@@ -197,6 +197,24 @@
     .pilot-name { font-weight: 700; color: var(--accent-blue); letter-spacing: 0.5px; }
     .sync-indicator { font-size: 9px; margin-left: 2px; }
     .sync-spinning { display: inline-block; animation: spin 1s linear infinite; }
+    .share-capsule {
+      border-color: rgba(46, 160, 67, 0.4);
+      background: linear-gradient(135deg, rgba(46,160,67,0.12), rgba(63,185,80,0.06));
+      color: #56d364;
+    }
+    .share-capsule:hover {
+      border-color: #56d364;
+      box-shadow: 0 3px 12px rgba(46,160,67,0.25);
+    }
+    .atc-capsule {
+      border-color: rgba(163, 113, 247, 0.4);
+      background: linear-gradient(135deg, rgba(163,113,247,0.12), rgba(187,134,252,0.06));
+      color: #bb86fc;
+    }
+    .atc-capsule:hover {
+      border-color: #bb86fc;
+      box-shadow: 0 3px 12px rgba(163,113,247,0.25);
+    }
 
     .shift-badge {
       background-color: var(--badge-bg);
@@ -790,21 +808,22 @@
     @keyframes spin { to { transform: rotate(360deg); } }
     .atc-header-text h4 { font-size: 14px; font-weight: 700; color: var(--text-title); }
     .atc-header-text p { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
-    
-    /* Digital Frequency LCD Display */
-    .atc-freq-bar {
-      background: #020617; border-bottom: 1px solid var(--border-color);
-      padding: 6px 14px; display: flex; justify-content: space-between; align-items: center;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      font-size: 11px;
+    .atc-close-btn {
+      background: rgba(255,255,255,0.08); border: 1px solid var(--border-color);
+      color: var(--text-title); width: 28px; height: 28px; border-radius: 50%;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700; transition: all 0.15s; flex-shrink: 0;
     }
-    .freq-active { color: #38bdf8; font-weight: 700; letter-spacing: 0.5px; }
-    .freq-stby { color: #10b981; font-weight: 600; }
+    .atc-close-btn:hover {
+      background: rgba(248,81,73,0.2); color: #ff7b72; border-color: rgba(248,81,73,0.4);
+    }
     .atc-cfg-btn {
-      background: transparent; border: none; cursor: pointer; font-size: 13px; color: #94a3b8;
-      padding: 2px 4px; border-radius: 4px; transition: color 0.15s;
+      background: rgba(255,255,255,0.06); border: 1px solid var(--border-color);
+      cursor: pointer; font-size: 14px; color: var(--text-muted);
+      width: 28px; height: 28px; border-radius: 50%; display: flex;
+      align-items: center; justify-content: center; transition: all 0.15s; flex-shrink: 0;
     }
-    .atc-cfg-btn:hover { color: #f8fafc; }
+    .atc-cfg-btn:hover { color: var(--text-title); border-color: var(--accent-blue); background: rgba(56,139,253,0.15); }
 
     #atc-messages {
       flex: 1; overflow-y: auto; padding: 14px; display: flex;
@@ -865,8 +884,8 @@
         </div>
       </div>
       <div class="header-controls">
-        <!-- Pilot Profile / Cloud Sync Capsule -->
-        <button class="header-capsule pilot-capsule" onclick="openPilotModal()" title="Gestión de Piloto y Sincronización">
+        <!-- Pilot Profile / Developer Mode / Cloud Sync Capsule -->
+        <button class="header-capsule pilot-capsule" onclick="openPilotModal()" title="Panel de Desarrollador y Gestión de Piloto">
           <span style="font-size: 14px;">👨‍✈️</span>
           <span id="header-pilot-callsign" class="pilot-name">EC-CHOZAS</span>
           <span class="sync-indicator" id="header-sync-status" title="Sincronizado con la Nube">🟢</span>
@@ -877,9 +896,14 @@
           ☀️ Día
         </button>
 
-        <!-- ATC Radio Access -->
-        <button class="header-capsule atc-capsule" onclick="toggleATC()" title="ATC Copilot Radio (118.10 MHz)">
-          📻 ATC 118.10
+        <!-- Share App Capsule -->
+        <button class="header-capsule share-capsule" onclick="shareAppWithFriends()" title="Compartir App con Amigos">
+          🔗 Compartir
+        </button>
+
+        <!-- ATC IA Virtual Copilot -->
+        <button class="header-capsule atc-capsule" onclick="toggleATC()" title="ATC IA Copiloto Virtual">
+          🤖 ATC IA
         </button>
 
         <!-- Shift Badge info -->
@@ -1040,6 +1064,16 @@
     let studiedGuides = [];
     let studiedScores = {};
 
+    // Handle guest / friend invite link on page load
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('invite') || urlParams.has('guest')) {
+      if (!localStorage.getItem('atpl_friend_initialized')) {
+        localStorage.setItem('atpl_active_pilot', 'PILOTO INVITADO');
+        localStorage.setItem('atpl_friend_initialized', 'true');
+        currentPilot = 'PILOTO INVITADO';
+      }
+    }
+
     function loadActivePilotState() {
       studiedTopics = JSON.parse(localStorage.getItem(getPilotKey('topics'))) || [];
       studiedGuides = JSON.parse(localStorage.getItem(getPilotKey('guides'))) || [];
@@ -1049,16 +1083,26 @@
       const headerPilot = document.getElementById('header-pilot-callsign');
       if (headerPilot) headerPilot.textContent = currentPilot;
       
-      // Update modal select if open
+      // Update modal inputs and select
+      const devNameInput = document.getElementById('dev-pilot-name-input');
+      if (devNameInput) devNameInput.value = currentPilot;
+      document.querySelectorAll('.active-pilot-label').forEach(el => el.textContent = currentPilot);
+      const atcWelcome = document.getElementById('atc-welcome-pilot');
+      if (atcWelcome) atcWelcome.textContent = currentPilot;
+
       const pilotSelect = document.getElementById('pilot-select');
       if (pilotSelect) {
         updatePilotSelectOptions();
         pilotSelect.value = currentPilot;
       }
 
-      // Update ATC sub-label
+      // Update ATC sub-label and status
       const atcSub = document.getElementById('atc-sub-label');
-      if (atcSub) atcSub.textContent = `Torre & Copiloto para ${currentPilot}`;
+      if (atcSub) atcSub.textContent = `Copiloto IA para ${currentPilot}`;
+
+      const apiKey = localStorage.getItem('atpl_gemini_api_key');
+      const atcBadge = document.getElementById('atc-status-badge');
+      if (atcBadge) atcBadge.textContent = apiKey ? 'IA GEMINI' : 'ACTIVO';
     }
 
     function saveActivePilotStateLocally() {
@@ -1237,8 +1281,11 @@
       e.target.value = '';
     }
 
-    // ─── PILOT MODAL & SWITCHING ───
+    // ─── PILOT MODAL & DEVELOPER MANAGEMENT ───
     function openPilotModal() {
+      const devNameInput = document.getElementById('dev-pilot-name-input');
+      if (devNameInput) devNameInput.value = currentPilot;
+      document.querySelectorAll('.active-pilot-label').forEach(el => el.textContent = currentPilot);
       updatePilotSelectOptions();
       document.getElementById('pilot-modal-overlay').classList.add('open');
     }
@@ -1249,6 +1296,97 @@
       }
     }
 
+    function saveDeveloperPilotName() {
+      const input = document.getElementById('dev-pilot-name-input');
+      if (!input) return;
+      const raw = input.value.trim().toUpperCase().replace(/[^A-Z0-9_\-\s]/g, '').trim();
+      if (!raw) {
+        alert('Por favor, introduce un nombre o Call Sign válido.');
+        return;
+      }
+      if (raw === currentPilot) {
+        alert(`Tu nombre ya es "${currentPilot}".`);
+        return;
+      }
+
+      const oldPilot = currentPilot;
+      // Migrate local data if not yet present in target
+      const oldTopics = localStorage.getItem(`atpl_${oldPilot}_topics`);
+      const oldGuides = localStorage.getItem(`atpl_${oldPilot}_guides`);
+      const oldScores = localStorage.getItem(`atpl_${oldPilot}_scores`);
+      const oldCloudId = pilotCloudIds[oldPilot];
+
+      currentPilot = raw;
+      localStorage.setItem('atpl_active_pilot', currentPilot);
+
+      if (oldTopics && !localStorage.getItem(`atpl_${currentPilot}_topics`)) {
+        localStorage.setItem(`atpl_${currentPilot}_topics`, oldTopics);
+      }
+      if (oldGuides && !localStorage.getItem(`atpl_${currentPilot}_guides`)) {
+        localStorage.setItem(`atpl_${currentPilot}_guides`, oldGuides);
+      }
+      if (oldScores && !localStorage.getItem(`atpl_${currentPilot}_scores`)) {
+        localStorage.setItem(`atpl_${currentPilot}_scores`, oldScores);
+      }
+      if (oldCloudId) {
+        pilotCloudIds[currentPilot] = oldCloudId;
+        localStorage.setItem('atpl_pilot_cloud_ids', JSON.stringify(pilotCloudIds));
+      }
+
+      if (!knownPilots.includes(currentPilot)) {
+        knownPilots.unshift(currentPilot);
+        localStorage.setItem('atpl_known_pilots', JSON.stringify(knownPilots));
+      }
+
+      loadActivePilotState();
+      updateKPIs();
+      renderTopics();
+      pushPilotDataToCloud();
+      alert(`✅ ¡Identificador actualizado con éxito a: ${currentPilot}!
+
+Todos tus progresos y sincronización en la nube se han transferido a tu nuevo nombre.`);
+    }
+
+    // ─── SHARE WITH FRIENDS ───
+    function getCleanShareUrl() {
+      const loc = window.location;
+      const base = loc.origin + loc.pathname;
+      return base + '?invite=friend';
+    }
+
+    function shareAppWithFriends() {
+      const url = getCleanShareUrl();
+      const shareData = {
+        title: 'ATPL Flight Deck — Preparación Modular EASA',
+        text: 'Plataforma oficial ATPL: resúmenes técnicos, podcasts y copiloto ATC IA.',
+        url: url
+      };
+      if (navigator.share) {
+        navigator.share(shareData).catch(err => {
+          if (err.name !== 'AbortError') copyCleanShareUrl();
+        });
+      } else {
+        copyCleanShareUrl();
+      }
+    }
+
+    function copyCleanShareUrl() {
+      const url = getCleanShareUrl();
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(() => {
+          alert('📋 ¡Enlace copiado al portapapeles!
+
+' + url + '
+
+Pásaselo a tus amigos por WhatsApp, Telegram o AirDrop. Entrarán con su propio perfil independiente y nunca afectarán a tu progreso.');
+        }).catch(() => {
+          prompt('Copia este enlace para enviarlo a tus amigos:', url);
+        });
+      } else {
+        prompt('Copia este enlace para enviarlo a tus amigos:', url);
+      }
+    }
+
     function updatePilotSelectOptions() {
       const sel = document.getElementById('pilot-select');
       if (!sel) return;
@@ -1256,7 +1394,7 @@
       knownPilots.forEach(p => {
         const opt = document.createElement('option');
         opt.value = p;
-        opt.textContent = p === 'EC-CHOZAS' ? 'EC-CHOZAS (Comandante Fernando)' : (p === 'INVITADO' ? 'PILOTO INVITADO (Demo)' : p);
+        opt.textContent = p === 'EC-CHOZAS' ? 'EC-CHOZAS (Comandante Fernando)' : (p === 'INVITADO' || p === 'PILOTO INVITADO' ? 'PILOTO INVITADO (Demo)' : p);
         sel.appendChild(opt);
       });
       const newOpt = document.createElement('option');
@@ -1840,50 +1978,82 @@
   <audio id="cockpit-audio"></audio>
 
   <!-- ═══════════════════════════════════════════════════════
-       PILOT PROFILE & CLOUD / ICLOUD SYNC MODAL
+       PILOT PROFILE & CLOUD / ICLOUD SYNC MODAL (DEVELOPER SUITE)
   ═══════════════════════════════════════════════════════════ -->
   <div id="pilot-modal-overlay" onclick="closePilotModal(event)">
     <div id="pilot-modal">
       <div class="pilot-modal-header">
-        <h3>👨‍✈️ Perfil de Piloto & Sincronización Multi-Dispositivo</h3>
-        <button class="modal-close-icon" onclick="closePilotModal()">✕</button>
-      </div>
-
-      <div class="pilot-box">
-        <label>Call Sign Activo (Identificador de Vuelo):</label>
-        <div class="pilot-input-row">
-          <select id="pilot-select" onchange="onPilotSelectChange(this.value)">
-            <option value="EC-CHOZAS">EC-CHOZAS (Comandante Fernando)</option>
-            <option value="INVITADO">PILOTO INVITADO (Modo Demo)</option>
-            <option value="__new__">+ Crear Nuevo Piloto / Amigo...</option>
-          </select>
-          <button class="btn-sync-action" onclick="forceSyncCloud()" title="Sincronizar ahora con la nube">🔄 Sincronizar</button>
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 24px;">👑</span>
+          <div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <h3 style="margin:0;">Control de Piloto & Desarrollador</h3>
+              <span class="badge-beta" style="background:rgba(210,153,34,0.2); color:#e3b341; border-color:rgba(210,153,34,0.4); font-size:10px;">ACCESO MASTER</span>
+            </div>
+            <p style="margin: 2px 0 0 0; font-size: 12px; color: var(--text-muted);">Gestión de perfil, sincronización multi-dispositivo y control de amigos</p>
+          </div>
         </div>
-        <p class="pilot-sync-desc" id="sync-timestamp-label">🟢 Sincronizado en la nube (Mac, iPad, iPhone)</p>
+        <button class="atc-close-btn" onclick="closePilotModal()" title="Cerrar modal">✕</button>
       </div>
 
-      <!-- Amigos Info Box -->
-      <div class="pilot-note-box">
-        <strong>👥 Compartir con amigos:</strong> Tus datos están vinculados a <code>EC-CHOZAS</code>. Si compartes el enlace de la web con tus amigos, ellos pueden usar su propio Call Sign o modo Invitado. Su progreso quedará 100% aislado y nunca afectará a tus notas ni a tus temas estudiados.
+      <!-- Sección 1: Mi Identidad de Piloto (Call Sign) -->
+      <div class="pilot-box" style="margin-bottom: 14px;">
+        <label style="font-size:12px; font-weight:700; color:var(--text-title); display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span>👨‍✈️ Mi Nombre / Call Sign de Piloto:</span>
+          <span style="font-size:11px; color:var(--accent-blue); font-weight:normal;">✏️ Puedes cambiarlo cuando quieras</span>
+        </label>
+        <div class="pilot-input-row" style="display:flex; gap:8px;">
+          <input type="text" id="dev-pilot-name-input" value="EC-CHOZAS" placeholder="Tu nombre o Call Sign (ej: EC-CHOZAS)" style="flex:1; padding:9px 12px; background:var(--bg-card); border:1px solid var(--border-color); color:var(--text-main); border-radius:8px; font-weight:700; font-size:13px; outline:none;">
+          <button class="btn-sync-action" onclick="saveDeveloperPilotName()" style="background:#238636; border-color:#2ea043; white-space:nowrap;" title="Guardar nuevo nombre y migrar progreso">💾 Guardar Nombre</button>
+        </div>
+        <p class="pilot-sync-desc" id="sync-timestamp-label" style="margin-top:8px;">🟢 Sincronizado en la nube (Mac, iPad, iPhone)</p>
       </div>
 
-      <!-- Apple iCloud Direct Backup -->
-      <div class="icloud-sync-box">
-        <h4>🍏 Copia de Seguridad Directa Apple / iCloud Drive</h4>
-        <p>Guarda o restaura tus notas y ticks directamente en tu carpeta de iCloud Drive en 1 clic:</p>
-        <div class="icloud-btns-row">
-          <button class="btn-icloud export" onclick="exportProgressToICloud()">
-            📥 Guardar Copia en iCloud
+      <!-- Sección 2: Compartir con Amigos (Perfiles Aislados) -->
+      <div class="pilot-box" style="margin-bottom: 14px; background: rgba(56,139,253,0.06); border: 1px solid rgba(56,139,253,0.2);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+          <strong style="color:var(--text-title); font-size:13px;">👥 Compartir con Amigos (Perfiles Aislados)</strong>
+          <span style="font-size:11px; background:rgba(46,160,67,0.15); color:#56d364; padding:2px 8px; border-radius:10px; font-weight:600;">100% Protegido</span>
+        </div>
+        <p style="font-size:12px; color:var(--text-muted); line-height:1.45; margin-bottom:12px;">
+          Al enviar este enlace, tus amigos entrarán con una sesión limpia e independiente (modo invitado o su propio indicativo). Sus avances y notas <strong>nunca alterarán ni borrarán tu progreso</strong> de <code><span class="active-pilot-label">EC-CHOZAS</span></code>.
+        </p>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button class="btn-sync-action" onclick="shareAppWithFriends()" style="flex:1; background:rgba(31,111,235,0.2); border:1px solid #388bfd; color:#79c0ff; justify-content:center; display:inline-flex; align-items:center; gap:6px;">
+            🔗 Compartir Enlace Amigos
           </button>
-          <button class="btn-icloud import" onclick="document.getElementById('icloud-file-input').click()">
+          <button class="btn-sync-action" onclick="copyCleanShareUrl()" style="flex:1; background:var(--bg-card); border:1px solid var(--border-color); color:var(--text-main); justify-content:center; display:inline-flex; align-items:center; gap:6px;">
+            📋 Copiar Enlace Directo
+          </button>
+        </div>
+      </div>
+
+      <!-- Sección 3: Apple iCloud Direct Backup -->
+      <div class="icloud-sync-box">
+        <h4 style="font-size:13px; font-weight:700; color:var(--text-title); margin-bottom:4px;">🍏 Sincronización en la Nube y Copia iCloud Drive</h4>
+        <p style="font-size:12px; color:var(--text-muted); margin-bottom:12px;">Sincroniza tus progresos en tiempo real o guarda un archivo JSON de respaldo en tu iCloud:</p>
+        <div class="icloud-btns-row" style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button class="btn-sync-action" onclick="forceSyncCloud()" style="flex:1; justify-content:center; display:inline-flex; align-items:center; gap:4px;">
+            🔄 Forzar Sincronización
+          </button>
+          <button class="btn-icloud export" onclick="exportProgressToICloud()" style="flex:1; justify-content:center;">
+            📥 Guardar en iCloud
+          </button>
+          <button class="btn-icloud import" onclick="document.getElementById('icloud-file-input').click()" style="flex:1; justify-content:center;">
             📤 Cargar desde iCloud
           </button>
           <input type="file" id="icloud-file-input" accept=".json" style="display:none" onchange="importProgressFromICloud(event)">
         </div>
       </div>
 
-      <div style="text-align: right; margin-top: 18px;">
-        <button class="pdf-cancel-btn" onclick="closePilotModal()">Cerrar</button>
+      <!-- Sección 4: Selector de Perfil / Modo Desarrollador -->
+      <div style="margin-top:14px; padding-top:12px; border-top:1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:11px; color:var(--text-muted);">Probar otros perfiles:</span>
+          <select id="pilot-select" onchange="onPilotSelectChange(this.value)" style="padding:4px 8px; font-size:11px; background:var(--bg-card); border:1px solid var(--border-color); color:var(--text-main); border-radius:6px; cursor:pointer;">
+          </select>
+        </div>
+        <button class="pdf-cancel-btn" onclick="closePilotModal()">Cerrar Panel</button>
       </div>
     </div>
   </div>
@@ -1927,31 +2097,26 @@
   </div>
 
   <!-- ═══════════════════════════════════════════════════════
-       OPCIÓN E — ATC Chatbot (Radio Transceiver)
+       OPCIÓN E — ATC Chatbot (Copiloto Virtual IA)
   ═══════════════════════════════════════════════════════════ -->
-  <button id="atc-fab" onclick="toggleATC()" title="ATC — Torre de Control & Copiloto ATPL">🛰️</button>
+  <button id="atc-fab" onclick="toggleATC()" title="ATC IA — Copiloto Virtual">🤖</button>
 
   <div id="atc-panel">
     <div class="atc-header">
-      <div class="atc-radar">📡</div>
-      <div class="atc-header-text">
-        <h4>ATC — Control de Área</h4>
-        <p id="atc-sub-label">Torre & Copiloto IA ATPL</p>
+      <div class="atc-radar">🤖</div>
+      <div class="atc-header-text" style="flex:1;">
+        <h4>ATC IA — Copiloto Virtual</h4>
+        <p id="atc-sub-label">Asistente EASA ATPL & Operaciones</p>
       </div>
-      <span class="atc-badge" id="atc-status-badge">ACTIVO</span>
-    </div>
-    
-    <!-- Digital Frequency LCD Display -->
-    <div class="atc-freq-bar">
-      <span class="freq-active">VHF1: 118.100 MHz [TWR]</span>
-      <span class="freq-stby">GUARD: 121.500</span>
-      <button class="atc-cfg-btn" onclick="openAtcConfig()" title="Configurar Gemini/OpenAI API Key">⚙️</button>
+      <span class="atc-badge" id="atc-status-badge" style="margin-right:4px;">ACTIVO</span>
+      <button class="atc-cfg-btn" onclick="openAtcConfig()" title="Conectar Google Gemini IA (Gratis)" style="margin-right:4px;">⚙️</button>
+      <button class="atc-close-btn" onclick="toggleATC()" title="Cerrar ATC IA">✕</button>
     </div>
 
     <div id="atc-messages">
       <div class="atc-msg atc">
-        ✈️ <strong>Torre de Control ATPL en línea para EC-CHOZAS.</strong><br>
-        En escucha en 118.10 MHz. Puedes consultarme cálculos de descenso, altimetría QNH, mínimas VFR/IFR, fórmulas de navegación o avisos de examen AviationExam.<br><br>
+        🤖 <strong>ATC IA en línea para <span id="atc-welcome-pilot">EC-CHOZAS</span>.</strong><br>
+        Tu copiloto virtual para resolver dudas EASA, cálculos en vuelo (descenso 3:1, regla 1 in 60, altimetría QNH), normativa OACI y trucos para AviationExam.<br><br>
         <span style="font-size: 11px; color: var(--text-muted);">💡 Usa los accesos rápidos o escribe tu consulta.</span>
       </div>
     </div>
@@ -1967,22 +2132,42 @@
       <button class="atc-quick" onclick="sendATCQuick('Explícame el METAR')">METAR</button>
     </div>
     <div id="atc-input-area">
-      <input id="atc-input" type="text" placeholder="Transmitir consulta a la Torre..." onkeydown="if(event.key==='Enter') sendATC()">
-      <button id="atc-send" onclick="sendATC()">PTT ➤</button>
+      <input id="atc-input" type="text" placeholder="Escribe tu consulta aeronáutica..." onkeydown="if(event.key==='Enter') sendATC()">
+      <button id="atc-send" onclick="sendATC()">Consultar ➤</button>
     </div>
   </div>
 
   <!-- Modal Configuración API Key ATC -->
   <div id="atc-config-modal-overlay" style="display:none; position:fixed; inset:0; background:var(--modal-overlay); z-index:2100; justify-content:center; align-items:center;" onclick="closeAtcConfig(event)">
-    <div id="atc-config-modal" style="background:var(--modal-bg); border:1px solid var(--border-color); border-radius:14px; padding:24px 28px; max-width:440px; width:90%; box-shadow:0 20px 60px rgba(0,0,0,0.6);" onclick="event.stopPropagation()">
-      <h3 style="font-size:16px; color:var(--text-title); margin-bottom:8px;">⚙️ Configuración Copiloto IA (Gemini / OpenAI)</h3>
-      <p style="font-size:12px; color:var(--text-muted); margin-bottom:14px;">
-        Por defecto, el ATC Copilot funciona con la <strong>base técnica local integrada</strong> (sin coste ni conexión externa). Si deseas conectar la inteligencia artificial generativa de Google Gemini o OpenAI, pega aquí tu clave:
-      </p>
-      <input id="gemini-api-key-input" type="password" placeholder="AIzaSy... o sk-..." style="width:100%; padding:9px 12px; background:var(--bg-card); border:1px solid var(--border-color); color:var(--text-main); border-radius:8px; font-size:13px; outline:none; margin-bottom:14px;">
-      <div style="display:flex; justify-content:flex-end; gap:8px;">
-        <button class="pdf-cancel-btn" onclick="closeAtcConfig()">Cancelar</button>
-        <button class="btn-sync-action" onclick="saveAtcApiKey()">Guardar Clave</button>
+    <div id="atc-config-modal" style="background:var(--modal-bg); border:1px solid var(--border-color); border-radius:14px; padding:24px 28px; max-width:480px; width:92%; box-shadow:0 20px 60px rgba(0,0,0,0.6);" onclick="event.stopPropagation()">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <h3 style="font-size:16px; color:var(--text-title); margin:0; display:flex; align-items:center; gap:8px;">
+          <span>🤖</span> Conectar Google Gemini IA al ATC
+        </h3>
+        <button class="atc-close-btn" onclick="closeAtcConfig()">✕</button>
+      </div>
+      
+      <div style="background:rgba(56,139,253,0.1); border:1px solid rgba(56,139,253,0.3); border-radius:8px; padding:12px 14px; margin-bottom:14px; font-size:12px; line-height:1.5; color:var(--text-main);">
+        <strong>¿Cómo conseguir tu clave gratuita en 1 minuto?</strong>
+        <ol style="margin:6px 0 0 16px; padding:0;">
+          <li style="margin-bottom:4px;">Entra en <strong>Google AI Studio</strong> (100% gratis, sin tarjeta):<br>
+            <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" style="color:#58a6ff; font-weight:700; text-decoration:underline;">👉 Abrir Google AI Studio (aistudio.google.com) ↗</a>
+          </li>
+          <li style="margin-bottom:4px;">Inicia sesión con tu cuenta normal de Google.</li>
+          <li style="margin-bottom:4px;">Pulsa en el botón azul <strong>"Create API key"</strong>.</li>
+          <li>Copia la clave que empieza por <code>AIzaSy...</code> y pégala aquí abajo.</li>
+        </ol>
+      </div>
+
+      <label style="font-size:12px; color:var(--text-muted); display:block; margin-bottom:6px; font-weight:600;">Pega tu API Key de Gemini:</label>
+      <input id="gemini-api-key-input" type="password" placeholder="AIzaSy..." style="width:100%; padding:10px 12px; background:var(--bg-card); border:1px solid var(--border-color); color:var(--text-main); border-radius:8px; font-size:13px; outline:none; margin-bottom:14px; font-family:monospace;">
+
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+        <button type="button" class="pdf-cancel-btn" onclick="clearAtcApiKey()" style="font-size:12px; color:var(--warn-yellow); border-color:rgba(210,153,34,0.3);">Restablecer Base Local</button>
+        <div style="display:flex; gap:8px;">
+          <button class="pdf-cancel-btn" onclick="closeAtcConfig()">Cancelar</button>
+          <button class="btn-sync-action" onclick="saveAtcApiKey()" style="background:#238636; border-color:#2ea043;">Guardar y Activar IA</button>
+        </div>
       </div>
     </div>
   </div>
@@ -2347,8 +2532,20 @@
   }
 
   function closeAtcConfig(e) {
-    const overlay = document.getElementById('atc-config-modal-overlay');
-    if (overlay) overlay.style.display = 'none';
+    if (!e || e.target === document.getElementById('atc-config-modal-overlay') || e === true) {
+      const overlay = document.getElementById('atc-config-modal-overlay');
+      if (overlay) overlay.style.display = 'none';
+    }
+  }
+
+  function clearAtcApiKey() {
+    localStorage.removeItem('atpl_gemini_api_key');
+    const input = document.getElementById('gemini-api-key-input');
+    if (input) input.value = '';
+    const badge = document.getElementById('atc-status-badge');
+    if (badge) badge.textContent = 'ACTIVO';
+    alert('Se ha restablecido la base técnica local integrada de EASA.');
+    closeAtcConfig(true);
   }
 
   function saveAtcApiKey() {
@@ -2356,16 +2553,13 @@
     const val = input ? input.value.trim() : '';
     if (val) {
       localStorage.setItem('atpl_gemini_api_key', val);
-      alert('🔑 Clave de API de IA guardada. El ATC ahora responderá utilizando el modelo neuronal.');
+      alert('🔑 ¡Clave de Gemini guardada correctamente!\n\nEl Copiloto ATC IA ahora responderá consultas avanzadas utilizando el modelo neuronal de Google.');
       const badge = document.getElementById('atc-status-badge');
-      if (badge) badge.textContent = 'IA ACTIVA';
+      if (badge) badge.textContent = 'IA GEMINI';
     } else {
-      localStorage.removeItem('atpl_gemini_api_key');
-      alert('Se ha restablecido la base técnica local integrada.');
-      const badge = document.getElementById('atc-status-badge');
-      if (badge) badge.textContent = 'ACTIVO';
+      clearAtcApiKey();
     }
-    closeAtcConfig();
+    closeAtcConfig(true);
   }
 
   function addATCMessage(html, sender) {

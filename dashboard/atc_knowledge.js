@@ -170,7 +170,8 @@ window.findATCAnswer = function(query) {
   }
 
   // Fallback
-  return `📡 <strong>ATC Torre en escucha activa para EC-CHOZAS:</strong><br>
+  const pilotName = (typeof currentPilot !== 'undefined' && currentPilot) ? currentPilot : 'Piloto';
+  return `📡 <strong>ATC Torre en escucha activa para ${pilotName}:</strong><br>
 Recibido tu mensaje: <em>"${query}"</em>.<br><br>
 Puedo resolver consultas operacionales inmediatas sobre:<br>
 • <strong>Altimetría & Presión:</strong> Calados QNH, QFE, QNE y cálculo de error de temperatura.<br>

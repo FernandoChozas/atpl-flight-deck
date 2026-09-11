@@ -1957,7 +1957,7 @@ window.ATPL_DATA = {
       "last_studied": null,
       "last_reviewed": null,
       "next_review": null,
-      "summary_file": "resumenes/convocatoria_3/033_flight_planning_monitoring/033_ch08_inflight_monitoring_reộng_dpp.pdf",
+      "summary_file": "resumenes/convocatoria_3/033_flight_planning_monitoring/033_ch08_inflight_monitoring_replanning_dpp.pdf",
       "notes": null,
       "summary_pages": 2,
       "notebooklm_pdf_en": "../notebooklm_pilot/convocatoria_3/033_flight_planning/pdf_en/033_ch08_flight_planning_notebooklm_EN.pdf",

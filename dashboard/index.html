@@ -1320,10 +1320,13 @@
     let studiedGuides = [];
     let studiedScores = {};
 
-    // Handle guest / friend invite link on page load
+    // Handle master or guest / friend invite link on page load
     const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.has('invite') || urlParams.has('guest')) {
-      if (!localStorage.getItem('atpl_friend_initialized')) {
+    if (urlParams.has('master') || urlParams.get('pilot') === 'EC-CHOZAS') {
+      localStorage.setItem('atpl_active_pilot', 'EC-CHOZAS');
+      currentPilot = 'EC-CHOZAS';
+    } else if (urlParams.has('invite') || urlParams.has('guest')) {
+      if (!localStorage.getItem('atpl_friend_initialized') || currentPilot === 'EC-CHOZAS') {
         localStorage.setItem('atpl_active_pilot', 'PILOTO INVITADO');
         localStorage.setItem('atpl_friend_initialized', 'true');
         currentPilot = 'PILOTO INVITADO';

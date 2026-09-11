@@ -1501,7 +1501,8 @@
       if (stored && stored.trim()) {
         return stored.trim().replace(/\/+$/, '');
       }
-      return '';
+      // 3. Official live fallback
+      return 'https://fernandochozas.github.io/atpl-flight-deck';
     }
 
     function getOfficialShareUrl() {

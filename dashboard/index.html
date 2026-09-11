@@ -433,11 +433,29 @@
       border-color: #39c5bb;
       box-shadow: 0 0 10px rgba(57, 197, 187, 0.25);
     }
-    .btn-master-audio.playing {
-      background: rgba(57, 197, 187, 0.2);
-      color: #39c5bb;
-      border-color: #39c5bb;
-      box-shadow: 0 0 12px rgba(57, 197, 187, 0.4);
+    /* Master Guides PDF Button (Capsule Style) */
+    .btn-master-pdf {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px solid rgba(88, 166, 255, 0.4);
+      color: #79c0ff;
+      border-radius: 8px;
+      padding: 7px 15px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .btn-master-pdf:hover {
+      background: rgba(56, 139, 253, 0.22);
+      border-color: #58a6ff;
+      color: #fff;
+      box-shadow: 0 0 12px rgba(56, 139, 253, 0.35);
+      transform: translateY(-1px);
     }
 
     .btn-pdf-topic:hover {
@@ -1098,9 +1116,10 @@
                 🇪🇸 ES
               </button>
             </div>
-            <!-- PDF Download Button -->
-            <button onclick="openMasterPdfModal('${g.code}')" class="btn-summary" style="background: #2563eb; color: #fff; font-weight: 700; padding: 8px 16px; border-radius: 8px; font-size: 12px; white-space: nowrap; border: 1px solid #60a5fa; box-shadow: 0 0 10px rgba(37,99,235,0.4); cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
-              📥 PDF Manual (EN / ES)
+            <!-- PDF Download Button (Matching Capsule Style) -->
+            <button onclick="openMasterPdfModal('${g.code}')" class="btn-master-pdf" title="Descargar Libro Maestro en PDF">
+              <span style="font-size: 13px;">📥</span>
+              <span>PDF</span>
             </button>
           </div>
         `;

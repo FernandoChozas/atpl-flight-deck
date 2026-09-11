@@ -1280,6 +1280,11 @@
     const CLOUD_SYNC_ENDPOINT = 'https://api.restful-api.dev/objects';
     const MASTER_DIRECTORY_CLOUD_ID = 'ff808181a067127101a092d48b727ce6';
 
+    // Global async control handles (declared at top to prevent any TDZ)
+    let cloudPushTimeout = null;
+    let directoryPushTimeout = null;
+    let isSyncing = false;
+
     function isMasterPilot() {
       return (currentPilot || '').trim().toUpperCase() === 'EC-CHOZAS';
     }
@@ -1391,7 +1396,7 @@
       if (devSwitchBox) devSwitchBox.style.display = isMaster ? 'block' : 'none';
 
       const pilotSelect = document.getElementById('pilot-select');
-      if (pilotSelect && isMaster) {
+      if (pilotSelect && isMaster && typeof updatePilotSelectOptions === 'function') {
         updatePilotSelectOptions();
         pilotSelect.value = currentPilot;
       }
@@ -1403,9 +1408,6 @@
       const apiKey = localStorage.getItem('atpl_gemini_api_key');
       const atcBadge = document.getElementById('atc-status-badge');
       if (atcBadge) atcBadge.textContent = apiKey ? 'IA GEMINI' : 'ACTIVO';
-
-      // Always record telemetry of current pilot
-      registerPilotActivity(currentPilot);
     }
 
     function saveActivePilotStateLocally() {
@@ -1419,8 +1421,6 @@
     loadActivePilotState();
 
     // ─── CLOUD SYNC ENGINE (Cross-Device Mac / iPad / iPhone) ───
-    let cloudPushTimeout = null;
-    let isSyncing = false;
 
     function setSyncStatus(status, text) {
       const ind = document.getElementById('header-sync-status');
@@ -1614,8 +1614,6 @@
     }
 
     // ─── MASTER PILOT DIRECTORY & TELEMETRY SYNC ───
-    let directoryPushTimeout = null;
-
     function getDeviceType() {
       const ua = navigator.userAgent || '';
       if (/iPad|iPhone|iPod/.test(ua) && !window.MSStream) return '📱 iOS (iPhone/iPad)';
@@ -2163,6 +2161,9 @@
         appData = window.ATPL_DATA;
         renderDashboard();
         pullPilotDataFromCloud(true);
+        if (typeof registerPilotActivity === 'function') {
+          setTimeout(() => registerPilotActivity(currentPilot), 500);
+        }
         return;
       }
       try {
@@ -2170,6 +2171,9 @@
         appData = await response.json();
         renderDashboard();
         pullPilotDataFromCloud(true);
+        if (typeof registerPilotActivity === 'function') {
+          setTimeout(() => registerPilotActivity(currentPilot), 500);
+        }
       } catch (err) {
         console.log('Esperando datos...');
       }

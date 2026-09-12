@@ -4,6 +4,22 @@ Todos los cambios notables, evoluciones y correcciones de este proyecto se regis
 
 ---
 
+## [0.9.1] - 2026-09-12
+
+### 🚀 Novedades y Mejoras Principales
+- **Popup de Onboarding e Identificación de Cadete ("¿Quién eres?")**:
+  - Al acceder a través de un enlace de invitación (`?invite=friend&pin=...`), se despliega de inmediato un modal de bienvenida que solicita al alumno su nombre o Call Sign (ej: `CARLOS`, `ALEX`, `MARTA`).
+  - Muestra pastillas de selección rápida (`pills`) si ya existen perfiles de alumnos previos guardados en el dispositivo para facilitar el acceso en 1 solo clic.
+  - El cadete se registra automáticamente en la telemetría de flota en tiempo real con su dispositivo y hora de última conexión.
+- **Aislamiento Estricto de Enlaces de Invitado vs Enlace Master**:
+  - Un enlace de invitación jamás hereda o auto-asigna la identidad del Comandante Master (`EC-CHOZAS`), incluso si se abre en el mismo navegador o móvil de Fernando.
+  - Bloqueo de seguridad: si un invitado intenta reclamar el nombre `EC-CHOZAS` desde el popup de cadetes, el sistema lo rechaza y exige autenticación Master mediante PIN.
+  - Acceso directo para el Comandante Master a través de `?master=1` o mediante el botón de identificación exclusivo al pie del popup.
+- **Botón de Cambio Rápido de Cadete en Perfil**:
+  - Añadido el botón `🔄 Cambiar de Cadete / Alumno` en el panel de perfil para alternar perfiles en dispositivos compartidos en cualquier momento.
+
+---
+
 ## [0.9.0] - 2026-09-12
 
 ### 🚀 Novedades y Mejoras Principales

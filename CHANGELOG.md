@@ -4,6 +4,21 @@ Todos los cambios notables, evoluciones y correcciones de este proyecto se regis
 
 ---
 
+## [0.9.2] - 2026-09-12
+
+### 🚀 Novedades y Mejoras Principales
+- **Bloqueo Estricto de Materiales hasta Identificación de Usuario**:
+  - Los materiales de estudio, audios, temarios y simuladores (`.container`) se inician completamente ocultos (`display: none;`) y bloqueados para cualquier invitado hasta que se identifique formalmente.
+  - Eliminado por completo cualquier estado o visualización de "Piloto Invitado".
+  - Al abrir un enlace de invitación, la única pantalla visible es el panel de identificación de cadete, impidiendo cualquier acceso o lectura previa de contenidos.
+- **Selector Rápido de Perfiles y Nuevo Registro**:
+  - Si en el dispositivo o en la red ya existen cadetes registrados (ej: `ALEX`, `CARLOS`), aparecen botones tipo píldora para identificarse y entrar con un solo toque.
+  - Si es un nuevo alumno, introduce su nombre o Call Sign en el campo de texto y pulsa "Desbloquear Cabina de Estudio".
+- **Garantía de Acceso Master Directo**:
+  - El acceso de Comandante Master (`EC-CHOZAS`) vía `?master=1` o entorno local continúa funcionando de forma directa, sin popups y con todos los privilegios administrativos.
+
+---
+
 ## [0.9.1] - 2026-09-12
 
 ### 🚀 Novedades y Mejoras Principales

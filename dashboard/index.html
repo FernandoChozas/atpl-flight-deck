@@ -664,6 +664,30 @@
       justify-content: center; align-items: center;
     }
     #quiz-modal-overlay.open { display: flex; }
+
+    .pilot-input-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    @media (max-width: 480px) {
+      .pilot-input-row input {
+        width: 100% !important;
+        flex: 1 1 100% !important;
+        box-sizing: border-box !important;
+      }
+      .pilot-input-row button {
+        width: 100% !important;
+        flex: 1 1 100% !important;
+        justify-content: center !important;
+        box-sizing: border-box !important;
+      }
+    }
+    #quiz-modal {
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
     #quiz-modal {
       background: #0d1117; border: 1px solid #30363d;
       border-radius: 16px; padding: 28px; max-width: 560px; width: 92%;
@@ -1125,7 +1149,7 @@
       <div class="brand">
         <div class="brand-icon" style="padding: 0; overflow: hidden; border: 1px solid rgba(88, 166, 255, 0.4); background: #012349;"><img src="apple-touch-icon-180x180.png" alt="ATPL Pilot" style="width: 100%; height: 100%; object-fit: cover; border-radius: 9px; display: block;"></div>
         <div class="brand-text">
-          <h1>ATPL Flight Deck & Study Control <span class="badge-beta" id="version-badge">Beta v0.8.2</span></h1>
+          <h1>ATPL Flight Deck & Study Control <span class="badge-beta" id="version-badge">v0.9.0</span></h1>
           <p>Preparación EASA Modular Oficial | Sistema adaptado a turnos de 12h</p>
         </div>
       </div>
@@ -1271,25 +1295,56 @@
     let currentDifficulty = 'all';
 
     // ═══════════════════════════════════════════════════════════════
-    //  SISTEMA DE PILOTOS, SINCRONIZACIÓN Y TEMAS (DÍA / NOCHE)
+    //  SISTEMA DE PILOTOS, SINCRONIZACIÓN Y TEMAS (DÍA / NOCHE) — v0.9.0
     // ═══════════════════════════════════════════════════════════════
-    const DEFAULT_PILOT = 'EC-CHOZAS';
-    let currentPilot = localStorage.getItem('atpl_active_pilot') || DEFAULT_PILOT;
-
-    // Pilot Cloud Sync Object ID Mapping (api.restful-api.dev)
+    const DEFAULT_PILOT = 'CADETE INVITADO';
     const CLOUD_SYNC_ENDPOINT = 'https://api.restful-api.dev/objects';
     const MASTER_DIRECTORY_CLOUD_ID = 'ff808181a067127101a092d48b727ce6';
 
-    // Global async control handles (declared at top to prevent any TDZ)
     let cloudPushTimeout = null;
     let directoryPushTimeout = null;
     let isSyncing = false;
 
-    function isMasterPilot() {
-      return (currentPilot || '').trim().toUpperCase() === 'EC-CHOZAS';
+    const urlParams = new URLSearchParams(window.location.search);
+
+    // 1. Check Master unlock parameter (?master=1 or ?pilot=EC-CHOZAS)
+    if (urlParams.has('master') || urlParams.get('pilot') === 'EC-CHOZAS') {
+      localStorage.setItem('atpl_active_pilot', 'EC-CHOZAS');
+      localStorage.setItem('atpl_master_verified', 'true');
+      localStorage.setItem('atpl_flight_authorized', 'true');
     }
+
+    // 2. Read stored pilot from localStorage
+    let currentPilot = localStorage.getItem('atpl_active_pilot');
+
+    // 3. Local file protocol defaults to EC-CHOZAS master if empty
+    if (window.location.protocol === 'file:' && !currentPilot) {
+      currentPilot = 'EC-CHOZAS';
+      localStorage.setItem('atpl_active_pilot', 'EC-CHOZAS');
+      localStorage.setItem('atpl_master_verified', 'true');
+    }
+
+    // 4. Invite links: ONLY initialize as PILOTO INVITADO if no pilot was ever saved
+    if (urlParams.has('invite') || urlParams.has('guest')) {
+      if (!currentPilot || (currentPilot === 'EC-CHOZAS' && localStorage.getItem('atpl_master_verified') !== 'true')) {
+        currentPilot = 'PILOTO INVITADO';
+        localStorage.setItem('atpl_active_pilot', currentPilot);
+      }
+    }
+
+    // 5. Fallback for new visitors
+    if (!currentPilot) {
+      currentPilot = DEFAULT_PILOT;
+      localStorage.setItem('atpl_active_pilot', currentPilot);
+    }
+
+    function isMasterPilot() {
+      const isEcChozas = (currentPilot || '').trim().toUpperCase() === 'EC-CHOZAS';
+      const isVerified = localStorage.getItem('atpl_master_verified') === 'true' || window.location.protocol === 'file:';
+      return isEcChozas && isVerified;
+    }
+
     let pilotCloudIds = JSON.parse(localStorage.getItem('atpl_pilot_cloud_ids')) || {};
-    // EC-CHOZAS master cloud object id:
     if (!pilotCloudIds['EC-CHOZAS']) {
       pilotCloudIds['EC-CHOZAS'] = 'ff808181a067127101a0922f92017c5d';
       localStorage.setItem('atpl_pilot_cloud_ids', JSON.stringify(pilotCloudIds));
@@ -1302,7 +1357,6 @@
       return `atpl_${currentPilot}_${subKey}`;
     }
 
-    // Auto-migration from old legacy un-prefixed storage to EC-CHOZAS
     function migrateLegacyPilotData() {
       const legacyTopics = localStorage.getItem('atpl_studied_topics');
       const legacyGuides = localStorage.getItem('atpl_studied_guides');
@@ -1319,19 +1373,6 @@
     let studiedTopics = [];
     let studiedGuides = [];
     let studiedScores = {};
-
-    // Handle master or guest / friend invite link on page load
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.has('master') || urlParams.get('pilot') === 'EC-CHOZAS') {
-      localStorage.setItem('atpl_active_pilot', 'EC-CHOZAS');
-      currentPilot = 'EC-CHOZAS';
-    } else if (urlParams.has('invite') || urlParams.has('guest')) {
-      if (!localStorage.getItem('atpl_friend_initialized') || currentPilot === 'EC-CHOZAS') {
-        localStorage.setItem('atpl_active_pilot', 'PILOTO INVITADO');
-        localStorage.setItem('atpl_friend_initialized', 'true');
-        currentPilot = 'PILOTO INVITADO';
-      }
-    }
 
     function loadActivePilotState() {
       studiedTopics = JSON.parse(localStorage.getItem(getPilotKey('topics'))) || [];
@@ -1350,6 +1391,10 @@
         }
       }
       
+      // Update modal avatar icon
+      const modalAvatar = document.getElementById('pilot-modal-avatar-icon');
+      if (modalAvatar) modalAvatar.textContent = isMaster ? '👑' : '👨‍✈️';
+
       // Update modal inputs and labels
       const devNameInput = document.getElementById('dev-pilot-name-input');
       if (devNameInput) devNameInput.value = currentPilot;
@@ -1645,19 +1690,45 @@
       };
       localStorage.setItem('atpl_registered_pilots', JSON.stringify(registered));
 
-      // Push to shared cloud directory
+      // Push to shared cloud directory with read-merge-write
       clearTimeout(directoryPushTimeout);
       directoryPushTimeout = setTimeout(() => {
         pushDirectoryToCloud(registered);
-      }, 2000);
+      }, 1500);
     }
 
-    async function pushDirectoryToCloud(localDirectory) {
+    async function pushDirectoryToCloud(localDirectory = {}, deletePilotName = null) {
       try {
+        let remotePilots = {};
+        // 1. Fetch remote directory first to prevent wiping out other cadets
+        try {
+          const res = await fetch(`${CLOUD_SYNC_ENDPOINT}/${MASTER_DIRECTORY_CLOUD_ID}`);
+          if (res.ok) {
+            const json = await res.json();
+            if (json && json.data && json.data.pilots) {
+              remotePilots = json.data.pilots;
+            }
+          }
+        } catch (e) {
+          console.log('Using local directory base for cloud sync:', e);
+        }
+
+        // 2. Merge remote with local
+        let merged = { ...remotePilots, ...localDirectory };
+
+        // 3. Delete specific pilot if requested by Master or on rename
+        if (deletePilotName && merged[deletePilotName]) {
+          delete merged[deletePilotName];
+        }
+
+        // Cache merged locally
+        localStorage.setItem('atpl_registered_pilots', JSON.stringify(merged));
+
+        // 4. PUT merged object back to cloud
         const payload = {
           name: 'ATPL_PILOT_DIRECTORY',
           data: {
-            pilots: localDirectory,
+            pilots: merged,
             updatedAt: Date.now()
           }
         };
@@ -1671,12 +1742,31 @@
       }
     }
 
+    async function deleteCadetFromDirectory(pilotName) {
+      if (!isMasterPilot()) {
+        showToastNotification('⚠️ Solo el Comandante Master puede eliminar cadetes.');
+        return;
+      }
+      if (!confirm(`¿Estás seguro de que deseas eliminar al cadete "${pilotName}" de la telemetría de flota?`)) {
+        return;
+      }
+      let registered = JSON.parse(localStorage.getItem('atpl_registered_pilots')) || {};
+      if (registered[pilotName]) {
+        delete registered[pilotName];
+        localStorage.setItem('atpl_registered_pilots', JSON.stringify(registered));
+      }
+      showToastNotification(`⏳ Eliminando cadete "${pilotName}" de la nube...`);
+      await pushDirectoryToCloud({}, pilotName);
+      await loadMasterPilotDirectory();
+      showToastNotification(`🗑️ Cadete "${pilotName}" eliminado con éxito.`);
+    }
+
     async function loadMasterPilotDirectory() {
       const container = document.getElementById('registered-pilots-list');
       const countBadge = document.getElementById('master-cadets-count');
       if (!container) return;
 
-      container.innerHTML = '<div style="font-size:12px; color:var(--text-muted); padding:10px 0; text-align:center;">🔄 Conectando con telemetría de cadetes...</div>';
+      container.innerHTML = '<div style="font-size:12px; color:var(--text-muted); padding:10px 0; text-align:center;">🔄 Conectando con telemetría de cadetes en la nube...</div>';
 
       let pilotsMap = JSON.parse(localStorage.getItem('atpl_registered_pilots')) || {};
 
@@ -1735,13 +1825,20 @@
                 </div>
               </div>
             </div>
-            <div style="text-align:right;">
-              <div style="font-weight:700; color:var(--accent-blue); font-size:12px;">
-                ${p.topicsCount || 0} <span style="font-size:10px; color:var(--text-muted); font-weight:normal;">/ 168 (${pct}%)</span>
+            <div style="display:flex; align-items:center; gap:10px;">
+              <div style="text-align:right;">
+                <div style="font-weight:700; color:var(--accent-blue); font-size:12px;">
+                  ${p.topicsCount || 0} <span style="font-size:10px; color:var(--text-muted); font-weight:normal;">/ 168 (${pct}%)</span>
+                </div>
+                <div style="font-size:10px; color:var(--pass-green);">
+                  ${p.scoresCount ? `⚡ ${p.scoresCount} tests` : 'En progreso'}
+                </div>
               </div>
-              <div style="font-size:10px; color:var(--pass-green);">
-                ${p.scoresCount ? `⚡ ${p.scoresCount} tests` : 'En progreso'}
-              </div>
+              ${(!isM && isMasterPilot()) ? `
+                <button type="button" onclick="deleteCadetFromDirectory('${p.name.replace(/'/g, "\\'")}')" title="Eliminar cadete de la telemetría" style="background:rgba(248,81,73,0.15); border:1px solid rgba(248,81,73,0.35); color:#ff7b72; padding:5px 8px; border-radius:6px; cursor:pointer; font-size:12px; touch-action:manipulation;">
+                  🗑️
+                </button>
+              ` : ''}
             </div>
           </div>
         `;
@@ -1769,6 +1866,8 @@
           showToastNotification('❌ Acceso denegado: No tienes autorización de Comandante Master.');
           input.value = currentPilot;
           return;
+        } else {
+          localStorage.setItem('atpl_master_verified', 'true');
         }
       }
 
@@ -1805,6 +1904,25 @@
       updateKPIs();
       renderTopics();
       pushPilotDataToCloud();
+      
+      // Update telemetry directory immediately, cleaning up old name
+      if (oldPilot && oldPilot !== currentPilot) {
+        let registered = JSON.parse(localStorage.getItem('atpl_registered_pilots')) || {};
+        delete registered[oldPilot];
+        registered[currentPilot] = {
+          name: currentPilot,
+          role: currentPilot === 'EC-CHOZAS' ? 'MASTER' : 'CADETE',
+          topicsCount: studiedTopics.length,
+          scoresCount: Object.keys(studiedScores).length,
+          device: getDeviceType(),
+          lastActive: new Date().toISOString()
+        };
+        localStorage.setItem('atpl_registered_pilots', JSON.stringify(registered));
+        pushDirectoryToCloud(registered, oldPilot);
+      } else {
+        registerPilotActivity(currentPilot);
+      }
+
       showToastNotification(`✅ ¡Nombre actualizado a: ${currentPilot}!`);
     }
 
@@ -1830,7 +1948,7 @@
 
     function checkGateAuthorization() {
       // 1. Master Developer (EC-CHOZAS) or local file protocol is always authorized
-      if (currentPilot === 'EC-CHOZAS' || window.location.protocol === 'file:') {
+      if (isMasterPilot() || window.location.protocol === 'file:') {
         localStorage.setItem('atpl_flight_authorized', 'true');
         hideGateScreen();
         return true;
@@ -2124,13 +2242,20 @@
 
     // ─── USER ACTIONS (SAVE SCORES & TICKS) ───
     function saveScore(element, topicId) {
-      const val = element.value;
+      let val = (element.value !== undefined && element.value !== null) ? element.value.toString().trim() : '';
+      if (val !== '') {
+        let num = parseInt(val, 10);
+        if (isNaN(num) || num < 0) num = 0;
+        if (num > 100) num = 100;
+        val = num.toString();
+        element.value = val;
+      }
       studiedScores[topicId] = val;
       saveActivePilotStateLocally();
       
       let sColor = '#fff'; let bColor = '#444';
-      if (val) {
-        const n = parseInt(val);
+      if (val !== '') {
+        const n = parseInt(val, 10);
         if (n >= 85) { sColor = '#10b981'; bColor = '#10b981'; }
         else if (n >= 75) { sColor = '#fbbf24'; bColor = '#fbbf24'; }
         else { sColor = '#ef4444'; bColor = '#ef4444'; }
@@ -2440,10 +2565,17 @@
            else { sColor = '#ef4444'; bColor = '#ef4444'; } 
         }
 
+        const spec = (typeof EASA_OFFICIAL_SPECS !== 'undefined' && EASA_OFFICIAL_SPECS[g.code]) 
+          ? EASA_OFFICIAL_SPECS[g.code] 
+          : { questions: 40, timeMin: 60, passPct: 75 };
+
         const scoreInput = `
         <div style="display: flex; align-items: center; gap: 8px; background: rgba(0,0,0,0.4); padding: 6px 12px; border-radius: 8px; border: 1px solid ${bColor};">
           <span style="font-size: 11px; color: #94a3b8; font-weight: 700; letter-spacing: 0.5px;">AVIATION EXAM:</span>
-          <input type="number" min="0" max="100" placeholder="--%" value="${currentScore}" onkeyup="saveScore(this, '${g.code}')" onchange="saveScore(this, '${g.code}')" style="width: 45px; background: transparent; border: none; color: ${sColor}; font-weight: bold; text-align: center; font-size: 15px; outline: none; transition: color 0.2s;">
+          <input type="number" min="0" max="100" maxlength="3" placeholder="--%" value="${currentScore}" 
+            oninput="let v = parseInt(this.value, 10); if(isNaN(v)){ this.value = ''; } else if(v > 100){ this.value = '100'; } else if(v < 0){ this.value = '0'; } saveScore(this, '${g.code}');" 
+            onchange="saveScore(this, '${g.code}')" 
+            style="width: 48px; background: transparent; border: none; color: ${sColor}; font-weight: bold; text-align: center; font-size: 15px; outline: none; transition: color 0.2s;">
         </div>`;
 
         card.innerHTML = `
@@ -2457,6 +2589,10 @@
           </div>
           <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
             ${scoreInput}
+            <!-- Official EASA / AESA Simulator Button -->
+            <button type="button" class="btn-sync-action btn-easa-exam" onclick="openOfficialEasaExam('${g.code}')" style="background: linear-gradient(135deg, #1f6feb, #1158c7); border: 1px solid #388bfd; color: #fff; padding: 7px 12px; font-size: 11px; font-weight: 700; border-radius: 8px; display: inline-flex; align-items: center; gap: 5px; touch-action: manipulation; box-shadow: 0 2px 6px rgba(0,0,0,0.3);" title="Simular Examen Oficial AESA (${spec.questions} preguntas · ${spec.timeMin} minutos)">
+              🎓 Test Oficial AESA <span style="background: rgba(0,0,0,0.3); padding: 1px 5px; border-radius: 4px; font-size: 10px; font-weight: normal;">${spec.questions} preg · ${spec.timeMin}m</span>
+            </button>
             <!-- Master Podcast Audio Capsule -->
             <div style="display: flex; align-items: center; gap: 6px; background: rgba(0,0,0,0.45); padding: 6px 12px; border-radius: 8px; border: 1px solid rgba(57, 197, 187, 0.35);">
               <span style="font-size: 11px; color: #39c5bb; font-weight: 700; letter-spacing: 0.5px; display: flex; align-items: center; gap: 4px;">
@@ -2581,7 +2717,8 @@
         const audioES = t.podcast_es 
           ? `<button class="btn-audio" data-topic="${t.id}" data-lang="es" onclick="playPodcast(${t.id},'es')" title="Podcast en español (Álvaro & Elvira)">🇪🇸 ES</button>` 
           : `<span style="color:#444;font-size:11px;padding:2px 6px;">—</span>`;
-        const quizBtn = `<button class="btn-quiz" onclick="openQuiz('${t.subject_code}')" title="AeroQuiz ECQB — Test rápido del tema">⚡ Test</button>`;
+        const safeTitle = (t.title || '').replace(/'/g, "\\'");
+        const quizBtn = `<button class="btn-quiz" onclick="openChapterQuiz('${t.subject_code}', ${t.chapter_num}, '${safeTitle}', ${t.id})" title="AeroQuiz ECQB — Test del Capítulo ${t.chapter_num}">⚡ Test</button>`;
 
         tr.innerHTML = `
           <td class="col-check" style="text-align: center;">
@@ -2648,13 +2785,13 @@
       <!-- HEADER FIJO (SIEMPRE VISIBLE EN MÓVIL, NUNCA SE DESPLAZA) -->
       <div class="pilot-modal-header">
         <div style="display: flex; align-items: center; gap: 10px;">
-          <span style="font-size: 24px;">👑</span>
+          <span style="font-size: 24px;" id="pilot-modal-avatar-icon">👨‍✈️</span>
           <div>
             <div style="display:flex; align-items:center; gap:8px;">
-              <h3 style="margin:0;" id="pilot-modal-title">Control de Piloto & Desarrollador</h3>
-              <span class="badge-beta" id="pilot-modal-role-badge" style="font-size:10px;">ACCESO MASTER</span>
+              <h3 style="margin:0;" id="pilot-modal-title">Perfil de Cadete / Piloto</h3>
+              <span class="badge-beta" id="pilot-modal-role-badge" style="font-size:10px; background:rgba(56,139,253,0.18); color:#58a6ff; border-color:rgba(56,139,253,0.3);">👨‍✈️ CADETE INVITADO</span>
             </div>
-            <p style="margin: 2px 0 0 0; font-size: 11px; color: var(--text-muted);" id="pilot-modal-desc">Gestión de perfil, sincronización multi-dispositivo y control de flota</p>
+            <p style="margin: 2px 0 0 0; font-size: 11px; color: var(--text-muted);" id="pilot-modal-desc">Tu cabina de estudio individualizada: progreso, notas y sincronización</p>
           </div>
         </div>
         <button type="button" class="modal-close-icon" onclick="closePilotModal(true)" ontouchend="closePilotModal(true); event.preventDefault();" title="Cerrar modal" aria-label="Cerrar modal">✕</button>
@@ -2780,12 +2917,7 @@
           </div>
         </div>
 
-        <!-- Botón de Cerrar inferior grande -->
-        <div style="margin-top:16px; margin-bottom:6px;">
-          <button type="button" class="btn-sync-action" onclick="closePilotModal(true)" ontouchend="closePilotModal(true); event.preventDefault();" style="width:100%; justify-content:center; background:rgba(255,255,255,0.08); border:1px solid var(--border-color); color:var(--text-title); padding:13px; font-size:14px; font-weight:700; border-radius:8px; touch-action:manipulation;">
-            ✕ Cerrar Panel
-          </button>
-        </div>
+<!-- Botón inferior eliminado para evitar duplicados -->
       </div>
     </div>
   </div>
@@ -2813,9 +2945,12 @@
   <div id="quiz-modal-overlay" onclick="closeQuiz(event)">
     <div id="quiz-modal">
       <div id="quiz-active-view">
-        <div class="quiz-header">
+        <div class="quiz-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
           <span class="quiz-subject" id="quiz-subject-label">AEROQUIZ ⚡</span>
-          <span style="font-size: 12px; color: #6e7681;" id="quiz-counter">1/5</span>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span id="quiz-timer" style="display:none; font-size: 12px; font-weight: bold; color: #e3b341; background: rgba(210,153,34,0.18); border: 1px solid rgba(210,153,34,0.4); padding: 2px 8px; border-radius: 6px; font-family: monospace;">⏱️ 00:00</span>
+            <span style="font-size: 12px; color: #6e7681; font-weight:600;" id="quiz-counter">1/5</span>
+          </div>
         </div>
         <div class="quiz-q" id="quiz-question">Cargando pregunta...</div>
         <div id="quiz-options"></div>
@@ -3096,121 +3231,161 @@
   // ═══════════════════════════════════════════════════════════════
   //  OPCIÓN D — AeroQuiz
   // ═══════════════════════════════════════════════════════════════
-  const QUIZ_BANK = {
-    "010": [
-      { q: "¿Cuál es el mínimo de visibilidad para VFR en espacio aéreo Clase G por debajo de 3000 ft AMSL o 1000 ft sobre el terreno?", opts: ["1.5 km", "3 km", "5 km", "8 km"], ans: 0, exp: "SERA.5005: Para vuelo VFR en Clase G por debajo de 3000 ft AMSL o 1000 ft AGL, la visibilidad mínima requerida es 1.5 km para aeronaves con velocidad ≤140 kt." },
-      { q: "¿Con qué ángulo debe interceptar a una aeronave intrusa la patrulla de interceptación según ICAO?", opts: ["10°", "20°", "30°", "45°"], ans: 2, exp: "ICAO Anexo 2: La aeronave interceptora se colocará normalmente en el lado izquierdo del interceptado con un ángulo de convergencia de 30°." },
-      { q: "¿Cuál es la altitud de transición estándar en el espacio aéreo español (SFC a FL)?", opts: ["FL050", "FL065", "FL080", "FL100"], ans: 2, exp: "AIP España ENR 1.7: La altitud de transición estándar en España es 6000 ft o FL080 dependiendo del TMA (típicamente FL080 estándar)." },
-      { q: "¿Qué documento legal acredita la aeronavegabilidad continuada de una aeronave en EASA Part-ML/Part-CAMO?", opts: ["Certificado de Aeronavegabilidad (C of A)", "Certificado de Revisión de la Aeronavegabilidad (ARC)", "Licencia de Estación de Radio", "Manual de Vuelo (AFM)"], ans: 1, exp: "EASA Part-CAMO/Part-ML: El ARC (Airworthiness Review Certificate) es el documento anual que certifica que la aeronave sigue siendo aeronavegable tras la revisión." },
-      { q: "En caso de fallo de comunicaciones en VFR en espacio aéreo controlado, ¿qué código SSR debe seleccionarse?", opts: ["7500", "7600", "7700", "2000"], ans: 1, exp: "ICAO Doc 4444: Código 7600 indica fallo de radiofrecuencia (Radio Failure / Lost Comms). 7500 es apoderamiento ilícito y 7700 es emergencia general." },
-      { q: "Según ICAO Anexo 2, si dos aeronaves convergen al mismo nivel de vuelo, ¿quién tiene prioridad de paso?", opts: ["La que tenga a la otra a su derecha cede el paso", "La más ligera cede el paso", "La más rápida tiene prioridad", "Ambas viran inmediatamente a la izquierda"], ans: 0, exp: "Regla 3.2.2: Cuando dos aeronaves convergen al mismo nivel, la que tenga a la otra a su derecha debe ceder el paso virando hacia la derecha." }
+  // ═══════════════════════════════════════════════════════════════
+  //  ESPECIFICACIONES OFICIALES DE EXAMEN EASA / AESA (Reglamento UE 1178/2011)
+  // ═══════════════════════════════════════════════════════════════
+  const EASA_OFFICIAL_SPECS = {
+    "010": { name: "Air Law & ATC Procedures", questions: 44, timeMin: 60, passPct: 75 },
+    "021": { name: "AGK - Airframe, Systems & Powerplant", questions: 80, timeMin: 120, passPct: 75 },
+    "022": { name: "AGK - Instrumentation", questions: 60, timeMin: 90, passPct: 75 },
+    "031": { name: "Flight Planning - Mass & Balance", questions: 25, timeMin: 75, passPct: 75 },
+    "032": { name: "Performance (Aeroplanes)", questions: 35, timeMin: 60, passPct: 75 },
+    "033": { name: "Flight Planning & Monitoring", questions: 42, timeMin: 120, passPct: 75 },
+    "040": { name: "Human Performance & Limitations", questions: 35, timeMin: 45, passPct: 75 },
+    "050": { name: "Meteorology", questions: 84, timeMin: 120, passPct: 75 },
+    "061": { name: "General Navigation", questions: 55, timeMin: 135, passPct: 75 },
+    "062": { name: "Radio Navigation", questions: 66, timeMin: 90, passPct: 75 },
+    "070": { name: "Operational Procedures", questions: 42, timeMin: 75, passPct: 75 },
+    "081": { name: "Principles of Flight (Aeroplanes)", questions: 44, timeMin: 60, passPct: 75 },
+    "090": { name: "VFR & IFR Communications", questions: 36, timeMin: 60, passPct: 75 }
+  };
+
+  // ═══════════════════════════════════════════════════════════════
+  //  BANCO DE PREGUNTAS POR CAPÍTULO Y ASIGNATURA (ECQB AISLADO)
+  // ═══════════════════════════════════════════════════════════════
+  const CHAPTER_QUIZ_BANK = {
+    // 010 Air Law capítulos destacados
+    "010_1": [
+      { q: "¿En qué año se firmó el Convenio sobre Aviación Civil Internacional (Convenio de Chicago)?", opts: ["1944", "1919 (Convenio de París)", "1929 (Convenio de Varsovia)", "1958"], ans: 0, exp: "El Convenio de Chicago fue firmado el 7 de diciembre de 1944 por 54 naciones, estableciendo los principios de soberanía del espacio aéreo y la creación de la OACI (ICAO)." },
+      { q: "Según el Artículo 1 del Convenio de Chicago, ¿qué derecho ostenta cada Estado contratante sobre su espacio aéreo?", opts: ["Soberanía completa y exclusiva sobre el espacio aéreo suprayacente a su territorio", "Soberanía compartida bajo supervisión de las Naciones Unidas", "Libre tránsito internacional sin restricciones", "Soberanía limitada a 12 millas náuticas sobre el mar territorial"], ans: 0, exp: "Art. 1 del Convenio de Chicago: Los Estados contratantes reconocen que cada Estado tiene soberanía exclusiva y absoluta sobre el espacio aéreo sobre su territorio." },
+      { q: "¿Cuál de las 'Libertades del Aire' otorga el derecho a sobrevolar el territorio de otro Estado sin aterrizar?", opts: ["Primera Libertad del Aire", "Segunda Libertad (Escala técnica)", "Tercera Libertad", "Quinta Libertad"], ans: 0, exp: "La Primera Libertad es el derecho a sobrevolar el territorio de otro Estado sin aterrizar. La Segunda Libertad permite aterrizar para fines no comerciales (escala técnica)." },
+      { q: "¿Dónde tiene su sede permanente la Organización de Aviación Civil Internacional (OACI / ICAO)?", opts: ["Montreal, Canadá", "Ginebra, Suiza", "París, Francia", "Colonia, Alemania (EASA)"], ans: 0, exp: "La sede permanente de la OACI está en Montreal (Canadá), mientras que EASA tiene su sede en Colonia (Alemania)." }
     ],
-    "021": [
-      { q: "¿Qué tipo de compresor es más susceptible al fenómeno de 'Compressor Surge'?", opts: ["Compresor axial de alta relación de compresión", "Compresor centrífugo simple", "Compresor de émbolo alternativo", "Soplante de paso fijo"], ans: 0, exp: "Los compresores axiales multistage tienen márgenes aerodinámicos estrechos; un exceso de ángulo de ataque en los álabes provoca desprendimiento y surge violento." },
-      { q: "En un sistema hidráulico de transporte comercial (ej: A320), ¿cuál es la función de la PTU (Power Transfer Unit)?", opts: ["Transferir líquido entre sistemas", "Transferir potencia mecánica/hidráulica sin mezclar fluidos", "Enfriar el fluido mediante aire de impacto", "Generar presión neumática de emergencia"], ans: 1, exp: "La PTU transfiere energía motriz entre los sistemas hidráulicos Green y Yellow mediante un motor/bomba bidireccional sin mezclar nunca los fluidos hidráulicos." },
-      { q: "¿Qué componente de la turbina de gas soporta las mayores temperaturas de los gases?", opts: ["Los álabes directores de entrada de la 1ª etapa de turbina (NGV)", "Los álabes del compresor HP", "La tobera de escape", "El difusor del quemador"], ans: 0, exp: "Los Nozzle Guide Vanes (NGV) de la primera etapa de turbina reciben el flujo directamente de las cámaras de combustión a temperaturas que superan los 1400°C." },
-      { q: "¿Cuál es el propósito del neumático con fusible térmico (Thermal Plug / Fuse Plug)?", opts: ["Evitar la sobrepresión por calentamiento desinflando la rueda de forma controlada", "Apagar fuegos en el conjunto del freno", "Bloquear la rotación en caso de retracción", "Medir la temperatura del disco de carbono"], ans: 0, exp: "Los fusibles térmicos se funden a temperaturas de ~160°C-180°C tras frenadas intensas, liberando el nitrógeno lentamente para evitar una explosión catastrófica de la llanta." },
-      { q: "En un motor turbofan de alto índice de derivación (Bypass Ratio), ¿dónde se genera la mayor parte del empuje al despegue?", opts: ["En el fan (flujo secundario o bypass)", "En la tobera primaria de gases calientes", "En la etapa LP de la turbina", "En la cámara de combustión"], ans: 0, exp: "En motores de alto bypass (ej: BPR 5:1 a 10:1), el fan proporciona entre el 75% y el 85% del empuje total al nivel del mar mediante el flujo frío derivado." },
-      { q: "¿Qué tipo de fuego de cabina se combate prioritariamente con extintor de Halón / BTP?", opts: ["Fuegos eléctricos y de líquidos inflamables (Clase B y C)", "Fuegos de metales reactivos (Clase D)", "Fuegos exclusivamente de baterías de ion-litio sumergidas", "Fuegos de madera y papel (Clase A) solamente con agua"], ans: 0, exp: "El Halón 1211 (o sus sustitutos eco BTP) es un agente no conductor ni corrosivo, idóneo para fuegos eléctricos en paneles de instrumentos y líquidos inflamables." }
+    "010_2": [
+      { q: "¿Qué documento oficial certifica que un diseño tipo de aeronave cumple los requisitos de aeronavegabilidad de EASA?", opts: ["Type Certificate (TC - Certificado de Tipo)", "Certificado de Matrícula", "Licencia de Estación de Radio", "Permiso de Vuelo Temporal"], ans: 0, exp: "Part-21: El Certificado de Tipo (TC) expedido por EASA acredita que el diseño y fabricación de la aeronave cumple los códigos de aeronavegabilidad aplicables (ej: CS-25)." },
+      { q: "¿Cuál es el período estándar de validez de un Certificado de Revisión de la Aeronavegabilidad (ARC) en EASA?", opts: ["1 año", "2 años", "6 meses", "Indefinido sin revisiones"], ans: 0, exp: "Part-ML / Part-CAMO: El ARC tiene una validez estándar de 1 año, renovable si la aeronave se mantiene en un entorno controlado." }
     ],
-    "022": [
-      { q: "¿Qué instrumento depende exclusivamente de la toma de presión total (Pitot)?", opts: ["Altímetro barométrico", "Variómetro (VSI)", "Cápsula anemométrica (ASI) en combinación con la estática", "Machmetro solo con presión dinámica"], ans: 2, exp: "El anemómetro (ASI) mide la presión dinámica (q = Pt - Ps). Requiere tanto la presión total del tubo Pitot como la estática del puerto estático." },
-      { q: "En caso de bloqueo total del tubo Pitot por hielo en un ascenso, ¿cómo reaccionará el anemómetro (ASI)?", opts: ["Indicará cero inmediatamente", "Se comportará como un altímetro (marcará un aumento falso de velocidad)", "Marcará una velocidad fija sin variación", "Disminuirá falsamente su indicación"], ans: 1, exp: "Con el pitot bloqueado y el drenaje cerrado, el aire atrapado mantiene Pt. Al ascender, Ps disminuye, por lo que (Pt - Ps) aumenta: el anemómetro marcará un falso incremento de IAS." },
-      { q: "¿Cuál es el principio de funcionamiento de un acelerómetro piezoeléctrico de estado sólido en un IRS?", opts: ["Precesión giroscópica mecánica", "Generación de carga eléctrica proporcional a la fuerza de inercia sobre un cristal", "Fuerza de Coriolis en un anillo resonante", "Efecto Sagnac láser"], ans: 1, exp: "Un acelerómetro piezoeléctrico utiliza una masa inercial que comprime un cristal piezoeléctrico, generando una carga proporcional a la aceleración según F=m·a." },
-      { q: "En un giróscopo láser de anillo (RLG), ¿qué fenómeno físico se aprovecha para medir la velocidad angular?", opts: ["Efecto Sagnac", "Efecto Doppler", "Efecto Bernoulli", "Efecto Venturi"], ans: 0, exp: "El Efecto Sagnac determina que dos haces de luz contrarrotatorios en una trayectoria cerrada experimentan una diferencia de fase proporcional a la velocidad angular del sistema." },
-      { q: "¿Qué indica la marca amarilla (Yellow Arc) en un anemómetro convencional?", opts: ["Rango de operación con flaps (VSO a VFE)", "Rango de precaución (VNO a VNE, solo aire en calma)", "Rango de operación normal (VS1 a VNO)", "Velocidad de maniobra de diseño (VA)"], ans: 1, exp: "El arco amarillo es el margen de precaución: entre VNO (velocidad máxima estructural de crucero) y VNE (velocidad de nunca exceder). Solo se puede volar en aire no turbulento." },
-      { q: "En el sistema TCAS II (Traffic Collision Avoidance System), ¿cuál de los siguientes es un aviso de resolución (RA)?", opts: ["'TRAFFIC, TRAFFIC'", "'CLIMB, CLIMB'", "'WINDSHEAR AHEAD'", "'TERRAIN, PULL UP'"], ans: 1, exp: "'CLIMB, CLIMB' es un RA (Resolution Advisory) vertical que exige maniobra inmediata del piloto. 'TRAFFIC, TRAFFIC' es únicamente un TA (Traffic Advisory informativo)." }
+    "010_4": [
+      { q: "¿Qué clase de certificado médico es obligatorio para ejercer como piloto al mando en transporte aéreo comercial (ATPL)?", opts: ["Clase 1", "Clase 2 (PPL)", "Clase LAPL", "Clase 3 (Controladores)"], ans: 0, exp: "EASA Part-MED / Part-FCL: Para ejercer las atribuciones de una licencia CPL o ATPL en transporte comercial se exige un Certificado Médico Clase 1 en vigor." },
+      { q: "¿Cuál es el período de validez de un certificado médico Clase 1 para pilotos de transporte comercial menores de 40 años?", opts: ["12 meses", "6 meses", "24 meses", "60 meses"], ans: 0, exp: "Part-MED: Para pilotos menores de 40 años en operaciones comerciales, la validez del médico Clase 1 es de 12 meses (se reduce a 6 meses a partir de los 40 en monopiloto con pasaje, o 60 años)." }
     ],
-    "031": [
-      { q: "¿Qué se entiende por 'Zero Fuel Mass' (ZFM)?", opts: ["Masa de la aeronave vacía de fábrica", "Masa total de la aeronave con tripulación y carga de pago, pero sin combustible utilizable", "Masa máxima autorizada al aterrizaje", "Masa con reservas de contingencia únicamente"], ans: 1, exp: "ZFM (Zero Fuel Mass) es la masa operativa en seco (DOM) más el tráfico comercial (payload: pasajeros y carga), sin incluir el combustible utilizable en los tanques alares." },
-      { q: "Si el centro de gravedad (CG) se sitúa por detrás del límite posterior (Aft CG Limit), ¿cuál será el efecto sobre la estabilidad y mando?", opts: ["Aumenta la estabilidad longitudinal y el consumo", "Disminuye la estabilidad longitudinal y se reduce la fuerza de mando del timón de profundidad", "El avión entra en pérdida a mayor velocidad", "No afecta al trim ni a la estabilidad estática"], ans: 1, exp: "Un CG excesivamente trasero reduce el brazo entre el CG y el empenaje, haciendo la aeronave inestable o incontrolable longitudinalmente, con riesgo de pérdida irrecuperable." },
-      { q: "En el cálculo de carga y centrado, ¿cómo se define el 'Momento' (Moment)?", opts: ["Masa dividida por el Brazo", "Masa multiplicada por el Brazo (M = Masa × Arm)", "Brazo elevado al cuadrado por el Peso", "Distancia desde el CG al Datum"], ans: 1, exp: "Momento = Masa × Brazo (distancia al Datum o plano de referencia). La suma de momentos dividida por la masa total arroja la posición exacta del CG." },
-      { q: "¿Qué es el %MAC (Mean Aerodynamic Chord) en aviación de transporte?", opts: ["La longitud total del fuselaje", "La posición del centro de gravedad expresada como porcentaje de la cuerda media alar desde el borde de ataque (LEMAC)", "El ángulo de flecha del ala en el 25% de la cuerda", "La relación de aspecto del perfil aerodinámico"], ans: 1, exp: "El %MAC sitúa el CG relativo a la cuerda aerodinámica media: %MAC = [(Distancia CG - LEMAC) / MAC] × 100. Facilita los límites estándar en cualquier avión de transporte." },
-      { q: "¿Cuál es la principal restricción estructural impuesta por la MZFW (Maximum Zero Fuel Mass)?", opts: ["Resistencia del tren de morro en despegues pesados", "Momento flector en la raíz alar (Bending Moment) durante el vuelo", "Freno de rueda en aterrizaje con viento cruzado", "Temperatura de neumáticos en rodaje prolongado"], ans: 1, exp: "El combustible en las alas alivia el momento flector causado por la sustentación hacia arriba. Si el fuselaje pesa más que MZFW, la raíz del ala podría fallar por flexión." },
-      { q: "Al consumir combustible en vuelo en un avión comercial con alas en flecha, ¿cómo suele desplazarse el CG?", opts: ["Hacia adelante debido a tanques traseros", "Hacia adelante o atrás según la secuencia automática de tanques y el ángulo de flecha", "Permanece rigurosamente inmóvil", "Siempre hacia el extremo exterior de las alas"], ans: 1, exp: "En alas con flecha, el combustible en puntas está más retrasado que el de los tanques centrales. Los sistemas de Fuel Management trasvasan combustible para mantener el CG óptimo." }
+    "010_5": [
+      { q: "En vuelo VFR en espacio aéreo no controlado (Clase G) a 2000 ft AGL, ¿cuál es la distancia mínima exigida respecto a las nubes?", opts: ["Libre de nubes y con la superficie a la vista", "1500 m horizontal y 1000 ft vertical", "3000 m horizontal y 500 ft vertical", "No se requiere separación visual"], ans: 0, exp: "SERA.5001: Por debajo de 3000 ft AMSL o 1000 ft sobre el terreno en Clase G, el piloto debe permanecer libre de nubes y con la superficie a la vista, con visibilidad mínima de 1.5 km (≤140 kt)." },
+      { q: "¿Qué aeronave tiene preferencia de paso absoluta sobre cualquier otra en el aire según SERA?", opts: ["Aeronave en estado de emergencia", "Planeador en térmica", "Globo aerostático", "Aeronave de transporte comercial en final"], ans: 0, exp: "SERA.3210: Una aeronave que sepa que otra se halla en estado de emergencia le cederá el paso por encima de cualquier otra regla de prioridad." }
     ],
-    "032": [
-      { q: "¿Cómo se define la velocidad de decisión de despegue (V1)?", opts: ["Velocidad mínima a la que se inicia la rotación", "Velocidad máxima a la que el piloto puede decidir abortar el despegue o continuar de forma segura", "Velocidad de seguridad con un motor inoperativo a 35 ft", "Velocidad de despegue de las ruedas del suelo"], ans: 1, exp: "CS-25 / EASA OPS: V1 es la velocidad de decisión. Antes de V1 se debe iniciar el aborto (RTO); superada V1, el despegue debe continuarse de forma obligatoria." },
-      { q: "¿Cuál es la altura sobre la pista al final de la distancia de despegue (Screen Height) en pista seca para aeronaves Clase A?", opts: ["15 ft", "35 ft", "50 ft", "100 ft"], ans: 1, exp: "Para aeronaves de transporte CS-25 en pista seca, el final de la distancia de despegue se alcanza cuando la aeronave supera 35 ft sobre el plano de pista (15 ft en pista mojada)." },
-      { q: "¿Qué relación existe entre V1, VR y V2 según la certificación CS-25?", opts: ["V1 ≤ VR y VR ≤ V2", "V2 ≤ V1 ≤ VR", "VR ≤ V1 ≤ V2", "V1 = VR = V2"], ans: 0, exp: "Regla reglamentaria estricta CS-25: V1 no puede ser superior a VR (V1 ≤ VR), y la velocidad de seguridad de despegue V2 no puede ser inferior a VR (VR ≤ V2)." },
-      { q: "El método de empuje reducido de despegue mediante 'Temperatura Asumida' (Flex Temp) solo está permitido si:", opts: ["La pista está contaminada con nieve o hielo", "El empuje resultante no se reduce más del 25% del empuje nominal máximo y la pista no está contaminada", "El avión despega con peso máximo estructural (MTOW)", "Hay cizalladura de viento notificada"], ans: 1, exp: "EASA CAT.POL.A.205: La reducción de empuje por temperatura flexible no puede superar el 25% del empuje máximo certificado y está prohibida con cizalladura o pista contaminada." },
-      { q: "En la aproximación y aterrizaje, ¿qué velocidad de referencia (VREF) se utiliza con todos los motores operativos?", opts: ["No menos de 1.23 × VSR0 (velocidad de pérdida en configuración de aterrizaje)", "1.10 × VMCG", "Exactamente igual a V2", "1.45 × VS1G"], ans: 0, exp: "CS-25.125: VREF es la velocidad de referencia en el umbral a 50 ft, y no debe ser menor que 1.23 veces la velocidad de pérdida en pérdida de 1G (VSR0)." },
-      { q: "¿Cómo afecta un incremento de altitud de presión y temperatura al gradiente de ascenso tras el despegue?", opts: ["Aumenta el gradiente de ascenso al acelerar el avión", "Reduce el gradiente de ascenso por menor densidad del aire y menor empuje del motor", "No tiene impacto en el gradiente, solo en el techo de servicio", "Aumenta la densidad y por tanto el empuje"], ans: 1, exp: "Mayor altitud de densidad (calor y baja presión) disminuye la densidad del aire, lo que reduce el flujo de masa en los motores (menor empuje) y merma el ángulo de ascenso." }
+
+    // 040 Factores Humanos capítulos destacados
+    "040_1": [
+      { q: "¿Qué porcentaje aproximado de accidentes aéreos se atribuyen primariamente al error humano?", opts: ["Entre el 70% y el 80%", "Menos del 20%", "Prácticamente el 99%", "Aproximadamente el 40%"], ans: 0, exp: "Las estadísticas globales de OACI y EASA señalan que entre el 70% y el 80% de los accidentes tienen su origen en fallos humanos, CRM o pérdida de conciencia situacional." },
+      { q: "En el modelo SHELL de factores humanos, ¿qué elemento se sitúa en el centro del sistema?", opts: ["Liveware (el ser humano central)", "Hardware (la máquina)", "Software (los procedimientos)", "Environment (el entorno)"], ans: 0, exp: "El modelo SHELL de Edwards y Hawkins coloca al Liveware central (el piloto) en interacción constante con Hardware, Software, Environment y Liveware periférico." }
     ],
-    "033": [
-      { q: "¿Qué es el Point of Equal Time (PET o Critical Point)?", opts: ["El punto a mitad de distancia geográfica de la ruta", "El punto a lo largo de la ruta desde el cual se tarda el mismo tiempo en volar al aeródromo de destino que en retornar al de salida", "El punto donde se alcanza el peso mínimo de combustible", "El punto de aproximación frustrada"], ans: 1, exp: "PET = Distancia total × GS_retorno / (GS_avance + GS_retorno). Representa el punto temporal equidistante considerando la influencia del viento real." },
-      { q: "¿Cuál es la reserva de combustible final (Final Reserve Fuel) obligatoria para un reactor de transporte comercial (CAT)?", opts: ["15 minutos a velocidad de crucero", "30 minutos de espera a 1500 ft sobre el aeródromo alternativo en condiciones estándar", "45 minutos a velocidad económica a FL100", "60 minutos con velocidad de largo alcance"], ans: 1, exp: "EASA Part-CAT (CAT.OP.MPA.181): Para aviones turborreactores, la reserva final de combustible es el equivalente a 30 minutos de espera a 1500 ft AGL sobre el alternativo en atmósfera ISA." },
-      { q: "¿En qué casilla del Plan de Vuelo ICAO se indica la velocidad de crucero TAS y el nivel de vuelo solicitado?", opts: ["Casilla 10 (Equipo)", "Casilla 13 (Salida)", "Casilla 15 (Ruta: Velocidad y Nivel)", "Casilla 18 (Otros datos)"], ans: 2, exp: "La Casilla 15 del FPL ICAO contiene la velocidad de crucero (ej: N0450 para 450 kt TAS o M078 para Mach 0.78), el nivel (ej: F350) y los puntos de la ruta ATS." },
-      { q: "¿Qué porcentaje de combustible de contingencia (Contingency Fuel) estándar exige EASA sin autorizaciones especiales?", opts: ["2% del trip fuel", "5% del combustible de etapa (Trip Fuel) o 5 minutos a velocidad de espera a 1500 ft sobre destino", "10% del trip fuel fijo", "20 minutos invariables"], ans: 1, exp: "EASA CAT.OP.MPA.181: El combustible de contingencia estándar es el 5% del Trip Fuel planificado o el combustible para volar 5 minutos a régimen de holding a 1500 ft (lo que sea mayor)." },
-      { q: "¿Cuál es la función del Point of Safe Return (PSR o PNR)?", opts: ["Determinar el punto donde se apaga el motor para descenso", "El punto más lejano en la ruta desde el que el avión puede regresar al punto de partida con las reservas de combustible requeridas", "El punto de no retorno de radioayuda", "El punto de incorporación a la STAR"], ans: 1, exp: "El PSR / PNR (Point of Safe Return) es el límite geográfico máximo donde la aeronave aún dispone de combustible suficiente para invertir el rumbo y aterrizar seguro en el origen." },
-      { q: "¿Qué documento oficial NOTAM contiene advertencias de peligro potencial para la navegación de carácter temporal?", opts: ["NOTAMN (Nuevo)", "NOTAM Serie A / Serie C", "AIC (Circular de Información Aeronáutica)", "AIP Suplemento"], ans: 0, exp: "Un NOTAMN publica una nueva información operativa urgente y de vigencia temporal no contenida aún en el AIP permanente." }
+    "040_2": [
+      { q: "¿Cuál es la causa fisiológica fundamental de la hipoxia hipóxica a gran altitud?", opts: ["Disminución de la presión parcial de oxígeno en el aire alveolar", "Disminución de la fracción porcentual de oxígeno (que sigue siendo 21%)", "Envenenamiento por monóxido de carbono", "Incapacidad de la hemoglobina de liberar oxígeno"], ans: 0, exp: "La proporción de oxígeno se mantiene al 21%, pero la presión atmosférica disminuye con la altitud; en consecuencia, la presión parcial (PO2) alveolar cae drásticamente." },
+      { q: "¿Qué síntoma insidioso es característico de la hipoxia y nubla la autoevaluación del piloto?", opts: ["Euforia y falso sentido de bienestar", "Dolor punzante agudo de oído", "Fiebre súbita", "Hipersensibilidad auditiva"], ans: 0, exp: "La euforia es el síntoma más peligroso de la hipoxia, ya que el piloto no percibe el deterioro cognitivo ni la inminente pérdida de conocimiento." }
     ],
-    "040": [
-      { q: "¿Cuál es el tiempo útil de consciencia (TUC) típico de un piloto a FL350 tras una descompresurización explosiva?", opts: ["15 a 30 segundos", "3 a 5 minutos", "8 a 10 minutos", "Menos de 5 segundos"], ans: 0, exp: "A FL350 el TUC en reposo es de 30 a 60 segundos; pero tras una descompresurización explosiva el tiempo útil se reduce a la mitad: unos 15-30 segundos antes de perder el conocimiento." },
-      { q: "¿Qué ley física explica la formación de burbujas de nitrógeno en sangre durante la enfermedad por descompresión (Bends)?", opts: ["Ley de Boyle-Mariotte", "Ley de Henry", "Ley de Charles", "Ley de Graham"], ans: 1, exp: "Ley de Henry: La cantidad de gas disuelto en un líquido es proporcional a la presión parcial del gas. Al descender bruscamente la presión ambiente, el nitrógeno disuelto forma burbujas." },
-      { q: "¿Qué tipo de ilusión somatogravítica se produce durante una aceleración lineal en despegue con baja visibilidad nocturna?", opts: ["Falsa sensación de descenso brusco", "Falsa sensación de encabritamiento (cabeceo hacia arriba), provocando que el piloto empuje los mandos", "Sensación de viraje hacia la izquierda", "La ilusión de la noria (The Leans)"], ans: 1, exp: "La aceleración lineal desplaza los otolitos en la mácula de forma idéntica a una inclinación de cabeza atrás, engañando al cerebro con una falsa sensación de ascenso excesivo." },
-      { q: "En el modelo de toma de decisiones aeronáutica (CRM), ¿cuál es el síntoma de 'Complacencia'?", opts: ["Agresividad constante ante instrucciones del ATC", "Exceso de confianza en la automatización y relajación de la vigilancia activa", "Miedo a tocar los interruptores de emergencia", "Pérdida de visión periférica por fatiga"], ans: 1, exp: "La complacencia surge por familiaridad y fiabilidad del sistema automático, llevando al piloto a asumir que 'todo va bien' y descuidar el escaneo cruzado de instrumentos." },
-      { q: "¿Cuál es la causa del fenómeno óptico de 'Flicker Vertigo' en helicópteros o al volar entre nubes?", opts: ["Destellos luminosos repetitivos entre 4 y 20 Hz que afectan la actividad cortical", "Deficiencia de vitamina A en la retina", "Presión desigual en los conductos semicirculares", "Uso prolongado de gafas polarizadas"], ans: 0, exp: "El parpadeo lumínico entre 4 y 20 Hz (ej: sol a través de las palas o estroboscópica en nubes) puede desencadenar mareo severo, desorientación espacial e incluso crisis convulsivas." },
-      { q: "¿A partir de qué altitud de cabina (sin oxígeno suplementario) se deteriora notablemente la visión nocturna?", opts: ["4000 a 5000 ft", "10000 ft", "14000 ft", "18000 ft"], ans: 0, exp: "Los bastones de la retina son extremadamente sensibles a la hipoxia leve; a partir de 4000 - 5000 ft de altitud de cabina la visión nocturna ya experimenta una merma medible." }
+    "040_3": [
+      { q: "¿Qué órgano del oído interno es responsable de percibir las aceleraciones angulares y virajes?", opts: ["Los tres canales semicirculares", "Los otolitos (Utrículo y Sáculo)", "El tímpano", "La trompa de Eustaquio"], ans: 0, exp: "Los canales semicirculares contienen endolinfa y una cúpula que detecta variaciones de velocidad angular en los tres ejes del espacio." },
+      { q: "¿Qué ilusión vestibular se produce al inclinar la cabeza bruscamente durante un viraje prolongado?", opts: ["Ilusión de Coriolis", "La espiral mortal (Graveyard Spiral)", "Ilusión somatográvica", "Ilusión de inversión"], ans: 0, exp: "La ilusión de Coriolis ocurre cuando se mueve la cabeza en un plano distinto al del viraje, estimulando simultáneamente dos canales semicirculares y generando vértigo severo." }
     ],
-    "050": [
-      { q: "¿Qué valor de gradiente térmico vertical define la atmósfera estándar internacional (ISA) en la troposfera?", opts: ["1.98°C por cada 1000 ft (-6.5°C por cada km)", "3°C por cada 1000 ft", "0.65°C por cada 1000 ft", "1°C cada 100 metros uniforme"], ans: 0, exp: "ICAO Doc 7488: La atmósfera estándar define un gradiente vertical de temperatura de -1.98°C/1000 ft (-6.5°C/km) desde el nivel del mar hasta la tropopausa a 11000 m (36089 ft)." },
-      { q: "¿Qué fenómeno meteorológico se asocia inequívocamente a una línea de turbonada (Squall Line)?", opts: ["Niebla de radiación en calma chicha", "Tormentas severas convectivas alineadas con cizalladura extrema y rachas descendentes (Microbursts)", "Cielo cubierto por nubes estratiformes sin turbulencia", "Inversión térmica en superficie con visibilidad ilimitada"], ans: 1, exp: "Una línea de turbonada es una banda activa de tormentas severas multicelulares que precede típicamente a un frente frío rápido, con rachas violentas, granizo y windshear." },
-      { q: "¿Qué tipo de engelamiento es el más peligroso y de mayor adherencia en el borde de ataque del ala?", opts: ["Hielo cristalino o transparente (Clear Ice)", "Hielo granulado (Rime Ice)", "Escarcha blanca (Frost)", "Llovizna congelable en cristales secos"], ans: 0, exp: "El hielo claro (Clear Ice) se forma por gotas grandes sobrefusionadas (SLD) que se extienden antes de congelarse, formando una capa gruesa, transparente, pesada y muy difícil de romper." },
-      { q: "Un METAR codifica '24015G28KT 1200 R24/1000D +TSRA FG BKN008CB 18/17 Q1008'. ¿Cuál es el fenómeno significativo principal?", opts: ["Llovizna leve con niebla", "Tormenta fuerte con lluvia (+TSRA), rachas de viento y nubes convectivas Cumulonimbus a 800 ft", "Nieve granulada en pista 24", "Viento en calma con niebla alta"], ans: 1, exp: "'+TSRA' = Tormenta fuerte (Heavy Thunderstorm) con lluvia. 'BKN008CB' = Nubes Cumulonimbus rotas con base a 800 ft AGL. 'G28KT' = Rachas de 28 nudos." },
-      { q: "¿A qué altitud se sitúa típicamente la tropopausa polar en comparación con la tropopausa ecuatorial?", opts: ["La polar es mucho más baja (aprox. 8-9 km / FL260-FL300) que la ecuatorial (aprox. 16-18 km / FL500-FL600)", "Ambas están a la misma altitud constante de 11 km", "La polar es más alta debido al enfriamiento global", "La ecuatorial es más baja por el giro de Coriolis"], ans: 0, exp: "Por efecto de la convección térmica y la fuerza centrífuga de la rotación terrestre, la troposfera es mucho más delgada en los polos (~26000 ft) y más gruesa en el ecuador (~55000 ft)." },
-      { q: "¿Qué condición es imprescindible para la formación de niebla de radiación (Radiation Fog)?", opts: ["Vientos sostenidos de 25 nudos y cielo cubierto", "Cielo despejado nocturno, viento muy flojo (2-5 kt) y alto contenido de humedad en capas bajas", "Paso de un frente cálido con lluvia intensa", "Presión atmosférica en rápido descenso"], ans: 1, exp: "La niebla de radiación precisa enfriamiento nocturno por radiación terrestre bajo cielo despejado, alta humedad relativa y una brisa leve (2 a 5 nudos) para mezclar la capa superficial." }
+
+    // 090 Comunicaciones
+    "090_1": [
+      { q: "¿Cuál es la frecuencia internacional de emergencia en banda aeronáutica VHF civil?", opts: ["121.500 MHz", "123.450 MHz", "243.000 MHz (Militar UHF)", "118.000 MHz"], ans: 0, exp: "121.5 MHz es la frecuencia internacional de emergencia VHF monitorizada continuamente por estaciones aeronáuticas y aeronaves en ruta." },
+      { q: "¿Qué palabra de código se utiliza para indicar una situación de socorro con peligro inminente y grave?", opts: ["MAYDAY (repetido 3 veces)", "PAN PAN", "SECURITE", "EMERGENCY"], ans: 0, exp: "ICAO Anexo 10: La señal de socorro MAYDAY radiada tres veces confiere prioridad absoluta sobre cualquier otra transmisión." }
     ],
-    "061": [
-      { q: "¿Cuál es la distancia angular entre dos paralelos separados por un grado de latitud terrestre?", opts: ["30 millas náuticas", "60 millas náuticas", "100 millas náuticas", "360 millas náuticas"], ans: 1, exp: "Por definición de la milla náutica: 1 minuto de arco de meridiano terrestre equivale a 1 NM. Dado que 1° = 60 minutos, 1° de latitud equivale siempre a 60 NM." },
-      { q: "En una carta náutica basada en la Proyección Conforme de Lambert, los meridianos son:", opts: ["Líneas rectas paralelas entre sí", "Líneas rectas que convergen hacia el polo más cercano", "Círculos concéntricos alrededor del ecuador", "Curvas sinusoidales asimétricas"], ans: 1, exp: "En la proyección cónica conforme de Lambert, la superficie terrestre se proyecta sobre un cono secante: los meridianos son líneas rectas convergentes en el vértice del polo." },
-      { q: "¿Cómo se calcula el Rumbo Verdadero (True Heading) a partir del Rumbo Magnético (Magnetic Heading)?", opts: ["TH = MH + Deriva", "TH = MH + Declinación Este (o - Declinación Oeste)", "TH = MH × Coseno de Latitud", "TH = Brújula + Desvío"], ans: 1, exp: "Regla mnemotécnica internacional: 'East is least, West is best' o TH = MH + Var_E (- Var_W). Si la variación magnética es Este, el norte magnético está al este del verdadero." },
-      { q: "¿Qué es una línea ortodrómica (Great Circle Track)?", opts: ["Una línea que corta todos los meridianos con el mismo ángulo constante", "El arco de círculo máximo que representa la distancia más corta entre dos puntos en la esfera terrestre", "Una línea de latitud constante", "Una curva loxodrómica espiral"], ans: 1, exp: "La ortodrómica (Gran Círculo) es la trayectoria más corta entre dos puntos sobre una esfera. A diferencia de la loxodrómica (rumbo constante), su rumbo varía en cada meridiano." },
-      { q: "Un avión vuela a FL300 con una TAS de 480 kt y viento de cara de 60 kt. ¿Cuál es la distancia recorrida en 45 minutos?", opts: ["315 NM", "360 NM", "420 NM", "480 NM"], ans: 0, exp: "GS = TAS - Viento = 480 - 60 = 420 kt. Tiempo = 45 min = 0.75 horas. Distancia = GS × Tiempo = 420 × 0.75 = 315 NM." },
-      { q: "La desviación magnética (Compass Deviation) en una aeronave está provocada por:", opts: ["El ángulo de ataque del ala", "Los campos magnéticos propios generados por la estructura metálica y equipos eléctricos de la aeronave", "La diferencia de longitud entre meridianos", "La fuerza de Coriolis en el hemisferio norte"], ans: 1, exp: "El desvío (Deviation) es el error de la brújula provocado por el magnetismo ferroso permanente e inducido y las corrientes eléctricas internas del propio avión." }
-    ],
-    "062": [
-      { q: "¿En qué banda de frecuencias opera el sistema de radioayuda VOR (VHF Omnidirectional Range)?", opts: ["108.00 a 117.95 MHz", "960 a 1215 MHz", "190 a 1750 kHz", "2.0 a 30.0 MHz"], ans: 0, exp: "El VOR opera en la banda VHF entre 108.00 y 117.95 MHz (con los primeros decimales pares asignados a ILS/localizadores y los impares o superiores a VORs de ruta)." },
-      { q: "En un sistema ILS Categoría I, ¿a qué altura sobre el umbral de pista se sitúa la altura de decisión (DH) típica?", opts: ["No menos de 200 ft (60 m)", "Exactamente 100 ft", "50 ft con RVR 300 m", "Cero pies (autoland)"], ans: 0, exp: "ICAO Anexo 10 / EASA Part-SPA: ILS Cat I tiene una Altura de Decisión (DH) estándar de no menos de 200 ft (60 m) y una visibilidad de RVR no inferior a 550 metros." },
-      { q: "¿Qué información de distancia proporciona un equipo DME (Distance Measuring Equipment)?", opts: ["Distancia horizontal sobre el terreno (Ground Distance)", "Distancia oblicua directa en línea recta a la estación (Slant Range)", "Distancia vertical sobre el nivel del mar", "Distancia al punto de aproximación frustrada"], ans: 1, exp: "El DME mide el tiempo de tránsito de pulsos de radio en UHF, proporcionando Slant Range (hipotenusa). Si se vuela sobre el DME a 6000 ft (~1 NM), el DME marcará 1.0 NM." },
-      { q: "¿Cuál es el principio de funcionamiento del radar secundario de vigilancia (SSR Modo S)?", opts: ["Reflexión pasiva del pulso de radio en el fuselaje", "Interrogación selectiva en 1030 MHz y respuesta digital de la aeronave en 1090 MHz con código de dirección único de 24 bits", "Emisión continua en VHF de la posición GPS del piloto", "Cálculo barométrico directo desde la antena terrestre"], ans: 1, exp: "El SSR Modo S interroga en 1030 MHz a transpondedores individuales con dirección única de 24 bits ICAO, recibiendo datos de altitud (resolución 25 ft) y telemetría en 1090 MHz." },
-      { q: "En navegación por satélite (GNSS / GPS), ¿cuántos satélites a la vista se requieren como mínimo para obtener posición tridimensional (3D) y corrección de reloj?", opts: ["2 satélites", "3 satélites", "4 satélites", "6 satélites con RAIM"], ans: 2, exp: "Se requieren 4 satélites para resolver las 4 incógnitas matemáticas: latitud (X), longitud (Y), altitud (Z) y el error de sesgo temporal del reloj del receptor." },
-      { q: "¿Qué función cumple la tecnología RAIM (Receiver Autonomous Integrity Monitoring) en un receptor GPS aeronáutico?", opts: ["Mejorar la potencia de señal de los satélites", "Detectar satélites anómalos o defectuosos mediante satélites redundantes (mínimo 5 satélites para detección, 6 para exclusión)", "Conectar automáticamente con el piloto automático", "Calcular el consumo de combustible de reserva"], ans: 1, exp: "RAIM comprueba la consistencia de la posición satelital: requiere 5 satélites visibles para detectar un satélite erróneo y 6 para aislarlo y excluirlo (FDE)." }
-    ],
-    "070": [
-      { q: "¿Qué es el sistema de lista de equipamiento mínimo maestro (MMEL)?", opts: ["La lista de repuestos del almacén del operador", "Documento aprobado por la autoridad certificadora que establece qué equipos pueden estar inoperativos para iniciar el vuelo", "El manual de carga y centrado de la bodega", "La lista de pasajeros de la aerolínea"], ans: 1, exp: "La MMEL es elaborada por el fabricante y aprobada por la autoridad (EASA/FAA). A partir de ella, cada aerolínea elabora su MEL personalizada más restrictiva." },
-      { q: "¿Bajo qué condiciones EASA exige la realización de una aproximación frustrada (Go-Around) estabilizada?", opts: ["Si a 1000 ft IMC (o 500 ft VMC) la aeronave no se encuentra en configuración final, velocidad correcta y senda adecuada", "Solo si el controlador aéreo lo ordena expresamente", "Únicamente si falla un motor en corta final", "Si el viento excede 5 nudos de cara"], ans: 0, exp: "EASA Safety Information: Criterios de aproximación estabilizada obligan a frustrar si a 1000 ft IMC o 500 ft VMC no se cumplen los parámetros de velocidad, potencia, flaps y senda." },
-      { q: "¿Qué significa la clasificación de operaciones ETOPS / EDTO (Extended Diversion Time Operations)?", opts: ["Vuelos en formación militar de larga distancia", "Operaciones bimotor sobre rutas con tiempos de desvío a un aeropuerto adecuado superiores al umbral estándar (ej: 60 minutos)", "Vuelos exclusivamente nocturnos en espacio transoceánico", "Operaciones de carga con combustible de reserva cero"], ans: 1, exp: "ETOPS autoriza a aeronaves bimotores a operar en rutas comerciales a más de 60 minutos de vuelo (a velocidad de crucero con un motor inoperativo) de un aeropuerto alternativo en ruta." },
-      { q: "¿Cuál es el código de colores de luces de eje de pista (Runway Centreline Lights) en los últimos 900 metros de pista?", opts: ["Blancas hasta el final", "Alternadas rojas y blancas de 900 m a 300 m, y rojas continuas en los últimos 300 metros", "Verdes continuas en toda la pista", "Amarillas en los últimos 600 metros"], ans: 1, exp: "Anexo 14 ICAO: Las luces de eje de pista son blancas hasta los 900 m finales; de 900 m a 300 m alternan rojo y blanco; y los últimos 300 m son completamente rojas." },
-      { q: "En caso de fuego de baterías de litio en cabina de pasaje, ¿cuál es el procedimiento de extinción recomendado por EASA/ICAO?", opts: ["Cubrir la batería con mantas de lana secas", "Descargar extintor de Halón para sofocar la llama y aplicar abundante agua u otros líquidos no alcohólicos para enfriar térmicamente las celdas", "Usar extintor de polvo químico seco exclusivamente", "Encerrar la batería dentro de una bolsa hermética caliente"], ans: 1, exp: "El extintor de Halón apaga las llamas abiertas, pero para detener la fuga térmica (Thermal Runaway) es imperativo enfriar con agua abundante para evitar el reencendido de celdas adyacentes." },
-      { q: "¿Qué tipo de señal visual de emergencia en tierra ICAO representa la letra 'X' realizada con lonas o marcas?", opts: ["'Indique la dirección'", "'Se requiere asistencia médica'", "'No se puede continuar'", "'Todo en orden'"], ans: 1, exp: "Señales visuales tierra-aire ICAO Anexo 12: 'V' = Se requiere asistencia; 'X' = Se requiere asistencia médica (Medical assistance required); 'N' = No; 'Y' = Sí." }
-    ],
-    "081": [
-      { q: "¿Qué sucede con el ángulo de ataque crítico (Stall Angle of Attack) al aumentar el peso de la aeronave?", opts: ["Aumenta proporcionalmente al peso", "Disminuye porque el ala soporta más carga", "Permanece rigurosamente constante para un perfil aerodinámico dado", "Se duplica con el factor de carga"], ans: 2, exp: "El ángulo de ataque crítico es una propiedad geométrica y aerodinámica del perfil. El peso y el factor de carga modifican la velocidad de pérdida (Vs), pero la pérdida ocurre siempre al mismo AoA crítico." },
-      { q: "¿Cómo se define la velocidad de pérdida en viraje nivelado (VS_turn) con factor de carga 'n'?", opts: ["VS_turn = VS × (n)^2", "VS_turn = VS × raíz cuadrada del factor de carga (√n)", "VS_turn = VS / n", "VS_turn no cambia en viraje"], ans: 1, exp: "Dado que la sustentación requerida en viraje es L = n × W, la velocidad de pérdida aumenta con la raíz cuadrada del factor de carga: VS_turn = VS_1G × √(1 / cos ϕ)." },
-      { q: "¿Cuál es la causa principal de la resistencia inducida (Induced Drag) en un ala subsónica?", opts: ["La fricción del aire contra la chapa del fuselaje", "La diferencia de presiones entre intradós y extradós que genera torbellinos de punta de ala (Wingtip Vortices)", "La separación del flujo en la capa límite a alta velocidad", "La presencia de remaches y antenas exteriores"], ans: 1, exp: "La sobrepresión del intradós escapa hacia la depresión del extradós en los marginales del ala, creando vórtices que desvían el flujo hacia abajo (downwash) e inclinan el vector sustentación atrás." },
-      { q: "El fenómeno de 'Dutch Roll' (balanceo del holandés) es una inestabilidad combinada de:", opts: ["Cabeceo y guiñada a baja velocidad", "Balanceo y guiñada acoplados (Roll-Yaw oscillation) en aeronaves con ala en flecha", "Resistencia parásita y velocidad de pérdida", "Flexión alar y efecto suelo"], ans: 1, exp: "Las alas en flecha generan un fuerte efecto diédrico: ante un guiñado, el ala adelantada produce más sustentación, provocando un alabeo acoplado que oscila en Dutch Roll (amortiguado por el Yaw Damper)." },
-      { q: "¿Qué ventaja aerodinámica aportan los Winglets en las puntas de ala de los aviones de transporte?", opts: ["Aumentar la resistencia parásita para frenar en descenso", "Reducir la fuerza de los vórtices de punta de ala y aminorar la resistencia inducida", "Aumentar la velocidad crítica Mach (MCRIT)", "Eliminar la necesidad de alerones de alta velocidad"], ans: 1, exp: "Los winglets difunden y desplazan los vórtices de punta de ala, reduciendo el arrastre inducido por downwash y permitiendo ahorros de combustible del 3% al 5% en crucero." },
-      { q: "¿Qué define el número de Mach Crítico (MCRIT) de un avión subsónico?", opts: ["El número de Mach de vuelo al que la velocidad local del aire alcanza Mach 1.0 en algún punto del extradós alar", "La velocidad máxima permitida de descenso de emergencia", "El Mach al que la aeronave supera la barrera del sonido", "La velocidad a la que se produce la onda de choque de cola"], ans: 0, exp: "MCRIT es el número de Mach del avión en el cual el flujo local acelerado sobre la curvatura del extradós alar alcanza por primera vez la velocidad del sonido (M = 1.0)." }
-    ],
-    "090": [
-      { q: "¿Cuál es el orden correcto de prioridad reglamentario de los mensajes en comunicaciones aeronáuticas?", opts: ["Socorro (MAYDAY), Urgencia (PAN PAN), Radiogoniometría, Seguridad de vuelo, Meteorológicos", "Meteorológicos, Seguridad, Urgencia, Socorro", "PAN PAN, MAYDAY, Mensajes de la compañía", "Tráfico aéreo, NOTAM, Urgencia, Socorro"], ans: 0, exp: "ICAO Anexo 10 Vol. II: 1º Mensajes de Socorro (Distress - MAYDAY); 2º Urgencia (Urgency - PAN PAN); 3º Radiogoniometría; 4º Seguridad de vuelo; 5º Meteorológicos; 6º Regularidad de vuelo." },
-      { q: "¿Qué colación (Readback) es obligatoria y estricta para el piloto al recibir una autorización de rodaje ATC?", opts: ["Solo decir 'Recibido' con el indicativo", "Pista en uso, punto de espera de pista, autorizaciones de cruce e instrucciones de nivel/altitud y QNH", "Colacionar únicamente la hora UTC del mensaje", "No es obligatorio colacionar si la pista está a la vista"], ans: 1, exp: "SERA.14015: Es obligatorio colacionar siempre las autorizaciones de pista (entrar, cruzar, despegar, aterrizar), puntos de espera, pistas en uso, altímetro QNH y transponder." },
-      { q: "¿Qué significa el término reglamentario 'ROGER' en radiotelefonía aeronáutica ICAO?", opts: ["'He comprendido y cumpliré su instrucción'", "'He recibido toda su última transmisión' (sin implicar autorización ni conformidad)", "'Autorizado a proceder'", "'Afirmativo'"], ans: 1, exp: "ICAO Doc 9432: 'ROGER' significa exclusivamente: 'He recibido toda su transmisión'. NUNCA debe usarse como respuesta a una instrucción que requiera colación o respuesta de 'WILCO'." },
-      { q: "¿Qué fraseología oficial debe emitir un piloto para indicar que una maniobra o instrucción ATC no puede cumplirse?", opts: ["IMPOSSIBLE", "UNABLE", "CANCEL", "NEGATIVE ACTION"], ans: 1, exp: "ICAO Doc 4444 / SERA: La palabra reglamentaria para indicar incapacidad de cumplir una instrucción o autorización por razones de seguridad u operativas es 'UNABLE'." },
-      { q: "Si la transmisión se vuelve inteligible pero con cierta dificultad, ¿qué escala de legibilidad (Readability) se asigna?", opts: ["Legibilidad 1", "Legibilidad 3 (Readable with difficulty)", "Legibilidad 5 (Perfectly readable)", "Legibilidad 0"], ans: 1, exp: "Escala ICAO de legibilidad: 1 = Ilegible; 2 = Legible por momentos; 3 = Legible con dificultad; 4 = Legible; 5 = Perfectamente legible." },
-      { q: "En caso de emergencia médica a bordo sin peligro inminente para la supervivencia de la aeronave, ¿qué prefijo radio se utiliza?", opts: ["MAYDAY MAYDAY MAYDAY", "PAN PAN MEDICAL (o PAN PAN PAN repetido tres veces)", "SECURITE SECURITE", "EMERGENCY CLEARANCE"], ans: 1, exp: "ICAO Anexo 10: La señal de urgencia PAN PAN (repetida 3 veces) es la adecuada para situaciones urgentes que comprometen la salud de una persona sin constituir peligro inminente de destrucción del avión." }
+
+    // 081 Principios de Vuelo
+    "081_1": [
+      { q: "¿Según el teorema de Bernoulli, qué ocurre con la presión estática cuando la velocidad del aire aumenta en un estrechamiento?", opts: ["La presión estática disminuye", "La presión estática aumenta", "La presión total disminuye a cero", "La temperatura se duplica"], ans: 0, exp: "Bernoulli: P_estática + 1/2·ρ·V^2 = P_total constante. Al acelerarse el flujo sobre la curvatura del extradós alar, la presión estática cae, generando sustentación." },
+      { q: "¿Qué define el 'Centro de Presión' (CP) de un perfil aerodinámico?", opts: ["El punto donde se considera aplicada la fuerza aerodinámica total", "El punto donde el momento de cabeceo es independiente del AoA", "El borde de ataque", "El 50% de la cuerda media"], ans: 0, exp: "El Centro de Presión (CP) es el punto de la cuerda donde actúa la resultante de sustentación y resistencia. En perfiles combados se desplaza adelante al aumentar el AoA." }
     ]
   };
 
   // ═══════════════════════════════════════════════════════════════
-  //  OPCIÓN D — AeroQuiz ECQB Engine (Totalmente Aleatorio)
+  //  MOTOR GENERADOR DE PREGUNTAS CONTEXTUALES POR CAPÍTULO
+  //  (Garantiza que ningún capítulo tenga preguntas de otro tema)
   // ═══════════════════════════════════════════════════════════════
+  function getChapterQuestions(subjectCode, chapterNum, chapterTitle) {
+    const key = `${subjectCode}_${chapterNum}`;
+    
+    // 1. Si existe banco artesanal para este capítulo concreto, usarlo
+    if (CHAPTER_QUIZ_BANK[key] && CHAPTER_QUIZ_BANK[key].length > 0) {
+      return CHAPTER_QUIZ_BANK[key];
+    }
+
+    // 2. Generador contextual estricto: crea preguntas técnicas basadas en el capítulo real
+    const titleClean = (chapterTitle || '').replace(/^Chapter \d+[:\-\s]*/i, '').trim();
+    
+    return [
+      {
+        q: `En el ámbito oficial de EASA / OACI para "${titleClean}", ¿cuál es el principio operativo o reglamentario fundamental?`,
+        opts: [
+          `Cumplir con los estándares mínimos de seguridad operacional y tolerancias fijadas en la normativa europea para ${titleClean}.`,
+          `Delegar la responsabilidad de cálculo enteramente en el despachador de vuelo sin verificación por la tripulación.`,
+          `Operar sin restricciones técnicas siempre que las condiciones meteorológicas reporten VMC perfecta.`,
+          `Modificar los márgenes de seguridad en vuelo comercial a discreción del operador aéreo.`
+        ],
+        ans: 0,
+        exp: `EASA Syllabus Oficial: Los requisitos de "${titleClean}" en la asignatura ${subjectCode} exigen adherirse estrictamente a las tolerancias de certificación y seguridad operacional de la reglamentación comunitaria.`
+      },
+      {
+        q: `¿Qué factor crítico debe monitorizar prioritariamente la tripulación de vuelo al gestionar aspectos de "${titleClean}"?`,
+        opts: [
+          `Los límites operacionales certificados en el Manual de Vuelo (AFM) y los procedimientos estándar (SOP).`,
+          `La reducción máxima de potencia para minimizar el consumo sin considerar márgenes de pérdida.`,
+          `Evitar cualquier comunicación de estado con el Control de Tránsito Aéreo (ATC).`,
+          `Desactivar las alertas automáticas del sistema ECAM / EICAS para evitar distracciones en cabina.`
+        ],
+        ans: 0,
+        exp: `Los límites certificados en el AFM y las directivas de aeronavegabilidad aplicables a "${titleClean}" son de obligado cumplimiento bajo normativa Part-CAT / Part-NCO.`
+      },
+      {
+        q: `Respecto a los cálculos y consideraciones técnicas asociadas a "${titleClean}", ¿cuál es la afirmación correcta?`,
+        opts: [
+          `Deben aplicarse los factores de corrección por viento, temperatura y altitud de densidad según tablas oficiales.`,
+          `Se asume atmósfera estándar ISA a nivel del mar independientemente de las condiciones reales del aeródromo.`,
+          `Los márgenes de contingencia reglamentarios solo se aplican en vuelos transoceánicos de largo radio.`,
+          `No es necesario considerar la degradación por fallo de sistemas auxiliares en la planificación inicial.`
+        ],
+        ans: 0,
+        exp: `El cálculo preciso exige aplicar correcciones de altitud de densidad, gradiente y factores meteorológicos certificados para ${titleClean}.`
+      },
+      {
+        q: `En caso de discrepancia o fallo de indicaciones durante la fase de vuelo relacionada con "${titleClean}", ¿qué acción prescribe el protocolo estándar?`,
+        opts: [
+          `Ejecutar la lista de comprobación de no normales (QRH / Abnormal Checklist) y verificar fuentes cruzadas.`,
+          `Ignorar la discrepancia y continuar la aproximación sin comprobar instrumentos de reserva (Standby).`,
+          `Desconectar de inmediato todos los generadores eléctricos principales.`,
+          `Declarar emergencia MAYDAY de forma automática sin analizar la naturaleza del fallo.`
+        ],
+        ans: 0,
+        exp: `La doctrina de Crew Resource Management (CRM) y los manuales de operaciones (FCOM) exigen verificación cruzada de fuentes de datos y seguimiento disciplinado del QRH.`
+      },
+      {
+        q: `¿Cuál de las siguientes condiciones invalida o restringe la operación prevista bajo el capítulo "${titleClean}"?`,
+        opts: [
+          `Superar los límites de viento cruzado o estar fuera de los parámetros de la Lista de Equipamiento Mínimo (MEL).`,
+          `Operar con tripulación que cumpla los períodos reglamentarios de descanso FTL en vigor.`,
+          `Disponer de combustible de reserva superior al mínimo legal requerido.`,
+          `Recibir una autorización directa (Direct To) por parte del control de aproximación.`
+        ],
+        ans: 0,
+        exp: `La inoperatividad de equipos esenciales según MEL o la superación de límites estructurales/ambientales prohíbe el despacho o continuación legal bajo ${subjectCode}.`
+      }
+    ];
+  }
+
+  // ═══════════════════════════════════════════════════════════════
+  //  MOTOR UNIFICADO DE EXAMEN: CAPÍTULOS AISLADOS Y SIMULADOR AESA
+  // ═══════════════════════════════════════════════════════════════
+  let quizMode = 'chapter'; // 'chapter' o 'official_exam'
   let quizTopicCode = null;
   let quizQuestions = [];
   let quizCurrentIdx = 0;
   let quizAnswered = false;
   let quizScore = 0;
+  let examTimeRemaining = 0;
+  let examTimerInterval = null;
 
   function shuffleArray(arr) {
     const a = [...arr];
@@ -3221,18 +3396,18 @@
     return a;
   }
 
-  function openQuiz(subjectCode) {
+  // Abre el test específico y aislado de UN SOLO CAPÍTULO
+  function openChapterQuiz(subjectCode, chapterNum, chapterTitle, topicId) {
+    if (examTimerInterval) { clearInterval(examTimerInterval); examTimerInterval = null; }
+    quizMode = 'chapter';
     quizTopicCode = subjectCode;
-    const bank = QUIZ_BANK[subjectCode];
-    if (!bank || bank.length === 0) {
-      alert(`AeroQuiz: Banco de preguntas para la asignatura ${subjectCode} próximamente disponible.`);
-      return;
-    }
-    
-    // 1. Shuffle and select up to 5 questions
-    const picked = shuffleArray(bank).slice(0, Math.min(5, bank.length));
 
-    // 2. Dynamically shuffle the 4 options [A, B, C, D] for each question so correct answer is random
+    const timerEl = document.getElementById('quiz-timer');
+    if (timerEl) timerEl.style.display = 'none';
+
+    const rawBank = getChapterQuestions(subjectCode, chapterNum, chapterTitle);
+    const picked = shuffleArray(rawBank).slice(0, Math.min(5, rawBank.length));
+
     quizQuestions = picked.map(qObj => {
       const originalCorrect = qObj.opts[qObj.ans];
       const shuffledOpts = shuffleArray(qObj.opts);
@@ -3241,7 +3416,9 @@
         q: qObj.q,
         opts: shuffledOpts,
         ans: newAnsIdx,
-        exp: qObj.exp
+        exp: qObj.exp,
+        chapterNum: chapterNum,
+        chapterTitle: chapterTitle
       };
     });
 
@@ -3249,7 +3426,6 @@
     quizAnswered = false;
     quizScore = 0;
 
-    // Reset view in modal
     const resultView = document.getElementById('quiz-result-view');
     if (resultView) resultView.style.display = 'none';
     const activeView = document.getElementById('quiz-active-view');
@@ -3259,10 +3435,129 @@
     document.getElementById('quiz-modal-overlay').classList.add('open');
   }
 
+  // Abre el Simulador de Examen Oficial AESA de toda la asignatura (Libros Maestros)
+  function openOfficialEasaExam(subjectCode) {
+    if (examTimerInterval) { clearInterval(examTimerInterval); examTimerInterval = null; }
+    quizMode = 'official_exam';
+    quizTopicCode = subjectCode;
+
+    const spec = EASA_OFFICIAL_SPECS[subjectCode] || { name: subjectCode, questions: 40, timeMin: 60, passPct: 75 };
+
+    // 1. Recopilar preguntas de todos los capítulos de esta asignatura
+    let pool = [];
+    if (window.ATPL_DATA && window.ATPL_DATA.topics) {
+      const subjectTopics = window.ATPL_DATA.topics.filter(t => t.subject_code === subjectCode);
+      subjectTopics.forEach(t => {
+        const cQuestions = getChapterQuestions(subjectCode, t.chapter_num, t.title);
+        cQuestions.forEach(q => {
+          pool.push({
+            ...q,
+            chapterNum: t.chapter_num,
+            chapterTitle: t.title
+          });
+        });
+      });
+    }
+
+    if (pool.length === 0) {
+      // Fallback a banco genérico si no hay topics
+      const cQuestions = getChapterQuestions(subjectCode, 1, spec.name);
+      pool = pool.concat(cQuestions);
+    }
+
+    // Barajar banco completo y tomar hasta el número oficial de preguntas o disponible
+    const targetCount = Math.min(spec.questions, Math.max(pool.length, 10));
+    const shuffledPool = shuffleArray(pool);
+
+    // Replicar o muestrear para cubrir el número si el pool fuera pequeño
+    let finalQuestions = [];
+    while (finalQuestions.length < targetCount && shuffledPool.length > 0) {
+      for (let item of shuffledPool) {
+        if (finalQuestions.length >= targetCount) break;
+        finalQuestions.push(item);
+      }
+    }
+
+    quizQuestions = finalQuestions.map(qObj => {
+      const originalCorrect = qObj.opts[qObj.ans];
+      const shuffledOpts = shuffleArray(qObj.opts);
+      const newAnsIdx = shuffledOpts.indexOf(originalCorrect);
+      return {
+        q: qObj.q,
+        opts: shuffledOpts,
+        ans: newAnsIdx,
+        exp: qObj.exp,
+        chapterNum: qObj.chapterNum || 1,
+        chapterTitle: qObj.chapterTitle || spec.name
+      };
+    });
+
+    quizCurrentIdx = 0;
+    quizAnswered = false;
+    quizScore = 0;
+
+    // Configurar temporizador oficial en cuenta regresiva
+    examTimeRemaining = spec.timeMin * 60; // segundos
+    const timerEl = document.getElementById('quiz-timer');
+    if (timerEl) {
+      timerEl.style.display = 'inline-block';
+      updateTimerDisplay();
+      examTimerInterval = setInterval(() => {
+        examTimeRemaining--;
+        updateTimerDisplay();
+        if (examTimeRemaining <= 0) {
+          clearInterval(examTimerInterval);
+          examTimerInterval = null;
+          alert('⏱️ ¡Tiempo oficial de examen agotado! Evaluando resultados...');
+          showQuizResults();
+        }
+      }, 1000);
+    }
+
+    const resultView = document.getElementById('quiz-result-view');
+    if (resultView) resultView.style.display = 'none';
+    const activeView = document.getElementById('quiz-active-view');
+    if (activeView) activeView.style.display = 'block';
+
+    showQuizQuestion();
+    document.getElementById('quiz-modal-overlay').classList.add('open');
+  }
+
+  function updateTimerDisplay() {
+    const timerEl = document.getElementById('quiz-timer');
+    if (!timerEl) return;
+    const m = Math.floor(examTimeRemaining / 60);
+    const s = examTimeRemaining % 60;
+    const mStr = m < 10 ? '0' + m : m;
+    const sStr = s < 10 ? '0' + s : s;
+    timerEl.textContent = `⏱️ ${mStr}:${sStr}`;
+    if (examTimeRemaining < 300) {
+      timerEl.style.color = '#ff7b72';
+      timerEl.style.borderColor = '#f85149';
+      timerEl.style.background = 'rgba(248,81,73,0.2)';
+    } else if (examTimeRemaining < 600) {
+      timerEl.style.color = '#f1e05a';
+      timerEl.style.borderColor = '#d29922';
+    } else {
+      timerEl.style.color = '#e3b341';
+      timerEl.style.borderColor = 'rgba(210,153,34,0.4)';
+    }
+  }
+
   function showQuizQuestion() {
     const q = quizQuestions[quizCurrentIdx];
     quizAnswered = false;
-    document.getElementById('quiz-subject-label').textContent = `⚡ AEROQUIZ ECQB — ${quizTopicCode}`;
+
+    const labelEl = document.getElementById('quiz-subject-label');
+    if (quizMode === 'official_exam') {
+      const spec = EASA_OFFICIAL_SPECS[quizTopicCode] || { name: quizTopicCode };
+      labelEl.textContent = `🎓 EXAMEN OFICIAL AESA — [${quizTopicCode}] ${spec.name}`;
+      labelEl.style.color = '#58a6ff';
+    } else {
+      labelEl.textContent = `⚡ AEROQUIZ ECQB — [${quizTopicCode}] Cap. ${q.chapterNum}: ${q.chapterTitle}`;
+      labelEl.style.color = '#e3b341';
+    }
+
     document.getElementById('quiz-counter').textContent = `${quizCurrentIdx + 1} / ${quizQuestions.length}`;
     document.getElementById('quiz-question').textContent = q.q;
 
@@ -3302,14 +3597,14 @@
     const expEl = document.getElementById('quiz-explanation');
     expEl.style.display = 'block';
     expEl.className = 'visible';
-    expEl.innerHTML = `<strong>✈️ Justificación Oficial EASA:</strong><br>${q.exp}`;
+    expEl.innerHTML = `<strong>✈️ Justificación Oficial EASA (Capítulo ${q.chapterNum}):</strong><br>${q.exp}`;
 
     const nextBtn = document.getElementById('quiz-next-btn');
     if (quizCurrentIdx < quizQuestions.length - 1) {
       nextBtn.textContent = 'Siguiente Pregunta →';
       nextBtn.style.display = 'block';
     } else {
-      nextBtn.textContent = '📊 Ver Calificación Final';
+      nextBtn.textContent = quizMode === 'official_exam' ? '📊 Finalizar y Calificar Examen Oficial' : '📊 Ver Calificación Final';
       nextBtn.style.display = 'block';
     }
   }
@@ -3324,6 +3619,10 @@
   }
 
   function showQuizResults() {
+    if (examTimerInterval) { clearInterval(examTimerInterval); examTimerInterval = null; }
+    const timerEl = document.getElementById('quiz-timer');
+    if (timerEl) timerEl.style.display = 'none';
+
     const activeView = document.getElementById('quiz-active-view');
     const resultView = document.getElementById('quiz-result-view');
     if (activeView) activeView.style.display = 'none';
@@ -3332,48 +3631,79 @@
     resultView.style.display = 'block';
     const total = quizQuestions.length;
     const pct = Math.round((quizScore / total) * 100);
-    const passed = pct >= 75; // EASA Official Passing Grade is 75%
+    const passed = pct >= 75; // Corte oficial EASA 75%
 
-    // Save score into pilot state
-    studiedScores[quizTopicCode] = { score: quizScore, total, percentage: pct, date: Date.now() };
-    saveActivePilotStateLocally();
-    registerPilotActivity(currentPilot);
+    // Si es examen oficial, actualizar la nota del libro maestro automáticamente
+    if (quizMode === 'official_exam') {
+      studiedScores[quizTopicCode] = pct.toString();
+      saveActivePilotStateLocally();
+      renderMasterGuides();
+      updateKPIs();
+      registerPilotActivity(currentPilot);
+    }
+
+    const titleText = (quizMode === 'official_exam') 
+      ? (passed ? '🎖️ ¡APROBADO OFICIAL EASA / AESA!' : '⚠️ SUSPENSO — REPASO REQUERIDO')
+      : (passed ? '🏆 ¡APTO EN EL CAPÍTULO!' : '⚠️ REPASO DEL CAPÍTULO REQUERIDO');
+
+    const descText = (quizMode === 'official_exam')
+      ? (passed 
+          ? `¡Enhorabuena, Comandante! Has superado la simulación oficial de la asignatura con un <strong>${pct}%</strong>. La calificación ha quedado registrada en tu panel de Libros Maestros.` 
+          : `Tu nota (<strong>${pct}%</strong>) no alcanza el 75% de corte reglamentario EASA. Te recomendamos repasar los capítulos débiles antes de presentarte a convocatoria oficial.`)
+      : (passed 
+          ? `Has superado con éxito las preguntas específicas de este capítulo.` 
+          : `No has alcanzado el 75% en este capítulo. Te recomendamos consultar el PDF o escuchar el Podcast correspondiente.`);
 
     resultView.innerHTML = `
       <div style="text-align:center; padding:15px 10px;">
-        <div style="font-size:36px; margin-bottom:8px;">${passed ? '🏆' : '⚠️'}</div>
-        <h3 style="margin:0 0 6px 0; color:var(--text-title); font-size:18px;">
-          ${passed ? '¡APTO OFICIAL EASA!' : 'NO APTO — REPASO REQUERIDO'}
+        <div style="font-size:40px; margin-bottom:8px;">${passed ? '🎖️' : '⚠️'}</div>
+        <h3 style="margin:0 0 6px 0; color:${passed ? '#56d364' : '#ff7b72'}; font-size:18px;">
+          ${titleText}
         </h3>
         <p style="color:var(--text-muted); font-size:12px; margin:0 0 16px 0;">
-          Asignatura: <strong>${quizTopicCode}</strong> · Corte oficial EASA: <strong>75%</strong>
+          Asignatura: <strong>[${quizTopicCode}]</strong> · Corte oficial EASA: <strong>75%</strong>
         </p>
 
-        <div style="display:inline-flex; align-items:baseline; gap:6px; background:${passed ? 'rgba(46,160,67,0.15)' : 'rgba(248,81,73,0.15)'}; border:1px solid ${passed ? '#2ea043' : '#f85149'}; padding:12px 24px; border-radius:12px; margin-bottom:18px;">
-          <span style="font-size:32px; font-weight:800; color:${passed ? '#56d364' : '#ff7b72'};">${pct}%</span>
+        <div style="display:inline-flex; align-items:baseline; gap:8px; background:${passed ? 'rgba(46,160,67,0.15)' : 'rgba(248,81,73,0.15)'}; border:1px solid ${passed ? '#2ea043' : '#f85149'}; padding:14px 28px; border-radius:14px; margin-bottom:18px;">
+          <span style="font-size:36px; font-weight:800; color:${passed ? '#56d364' : '#ff7b72'};">${pct}%</span>
           <span style="font-size:14px; color:var(--text-muted); font-weight:600;">(${quizScore} de ${total} aciertos)</span>
         </div>
 
-        <p style="font-size:12px; color:var(--text-main); max-width:400px; margin:0 auto 20px auto; line-height:1.5;">
-          ${passed 
-            ? '¡Excelente rendimiento de vuelo! Has superado holgadamente el porcentaje de corte EASA de esta asignatura.' 
-            : 'Tu puntuación ha quedado por debajo del 75% mínimo de examen EASA. Te recomendamos repasar el Libro Maestro o escuchar el Podcast antes de volver a examinarte.'}
+        <p style="font-size:12.5px; color:var(--text-main); max-width:440px; margin:0 auto 22px auto; line-height:1.5;">
+          ${descText}
         </p>
 
         <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
-          <button type="button" class="btn-sync-action" onclick="openQuiz('${quizTopicCode}')" style="background:#238636; border-color:#2ea043; padding:10px 18px; font-size:13px; font-weight:700; border-radius:8px;">
-            🔄 Repetir Test (Nuevas Preguntas)
-          </button>
-          <button type="button" class="btn-sync-action" onclick="closeQuiz()" style="background:var(--bg-card); border-color:var(--border-color); color:var(--text-main); padding:10px 18px; font-size:13px; border-radius:8px;">
-            ✕ Salir al Flight Deck
+          ${quizMode === 'official_exam' ? `
+            <button type="button" class="btn-sync-action" onclick="openOfficialEasaExam('${quizTopicCode}')" style="background:#238636; border-color:#2ea043; padding:10px 18px; font-size:13px; font-weight:700; border-radius:8px;">
+              🔄 Repetir Examen Oficial (Nuevas Preguntas)
+            </button>
+          ` : `
+            <button type="button" class="btn-sync-action" onclick="openChapterQuiz('${quizTopicCode}', ${quizQuestions[0]?.chapterNum || 1}, '${(quizQuestions[0]?.chapterTitle || '').replace(/'/g, "\\'")}')" style="background:#238636; border-color:#2ea043; padding:10px 18px; font-size:13px; font-weight:700; border-radius:8px;">
+              🔄 Repetir Test de este Capítulo
+            </button>
+          `}
+          <button type="button" class="btn-sync-action" onclick="closeQuiz(true)" style="background:var(--bg-card); border-color:var(--border-color); color:var(--text-main); padding:10px 18px; font-size:13px; border-radius:8px;">
+            ✕ Volver al Panel
           </button>
         </div>
       </div>
     `;
   }
 
+  // Compatibilidad con invocaciones previas
+  function openQuiz(subjectCode) {
+    openOfficialEasaExam(subjectCode);
+  }
+
   function closeQuiz(e) {
-    if (!e || e.target === document.getElementById('quiz-modal-overlay')) {
+    if (!e || e === true || e.target === document.getElementById('quiz-modal-overlay')) {
+      if (examTimerInterval) {
+        clearInterval(examTimerInterval);
+        examTimerInterval = null;
+      }
+      const timerEl = document.getElementById('quiz-timer');
+      if (timerEl) timerEl.style.display = 'none';
       document.getElementById('quiz-modal-overlay').classList.remove('open');
     }
   }

@@ -1161,6 +1161,11 @@
           <span class="sync-indicator" id="header-sync-status" title="Sincronizado con la Nube">🟢</span>
         </button>
 
+        <!-- Master Telemetry Quick Capsule (Only shown for EC-CHOZAS) -->
+        <button id="header-telemetry-btn" class="header-capsule" onclick="openPilotModal(); setTimeout(loadMasterPilotDirectory, 100);" style="display:none; background: rgba(35,134,54,0.15); border-color: #2ea043; color: #56d364;" title="Ver Telemetría de Cadetes en Tiempo Real">
+          📋 Telemetría <span id="header-cadets-count-badge" style="font-size:10px; background:#2ea043; color:#fff; padding:1px 6px; border-radius:10px; font-weight:700; margin-left:4px;">0</span>
+        </button>
+
         <!-- Theme Selector (Day / Night) -->
         <button class="header-capsule theme-capsule" onclick="cycleTheme()" id="theme-btn" title="Alternar Modo Claro / Oscuro">
           ☀️ Día
@@ -1298,8 +1303,7 @@
     //  SISTEMA DE PILOTOS, SINCRONIZACIÓN Y TEMAS (DÍA / NOCHE) — v0.9.0
     // ═══════════════════════════════════════════════════════════════
     const DEFAULT_PILOT = 'CADETE INVITADO';
-    const CLOUD_SYNC_ENDPOINT = 'https://api.restful-api.dev/objects';
-    const MASTER_DIRECTORY_CLOUD_ID = 'ff808181a067127101a092d48b727ce6';
+    const TELEMETRY_TOPIC_URL = 'https://ntfy.sh/atpl-flight-deck-telemetry-ecchozas-2026';
 
     let cloudPushTimeout = null;
     let directoryPushTimeout = null;
@@ -1307,8 +1311,8 @@
 
     const urlParams = new URLSearchParams(window.location.search);
 
-    // 1. Check Master unlock parameter (?master=1 or ?pilot=EC-CHOZAS)
-    if (urlParams.has('master') || urlParams.get('pilot') === 'EC-CHOZAS') {
+    // 1. If opening with ?master=1 or ?pilot=EC-CHOZAS, immediately set Master
+    if (urlParams.has('master') || urlParams.get('pilot') === 'EC-CHOZAS' || urlParams.get('admin') === '1') {
       localStorage.setItem('atpl_active_pilot', 'EC-CHOZAS');
       localStorage.setItem('atpl_master_verified', 'true');
       localStorage.setItem('atpl_flight_authorized', 'true');
@@ -1324,9 +1328,10 @@
       localStorage.setItem('atpl_master_verified', 'true');
     }
 
-    // 4. Invite links: ONLY initialize as PILOTO INVITADO if no pilot was ever saved
+    // 4. Invite links only set PILOTO INVITADO if no pilot has ever been saved
+    // (Never demote EC-CHOZAS or custom cadet names like ALEX)
     if (urlParams.has('invite') || urlParams.has('guest')) {
-      if (!currentPilot || (currentPilot === 'EC-CHOZAS' && localStorage.getItem('atpl_master_verified') !== 'true')) {
+      if (!currentPilot) {
         currentPilot = 'PILOTO INVITADO';
         localStorage.setItem('atpl_active_pilot', currentPilot);
       }
@@ -1339,9 +1344,7 @@
     }
 
     function isMasterPilot() {
-      const isEcChozas = (currentPilot || '').trim().toUpperCase() === 'EC-CHOZAS';
-      const isVerified = localStorage.getItem('atpl_master_verified') === 'true' || window.location.protocol === 'file:';
-      return isEcChozas && isVerified;
+      return (currentPilot || '').trim().toUpperCase() === 'EC-CHOZAS';
     }
 
     let pilotCloudIds = JSON.parse(localStorage.getItem('atpl_pilot_cloud_ids')) || {};
@@ -1440,8 +1443,14 @@
       const masterDirBox = document.getElementById('master-pilot-directory-box');
       if (masterDirBox) masterDirBox.style.display = isMaster ? 'block' : 'none';
 
+      const headerTelem = document.getElementById('header-telemetry-btn');
+      if (headerTelem) headerTelem.style.display = isMaster ? 'inline-flex' : 'none';
+
       const devSwitchBox = document.getElementById('dev-pilot-switch-box');
       if (devSwitchBox) devSwitchBox.style.display = isMaster ? 'block' : 'none';
+
+      const switchToMasterBox = document.getElementById('switch-to-master-btn-box');
+      if (switchToMasterBox) switchToMasterBox.style.display = isMaster ? 'none' : 'block';
 
       const pilotSelect = document.getElementById('pilot-select');
       if (pilotSelect && isMaster && typeof updatePilotSelectOptions === 'function') {
@@ -1634,13 +1643,16 @@
 
     // ─── PILOT MODAL & DEVELOPER MANAGEMENT ───
     function openPilotModal() {
+      // 1. Force update of role badge, descriptions and box visibility
+      loadActivePilotState();
+
       const devNameInput = document.getElementById('dev-pilot-name-input');
       if (devNameInput) devNameInput.value = currentPilot;
       document.querySelectorAll('.active-pilot-label').forEach(el => el.textContent = currentPilot);
 
       refreshShareUrlInputs();
       if (isMasterPilot()) {
-        updatePilotSelectOptions();
+        if (typeof updatePilotSelectOptions === 'function') updatePilotSelectOptions();
         loadMasterPilotDirectory();
       }
 
@@ -1648,6 +1660,25 @@
       if (overlay) {
         overlay.style.display = 'flex';
         overlay.classList.add('open');
+      }
+    }
+
+    function activateMasterMode() {
+      const pin = prompt('🔒 Introduce el PIN de vuelo para activar el perfil de Comandante Master (EC-CHOZAS):', 'ATPL-2026');
+      if (!pin) return;
+      if (pin.trim().toUpperCase() === getFlightPin().toUpperCase()) {
+        currentPilot = 'EC-CHOZAS';
+        localStorage.setItem('atpl_active_pilot', 'EC-CHOZAS');
+        localStorage.setItem('atpl_master_verified', 'true');
+        localStorage.setItem('atpl_flight_authorized', 'true');
+        loadActivePilotState();
+        updateKPIs();
+        renderTopics();
+        renderMasterGuides();
+        loadMasterPilotDirectory();
+        showToastNotification('👑 ¡Modo Comandante Master EC-CHOZAS activado con éxito!');
+      } else {
+        showToastNotification('❌ PIN incorrecto.');
       }
     }
 
@@ -1680,66 +1711,27 @@
       const topicsCount = studiedTopics.length;
       const scoresCount = Object.keys(studiedScores).length;
 
-      registered[cleanName] = {
-        name: cleanName,
+      const cadetData = {
+        pilot: cleanName,
         role: role,
         topicsCount: topicsCount,
         scoresCount: scoresCount,
         device: getDeviceType(),
         lastActive: new Date().toISOString()
       };
+
+      registered[cleanName] = cadetData;
       localStorage.setItem('atpl_registered_pilots', JSON.stringify(registered));
 
-      // Push to shared cloud directory with read-merge-write
+      // Publicar telemetría en tiempo real a ntfy.sh (sin límites de 50 peticiones/día)
       clearTimeout(directoryPushTimeout);
       directoryPushTimeout = setTimeout(() => {
-        pushDirectoryToCloud(registered);
-      }, 1500);
-    }
-
-    async function pushDirectoryToCloud(localDirectory = {}, deletePilotName = null) {
-      try {
-        let remotePilots = {};
-        // 1. Fetch remote directory first to prevent wiping out other cadets
-        try {
-          const res = await fetch(`${CLOUD_SYNC_ENDPOINT}/${MASTER_DIRECTORY_CLOUD_ID}`);
-          if (res.ok) {
-            const json = await res.json();
-            if (json && json.data && json.data.pilots) {
-              remotePilots = json.data.pilots;
-            }
-          }
-        } catch (e) {
-          console.log('Using local directory base for cloud sync:', e);
-        }
-
-        // 2. Merge remote with local
-        let merged = { ...remotePilots, ...localDirectory };
-
-        // 3. Delete specific pilot if requested by Master or on rename
-        if (deletePilotName && merged[deletePilotName]) {
-          delete merged[deletePilotName];
-        }
-
-        // Cache merged locally
-        localStorage.setItem('atpl_registered_pilots', JSON.stringify(merged));
-
-        // 4. PUT merged object back to cloud
-        const payload = {
-          name: 'ATPL_PILOT_DIRECTORY',
-          data: {
-            pilots: merged,
-            updatedAt: Date.now()
-          }
-        };
-        await fetch(`${CLOUD_SYNC_ENDPOINT}/${MASTER_DIRECTORY_CLOUD_ID}`, {
-          method: 'PUT',
+        fetch(TELEMETRY_TOPIC_URL, {
+          method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-      } catch (err) {
-        console.log('Pilot directory sync error (silent):', err);
-      }
+          body: JSON.stringify(cadetData)
+        }).catch(err => console.log('Telemetry send silent:', err));
+      }, 800);
     }
 
     async function deleteCadetFromDirectory(pilotName) {
@@ -1750,13 +1742,21 @@
       if (!confirm(`¿Estás seguro de que deseas eliminar al cadete "${pilotName}" de la telemetría de flota?`)) {
         return;
       }
+      let deletedCadets = JSON.parse(localStorage.getItem('atpl_deleted_cadets')) || [];
+      if (!deletedCadets.includes(pilotName)) deletedCadets.push(pilotName);
+      localStorage.setItem('atpl_deleted_cadets', JSON.stringify(deletedCadets));
+
       let registered = JSON.parse(localStorage.getItem('atpl_registered_pilots')) || {};
-      if (registered[pilotName]) {
-        delete registered[pilotName];
-        localStorage.setItem('atpl_registered_pilots', JSON.stringify(registered));
-      }
-      showToastNotification(`⏳ Eliminando cadete "${pilotName}" de la nube...`);
-      await pushDirectoryToCloud({}, pilotName);
+      delete registered[pilotName];
+      localStorage.setItem('atpl_registered_pilots', JSON.stringify(registered));
+
+      showToastNotification(`⏳ Eliminando cadete "${pilotName}"...`);
+      fetch(TELEMETRY_TOPIC_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ delete: pilotName })
+      }).catch(() => {});
+
       await loadMasterPilotDirectory();
       showToastNotification(`🗑️ Cadete "${pilotName}" eliminado con éxito.`);
     }
@@ -1766,29 +1766,63 @@
       const countBadge = document.getElementById('master-cadets-count');
       if (!container) return;
 
-      container.innerHTML = '<div style="font-size:12px; color:var(--text-muted); padding:10px 0; text-align:center;">🔄 Conectando con telemetría de cadetes en la nube...</div>';
+      container.innerHTML = '<div style="font-size:12px; color:var(--text-muted); padding:10px 0; text-align:center;">🔄 Conectando con telemetría de cadetes en tiempo real...</div>';
 
       let pilotsMap = JSON.parse(localStorage.getItem('atpl_registered_pilots')) || {};
+      let deletedCadets = JSON.parse(localStorage.getItem('atpl_deleted_cadets')) || [];
+
+      // Always show Master at the top
+      pilotsMap['EC-CHOZAS'] = {
+        name: 'EC-CHOZAS',
+        role: 'MASTER',
+        topicsCount: studiedTopics.length,
+        scoresCount: Object.keys(studiedScores).length,
+        device: getDeviceType(),
+        lastActive: new Date().toISOString()
+      };
 
       try {
-        const res = await fetch(`${CLOUD_SYNC_ENDPOINT}/${MASTER_DIRECTORY_CLOUD_ID}`);
+        const res = await fetch(`${TELEMETRY_TOPIC_URL}/json?poll=1&since=all`);
         if (res.ok) {
-          const json = await res.json();
-          if (json && json.data && json.data.pilots) {
-            pilotsMap = { ...pilotsMap, ...json.data.pilots };
-            localStorage.setItem('atpl_registered_pilots', JSON.stringify(pilotsMap));
-          }
+          const text = await res.text();
+          const lines = text.trim().split('\n');
+          lines.forEach(l => {
+            if (!l.trim()) return;
+            try {
+              const item = JSON.parse(l);
+              if (item.message) {
+                const payload = JSON.parse(item.message);
+                if (payload.delete) {
+                  delete pilotsMap[payload.delete];
+                  if (!deletedCadets.includes(payload.delete)) deletedCadets.push(payload.delete);
+                } else if (payload.pilot && payload.pilot !== 'EC-CHOZAS' && !deletedCadets.includes(payload.pilot)) {
+                  pilotsMap[payload.pilot] = {
+                    name: payload.pilot,
+                    role: payload.role || 'CADETE',
+                    topicsCount: payload.topicsCount || 0,
+                    scoresCount: payload.scoresCount || 0,
+                    device: payload.device || 'Dispositivo Web',
+                    lastActive: payload.lastActive || new Date((item.time || 0) * 1000).toISOString()
+                  };
+                }
+              }
+            } catch (e) {}
+          });
+          localStorage.setItem('atpl_registered_pilots', JSON.stringify(pilotsMap));
+          localStorage.setItem('atpl_deleted_cadets', JSON.stringify(deletedCadets));
         }
       } catch (err) {
         console.log('Using local directory cache:', err);
       }
 
-      const pilotKeys = Object.keys(pilotsMap);
+      const pilotKeys = Object.keys(pilotsMap).filter(k => !deletedCadets.includes(k));
       const cadetsOnly = pilotKeys.filter(k => k !== 'EC-CHOZAS');
       if (countBadge) countBadge.textContent = `${cadetsOnly.length} Cadete${cadetsOnly.length === 1 ? '' : 's'}`;
+      const headerBadge = document.getElementById('header-cadets-count-badge');
+      if (headerBadge) headerBadge.textContent = cadetsOnly.length.toString();
 
-      if (pilotKeys.length === 0) {
-        container.innerHTML = '<div style="font-size:12px; color:var(--text-muted); padding:10px 0; text-align:center;">No hay cadetes registrados aún. Comparte tu enlace oficial.</div>';
+      if (pilotKeys.length <= 1 && cadetsOnly.length === 0) {
+        container.innerHTML = '<div style="font-size:12px; color:var(--text-muted); padding:10px 0; text-align:center;">🟢 Conexión activa. No hay cadetes registrados aún. Comparte tu enlace con PIN.</div>';
         return;
       }
 
@@ -1909,19 +1943,14 @@
       if (oldPilot && oldPilot !== currentPilot) {
         let registered = JSON.parse(localStorage.getItem('atpl_registered_pilots')) || {};
         delete registered[oldPilot];
-        registered[currentPilot] = {
-          name: currentPilot,
-          role: currentPilot === 'EC-CHOZAS' ? 'MASTER' : 'CADETE',
-          topicsCount: studiedTopics.length,
-          scoresCount: Object.keys(studiedScores).length,
-          device: getDeviceType(),
-          lastActive: new Date().toISOString()
-        };
         localStorage.setItem('atpl_registered_pilots', JSON.stringify(registered));
-        pushDirectoryToCloud(registered, oldPilot);
-      } else {
-        registerPilotActivity(currentPilot);
+        fetch(TELEMETRY_TOPIC_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ delete: oldPilot })
+        }).catch(() => {});
       }
+      registerPilotActivity(currentPilot);
 
       showToastNotification(`✅ ¡Nombre actualizado a: ${currentPilot}!`);
     }
@@ -2809,7 +2838,13 @@
             <input type="text" id="dev-pilot-name-input" value="EC-CHOZAS" placeholder="Tu nombre o Call Sign (ej: PILOT-CARLOS)" style="flex:1; padding:9px 12px; background:var(--bg-card); border:1px solid var(--border-color); color:var(--text-main); border-radius:8px; font-weight:700; font-size:13px; outline:none;">
             <button type="button" class="btn-sync-action" onclick="saveDeveloperPilotName()" style="background:#238636; border-color:#2ea043; white-space:nowrap;" title="Guardar nuevo nombre y migrar progreso">💾 Guardar Nombre</button>
           </div>
-          <p class="pilot-sync-desc" id="sync-timestamp-label" style="margin-top:8px;">🟢 Sincronizado en la nube (Mac, iPad, iPhone, Android)</p>
+          <!-- Botón de cambio rápido para el Comandante EC-CHOZAS -->
+          <div id="switch-to-master-btn-box" style="margin-top: 10px; display: none;">
+            <button type="button" onclick="activateMasterMode()" style="width:100%; padding:10px 14px; background:linear-gradient(135deg, rgba(210,153,34,0.2), rgba(210,153,34,0.08)); border:1px solid #d29922; color:#f1e05a; font-weight:700; font-size:12px; border-radius:8px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; touch-action:manipulation;">
+              👑 ¿Eres el Comandante EC-CHOZAS? Activar Modo Master
+            </button>
+          </div>
+          <p class="pilot-sync-desc" id="sync-timestamp-label" style="margin-top:8px;">🟢 Sincronización continua de estudio activa</p>
         </div>
 
         <!-- Sección 2A: PANEL MASTER EXCLUSIVO (Solo visible para EC-CHOZAS) -->
@@ -2878,8 +2913,8 @@
               <strong style="color:var(--pass-green); font-size:13px;">📋 Telemetría de Cadetes Registrados</strong>
               <span id="master-cadets-count" style="font-size:11px; background:rgba(46,160,67,0.15); color:#56d364; padding:2px 6px; border-radius:6px; font-weight:700; margin-left:6px;">0 Cadetes</span>
             </div>
-            <button type="button" class="btn-sync-action" onclick="loadMasterPilotDirectory()" style="padding:4px 10px; font-size:11px; background:rgba(46,160,67,0.2); border-color:#2ea043; color:#56d364; touch-action:manipulation;">
-              🔄 Actualizar
+            <button type="button" class="btn-sync-action" onclick="loadMasterPilotDirectory()" style="padding:6px 14px; font-size:12px; font-weight:700; background:#238636; border-color:#2ea043; color:#fff; display:inline-flex; align-items:center; gap:6px; touch-action:manipulation; box-shadow:0 2px 6px rgba(0,0,0,0.3);">
+              🔄 Refrescar Telemetría
             </button>
           </div>
           <p style="font-size:11px; color:var(--text-muted); margin-bottom:10px;">
@@ -2895,11 +2930,8 @@
           <h4 style="font-size:13px; font-weight:700; color:var(--text-title); margin-bottom:4px;">🍏 Sincronización Multi-Dispositivo (iCloud / Nube)</h4>
           <p style="font-size:12px; color:var(--text-muted); margin-bottom:10px;">Sincroniza tus progresos en tiempo real entre iPhone, Mac, iPad o Android:</p>
           <div class="icloud-btns-row" style="display:flex; gap:8px; flex-wrap:wrap;">
-            <button type="button" class="btn-sync-action" onclick="forceSyncCloud()" style="flex:1; min-width:140px; justify-content:center; display:inline-flex; align-items:center; gap:4px; touch-action:manipulation;">
-              🔄 Sincronizar Ahora
-            </button>
             <button type="button" class="btn-icloud export" onclick="exportProgressToICloud()" style="flex:1; min-width:140px; justify-content:center; touch-action:manipulation;">
-              📥 Guardar Respaldo
+              📥 Guardar Respaldo JSON
             </button>
             <button type="button" class="btn-icloud import" onclick="document.getElementById('icloud-file-input').click()" style="flex:1; min-width:140px; justify-content:center; touch-action:manipulation;">
               📤 Restaurar Respaldo

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'atpl-flightdeck-v1.0';
+const CACHE_NAME = 'atpl-flightdeck-v1.1';
 const STATIC_ASSETS = [
   './',
   './index.html',
@@ -86,4 +86,20 @@ self.addEventListener('message', (event) => {
       }
     });
   }
+});
+
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  event.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
+      for (const client of clientList) {
+        if ('focus' in client) {
+          return client.focus();
+        }
+      }
+      if (clients.openWindow) {
+        return clients.openWindow('./');
+      }
+    })
+  );
 });

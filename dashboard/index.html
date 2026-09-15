@@ -1267,7 +1267,7 @@
       <div class="brand">
         <div class="brand-icon" style="padding: 0; overflow: hidden; border: 1px solid rgba(88, 166, 255, 0.4); background: #012349;"><img src="apple-touch-icon-180x180.png" alt="ATPL Pilot" style="width: 100%; height: 100%; object-fit: cover; border-radius: 9px; display: block;"></div>
         <div class="brand-text">
-          <h1>ATPL Flight Deck & Study Control <span class="badge-beta" id="version-badge">v1.0.0</span></h1>
+          <h1>ATPL Flight Deck & Study Control <span class="badge-beta" id="version-badge">v1.1.0 EFB</span></h1>
           <p>Preparación EASA Modular Oficial | Sistema adaptado a turnos de 12h</p>
         </div>
       </div>
@@ -1314,6 +1314,7 @@
       </button>
       <button type="button" class="cockpit-tab-btn" onclick="switchCockpitTab('hangar')" id="cockpit-tab-hangar">
         <span>🎯</span> Caja Negra & Retos
+        <span id="daily-tab-dot" style="display: none; width: 8px; height: 8px; background: #f85149; border-radius: 50%; margin-left: 6px; box-shadow: 0 0 6px #f85149;" title="Desafío diario pendiente"></span>
       </button>
       <button type="button" class="cockpit-tab-btn" onclick="switchCockpitTab('herramientas')" id="cockpit-tab-herramientas">
         <span>🧭</span> Simuladores & METAR
@@ -1327,6 +1328,20 @@
          MODO 1: CABINA DE ESTUDIO (DASHBOARD ACTUAL 100% INTACTO)
     ═══════════════════════════════════════════════════════════ -->
     <div id="view-estudio">
+    <!-- BANNER ALERTA: DESAFÍO DIARIO PENDIENTE -->
+    <div id="daily-challenge-alert-banner" style="display: none; background: linear-gradient(90deg, rgba(210,153,34,0.22), rgba(210,153,34,0.06)); border: 1px solid #d29922; border-radius: 12px; padding: 12px 18px; margin-bottom: 18px; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <span style="font-size: 22px;">⚡</span>
+        <div>
+          <div style="font-size: 13px; font-weight: 800; color: #f1e05a;">¡Desafío Diario ATPL de Hoy Pendiente!</div>
+          <div style="font-size: 11px; color: var(--text-muted);">Tienes una nueva pregunta oficial disponible para mantener tu racha activa. Se renueva cada noche a las 00:00.</div>
+        </div>
+      </div>
+      <button type="button" onclick="switchCockpitTab('hangar')" style="padding: 7px 16px; background: #d29922; color: #0d1117; font-weight: 800; font-size: 12px; border: none; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px; touch-action: manipulation;">
+        <span>🎯</span> Resolver Reto Ahora
+      </button>
+    </div>
+
     <!-- AviationExam Safety Scale -->
     <div class="aviation-box">
       <div>
@@ -1442,7 +1457,10 @@
             <p style="margin: 2px 0 0 0; font-size: 12px; color: var(--text-muted);">Una pregunta oficial de examen cada 24h para toda la flota de cadetes</p>
           </div>
         </div>
-        <div style="display: flex; align-items: center; gap: 8px;">
+        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+          <button type="button" id="btn-daily-notify-toggle" onclick="toggleDailyChallengeNotifications()" style="padding: 6px 12px; background: #21262d; border: 1px solid #30363d; color: #8b949e; font-size: 11px; font-weight: 700; border-radius: 10px; cursor: pointer; display: flex; align-items: center; gap: 6px; touch-action: manipulation;" title="Activar avisos si tienes el reto del día pendiente">
+            <span id="daily-notify-icon">🔔</span> <span id="daily-notify-text">Activar Avisos</span>
+          </button>
           <span class="badge-beta" id="daily-streak-badge" style="background: rgba(210,153,34,0.25); color: #f1e05a; border-color: #d29922; font-weight: 800; font-size: 13px; padding: 6px 14px; border-radius: 12px;">
             ⚡ Racha: 1 día
           </span>
@@ -1726,6 +1744,20 @@
         <div style="width: 100%; height: 8px; background: #21262d; border-radius: 6px; overflow: hidden;">
           <div id="logbook-progress-fill" style="width: 0%; height: 100%; background: linear-gradient(90deg, #1f6feb, #3fb950); transition: width 0.4s ease;"></div>
         </div>
+      </div>
+
+      <!-- CONTROL MASTER: REINICIO DE TIEMPO / RESET LOGBOOK -->
+      <div id="master-logbook-reset-box" style="display: none; margin-top: 16px; padding: 14px 18px; background: rgba(248,81,73,0.08); border: 1px dashed rgba(248,81,73,0.35); border-radius: 12px; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 22px;">⏱️</span>
+          <div>
+            <div style="font-size: 13px; font-weight: 800; color: #ff7b72;">Control de Comandante Master: Reiniciar Horas de Estudio</div>
+            <div style="font-size: 11px; color: var(--text-muted);">¿Un alumno dejó el audio corriendo por error o acumuló horas indebidas? Pulsa aquí para restablecer el tiempo a 0h 00m.</div>
+          </div>
+        </div>
+        <button type="button" onclick="masterResetCurrentStudyTime()" style="padding: 8px 16px; background: rgba(248,81,73,0.2); border: 1px solid #f85149; color: #ff7b72; font-weight: 800; font-size: 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px; touch-action: manipulation;">
+          <span>⏱️</span> Reiniciar Tiempo a 0h 00m
+        </button>
       </div>
     </div>
 
@@ -2325,6 +2357,9 @@
                 </div>
               </div>
               ${(!isM && isMasterPilot()) ? `
+                <button type="button" onclick="masterResetCadetTime('${p.name.replace(/'/g, "\\'")}')" title="Reiniciar tiempo/horas de estudio de este alumno a 0" style="background:rgba(210,153,34,0.15); border:1px solid rgba(210,153,34,0.35); color:#f1e05a; padding:5px 8px; border-radius:6px; cursor:pointer; font-size:12px; touch-action:manipulation;">
+                  ⏱️
+                </button>
                 <button type="button" onclick="deleteCadetFromDirectory('${p.name.replace(/'/g, "\\'")}')" title="Eliminar cadete de la telemetría" style="background:rgba(248,81,73,0.15); border:1px solid rgba(248,81,73,0.35); color:#ff7b72; padding:5px 8px; border-radius:6px; cursor:pointer; font-size:12px; touch-action:manipulation;">
                   🗑️
                 </button>
@@ -3688,6 +3723,11 @@
     if (fillEl) fillEl.style.width = `${pct}%`;
     if (pctEl) pctEl.textContent = `${pct}% (${topicsCount}/168 temas)`;
 
+    const masterResetBox = document.getElementById('master-logbook-reset-box');
+    if (masterResetBox) {
+      masterResetBox.style.display = isMasterPilot() ? 'flex' : 'none';
+    }
+
     if (rankEl) {
       if (pct >= 85) {
         rankEl.textContent = '🥇 Frozen ATPL Candidate';
@@ -3812,17 +3852,41 @@
     document.getElementById('quiz-modal-overlay').classList.add('open');
   }
 
-  // 6. DESAFÍO DIARIO ATPL (1 PREGUNTA AL DÍA)
+  // 6. DESAFÍO DIARIO ATPL (RENOVACIÓN 00:00 LOCAL + NOTIFICACIONES + RESET MASTER)
   const DAILY_QUESTIONS_POOL = [
     { s: "081 Principles of Flight", q: "¿Cómo se define la velocidad VMO en un avión de transporte a reacción?", opts: ["Maximum Operating Limit Speed en nudos CAS", "Design Cruising Speed para cálculos de ráfagas", "Minimum Takeoff Safety Speed con un motor inoperativo", "Maximum Flap Extended Speed con slats extendidos"], ans: 0, exp: "VMO es la velocidad máxima operativa en CAS para evitar flutter y cargas estructurales excesivas." },
     { s: "050 Meteorología", q: "¿Qué fenómeno meteorológico se asocia característicamente con el paso de un frente frío activo?", opts: ["Nubes cumulonimbus con turbulencia severa y chubascos fuertes", "Estratos continuos con niebla engelante extensa", "Altostratos con lluvia suave y persistente durante días", "Cielo despejado con inversión térmica a baja cota"], ans: 0, exp: "El aire frío empuja al cálido hacia arriba provocando nubes de gran desarrollo vertical y ráfagas." },
     { s: "010 Air Law", q: "¿Qué derecho confiere la Primera Libertad del Aire según el Convenio de Chicago?", opts: ["El derecho a sobrevolar el territorio de otro Estado sin aterrizar", "El derecho a aterrizar para fines no comerciales", "El derecho a desembarcar pasajeros procedentes del Estado de matrícula", "El derecho a embarcar pasajeros con destino a un tercer Estado"], ans: 0, exp: "La Primera Libertad es el sobrevuelo pacífico sin escala técnica ni comercial." },
-    { s: "062 Radio Navegación", q: "¿Cuál es la frecuencia de referencia del sistema VOR Doppler para la señal omnidireccional?", opts: ["30 Hz modulada en FM en la subportadora de 9960 Hz", "1020 Hz modulada en AM para identificación Morse", "135 kHz para cálculo de desfase de azimut", "300 MHz para la trayectoria de planeo del ILS"], ans: 0, exp: "El VOR emite una señal de 30 Hz de referencia y otra variable para medir la fase y obtener el radial." }
+    { s: "062 Radio Navegación", q: "¿Cuál es la frecuencia de referencia del sistema VOR Doppler para la señal omnidireccional?", opts: ["30 Hz modulada en FM en la subportadora de 9960 Hz", "1020 Hz modulada en AM para identificación Morse", "135 kHz para cálculo de desfase de azimut", "300 MHz para la trayectoria de planeo del ILS"], ans: 0, exp: "El VOR emite una señal de 30 Hz de referencia y otra variable para medir la fase y obtener el radial." },
+    { s: "021 AGK Sistemas", q: "¿Cuál es la función principal de la Crossfeed Valve en el sistema de combustible de un bimotor?", opts: ["Permitir alimentar cualquier motor desde cualquier depósito del avión", "Drenar automáticamente el agua decantada en los tanques alares", "Inyectar aditivo anticongelante al circuito de alta presión", "Presurizar el depósito central mediante aire sangrado del compresor"], ans: 0, exp: "La válvula de alimentación cruzada (Crossfeed) permite equilibrar pesos o alimentar un motor desde el lado opuesto." },
+    { s: "022 AGK Instrumentos", q: "¿Qué instrumento giroscópico está sujeto al error de precesión aparente debida a la rotación terrestre?", opts: ["El indicador direccional giroscópico (Directional Gyro / DG)", "El variómetro neumático de cápsula manométrica", "El altímetro barométrico con ajuste QNH", "El indicador de ángulo de ataque con sensor de veleta"], ans: 0, exp: "Debido a que la Tierra gira a 15°/hora, un giróscopo libre mantendrá su posición en el espacio, derivando relativamente respecto a la Tierra (15° × sen(latitud) por hora)." },
+    { s: "031 Masa y Centrado", q: "¿Cómo afecta al consumo de combustible y a la velocidad un centro de gravedad (CG) situado en su límite delantero?", opts: ["Aumenta la resistencia aerodinámica por mayor sustentación negativa de cola, reduciendo la velocidad", "Reduce el consumo al incrementar el momento de cabeceo a picar", "No tiene impacto medible en crucero comercial de largo radio", "Disminuye la velocidad de pérdida del avión"], ans: 0, exp: "Un CG delantero requiere más sustentación negativa en el estabilizador horizontal, aumentando el peso aparente y la resistencia inducida." },
+    { s: "032 Rendimiento (Performance)", q: "¿Cómo se define la velocidad V1 en el despegue de un avión comercial?", opts: ["Velocidad de decisión de despegue: la acción de abortar debe haberse iniciado antes o en V1", "Velocidad a la que el avión despega las ruedas principales del suelo", "Velocidad mínima de control en el aire con motor crítico fallado (VMCA)", "Velocidad para alcanzar 35 pies de altura sobre la pista"], ans: 0, exp: "V1 es la velocidad máxima a la que el piloto puede tomar la primera acción para detener el avión dentro de la distancia disponible." },
+    { s: "033 Planificación de Vuelo", q: "¿Qué porcentaje de reserva de contingencia (Contingency Fuel) exige por defecto la normativa EASA CAT.OP?", opts: ["El 5% del combustible de viaje presupuestado o 5 minutos a velocidad de espera", "El 15% del combustible de viaje más 45 minutos de reserva final", "El 10% obligatorio sin importar la ruta ni los aeropuertos alternativos", "Exactamente 30 minutos a nivel de crucero"], ans: 0, exp: "EASA exige el 5% del trip fuel (o un mínimo de 5 minutos de espera a 1.500 ft sobre el destino) bajo condiciones estándar de despacho." },
+    { s: "040 Factores Humanos", q: "¿A qué altitud aproximada suele manifestarse la hipoxia hipóxica en un piloto sano sin oxígeno suplementario?", opts: ["Por encima de 10.000 pies de altitud de presión en atmósfera estándar", "Exclusivamente por encima de 25.000 pies durante vuelo estratosférico", "A cualquier altitud por debajo de 5.000 pies si la temperatura es alta", "Solo durante maniobras con aceleraciones de más de +3G"], ans: 0, exp: "A partir de los 10.000 ft la presión parcial de oxígeno cae provocando deterioro cognitivo sutil e hipoxia sin previo aviso." },
+    { s: "061 Navegación General", q: "¿Qué propiedad geométrica singular tiene una línea ortodrómica (Great Circle) en la superficie terrestre?", opts: ["Es la distancia más corta entre dos puntos sobre una esfera", "Corta a todos los meridianos con el mismo ángulo constante", "Aparece siempre como una línea recta en una carta Mercator normal", "Es paralela a la línea de cambio de fecha internacional"], ans: 0, exp: "El círculo máximo (ortodrómica) representa el camino más corto sobre una superficie esférica." },
+    { s: "070 Procedimientos Operacionales", q: "¿En qué consiste la técnica de aproximación CDFA (Continuous Descent Final Approach)?", opts: ["Un descenso continuo a régimen constante sin niveladas intermedias desde el FAF hasta los mínimos", "Una aproximación escalonada nivelando en cada fix de la carta", "Un descenso con spoilers desplegados para aproximación rápida", "Una maniobra de espera estándar antes de iniciar el descenso final"], ans: 0, exp: "CDFA estabiliza la aproximación manteniendo un perfil de descenso continuo, mejorando la seguridad y reduciendo el riesgo de CFIT." },
+    { s: "090 Comunicaciones VFR/IFR", q: "¿Qué significa la llamada de socorro aeronáutica 'PAN PAN' repetida tres veces?", opts: ["Mensaje de urgencia relativo a la seguridad de una aeronave o persona sin peligro inmediato", "Mensaje de socorro crítico con peligro inminente y necesidad de auxilio inmediato", "Solicitud prioritaria de información meteorológica en ruta", "Fallo total de comunicaciones en espacio aéreo controlado"], ans: 0, exp: "PAN PAN indica una condición de urgencia, a diferencia de MAYDAY que denota socorro y peligro inminente." }
   ];
 
+  // Helper para obtener la fecha local YYYY-MM-DD (renovación estricta a las 00:00 local)
+  function getDailyChallengeDateKey() {
+    const now = new Date();
+    const y = now.getFullYear();
+    const m = String(now.getMonth() + 1).padStart(2, '0');
+    const d = String(now.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
+  }
+
+  // Seed determinista para seleccionar la pregunta oficial del día
+  function getDailyChallengeSeed() {
+    const now = new Date();
+    return (now.getFullYear() * 10000) + ((now.getMonth() + 1) * 100) + now.getDate();
+  }
+
   function initDailyChallenge() {
-    const today = new Date().toISOString().slice(0, 10);
-    const daySeed = (new Date().getFullYear() * 1000) + (new Date().getMonth() * 32) + new Date().getDate();
+    const today = getDailyChallengeDateKey();
+    const daySeed = getDailyChallengeSeed();
     const qIndex = daySeed % DAILY_QUESTIONS_POOL.length;
     const q = DAILY_QUESTIONS_POOL[qIndex];
 
@@ -3837,10 +3901,19 @@
 
     if (qText) qText.textContent = q.q;
     if (sBadge) sBadge.textContent = q.s;
-    if (dLabel) dLabel.textContent = `Reto Oficial · ${today}`;
+    if (dLabel) dLabel.textContent = `Reto Oficial · ${today} (Válido hasta las 00:00)`;
 
     const answeredDate = localStorage.getItem(`atpl_${currentPilot}_daily_answered`);
-    const isAnsweredToday = answeredDate === today;
+    const isAnsweredToday = (answeredDate === today);
+
+    // Actualizar UI de alertas de reto pendiente
+    const alertBanner = document.getElementById('daily-challenge-alert-banner');
+    if (alertBanner) alertBanner.style.display = isAnsweredToday ? 'none' : 'flex';
+
+    const tabDot = document.getElementById('daily-tab-dot');
+    if (tabDot) tabDot.style.display = isAnsweredToday ? 'none' : 'inline-block';
+
+    updateDailyNotificationUI();
 
     if (optsGrid) {
       optsGrid.innerHTML = '';
@@ -3870,15 +3943,20 @@
         fb.style.background = 'rgba(63,185,80,0.15)';
         fb.style.border = '1px solid #3fb950';
         fb.style.color = '#56d364';
-        fb.innerHTML = `✅ ¡Desafío de hoy completado! Racha activa. Vuelve mañana a las 09:00 AM para el siguiente reto.`;
+        fb.innerHTML = `✅ ¡Desafío de hoy completado! Racha activa. El siguiente reto oficial estará disponible esta noche a las 00:00.`;
       } else {
         fb.style.display = 'none';
       }
     }
+
+    // Verificar si corresponde enviar notificación de sistema
+    if (!isAnsweredToday) {
+      checkAndTriggerDailyNotification(false);
+    }
   }
 
   function answerDailyChallenge(selectedIdx, correctIdx, exp, btnEl) {
-    const today = new Date().toISOString().slice(0, 10);
+    const today = getDailyChallengeDateKey();
     localStorage.setItem(`atpl_${currentPilot}_daily_answered`, today);
 
     let streak = parseInt(localStorage.getItem(`atpl_${currentPilot}_streak`) || '0', 10);
@@ -3899,17 +3977,244 @@
         fb.style.background = 'rgba(63,185,80,0.15)';
         fb.style.border = '1px solid #3fb950';
         fb.style.color = '#56d364';
-        fb.innerHTML = `✅ ¡CORRECTO! Racha aumentada a <strong>${streak} días</strong>.<br>${exp}`;
+        fb.innerHTML = `✅ ¡CORRECTO! Racha aumentada a <strong>${streak} días</strong>.<br>${exp}<div style="margin-top:6px; font-size:11px; opacity:0.85;">Próximo reto disponible esta noche a las 00:00.</div>`;
       } else {
         fb.style.background = 'rgba(248,81,73,0.15)';
         fb.style.border = '1px solid #f85149';
         fb.style.color = '#ff7b72';
-        fb.innerHTML = `❌ INCORRECTO. La respuesta correcta era la [A].<br>${exp}`;
+        fb.innerHTML = `❌ INCORRECTO. La respuesta correcta era la [A].<br>${exp}<div style="margin-top:6px; font-size:11px; opacity:0.85;">Próximo reto disponible esta noche a las 00:00.</div>`;
       }
     }
     const streakBadge = document.getElementById('daily-streak-badge');
     if (streakBadge) streakBadge.textContent = `⚡ Racha: ${streak} día${streak === 1 ? '' : 's'}`;
+
+    // Ocultar alertas inmediatas
+    const alertBanner = document.getElementById('daily-challenge-alert-banner');
+    if (alertBanner) alertBanner.style.display = 'none';
+
+    const tabDot = document.getElementById('daily-tab-dot');
+    if (tabDot) tabDot.style.display = 'none';
   }
+
+  // Programar cambio automático de reto a las 00:00 exactas hora local
+  function scheduleDailyMidnightReset() {
+    const now = new Date();
+    const nextMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 1);
+    const msUntilMidnight = Math.max(1000, nextMidnight.getTime() - now.getTime());
+    console.log(`[ATPL Daily] Cambio de reto programado en ${Math.round(msUntilMidnight / 60000)} minutos (00:00 local).`);
+
+    setTimeout(() => {
+      console.log('[ATPL Daily] 🕛 ¡Son las 00:00 local! Actualizando Desafío Diario ATPL...');
+      initDailyChallenge();
+      checkAndTriggerDailyNotification(true);
+      scheduleDailyMidnightReset(); // Reprogramar para la siguiente noche
+    }, msUntilMidnight);
+  }
+
+  // Sistema de notificaciones web para el reto diario
+  function updateDailyNotificationUI() {
+    const btn = document.getElementById('btn-daily-notify-toggle');
+    const icon = document.getElementById('daily-notify-icon');
+    const text = document.getElementById('daily-notify-text');
+    if (!btn || !icon || !text) return;
+
+    if (!('Notification' in window)) {
+      btn.style.display = 'none';
+      return;
+    }
+
+    if (Notification.permission === 'granted') {
+      const enabled = localStorage.getItem('atpl_daily_notifications_enabled') !== 'false';
+      if (enabled) {
+        btn.style.background = 'rgba(46,160,67,0.15)';
+        btn.style.borderColor = '#2ea043';
+        btn.style.color = '#56d364';
+        icon.textContent = '🔔';
+        text.textContent = 'Avisos: Activos';
+      } else {
+        btn.style.background = '#21262d';
+        btn.style.borderColor = '#30363d';
+        btn.style.color = '#8b949e';
+        icon.textContent = '🔕';
+        text.textContent = 'Avisos: En pausa';
+      }
+    } else if (Notification.permission === 'denied') {
+      btn.style.background = '#21262d';
+      btn.style.borderColor = '#30363d';
+      btn.style.color = '#8b949e';
+      icon.textContent = '🔕';
+      text.textContent = 'Avisos: Bloqueados';
+    } else {
+      btn.style.background = '#21262d';
+      btn.style.borderColor = '#30363d';
+      btn.style.color = '#8b949e';
+      icon.textContent = '🔔';
+      text.textContent = 'Activar Avisos';
+    }
+  }
+
+  function toggleDailyChallengeNotifications() {
+    if (!('Notification' in window)) {
+      showToastNotification('⚠️ Tu navegador no soporta notificaciones de sistema.');
+      return;
+    }
+
+    if (Notification.permission === 'default') {
+      Notification.requestPermission().then(permission => {
+        if (permission === 'granted') {
+          localStorage.setItem('atpl_daily_notifications_enabled', 'true');
+          updateDailyNotificationUI();
+          showToastNotification('🔔 ¡Avisos activados! Te notificaremos si tienes el reto del día pendiente.');
+          checkAndTriggerDailyNotification(true);
+        } else {
+          updateDailyNotificationUI();
+          showToastNotification('ℹ️ Notificaciones no autorizadas por el usuario.');
+        }
+      });
+    } else if (Notification.permission === 'granted') {
+      const cur = localStorage.getItem('atpl_daily_notifications_enabled') !== 'false';
+      localStorage.setItem('atpl_daily_notifications_enabled', cur ? 'false' : 'true');
+      updateDailyNotificationUI();
+      showToastNotification(cur ? '🔕 Avisos del desafío diario pausados.' : '🔔 Avisos del desafío diario activados.');
+    } else {
+      showToastNotification('⚠️ Notificaciones bloqueadas en el navegador. Habilítalas en los ajustes del sitio.');
+    }
+  }
+
+  function checkAndTriggerDailyNotification(force = false) {
+    if (!currentPilot) return;
+    const today = getDailyChallengeDateKey();
+    const answeredDate = localStorage.getItem(`atpl_${currentPilot}_daily_answered`);
+    if (answeredDate === today) return; // Ya respondido hoy
+
+    if (!('Notification' in window) || Notification.permission !== 'granted') return;
+    if (localStorage.getItem('atpl_daily_notifications_enabled') === 'false') return;
+
+    const notifiedKey = `atpl_${currentPilot}_daily_notified_${today}`;
+    if (!force && localStorage.getItem(notifiedKey) === 'true') return;
+    localStorage.setItem(notifiedKey, 'true');
+
+    const title = '🎯 Desafío Diario ATPL Pendiente';
+    const body = `Comandante ${currentPilot}, la pregunta oficial de hoy está lista. ¡Resuélvela antes de las 00:00 para mantener tu racha!`;
+
+    try {
+      if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+        navigator.serviceWorker.ready.then(reg => {
+          reg.showNotification(title, {
+            body: body,
+            icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🎯</text></svg>',
+            tag: 'atpl-daily-challenge'
+          });
+        });
+      } else {
+        const notif = new Notification(title, {
+          body: body,
+          icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🎯</text></svg>'
+        });
+        notif.onclick = () => {
+          window.focus();
+          switchCockpitTab('hangar');
+          notif.close();
+        };
+      }
+    } catch (e) {
+      console.log('Daily notification silent error:', e);
+    }
+  }
+
+  // Recordatorio durante la sesión de estudio (a los 3 minutos si no ha resuelto el reto)
+  let dailySessionReminderFired = false;
+  setTimeout(() => {
+    if (dailySessionReminderFired || !currentPilot) return;
+    const today = getDailyChallengeDateKey();
+    const answeredDate = localStorage.getItem(`atpl_${currentPilot}_daily_answered`);
+    if (answeredDate !== today) {
+      dailySessionReminderFired = true;
+      showToastNotification('🎯 Recordatorio de vuelo: Tienes el Desafío Diario de hoy sin resolver. ¡Conserva tu racha!');
+    }
+  }, 180000);
+
+  // Inicializar temporizador de medianoche al arrancar
+  scheduleDailyMidnightReset();
+
+  // ─── CONTROL MASTER: REINICIO DE TIEMPO DE ESTUDIO (POR ERROR DE ALUMNO) ───
+
+  function masterResetCurrentStudyTime() {
+    if (!isMasterPilot()) {
+      showToastNotification('⚠️ Solo el Comandante Master puede reiniciar horas de estudio.');
+      return;
+    }
+    if (!confirm(`¿Comandante EC-CHOZAS, confirmas que deseas reiniciar a 0h 00m el tiempo de estudio registrado para el perfil activo "${currentPilot}"?`)) {
+      return;
+    }
+    localStorage.setItem(`atpl_${currentPilot}_audio_time`, '0');
+    updateLogbookDisplay();
+    registerPilotActivity(currentPilot);
+    showToastNotification(`⏱️ Horas de estudio de "${currentPilot}" restablecidas a 0h 00m.`);
+  }
+
+  async function masterResetCadetTime(pilotName) {
+    if (!isMasterPilot()) {
+      showToastNotification('⚠️ Solo el Comandante Master puede reiniciar el tiempo de un alumno.');
+      return;
+    }
+    if (!confirm(`¿Comandante EC-CHOZAS, deseas reiniciar a 0h 00m el tiempo de estudio y progreso del cadete "${pilotName}"?`)) {
+      return;
+    }
+
+    // 1. Limpiar datos locales en este navegador si existen
+    localStorage.removeItem(`atpl_${pilotName}_audio_time`);
+
+    // 2. Limpiar en la lista de pilotos registrados en telemetría
+    let registered = JSON.parse(localStorage.getItem('atpl_registered_pilots')) || {};
+    if (registered[pilotName]) {
+      registered[pilotName].audioTime = 0;
+      registered[pilotName].topicsCount = 0;
+      registered[pilotName].scoresCount = 0;
+      registered[pilotName].resetTimestamp = Date.now();
+      localStorage.setItem('atpl_registered_pilots', JSON.stringify(registered));
+    }
+
+    // 3. Emitir comando por telemetría ntfy para que el dispositivo del alumno lo aplique
+    fetch(TELEMETRY_TOPIC_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        resetCadetTime: pilotName,
+        by: 'EC-CHOZAS',
+        timestamp: Date.now()
+      })
+    }).catch(() => {});
+
+    showToastNotification(`⏱️ Tiempo del cadete "${pilotName}" reiniciado a 0h 00m en toda la flota.`);
+    loadMasterPilotDirectory();
+  }
+
+  // Escuchar órdenes de reset emitidas por el Master en los dispositivos de los cadetes
+  function pollFleetCommands() {
+    if (!currentPilot || isMasterPilot()) return;
+    fetch(`${TELEMETRY_TOPIC_URL}/json?poll=1&since=10m`).then(r => r.text()).then(text => {
+      text.trim().split('\n').forEach(l => {
+        if (!l.trim()) return;
+        try {
+          const item = JSON.parse(l);
+          if (item.message) {
+            const payload = JSON.parse(item.message);
+            if (payload.resetCadetTime && payload.resetCadetTime === currentPilot) {
+              const lastReset = parseInt(localStorage.getItem(`atpl_${currentPilot}_last_reset_handled`) || '0', 10);
+              if (payload.timestamp && payload.timestamp > lastReset) {
+                localStorage.setItem(`atpl_${currentPilot}_last_reset_handled`, payload.timestamp.toString());
+                localStorage.setItem(`atpl_${currentPilot}_audio_time`, '0');
+                updateLogbookDisplay();
+                showToastNotification('⏱️ Atención: El Comandante Master ha restablecido tu tiempo de estudio a 0h 00m.');
+              }
+            }
+          }
+        } catch (e) {}
+      });
+    }).catch(() => {});
+  }
+  setInterval(pollFleetCommands, 30000);
 
   // 7. DESCARGA 100% OFFLINE PARA MODO AVIÓN (SERVICE WORKER)
   if ('serviceWorker' in navigator) {

@@ -4,6 +4,30 @@ Todos los cambios notables, evoluciones y correcciones de este proyecto se regis
 
 ---
 
+## [1.1.0] - 2026-09-15
+
+### 🚀 Novedades y Mejoras Principales
+- **Desafío Diario ATPL: Renovación Automática a las 00:00 (Medianoche Local)**:
+  - Migrado el cálculo de la fecha diaria a tiempo local (`getDailyChallengeDateKey`), asegurando que la pregunta oficial cambie estrictamente a las 00:00 de cada noche en el huso horario local.
+  - Temporizador activo en segundo plano (`scheduleDailyMidnightReset`): calcula con precisión los milisegundos restantes hasta la medianoche (00:00:01). Si el alumno tiene la app abierta de noche, la interfaz cambia automáticamente a la nueva pregunta oficial, reinicia el estado y actualiza la racha sin necesidad de refrescar la página.
+  - Banco ampliado de preguntas de desafío oficial rotando por las distintas materias del temario EASA (010, 021, 022, 031, 032, 033, 040, 050, 061, 062, 070, 081, 090).
+- **Sistema de Notificaciones Web & In-App para Reto Diario Pendiente**:
+  - Si el alumno no ha realizado el reto diario de hoy, la plataforma despliega avisos en múltiples niveles:
+    1. **Notificación de Sistema (Web Push / Local API)**: Notificación en el sistema operativo del móvil o PC con sonido/aviso recordando completar la pregunta oficial antes de medianoche para no perder la racha.
+    2. **Selector de Estado en Tarjeta**: Botón interactivo `🔔 Activar Avisos / Avisos: Activos / Avisos: En pausa` para otorgar permisos y configurar notificaciones en 1 clic.
+    3. **Banner HUD en Cabina de Estudio**: Aviso visual destacado en la parte superior de la cabina (`#daily-challenge-alert-banner`) con botón directo `🎯 Resolver Reto Ahora`.
+    4. **Indicador en Pestaña**: Punto rojo de alerta (`#daily-tab-dot`) en la pestaña *Caja Negra & Retos* mientras el reto de la jornada siga pendiente.
+    5. **Recordatorio en Sesión de Vuelo**: Alarma flotante HUD en cabina tras varios minutos de estudio si el alumno aún no ha resuelto su desafío del día.
+- **Control de Comandante Master: Reinicio de Tiempos de Estudio**:
+  - Diseñado para corregir incidentes en los que un alumno deja un audio corriendo en bucle, suma horas por error o necesita restablecer su cómputo:
+    1. **Reinicio de Alumnos en Telemetría de Flota**: Añadido el botón de acción rápida `⏱️` junto a cada cadete en el directorio del Master (`EC-CHOZAS`). Permite restablecer las horas de estudio del cadete seleccionado y emite una orden de telemetría cifrada en tiempo real.
+    2. **Propagación Automática a la Cabina del Alumno**: Cuando el dispositivo del cadete recibe la instrucción del Master (`resetCadetTime`), restablece automáticamente su contador local a `00h 00m`, actualiza el Logbook y le notifica en pantalla.
+    3. **Módulo Master en el Logbook**: En la vista de *Logbook & Offline*, el Comandante Master dispone de un panel de control para reiniciar el tiempo a `00h 00m` con confirmación de seguridad.
+- **Actualización de Caché Offline (v1.1)**:
+  - Service Worker actualizado a la versión de caché `atpl-flightdeck-v1.1` con gestor de clics en notificaciones (`notificationclick`) para enfocar automáticamente la app al pulsar el aviso.
+
+---
+
 ## [1.0.0] - 2026-09-15
 
 ### 🚀 Novedades y Mejoras Principales

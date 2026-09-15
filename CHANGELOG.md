@@ -2,6 +2,20 @@
 
 Todos los cambios notables, evoluciones y correcciones de este proyecto se registran de forma cronológica en este documento, siguiendo las directrices de [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/) y versionado semántico [SemVer](https://semver.org/lang/es/).
 
+## [1.5.3] - 2026-09-16
+
+### 🏷️ Corrección de Solapamiento de Letras en Pestañas Móviles (Tabs Anti-Collision)
+- **Eliminación del Conflicto de Flexbox y Letras Superpuestas**:
+  - Las pestañas de cabina (`.cockpit-tab-btn`) utilizaban `flex: 1` con `min-width: 110px` y `justify-content: center`. En móviles, al tener textos largos como *"Plan de Vuelo (OFP) & Cartas VFR"* y *"Simuladores & METAR"*, los caracteres desbordaban a ambos lados del botón y se superponían directamente con los textos de los botones vecinos.
+  - Se ha establecido `flex: 0 0 auto !important` y `width: auto !important`, garantizando que la anchura de cada pestaña sea idéntica al 100% del tamaño real de su contenido, imposibilitando físicamente que una letra se dibuje fuera del botón o encima de otra pestaña.
+- **Etiquetado Adaptativo (Full en Web / Conciso en Móvil)**:
+  - En escritorio se mantienen los nombres completos oficiales: *"Cabina de Estudio"*, *"Caja Negra & Retos"*, *"Simuladores & METAR"*, *"Logbook & Offline"* y *"Plan de Vuelo (OFP) & Cartas VFR"*.
+  - En móviles (≤ 768px) el sistema conmuta automáticamente mediante `.tab-label-short` a etiquetas concisas y nítidas: *"Estudio"*, *"Caja Negra"*, *"Simuladores"*, *"Logbook"* y *"Plan de Vuelo"*.
+- **Sub-Pestañas de Plan de Vuelo (`.fpl-subtabs-nav`) & Simulador CR-3 (`.cr3-subtabs-nav`)**:
+  - Contenedores con desplazamiento táctil horizontal suave (`overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none`), evitando el salto de líneas incómodo y los textos montados.
+
+---
+
 ## [1.5.2] - 2026-09-16
 
 ### 🛡️ Auditoría Integral, Adaptabilidad Móvil & Resolución de Solapamientos

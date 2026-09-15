@@ -1214,23 +1214,33 @@
 
 
     /* ═══════════════════════════════════════════════════════════
-       COCKPIT EFB HUB NAVIGATION & MODULAR TABS (v1.0.0)
+       COCKPIT EFB HUB NAVIGATION & MODULAR TABS (v1.5.3 Anti-Solapamiento)
     ═══════════════════════════════════════════════════════════ */
+    .tab-label-short { display: none; }
+    .tab-label-full { display: inline; }
+
     .cockpit-hub-nav {
       display: flex; gap: 8px; margin: 16px 0 20px 0;
       background: var(--bg-card, #161b22);
       border: 1px solid var(--border-color, #30363d);
       border-radius: 16px; padding: 6px;
       overflow-x: auto; -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
       box-shadow: 0 8px 24px rgba(0,0,0,0.4);
     }
+    .cockpit-hub-nav::-webkit-scrollbar { display: none; }
+
     .cockpit-tab-btn {
-      flex: 1; min-width: 140px; padding: 12px 16px;
+      flex: 0 0 auto !important;
+      width: auto !important;
+      min-width: fit-content !important;
+      padding: 11px 18px;
       background: transparent; border: 1px solid transparent;
       border-radius: 12px; color: var(--text-muted, #8b949e);
       font-size: 13px; font-weight: 700; cursor: pointer;
-      display: flex; align-items: center; justify-content: center; gap: 8px;
-      transition: all 0.2s ease; white-space: nowrap; touch-action: manipulation;
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      transition: all 0.2s ease; white-space: nowrap !important; touch-action: manipulation;
+      box-sizing: border-box;
     }
     .cockpit-tab-btn:hover {
       background: rgba(255,255,255,0.04); color: var(--text-main, #e6edf3);
@@ -1239,9 +1249,52 @@
       background: #1f6feb; border-color: #388bfd; color: #fff;
       box-shadow: 0 4px 14px rgba(31,111,235,0.4);
     }
+
+    .fpl-subtabs-nav {
+      display: flex; gap: 8px; margin-bottom: 16px;
+      border-bottom: 1px solid var(--border-color, #30363d);
+      padding-bottom: 10px; overflow-x: auto; -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .fpl-subtabs-nav::-webkit-scrollbar { display: none; }
+    .fpl-subtabs-nav .cockpit-tab-btn {
+      flex: 0 0 auto !important;
+      padding: 8px 16px;
+      font-size: 12px;
+    }
+
+    .cr3-subtabs-nav {
+      display: flex; align-items: center; gap: 8px;
+      overflow-x: auto; -webkit-overflow-scrolling: touch;
+      scrollbar-width: none; padding-bottom: 4px;
+    }
+    .cr3-subtabs-nav::-webkit-scrollbar { display: none; }
+    .cr3-subtabs-nav button, .cr3-subtabs-nav a {
+      flex: 0 0 auto !important;
+      white-space: nowrap !important;
+    }
+
     @media (max-width: 768px) {
-      .cockpit-hub-nav { border-radius: 12px; padding: 4px; gap: 4px; }
-      .cockpit-tab-btn { min-width: 110px; padding: 9px 10px; font-size: 11px; }
+      .tab-label-short { display: inline !important; }
+      .tab-label-full { display: none !important; }
+      .cockpit-hub-nav { border-radius: 14px; padding: 5px; gap: 6px; }
+      .cockpit-tab-btn {
+        flex: 0 0 auto !important;
+        width: auto !important;
+        min-width: auto !important;
+        padding: 8px 12px !important;
+        font-size: 12px !important;
+        border-radius: 10px !important;
+        gap: 6px !important;
+      }
+      .fpl-subtabs-nav .cockpit-tab-btn {
+        padding: 7px 11px !important;
+        font-size: 11px !important;
+      }
+      .cr3-subtabs-nav button, .cr3-subtabs-nav a {
+        padding: 6px 10px !important;
+        font-size: 11px !important;
+      }
     }
 
     /* METAR & TAF RAW Styles */
@@ -1571,7 +1624,7 @@
       <div class="brand">
         <div class="brand-icon" style="padding: 0; overflow: hidden; border: 1px solid rgba(88, 166, 255, 0.4); background: #012349;"><img src="apple-touch-icon-180x180.png" alt="ATPL Pilot" style="width: 100%; height: 100%; object-fit: cover; border-radius: 9px; display: block;"></div>
         <div class="brand-text">
-          <h1>ATPL Flight Deck & Study Control <span class="badge-beta" id="version-badge" onclick="forceCheckAppUpdate(true)" style="cursor:pointer;" title="Versión v1.5.2 EFB — Clic para forzar actualización limpia">v1.5.2 EFB</span></h1>
+          <h1>ATPL Flight Deck & Study Control <span class="badge-beta" id="version-badge" onclick="forceCheckAppUpdate(true)" style="cursor:pointer;" title="Versión v1.5.3 EFB — Clic para forzar actualización limpia">v1.5.3 EFB</span></h1>
           <p>Preparación EASA Modular Oficial | Sistema adaptado a turnos de 12h</p>
         </div>
       </div>
@@ -1611,23 +1664,23 @@
       </div>
     </header>
 
-    <!-- COCKPIT EFB HUB NAVIGATION BAR (4 MODOS) -->
+    <!-- COCKPIT EFB HUB NAVIGATION BAR (5 MODOS) -->
     <nav class="cockpit-hub-nav">
       <button type="button" class="cockpit-tab-btn active" onclick="switchCockpitTab('estudio')" id="cockpit-tab-estudio">
-        <span>📚</span> Cabina de Estudio
+        <span>📚</span> <span class="tab-label-full">Cabina de Estudio</span><span class="tab-label-short">Estudio</span>
       </button>
       <button type="button" class="cockpit-tab-btn" onclick="switchCockpitTab('hangar')" id="cockpit-tab-hangar">
-        <span>🎯</span> Caja Negra & Retos
+        <span>🎯</span> <span class="tab-label-full">Caja Negra & Retos</span><span class="tab-label-short">Caja Negra</span>
         <span id="daily-tab-dot" style="display: none; width: 8px; height: 8px; background: #f85149; border-radius: 50%; margin-left: 6px; box-shadow: 0 0 6px #f85149;" title="Desafío diario pendiente"></span>
       </button>
       <button type="button" class="cockpit-tab-btn" onclick="switchCockpitTab('herramientas')" id="cockpit-tab-herramientas">
-        <span>🧭</span> Simuladores & METAR
+        <span>🧭</span> <span class="tab-label-full">Simuladores & METAR</span><span class="tab-label-short">Simuladores</span>
       </button>
       <button type="button" class="cockpit-tab-btn" onclick="switchCockpitTab('logbook')" id="cockpit-tab-logbook">
-        <span>📖</span> Logbook & Offline
+        <span>📖</span> <span class="tab-label-full">Logbook & Offline</span><span class="tab-label-short">Logbook</span>
       </button>
       <button type="button" class="cockpit-tab-btn" onclick="switchCockpitTab('fpl')" id="cockpit-tab-fpl">
-        <span>🗺️</span> Plan de Vuelo (OFP) & Cartas VFR
+        <span>🗺️</span> <span class="tab-label-full">Plan de Vuelo (OFP) & Cartas VFR</span><span class="tab-label-short">Plan de Vuelo</span>
       </button>
     </nav>
 
@@ -2025,21 +2078,21 @@
         </div>
 
         <!-- Botones de Acción y Pestañas -->
-        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+        <div class="cr3-subtabs-nav">
           <button type="button" class="btn-filter" id="cr3-tab-embed" onclick="switchCR3Section('embed')" style="background: rgba(56,139,253,0.2); border-color: #388bfd; color: #58a6ff; font-weight: 800; font-size: 12px; padding: 6px 14px; border-radius: 8px; cursor: pointer;">
-            🎛️ Computador Interactivo
+            🎛️ <span class="tab-label-full">Computador Interactivo</span><span class="tab-label-short">Computador</span>
           </button>
           <button type="button" class="btn-filter" id="cr3-tab-guide" onclick="switchCR3Section('guide')" style="background: var(--bg-card); border-color: var(--border-color); color: #e3b341; font-weight: 700; font-size: 12px; padding: 6px 14px; border-radius: 8px; cursor: pointer;">
-            📖 Guía: Rumbos y Velocidades
+            📖 <span class="tab-label-full">Guía: Rumbos y Velocidades</span><span class="tab-label-short">Guía Rumbos</span>
           </button>
           <button type="button" class="btn-filter" id="cr3-tab-exercises" onclick="switchCR3Section('exercises')" style="background: var(--bg-card); border-color: var(--border-color); color: #3fb950; font-weight: 700; font-size: 12px; padding: 6px 14px; border-radius: 8px; cursor: pointer;">
-            🎯 Ejercicios de Navegación
+            🎯 <span class="tab-label-full">Ejercicios de Navegación</span><span class="tab-label-short">Ejercicios</span>
           </button>
           <button type="button" onclick="reloadCR3Iframe()" style="background: var(--badge-bg); border: 1px solid var(--border-color); color: var(--text-main); font-size: 12px; padding: 6px 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 4px;" title="Recargar simulador">
             <span>🔄</span> Recargar
           </button>
           <a href="https://aerotestppl.es/cr3/" target="_blank" rel="noopener noreferrer" style="padding: 6px 14px; background: #238636; border: 1px solid #2ea043; color: #fff; font-weight: 800; font-size: 12px; border-radius: 8px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;" title="Abrir en pantalla completa o pestaña nueva">
-            <span>🌐</span> Abrir en Pantalla Completa ↗
+            <span>🌐</span> <span class="tab-label-full">Abrir en Pantalla Completa ↗</span><span class="tab-label-short">Pantalla Completa ↗</span>
           </a>
         </div>
       </div>
@@ -2250,15 +2303,15 @@
   ═══════════════════════════════════════════════════════════ -->
   <div id="view-fpl" style="display: none; margin-bottom: 30px;">
     <!-- SUB-PESTAÑAS DE NAVEGACIÓN DENTRO DEL PLANIFICADOR -->
-    <div style="display: flex; gap: 8px; margin-bottom: 16px; border-bottom: 1px solid var(--border-color, #30363d); padding-bottom: 10px; flex-wrap: wrap;" class="no-print">
-      <button type="button" class="cockpit-tab-btn active" id="fpl-subtab-btn-ofp" onclick="switchFPLSubTab('ofp')" style="padding: 8px 16px; font-size: 12px;">
-        <span>📋</span> Plan de Vuelo (World Aviation Excel)
+    <div class="fpl-subtabs-nav no-print">
+      <button type="button" class="cockpit-tab-btn active" id="fpl-subtab-btn-ofp" onclick="switchFPLSubTab('ofp')">
+        <span>📋</span> <span class="tab-label-full">Plan de Vuelo (World Aviation Excel)</span><span class="tab-label-short">NavLog OFP</span>
       </button>
-      <button type="button" class="cockpit-tab-btn" id="fpl-subtab-btn-map" onclick="switchFPLSubTab('map')" style="padding: 8px 16px; font-size: 12px;">
-        <span>🗺️</span> Trazador VFR & Carta Visual
+      <button type="button" class="cockpit-tab-btn" id="fpl-subtab-btn-map" onclick="switchFPLSubTab('map')">
+        <span>🗺️</span> <span class="tab-label-full">Trazador VFR & Carta Visual</span><span class="tab-label-short">Carta Visual</span>
       </button>
-      <button type="button" class="cockpit-tab-btn" id="fpl-subtab-btn-charts" onclick="switchFPLSubTab('charts')" style="padding: 8px 16px; font-size: 12px;">
-        <span>🗂️</span> Cartas Visuales de España (VAC ENAIRE)
+      <button type="button" class="cockpit-tab-btn" id="fpl-subtab-btn-charts" onclick="switchFPLSubTab('charts')">
+        <span>🗂️</span> <span class="tab-label-full">Cartas Visuales de España (VAC ENAIRE)</span><span class="tab-label-short">Cartas VAC</span>
       </button>
     </div>
 
@@ -3188,7 +3241,7 @@
     function exportProgressToICloud() {
       const data = {
         application: "ATPL Flight Deck",
-        version: "v1.5.2",
+        version: "v1.5.3",
         pilot: currentPilot,
         exportedAt: new Date().toISOString(),
         topics: studiedTopics,
@@ -5333,7 +5386,7 @@
           if (newWorker) {
             newWorker.addEventListener('statechange', () => {
               if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                showToastNotification('🚀 ¡Nueva versión v1.5.2 lista! Pulsa el distintivo de versión para aplicar.');
+                showToastNotification('🚀 ¡Nueva versión v1.5.3 lista! Pulsa el distintivo de versión para aplicar.');
               }
             });
           }
@@ -5368,7 +5421,7 @@
         await Promise.all(keys.map(k => caches.delete(k)));
       }
       if (interactive) {
-        showToastNotification('✅ Versión v1.5.2 aplicada. Reiniciando cabina...');
+        showToastNotification('✅ Versión v1.5.3 aplicada. Reiniciando cabina...');
         setTimeout(() => {
           window.location.reload(true);
         }, 600);
@@ -5387,7 +5440,7 @@
 
     try {
       if ('caches' in window) {
-        const cache = await caches.open('atpl-flightdeck-v1.5.2');
+        const cache = await caches.open('atpl-flightdeck-v1.5.3');
         await cache.addAll([
           './',
           './index.html',
@@ -5595,14 +5648,14 @@
         <!-- Sección 5: Versión del Sistema y Forzar Actualización PWA -->
         <div class="pilot-box" style="margin-top: 12px; background: rgba(56,139,253,0.06); border: 1px solid rgba(56,139,253,0.25);">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-            <strong style="color:var(--text-title); font-size:12px;">🚀 Versión del Sistema: <span style="color:#58a6ff;">v1.5.2 EFB</span></strong>
+            <strong style="color:var(--text-title); font-size:12px;">🚀 Versión del Sistema: <span style="color:#58a6ff;">v1.5.3 EFB</span></strong>
             <span style="font-size:10px; background:rgba(46,160,67,0.2); color:#56d364; padding:2px 8px; border-radius:10px; font-weight:700;">PRODUCCIÓN</span>
           </div>
           <p style="font-size:11px; color:var(--text-muted); margin-bottom:8px; line-height:1.4;">
             Si has añadido la app a la pantalla de inicio o tu navegador mantiene una versión anterior en caché, puedes forzar la recarga limpia instantánea:
           </p>
           <button type="button" class="btn-sync-action" onclick="forceCheckAppUpdate(true)" style="width:100%; padding:9px 12px; background:rgba(56,139,253,0.2); border:1px solid #388bfd; color:#79c0ff; font-weight:700; font-size:12px; border-radius:8px; display:flex; align-items:center; justify-content:center; gap:8px; cursor:pointer;">
-            🔄 Forzar Actualización a v1.5.2 (Limpiar Caché PWA)
+            🔄 Forzar Actualización a v1.5.3 (Limpiar Caché PWA)
           </button>
         </div>
 <!-- Botón inferior eliminado para evitar duplicados -->
@@ -6549,7 +6602,7 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
   }
   
   // ═══════════════════════════════════════════════════════════════
-  // 8. MÓDULO PLAN DE VUELO OPERACIONAL (WORLD AVIATION) & CARTAS VFR (v1.5.2)
+  // 8. MÓDULO PLAN DE VUELO OPERACIONAL (WORLD AVIATION) & CARTAS VFR (v1.5.3)
   // ═══════════════════════════════════════════════════════════════
 
   let fplMap = null;

@@ -4,6 +4,33 @@ Todos los cambios notables, evoluciones y correcciones de este proyecto se regis
 
 ---
 
+## [1.4.1] - 2026-09-15
+
+### 🚀 Novedades y Correcciones Solicitadas
+- **Unidades de Combustible 100% en Galones US (Gal · Gal/h)**:
+  - Eliminada la confusión de litros: todo el cálculo de combustible de la Cessna 172 (consumo horario, combustible por tramo, trip fuel, reserva final de 45 min y FOB) se realiza en **Galones US**.
+  - NavLog con columna `Fuel (Gal)`, resumen de viaje en Galones (`Trip: 6.8 Gal`, `Reserva: 6.0 Gal`, `FOB: 40.0 Gal`, `Margen: +22.5 Gal`) y volcado oficial a Excel `.xlsx` en Galones.
+- **Corrección de Rendimiento y ATIS de Destino (Valladolid / LEVD)**:
+  - Implementado helper `getSpanishAirport()` que busca con precisión en el catálogo `SPANISH_VAC_DATABASE`.
+  - Al seleccionar o escribir **Valladolid (LEVD)** (o cualquier aeródromo de destino), se actualizan automáticamente:
+    - Pista disponible de aterrizaje (`fpl-perf-ld-avail` = `05/23 (3.000m Asf.) (LEVD)`).
+    - Frecuencia de torre / radio de llegada (`122.200 (LEVD TWR)`).
+    - Pista activa según viento (`RWY 05`).
+    - Parking de llegada (`LEVD Plataforma`).
+    - Cuadro de frecuencias con TWR, GND, ATIS y APP de Valladolid.
+- **Edición Fluida de Tramos Manuales**:
+  - Al añadir un tramo manual con `➕ Añadir Tramo Manual`, se auto-enfoca el campo de nombre.
+  - El campo de altitud ahora es numérico limpio (sin sufijo `" ft"` incrustado en el valor) permitiendo editarlo con teclado y flechas con total libertad.
+  - La edición manual de nombre, altitud, TC, viento, distancia o ATA no se sobreescribe ni se bloquea.
+  - Si el usuario escribe un nombre conocido (ej. `Valladolid`, `LEVD`, `Casarrubios`, `Toledo`), se auto-geolocaliza y actualiza la ruta.
+- **Botón METAR Inteligente & Integración con Windy**:
+  - El botón `🔄 Actualizar METARs` descarga directamente los teletipos oficiales de la NOAA/AviationWeather para el aeródromo de salida (LECU/LEMD) y el de llegada (LEVD/LESA), actualizando QNH, temperatura, visibilidad, nubes y pistas activas.
+  - Nuevo botón directo `🌐 Abrir en Windy` que abre la ruta en Windy.com en el nivel de presión y altitud de vuelo para contrastar modelos numéricos (ECMWF, GFS, ICON).
+- **Botón "📋 Copiar Plan de Vuelo" al Portapapeles**:
+  - Nuevo botón en la barra principal que formatea un resumen textual completo del vuelo (aeronave, crucero, consumo, NavLog detallado tramo a tramo, totales de combustible, ATIS y frecuencias) y lo copia al portapapeles con 1 clic para enviar a instructores, WhatsApp o notas.
+
+---
+
 ## [1.4.0] - 2026-09-15
 
 ### 🚀 Novedades y Correcciones Solicitadas

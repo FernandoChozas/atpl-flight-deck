@@ -1932,16 +1932,19 @@
             </div>
           </div>
           <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-            <button type="button" onclick="downloadFilledOfficialExcel()" style="padding: 9px 18px; background: #238636; border: 1px solid #2ea043; color: #fff; font-weight: 800; font-size: 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 2px 8px rgba(46,160,67,0.35);" title="Descarga el archivo Excel original .xlsx de World Aviation rellenado">
-              <span>📥</span> Descargar Excel Oficial (.xlsx) Rellenado
+            <button type="button" onclick="downloadFilledOfficialExcel()" style="padding: 9px 16px; background: #238636; border: 1px solid #2ea043; color: #fff; font-weight: 800; font-size: 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 2px 8px rgba(46,160,67,0.35);" title="Descarga el archivo Excel original .xlsx de World Aviation rellenado">
+              <span>📥</span> Descargar Excel Oficial (.xlsx)
+            </button>
+            <button type="button" onclick="copyFlightPlanSummaryToClipboard()" style="padding: 9px 14px; background: #1f6feb; border: 1px solid #388bfd; color: #fff; font-weight: 800; font-size: 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px;" title="Copiar todo el resumen y tramos del plan de vuelo al portapapeles para pegar o compartir">
+              <span>📋</span> Copiar Plan de Vuelo
             </button>
             <button type="button" onclick="exportFlightPlanToPDF()" style="padding: 9px 14px; background: #21262d; border: 1px solid #30363d; color: #fff; font-weight: 700; font-size: 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px;" title="Imprimir o guardar PDF del NavLog limpio">
               <span>📄</span> Imprimir / PDF
             </button>
-            <button type="button" onclick="saveFlightPlanLocally()" style="padding: 9px 14px; background: #1f6feb; border: 1px solid #388bfd; color: #fff; font-weight: 700; font-size: 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+            <button type="button" onclick="saveFlightPlanLocally()" style="padding: 9px 12px; background: #21262d; border: 1px solid #30363d; color: #58a6ff; font-weight: 700; font-size: 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 5px;">
               <span>💾</span> Guardar
             </button>
-            <button type="button" onclick="resetFlightPlanRoute()" style="padding: 9px 14px; background: rgba(248,81,73,0.15); border: 1px solid rgba(248,81,73,0.35); color: #ff7b72; font-size: 12px; font-weight: 700; border-radius: 8px; cursor: pointer;">
+            <button type="button" onclick="resetFlightPlanRoute()" style="padding: 9px 12px; background: rgba(248,81,73,0.15); border: 1px solid rgba(248,81,73,0.35); color: #ff7b72; font-size: 12px; font-weight: 700; border-radius: 8px; cursor: pointer;">
               🧹 Limpiar
             </button>
           </div>
@@ -1956,10 +1959,10 @@
             <div>
               <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">✈️ MODELO PRESET</label>
               <select id="fpl-aircraft-select" onchange="applyAircraftPreset()" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #fff; font-size: 12px; padding: 7px 10px; border-radius: 8px; outline: none;">
-                <option value="C172" selected>Cessna 172 (90kt · 8.0 Gal/h = 30.3 L/h)</option>
-                <option value="P2008JC">Tecnam P2008JC (95kt · 4.5 Gal/h = 17.0 L/h)</option>
-                <option value="P2006T">Tecnam P2006T (140kt · 9.0 Gal/h = 34.0 L/h)</option>
-                <option value="DA40">Diamond DA40 NG (125kt · 5.8 Gal/h = 22.0 L/h)</option>
+                <option value="C172" selected>Cessna 172 (90kt · 8.0 Gal/h)</option>
+                <option value="P2008JC">Tecnam P2008JC (95kt · 4.5 Gal/h)</option>
+                <option value="P2006T">Tecnam P2006T (140kt · 9.0 Gal/h)</option>
+                <option value="DA40">Diamond DA40 NG (125kt · 5.8 Gal/h)</option>
               </select>
             </div>
             <div>
@@ -1974,17 +1977,42 @@
               </div>
             </div>
             <div>
-              <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">⛽ CONSUMO HORARIO (FUEL BURN)</label>
-              <div style="display: flex; align-items: center; gap: 4px;">
-                <input type="number" id="fpl-aircraft-consumption" value="8.0" step="0.1" min="1" max="150" oninput="handleAircraftConsumptionChange()" style="width: 65%; background: #161b22; border: 1px solid #30363d; color: #3fb950; font-weight: 800; font-size: 13px; padding: 7px 8px; border-radius: 8px;">
-                <select id="fpl-aircraft-consumption-unit" onchange="handleAircraftConsumptionChange()" style="width: 35%; background: #161b22; border: 1px solid #30363d; color: #fff; font-size: 11px; padding: 7px 4px; border-radius: 8px; outline: none; font-weight: 700;">
-                  <option value="gal" selected>Gal/h</option>
-                  <option value="l">L/h</option>
+              <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">⛽ CONSUMO HORARIO (FUEL FLOW)</label>
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <input type="number" id="fpl-aircraft-consumption" value="8.0" step="0.1" min="1" max="60" oninput="handleAircraftConsumptionChange()" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #3fb950; font-weight: 800; font-size: 13px; padding: 7px 10px; border-radius: 8px;">
+                <span style="font-size: 12px; color: #3fb950; font-weight: 800;">Gal/h</span>
+              </div>
+            </div>
+            <div>
+              <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">🛫 AERÓDROMO SALIDA</label>
+              <input type="text" id="fpl-departure-name" value="LECU / CUATRO VIENTOS" onchange="handleDepartureAirportChange(this.value)" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #58a6ff; font-weight: 700; font-size: 12px; padding: 7px 10px; border-radius: 8px;">
+            </div>
+            <div>
+              <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">🛬 AERÓDROMO DESTINO</label>
+              <div style="display: flex; gap: 4px;">
+                <select id="fpl-destination-select" onchange="handleDestinationSelectChange(this.value)" style="width: 45%; background: #161b22; border: 1px solid #30363d; color: #3fb950; font-weight: 800; font-size: 11px; padding: 7px 4px; border-radius: 8px; outline: none;">
+                  <option value="LEVD" selected>LEVD (Valladolid)</option>
+                  <option value="LECU">LECU (Cuatro Vientos)</option>
+                  <option value="LEMT">LEMT (Casarrubios)</option>
+                  <option value="LESA">LESA (Salamanca)</option>
+                  <option value="LEBZ">LEBZ (Badajoz)</option>
+                  <option value="LEDS">LEDS (Castellón)</option>
+                  <option value="LESB">LESB (Son Bonet)</option>
+                  <option value="LERJ">LERJ (Logroño)</option>
+                  <option value="LETO">LETO (Toledo)</option>
+                  <option value="LERM">LERM (Robledillo)</option>
+                  <option value="LEOC">LEOC (Ocaña)</option>
+                  <option value="LEZL">LEZL (Sevilla)</option>
+                  <option value="LEJR">LEJR (Jerez)</option>
+                  <option value="LEMG">LEMG (Málaga)</option>
+                  <option value="LEMD">LEMD (Barajas)</option>
                 </select>
+                <input type="text" id="fpl-destination-name" value="LEVD / VALLADOLID" onchange="handleDestinationAirportChange(this.value)" style="width: 55%; background: #161b22; border: 1px solid #30363d; color: #3fb950; font-weight: 800; font-size: 12px; padding: 7px 8px; border-radius: 8px;">
               </div>
-              <div id="fpl-consumption-equiv-badge" style="font-size: 10px; color: #8b949e; font-weight: 700; margin-top: 3px; text-align: right;">
-                = 30.3 L/h
-              </div>
+            </div>
+            <div>
+              <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">AERÓDROMO ALTERNATIVO</label>
+              <input type="text" id="fpl-alternate-name" value="LESA / SALAMANCA" onchange="handleAlternateAirportChange(this.value)" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #e3b341; font-weight: 700; font-size: 12px; padding: 7px 10px; border-radius: 8px;">
             </div>
             <div>
               <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">MATRÍCULA</label>
@@ -2006,10 +2034,6 @@
               <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">TRANSPONDER (SQUAWK)</label>
               <input type="text" id="fpl-squawk" value="7000" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #3fb950; font-weight: 800; font-size: 12px; padding: 7px 10px; border-radius: 8px; text-align: center;">
             </div>
-            <div>
-              <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">AERÓDROMO ALTERNATIVO</label>
-              <input type="text" id="fpl-alternate-name" value="LEVD / VALLADOLID" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #e3b341; font-weight: 700; font-size: 12px; padding: 7px 10px; border-radius: 8px;">
-            </div>
           </div>
         </div>
 
@@ -2017,14 +2041,17 @@
         <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 12px; padding: 14px;">
           <div style="font-size: 11px; font-weight: 800; color: #3fb950; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; letter-spacing: 0.5px;">
             <div style="display: flex; align-items: center; gap: 6px;">
-              <span>🧭</span> COMPUTADOR DE VUELO CR3 & CONDICIONES DE NAVEGACIÓN
+              <span>🧭</span> COMPUTADOR DE VUELO CR3 & PRONÓSTICO DE VIENTOS EN RUTA
             </div>
-            <div style="display: flex; align-items: center; gap: 6px;">
-              <button type="button" id="fpl-btn-fetch-winds" onclick="fetchWindsAloftForRoute()" style="padding: 6px 12px; background: rgba(56,139,253,0.15); border: 1px solid #388bfd; color: #58a6ff; font-size: 11px; font-weight: 800; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 5px;" title="Obtener pronóstico de vientos en altura (Open-Meteo) para cada waypoint a la hora estimada del vuelo">
-                <span>🌬️</span> Obtener Pronóstico Vientos en Altura (Hora Vuelo)
+            <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+              <button type="button" id="fpl-btn-fetch-winds" onclick="fetchWindsAloftForRoute()" style="padding: 6px 12px; background: rgba(56,139,253,0.15); border: 1px solid #388bfd; color: #58a6ff; font-size: 11px; font-weight: 800; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 5px;" title="Obtener pronóstico de vientos en altura (Open-Meteo / Windy) para cada waypoint a la hora estimada del vuelo">
+                <span>🌬️</span> Pronóstico Viento Altura (Hora Vuelo)
               </button>
-              <button type="button" onclick="useMetarWindInFPL()" style="padding: 6px 10px; background: #21262d; border: 1px solid #30363d; color: #e3b341; font-size: 11px; font-weight: 700; border-radius: 6px; cursor: pointer;" title="Copiar viento del METAR activo al viento base">
-                🌬️ METAR
+              <button type="button" onclick="openRouteInWindy()" style="padding: 6px 10px; background: #d94b00; border: 1px solid #ff5e00; color: #fff; font-size: 11px; font-weight: 800; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 4px;" title="Abrir la ruta y mapa meteorológico interactivo en Windy.com">
+                <span>🌐</span> Abrir en Windy
+              </button>
+              <button type="button" id="fpl-btn-metar-refresh" onclick="useMetarWindInFPL()" style="padding: 6px 10px; background: #238636; border: 1px solid #2ea043; color: #fff; font-size: 11px; font-weight: 800; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 4px;" title="Descarga los METARs oficiales en tiempo real de Salida y Destino y aplica viento, QNH y temperaturas">
+                <span>🔄</span> Actualizar METARs
               </button>
             </div>
           </div>
@@ -2046,7 +2073,7 @@
             </div>
             <div>
               <div style="background: rgba(56,139,253,0.08); border: 1px solid rgba(56,139,253,0.25); border-radius: 8px; padding: 8px 10px; font-size: 11px; color: var(--text-muted);">
-                <strong style="color: #58a6ff;">💡 Viento por Punto:</strong> Cada tramo dispone de su propia casilla de viento editable. Puedes pulsar el botón azul para consultar el pronóstico en altura para cada punto a la hora de tu ruta.
+                <strong style="color: #58a6ff;">💡 Vientos por Punto:</strong> Cada tramo de la tabla tiene su casilla de viento editable. El botón azul carga el pronóstico en altura por hora, y el botón verde actualiza los METARs de salida y llegada.
               </div>
             </div>
           </div>
@@ -2061,19 +2088,18 @@
           <div>
             <h4 style="margin: 0; font-size: 14px; font-weight: 800; color: #fff;">🗺️ NavLog de Navegación Operacional (Tramos de Ruta)</h4>
             <p style="margin: 2px 0 0 0; font-size: 11px; color: var(--text-muted);">
-              Secuencia oficial aeronáutica: TC · VAR · MC · Viento · MH · Alt · Dist · TAS · GS · ETE · ETA · ATA · Fuel
+              Secuencia oficial: TC · VAR · MC · Viento · MH · Alt · Dist · TAS · GS · ETE · ETA · ATA · Fuel (Gal)
             </p>
           </div>
           <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-            <button type="button" onclick="addNewEmptyWaypointRow()" style="padding: 6px 12px; background: #21262d; border: 1px solid #30363d; color: #58a6ff; font-size: 11px; font-weight: 700; border-radius: 6px; cursor: pointer;">
-              ➕ Añadir Tramo Manual
+            <button type="button" onclick="addNewEmptyWaypointRow()" style="padding: 7px 14px; background: #1f6feb; border: 1px solid #388bfd; color: #fff; font-size: 12px; font-weight: 800; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 5px;">
+              <span>➕</span> Añadir Tramo Manual
             </button>
-            <button type="button" onclick="switchFPLSubTab('map')" style="padding: 6px 12px; background: rgba(56,139,253,0.15); border: 1px solid #388bfd; color: #58a6ff; font-size: 11px; font-weight: 700; border-radius: 6px; cursor: pointer;">
+            <button type="button" onclick="switchFPLSubTab('map')" style="padding: 7px 12px; background: rgba(56,139,253,0.15); border: 1px solid #388bfd; color: #58a6ff; font-size: 11px; font-weight: 700; border-radius: 6px; cursor: pointer;">
               🗺️ Trazar en Carta Visual
             </button>
           </div>
         </div>
-
         <!-- CONTENEDOR TABLA CON SCROLL SUAVE Y COLUMNAS ESPACIOSAS -->
         <div style="overflow-x: auto; border-radius: 10px; border: 1px solid #30363d;">
           <table style="width: 100%; min-width: 1040px; border-collapse: collapse; font-size: 12px; text-align: left;">
@@ -2093,7 +2119,7 @@
                 <th style="padding: 10px 4px; width: 65px; text-align: center; color: #e3b341; font-weight: 800;">ETE</th>
                 <th style="padding: 10px 4px; width: 65px; text-align: center;">ETA</th>
                 <th style="padding: 10px 4px; width: 65px; text-align: center;">ATA</th>
-                <th style="padding: 10px 4px; width: 95px; text-align: center;">Fuel (L)</th>
+                <th style="padding: 10px 4px; width: 95px; text-align: center; color: #58a6ff;">Fuel (Gal)</th>
                 <th style="padding: 10px 4px; width: 35px; text-align: center;" class="no-print">Acción</th>
               </tr>
             </thead>
@@ -2109,7 +2135,7 @@
                 <td colspan="2"></td>
                 <td style="padding: 10px 4px; text-align: center; color: #e3b341; font-size: 13px;" id="fpl-total-time-badge">00m</td>
                 <td colspan="2"></td>
-                <td style="padding: 10px 4px; text-align: center; color: #58a6ff; font-size: 13px;" id="fpl-total-fuel-badge">0.0 L</td>
+                <td style="padding: 10px 4px; text-align: center; color: #58a6ff; font-size: 13px;" id="fpl-total-fuel-badge">0.0 Gal</td>
                 <td class="no-print"></td>
               </tr>
             </tfoot>
@@ -2133,18 +2159,18 @@
       </div>
 
       <!-- ───────────────────────────────────────────────────────────
-           TARJETA 3: GESTIÓN DE COMBUSTIBLE (WORLD AVIATION FUEL PLAN)
+           TARJETA 3: GESTIÓN DE COMBUSTIBLE EN GALONES (C172 US GALLONS)
       ─────────────────────────────────────────────────────────── -->
       <div class="pilot-box" style="margin-bottom: 16px; background: var(--bg-card, #161b22); border: 1px solid var(--border-color, #30363d); border-radius: 16px; padding: 16px;">
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 14px;">
           <div>
-            <h4 style="margin: 0; font-size: 14px; font-weight: 800; color: #fff;">⛽ Gestión de Combustible Reglamentario (World Aviation)</h4>
+            <h4 style="margin: 0; font-size: 14px; font-weight: 800; color: #fff;">⛽ Gestión de Combustible Reglamentario (Galones US · C172)</h4>
             <p style="margin: 2px 0 0 0; font-size: 11px; color: var(--text-muted);">
-              Desglose editable de consumo de viaje, reservas y margen de autonomía de seguridad
+              Cálculo en Galones US (Gal · 8.0 Gal/h): consumo de viaje, alternativo, 45 min de reserva final y contingencia
             </p>
           </div>
           <div id="fpl-fuel-safety-margin-badge" style="background: rgba(46,160,67,0.15); border: 1px solid #2ea043; color: #56d364; font-size: 11px; font-weight: 800; padding: 5px 12px; border-radius: 8px;">
-            ✅ Margen Seguro: +26.0 L
+            ✅ Margen Seguro: +22.8 Gal
           </div>
         </div>
 
@@ -2155,19 +2181,19 @@
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
               <div>
                 <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">Climb (Subida)</label>
-                <input type="text" id="fpl-fuel-climb" value="8.0 L" onchange="calculateFuelSummary()" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #fff; font-weight: 700; font-size: 12px; padding: 6px 10px; border-radius: 6px; text-align: center;">
+                <input type="text" id="fpl-fuel-climb" value="1.5 Gal" onchange="calculateFuelSummary()" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #fff; font-weight: 700; font-size: 12px; padding: 6px 10px; border-radius: 6px; text-align: center;">
               </div>
               <div>
                 <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">Cruise (Crucero)</label>
-                <input type="text" id="fpl-fuel-cruise" value="18.5 L" onchange="calculateFuelSummary()" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #fff; font-weight: 700; font-size: 12px; padding: 6px 10px; border-radius: 6px; text-align: center;">
+                <input type="text" id="fpl-fuel-cruise" value="4.8 Gal" onchange="calculateFuelSummary()" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #fff; font-weight: 700; font-size: 12px; padding: 6px 10px; border-radius: 6px; text-align: center;">
               </div>
               <div>
                 <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">Descent (Descenso)</label>
-                <input type="text" id="fpl-fuel-descent" value="2.5 L" onchange="calculateFuelSummary()" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #fff; font-weight: 700; font-size: 12px; padding: 6px 10px; border-radius: 6px; text-align: center;">
+                <input type="text" id="fpl-fuel-descent" value="0.5 Gal" onchange="calculateFuelSummary()" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #fff; font-weight: 700; font-size: 12px; padding: 6px 10px; border-radius: 6px; text-align: center;">
               </div>
               <div>
                 <label style="font-size: 10px; font-weight: 800; color: #58a6ff; display: block; margin-bottom: 4px;">TOTAL TRIP FUEL</label>
-                <input type="text" id="fpl-fuel-total-trip" value="29.0 L" style="width: 100%; background: #161b22; border: 1px solid #388bfd; color: #58a6ff; font-weight: 800; font-size: 12px; padding: 6px 10px; border-radius: 6px; text-align: center;">
+                <input type="text" id="fpl-fuel-total-trip" value="6.8 Gal" style="width: 100%; background: #161b22; border: 1px solid #388bfd; color: #58a6ff; font-weight: 800; font-size: 12px; padding: 6px 10px; border-radius: 6px; text-align: center;">
               </div>
             </div>
           </div>
@@ -2178,25 +2204,24 @@
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
               <div>
                 <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">Alternate Fuel (Alternativo)</label>
-                <input type="text" id="fpl-fuel-alt" value="15.0 L" onchange="calculateFuelSummary()" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #fff; font-weight: 700; font-size: 12px; padding: 6px 10px; border-radius: 6px; text-align: center;">
+                <input type="text" id="fpl-fuel-alt" value="4.0 Gal" onchange="calculateFuelSummary()" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #fff; font-weight: 700; font-size: 12px; padding: 6px 10px; border-radius: 6px; text-align: center;">
               </div>
               <div>
                 <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">Trip Fuel Requerido</label>
-                <input type="text" id="fpl-fuel-trip" value="29.0 L" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #fff; font-weight: 700; font-size: 12px; padding: 6px 10px; border-radius: 6px; text-align: center;">
+                <input type="text" id="fpl-fuel-trip" value="6.8 Gal" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #fff; font-weight: 700; font-size: 12px; padding: 6px 10px; border-radius: 6px; text-align: center;">
               </div>
               <div>
                 <label style="font-size: 10px; font-weight: 800; color: #e3b341; display: block; margin-bottom: 4px;">MIN. REQUIRED FUEL</label>
-                <input type="text" id="fpl-fuel-min-req" value="54.0 L" onchange="calculateFuelSummary()" style="width: 100%; background: #161b22; border: 1px solid #d29922; color: #f1e05a; font-weight: 800; font-size: 12px; padding: 6px 10px; border-radius: 6px; text-align: center;">
+                <input type="text" id="fpl-fuel-min-req" value="17.5 Gal" onchange="calculateFuelSummary()" style="width: 100%; background: #161b22; border: 1px solid #d29922; color: #f1e05a; font-weight: 800; font-size: 12px; padding: 6px 10px; border-radius: 6px; text-align: center;">
               </div>
               <div>
                 <label style="font-size: 10px; font-weight: 800; color: #3fb950; display: block; margin-bottom: 4px;">FUEL ON BOARD (FOB)</label>
-                <input type="text" id="fpl-fuel-fob" value="80.0 L" onchange="calculateFuelSummary()" style="width: 100%; background: #161b22; border: 1px solid #2ea043; color: #3fb950; font-weight: 900; font-size: 13px; padding: 6px 10px; border-radius: 6px; text-align: center;">
+                <input type="text" id="fpl-fuel-fob" value="40.0 Gal" onchange="calculateFuelSummary()" style="width: 100%; background: #161b22; border: 1px solid #2ea043; color: #3fb950; font-weight: 900; font-size: 13px; padding: 6px 10px; border-radius: 6px; text-align: center;">
               </div>
             </div>
           </div>
         </div>
       </div>
-
       <!-- ───────────────────────────────────────────────────────────
            TARJETA 4: METEOROLOGÍA, PISTAS, CALZOS Y CLEARANCE
       ─────────────────────────────────────────────────────────── -->
@@ -6873,26 +6898,13 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
     showToastNotification(`➕ Añadido ${name} a la ruta.`);
   }
 
-  function getAircraftHourlyBurnLph() {
+  // Consumo en Galones/hora (estándar aviación C172)
+  function getAircraftHourlyBurnGal() {
     const val = parseFloat(document.getElementById('fpl-aircraft-consumption')?.value || '8.0');
-    const unit = document.getElementById('fpl-aircraft-consumption-unit')?.value || 'gal';
-    if (isNaN(val) || val <= 0) return 30.28;
-    return unit === 'gal' ? (val * 3.78541) : val;
+    return (!isNaN(val) && val > 0) ? val : 8.0;
   }
 
   function handleAircraftConsumptionChange() {
-    const val = parseFloat(document.getElementById('fpl-aircraft-consumption')?.value || '8.0');
-    const unit = document.getElementById('fpl-aircraft-consumption-unit')?.value || 'gal';
-    const badge = document.getElementById('fpl-consumption-equiv-badge');
-    if (badge) {
-      if (unit === 'gal') {
-        const lph = (val * 3.78541).toFixed(1);
-        badge.textContent = `= ${lph} L/h`;
-      } else {
-        const galph = (val / 3.78541).toFixed(1);
-        badge.textContent = `= ${galph} Gal/h`;
-      }
-    }
     updateNavLogCalculationsAndDOM();
   }
 
@@ -6912,6 +6924,118 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
     updateNavLogCalculationsAndDOM();
   }
 
+  function getSpanishAirport(icaoOrName) {
+    if (!icaoOrName) return null;
+    const clean = icaoOrName.split('/')[0].trim().toUpperCase();
+    return SPANISH_VAC_DATABASE.find(ad => ad.icao === clean || ad.name.toUpperCase().includes(clean));
+  }
+
+  function handleDepartureAirportChange(val) {
+    const ap = getSpanishAirport(val);
+    if (ap) {
+      const toRwyInput = document.getElementById('fpl-to-rwy');
+      if (toRwyInput && ap.runways) {
+        const m = ap.runways.match(/(\d{2})\//);
+        if (m) toRwyInput.value = m[1];
+      }
+      const toAvail = document.getElementById('fpl-perf-to-avail');
+      if (toAvail && ap.runways) {
+        toAvail.value = `${ap.runways.split('·')[0].trim()} (${ap.icao})`;
+      }
+    }
+  }
+
+  function handleDestinationSelectChange(icao) {
+    const ap = getSpanishAirport(icao);
+    const nameInput = document.getElementById('fpl-destination-name');
+    if (nameInput && ap) {
+      nameInput.value = `${ap.icao} / ${ap.name.toUpperCase()}`;
+    }
+    applyDestinationAirportData(icao);
+  }
+
+  function handleDestinationAirportChange(val) {
+    const ap = getSpanishAirport(val);
+    if (ap) {
+      const select = document.getElementById('fpl-destination-select');
+      if (select) select.value = ap.icao;
+      applyDestinationAirportData(ap.icao);
+    }
+  }
+
+  function handleAlternateAirportChange(val) {
+    const ap = getSpanishAirport(val);
+    if (ap) {
+      const toAlt = document.getElementById('fpl-perf-to-avail-alt');
+      if (toAlt && ap.runways) toAlt.value = `${ap.runways.split('·')[0].trim()} (${ap.icao})`;
+      const ldAlt = document.getElementById('fpl-perf-ld-avail-alt');
+      if (ldAlt && ap.runways) ldAlt.value = `${ap.runways.split('·')[0].trim()} (${ap.icao})`;
+    }
+  }
+
+  // ─────────────────────────────────────────────────────────────
+  // ACTUALIZACIÓN DE DATOS Y RENDIMIENTO DE ATERRIZAJE (VALLADOLID, ETC.)
+  // ─────────────────────────────────────────────────────────────
+  function applyDestinationAirportData(icao) {
+    if (!icao) return;
+    const ap = getSpanishAirport(icao);
+    if (!ap) return;
+
+    // Actualizar Pista Disponible de Aterrizaje
+    const ldAvailInput = document.getElementById('fpl-perf-ld-avail');
+    if (ldAvailInput && ap.runways) {
+      ldAvailInput.value = `${ap.runways.split('·')[0].trim()} (${ap.icao})`;
+    }
+
+    // Actualizar Frecuencia TWR de contacto de llegada
+    const ldCallInput = document.getElementById('fpl-ld-firstcall');
+    if (ldCallInput && ap.freqs) {
+      const twr = (ap.freqs.twr && ap.freqs.twr !== '—') ? ap.freqs.twr : (ap.freqs.fis || '123.500');
+      ldCallInput.value = `${twr} (${ap.icao} ${ap.freqs.twr !== '—' ? 'TWR' : 'RADIO'})`;
+    }
+
+    // Actualizar Pista de llegada
+    const ldRwyInput = document.getElementById('fpl-ld-rwy');
+    if (ldRwyInput && ap.runways) {
+      const m = ap.runways.match(/(\d{2})\//);
+      if (m) ldRwyInput.value = m[1];
+    }
+
+    // Actualizar Parking de llegada
+    const park2 = document.getElementById('fpl-parking-2');
+    if (park2) park2.value = `${ap.icao} Plataforma`;
+
+    // Actualizar frecuencias operacionales
+    const freqsBox = document.getElementById('fpl-frequencies');
+    if (freqsBox && ap.freqs) {
+      let fStr = `SALIDA (LECU): TWR 118.150 | GND 121.800 | ATIS 130.850\nLLEGADA (${ap.icao}): `;
+      Object.entries(ap.freqs).forEach(([k, v]) => {
+        if (v && v !== '—') fStr += `${k.toUpperCase()} ${v} · `;
+      });
+      fStr += 'MADRID FIS: 127.100';
+      freqsBox.value = fStr;
+    }
+
+    // Actualizar último tramo de la ruta si es el destino
+    if (fplWaypoints.length > 1) {
+      const last = fplWaypoints[fplWaypoints.length - 1];
+      if (last.lat === null || last.name.startsWith('TRAMO') || last.name.includes('LEVD') || last.name.includes('DESTINO')) {
+        last.name = `${ap.icao} (${ap.name.split('/')[0].trim()})`;
+        last.lat = ap.lat;
+        last.lon = ap.lon;
+        last.alt = ap.elev ? (parseInt(ap.elev.replace(/[^0-9]/g, ''), 10) + 1000) : 4500;
+        last.manualDist = false;
+        last.manualTC = false;
+        updateNavLogCalculationsAndDOM();
+        renderNavLogTable();
+      }
+    }
+
+    showToastNotification(`🛬 Pistas y ATIS actualizados para ${ap.name} (${ap.icao}): ${ap.runways.split('·')[0].trim()}`);
+  }
+  // ─────────────────────────────────────────────────────────────
+  // AÑADIR TRAMO MANUAL Y EDICIÓN NATIVA ROBUSTA
+  // ─────────────────────────────────────────────────────────────
   function addNewEmptyWaypointRow() {
     if (fplWaypoints.length >= 12) {
       showToastNotification('⚠️ El plan de vuelo permite un máximo de 12 tramos.');
@@ -6943,11 +7067,24 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
       ete: '07m',
       eta: '',
       ata: '',
-      legFuel: '3.5 L',
-      totFuel: '3.5 L'
+      legFuel: '0.9 Gal',
+      totFuel: '0.9 Gal'
     });
+
     renderNavLogTable();
     updateNavLogCalculationsAndDOM();
+
+    // Enfocar automáticamente el nuevo tramo para escribir su nombre de inmediato
+    setTimeout(() => {
+      const newRow = document.getElementById(`fpl-nav-row-${fplWaypoints.length - 1}`);
+      if (newRow) {
+        const input = newRow.querySelector('.fpl-input-name');
+        if (input) {
+          input.focus();
+          input.select();
+        }
+      }
+    }, 50);
   }
 
   function removeWaypoint(idx) {
@@ -6963,29 +7100,61 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
   function resetFlightPlanRoute() {
     if (!confirm('¿Deseas reiniciar la ruta del Plan de Vuelo Operacional?')) return;
     fplWaypoints = [
-      { name: "LECU (RWY 27)", lat: 40.3706, lon: -3.7850, alt: 2500, dist: 0, tc: 0, varDeg: -1, mc: 0, wind: "240/12", mh: 0, tas: 90, gs: 90, ete: "00m", eta: "10:00", ata: "", legFuel: "0.0 L", totFuel: "0.0 L" }
+      { name: "LECU (RWY 27)", lat: 40.3706, lon: -3.7850, alt: 2500, dist: 0, tc: 0, varDeg: -1, mc: 0, wind: "240/12", mh: 0, tas: 90, gs: 90, ete: "00m", eta: "10:00", ata: "", legFuel: "0.0 Gal", totFuel: "0.0 Gal" }
     ];
     renderNavLogTable();
     updateNavLogCalculationsAndDOM();
   }
 
-  // ─────────────────────────────────────────────────────────────
-  // MANEJO ROBUSTO DE EDICIÓN EN CELDAS DEL NAVLOG (SIN CORRUPCIÓN)
-  // ─────────────────────────────────────────────────────────────
+  // Manejo reactivo de inputs
   function handleNavlogInput(idx, field, val) {
+    applyNavlogValue(idx, field, val, false);
+  }
+
+  function handleNavlogChange(idx, field, val) {
+    applyNavlogValue(idx, field, val, true);
+  }
+
+  function applyNavlogValue(idx, field, val, isFinalChange) {
     const wp = fplWaypoints[idx];
     if (!wp) return;
 
     if (field === 'name') {
       wp.name = val;
+      // Autodetección si el nombre coincide con un punto conocido del AIP o VAC
+      const upper = val.toUpperCase().trim();
+      let matched = null;
+      for (const [k, pt] of Object.entries(VFR_KNOWN_POINTS)) {
+        if (k.toUpperCase().includes(upper) || upper.includes(k.toUpperCase().split(' ')[0])) {
+          matched = pt;
+          break;
+        }
+      }
+      if (!matched && SPANISH_VAC_DATABASE[upper]) {
+        const ap = SPANISH_VAC_DATABASE[upper];
+        matched = { lat: ap.lat, lon: ap.lon, alt: ap.elevacion + 1000 };
+        applyDestinationAirportData(upper);
+      }
+      if (matched && (!wp.lat || isFinalChange)) {
+        wp.lat = matched.lat;
+        wp.lon = matched.lon;
+        if (!wp.manualAlt) wp.alt = matched.alt || 3500;
+        wp.manualDist = false;
+        wp.manualTC = false;
+      }
     } else if (field === 'alt') {
-      const num = parseInt(val.replace(/[^0-9]/g, ''), 10);
-      if (!isNaN(num) && num > 0) wp.alt = num;
+      const num = parseInt(val, 10);
+      if (!isNaN(num) && num >= 0) {
+        wp.alt = num;
+        wp.manualAlt = true;
+      }
     } else if (field === 'tc') {
       const num = parseFloat(val);
       if (!isNaN(num)) {
         wp.tc = (num % 360 + 360) % 360;
         wp.manualTC = true;
+      } else if (val === '') {
+        wp.tc = 0;
       }
     } else if (field === 'var') {
       const num = parseFloat(val);
@@ -7009,6 +7178,8 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
       if (!isNaN(num) && num >= 0) {
         wp.dist = num;
         wp.manualDist = true;
+      } else if (val === '') {
+        wp.dist = 0;
       }
     } else if (field === 'tas') {
       const num = parseFloat(val);
@@ -7023,18 +7194,20 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
     updateNavLogCalculationsAndDOM();
   }
 
-  // Recálculo trigonométrico CR3 y propagación horaria sin destruir el DOM
+  // ─────────────────────────────────────────────────────────────
+  // RECÁLCULO TRIGONOMÉTRICO CR3 & PROPAGACIÓN DE TIEMPOS Y FUEL (GALONES)
+  // ─────────────────────────────────────────────────────────────
   function updateNavLogCalculationsAndDOM() {
     const globalIas = parseInt(document.getElementById('fpl-ias-input')?.value || '90', 10);
     const globalWind = document.getElementById('fpl-wind-input')?.value || '240/12';
     const globalVar = parseFloat(document.getElementById('fpl-var-input')?.value || '-1');
-    const hourlyBurnLph = getAircraftHourlyBurnLph();
+    const hourlyBurnGal = getAircraftHourlyBurnGal();
 
     let toTimeStr = document.getElementById('fpl-takeoff-time')?.value || '10:00';
     let [curHour, curMin] = toTimeStr.split(':').map(x => parseInt(x, 10) || 0);
 
     let cumulativeMinutes = 0;
-    let totalFuel = 0;
+    let totalFuelGal = 0;
     let totalDist = 0;
 
     fplWaypoints.forEach((wp, idx) => {
@@ -7046,8 +7219,8 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
         wp.gs = globalIas;
         wp.ete = '—';
         wp.eta = toTimeStr;
-        wp.legFuel = '0.0 L';
-        wp.totFuel = '0.0 L';
+        wp.legFuel = '0.0 Gal';
+        wp.totFuel = '0.0 Gal';
       } else {
         const prev = fplWaypoints[idx - 1];
         if (!wp.manualDist && wp.lat && wp.lon && prev.lat && prev.lon) {
@@ -7093,13 +7266,13 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
         const etaM = etaTotalMin % 60;
         wp.eta = `${String(etaH).padStart(2, '0')}:${String(etaM).padStart(2, '0')}`;
 
-        const legF = parseFloat(((legMinutes / 60) * hourlyBurnLph).toFixed(1));
-        totalFuel += legF;
-        wp.legFuel = `${legF.toFixed(1)} L`;
-        wp.totFuel = `${totalFuel.toFixed(1)} L`;
+        const legF = parseFloat(((legMinutes / 60) * hourlyBurnGal).toFixed(1));
+        totalFuelGal += legF;
+        wp.legFuel = `${legF.toFixed(1)} Gal`;
+        wp.totFuel = `${totalFuelGal.toFixed(1)} Gal`;
       }
 
-      // Actualizar valores en el DOM de forma quirúrgica sin perder el foco
+      // Actualizar valores en el DOM de forma no destructiva
       const row = document.getElementById(`fpl-nav-row-${idx}`);
       if (row) {
         const activeEl = document.activeElement;
@@ -7145,7 +7318,11 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
     }
 
     const fuelBadge = document.getElementById('fpl-total-fuel-badge');
-    if (fuelBadge) fuelBadge.textContent = `${totalFuel.toFixed(1)} L`;
+    if (fuelBadge) fuelBadge.textContent = `${totalFuelGal.toFixed(1)} Gal`;
+
+    // Sincronizar combustible de crucero
+    const cruiseFuelInput = document.getElementById('fpl-fuel-cruise');
+    if (cruiseFuelInput) cruiseFuelInput.value = `${totalFuelGal.toFixed(1)} Gal`;
 
     calculateFuelSummary();
     updateVFRMapDisplay();
@@ -7157,8 +7334,7 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
   }
 
   // ─────────────────────────────────────────────────────────────
-  // RENDERIZADO DEL NAVLOG EN EL ORDEN EXACTO SOLICITADO
-  // TC - VAR - MC - Viento - MH - Alt - Dist - TAS - GS - ETE - ETA - ATA - Fuel
+  // RENDERIZADO DEL NAVLOG OPERACIONAL EN EL ORDEN SOLICITADO
   // ─────────────────────────────────────────────────────────────
   function renderNavLogTable() {
     const tbody = document.getElementById('fpl-friendly-navlog-tbody');
@@ -7181,47 +7357,47 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
 
           <!-- WAYPOINT -->
           <td style="padding: 8px 6px;">
-            <input type="text" class="fpl-input-name" data-idx="${idx}" value="${wp.name}" oninput="handleNavlogInput(${idx}, 'name', this.value)" placeholder="${isOrigin ? 'Punto Salida' : 'Nombre del tramo'}" style="width: 100%; background: #0d1117; border: 1px solid #30363d; color: #fff; font-weight: 700; font-size: 12px; padding: 6px 8px; border-radius: 6px; outline: none;">
+            <input type="text" class="fpl-input-name" data-idx="${idx}" value="${wp.name}" oninput="handleNavlogInput(${idx}, 'name', this.value)" onchange="handleNavlogChange(${idx}, 'name', this.value)" placeholder="${isOrigin ? 'Punto Salida' : 'Nombre del tramo'}" style="width: 100%; background: #0d1117; border: 1px solid #30363d; color: #fff; font-weight: 700; font-size: 12px; padding: 6px 8px; border-radius: 6px; outline: none;">
           </td>
 
           <!-- TC (°) -->
           <td style="padding: 8px 4px; text-align: center;">
-            ${isOrigin ? '—' : `<input type="number" class="fpl-input-tc" data-idx="${idx}" value="${wp.tc ?? 0}" oninput="handleNavlogInput(${idx}, 'tc', this.value)" min="0" max="360" style="width: 58px; background: #0d1117; border: 1px solid #30363d; color: #58a6ff; font-weight: 700; font-size: 12px; padding: 5px 2px; border-radius: 6px; text-align: center;">`}
+            ${isOrigin ? '—' : `<input type="number" class="fpl-input-tc" data-idx="${idx}" value="${wp.tc ?? 0}" oninput="handleNavlogInput(${idx}, 'tc', this.value)" onchange="handleNavlogChange(${idx}, 'tc', this.value)" min="0" max="360" style="width: 58px; background: #0d1117; border: 1px solid #30363d; color: #58a6ff; font-weight: 700; font-size: 12px; padding: 5px 2px; border-radius: 6px; text-align: center;">`}
           </td>
 
           <!-- VAR -->
           <td style="padding: 8px 4px; text-align: center;">
-            ${isOrigin ? '—' : `<input type="text" class="fpl-input-var" data-idx="${idx}" value="${wp.varDeg ?? globalVar}" oninput="handleNavlogInput(${idx}, 'var', this.value)" style="width: 46px; background: #0d1117; border: 1px solid #30363d; color: #8b949e; font-size: 11px; padding: 5px 2px; border-radius: 6px; text-align: center;">`}
+            ${isOrigin ? '—' : `<input type="text" class="fpl-input-var" data-idx="${idx}" value="${wp.varDeg ?? globalVar}" oninput="handleNavlogInput(${idx}, 'var', this.value)" onchange="handleNavlogChange(${idx}, 'var', this.value)" style="width: 46px; background: #0d1117; border: 1px solid #30363d; color: #8b949e; font-size: 11px; padding: 5px 2px; border-radius: 6px; text-align: center;">`}
           </td>
 
           <!-- MC (°) -->
           <td style="padding: 8px 4px; text-align: center;">
-            ${isOrigin ? '—' : `<input type="number" class="fpl-input-mc" data-idx="${idx}" value="${wp.mc ?? 0}" oninput="handleNavlogInput(${idx}, 'mc', this.value)" min="0" max="360" style="width: 58px; background: #0d1117; border: 1px solid #30363d; color: #79c0ff; font-weight: 800; font-size: 12px; padding: 5px 2px; border-radius: 6px; text-align: center;">`}
+            ${isOrigin ? '—' : `<input type="number" class="fpl-input-mc" data-idx="${idx}" value="${wp.mc ?? 0}" oninput="handleNavlogInput(${idx}, 'mc', this.value)" onchange="handleNavlogChange(${idx}, 'mc', this.value)" min="0" max="360" style="width: 58px; background: #0d1117; border: 1px solid #30363d; color: #79c0ff; font-weight: 800; font-size: 12px; padding: 5px 2px; border-radius: 6px; text-align: center;">`}
           </td>
 
           <!-- VIENTO -->
           <td style="padding: 8px 4px; text-align: center;">
-            ${isOrigin ? '—' : `<input type="text" class="fpl-input-wind" data-idx="${idx}" value="${wp.wind || globalWind}" oninput="handleNavlogInput(${idx}, 'wind', this.value)" placeholder="240/12" style="width: 80px; background: #0d1117; border: 1px solid #30363d; color: #3fb950; font-weight: 700; font-family: monospace; font-size: 11px; padding: 5px 4px; border-radius: 6px; text-align: center;">`}
+            ${isOrigin ? '—' : `<input type="text" class="fpl-input-wind" data-idx="${idx}" value="${wp.wind || globalWind}" oninput="handleNavlogInput(${idx}, 'wind', this.value)" onchange="handleNavlogChange(${idx}, 'wind', this.value)" placeholder="240/12" style="width: 80px; background: #0d1117; border: 1px solid #30363d; color: #3fb950; font-weight: 700; font-family: monospace; font-size: 11px; padding: 5px 4px; border-radius: 6px; text-align: center;">`}
           </td>
 
           <!-- MH (°) -->
           <td style="padding: 8px 4px; text-align: center;">
-            ${isOrigin ? '—' : `<input type="number" class="fpl-input-mh" data-idx="${idx}" value="${wp.mh ?? 0}" oninput="handleNavlogInput(${idx}, 'mh', this.value)" min="0" max="360" style="width: 58px; background: #0d1117; border: 1px solid #30363d; color: #d2a8ff; font-weight: 800; font-size: 13px; padding: 5px 2px; border-radius: 6px; text-align: center;" title="Rumbo de navegación / brújula corregido por viento">`}
+            ${isOrigin ? '—' : `<input type="number" class="fpl-input-mh" data-idx="${idx}" value="${wp.mh ?? 0}" oninput="handleNavlogInput(${idx}, 'mh', this.value)" onchange="handleNavlogChange(${idx}, 'mh', this.value)" min="0" max="360" style="width: 58px; background: #0d1117; border: 1px solid #30363d; color: #d2a8ff; font-weight: 800; font-size: 13px; padding: 5px 2px; border-radius: 6px; text-align: center;" title="Rumbo de navegación magnético corregido por viento">`}
           </td>
 
-          <!-- ALTITUD -->
+          <!-- ALTITUD (ft numérico limpio) -->
           <td style="padding: 8px 4px; text-align: center;">
-            <input type="text" class="fpl-input-alt" data-idx="${idx}" value="${wp.alt} ft" oninput="handleNavlogInput(${idx}, 'alt', this.value)" style="width: 78px; background: #0d1117; border: 1px solid #30363d; color: #58a6ff; font-weight: 700; font-size: 12px; padding: 5px 4px; border-radius: 6px; text-align: center;">
+            <input type="number" step="500" min="500" max="25000" class="fpl-input-alt" data-idx="${idx}" value="${wp.alt}" oninput="handleNavlogInput(${idx}, 'alt', this.value)" onchange="handleNavlogChange(${idx}, 'alt', this.value)" style="width: 72px; background: #0d1117; border: 1px solid #30363d; color: #58a6ff; font-weight: 700; font-size: 12px; padding: 5px 4px; border-radius: 6px; text-align: center;">
           </td>
 
           <!-- DIST (NM) -->
           <td style="padding: 8px 4px; text-align: center;">
-            ${isOrigin ? '—' : `<input type="number" step="0.1" class="fpl-input-dist" data-idx="${idx}" value="${(wp.dist || 0).toFixed(1)}" oninput="handleNavlogInput(${idx}, 'dist', this.value)" style="width: 68px; background: #0d1117; border: 1px solid #30363d; color: #56d364; font-weight: 800; font-size: 12px; padding: 5px 2px; border-radius: 6px; text-align: center;">`}
+            ${isOrigin ? '—' : `<input type="number" step="0.1" min="0" class="fpl-input-dist" data-idx="${idx}" value="${(wp.dist || 0).toFixed(1)}" oninput="handleNavlogInput(${idx}, 'dist', this.value)" onchange="handleNavlogChange(${idx}, 'dist', this.value)" style="width: 68px; background: #0d1117; border: 1px solid #30363d; color: #56d364; font-weight: 800; font-size: 12px; padding: 5px 2px; border-radius: 6px; text-align: center;">`}
           </td>
 
           <!-- TAS (kt) -->
           <td style="padding: 8px 4px; text-align: center;">
-            ${isOrigin ? '—' : `<input type="number" class="fpl-input-tas" data-idx="${idx}" value="${wp.tas || globalIas}" oninput="handleNavlogInput(${idx}, 'tas', this.value)" style="width: 56px; background: #0d1117; border: 1px solid #30363d; color: #8b949e; font-size: 12px; padding: 5px 2px; border-radius: 6px; text-align: center;">`}
+            ${isOrigin ? '—' : `<input type="number" min="30" max="300" class="fpl-input-tas" data-idx="${idx}" value="${wp.tas || globalIas}" oninput="handleNavlogInput(${idx}, 'tas', this.value)" onchange="handleNavlogChange(${idx}, 'tas', this.value)" style="width: 56px; background: #0d1117; border: 1px solid #30363d; color: #8b949e; font-size: 12px; padding: 5px 2px; border-radius: 6px; text-align: center;">`}
           </td>
 
           <!-- GS (kt) -->
@@ -7241,10 +7417,10 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
 
           <!-- ATA -->
           <td style="padding: 8px 4px; text-align: center;">
-            <input type="text" class="fpl-input-ata" data-idx="${idx}" value="${wp.ata || ''}" oninput="handleNavlogInput(${idx}, 'ata', this.value)" placeholder="--:--" style="width: 55px; background: #0d1117; border: 1px solid #30363d; color: #fff; font-size: 11px; padding: 5px 2px; border-radius: 6px; text-align: center;">
+            <input type="text" class="fpl-input-ata" data-idx="${idx}" value="${wp.ata || ''}" oninput="handleNavlogInput(${idx}, 'ata', this.value)" onchange="handleNavlogChange(${idx}, 'ata', this.value)" placeholder="--:--" style="width: 55px; background: #0d1117; border: 1px solid #30363d; color: #fff; font-size: 11px; padding: 5px 2px; border-radius: 6px; text-align: center;">
           </td>
 
-          <!-- FUEL (L) -->
+          <!-- FUEL (Gal) -->
           <td style="padding: 8px 4px; text-align: center;">
             <span class="fpl-cell-fuel" data-idx="${idx}" style="font-size: 11px;">
               <span style="color: #8b949e;">${wp.legFuel}</span> · <strong style="color: #58a6ff;">${wp.totFuel}</strong>
@@ -7263,17 +7439,17 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
   }
 
   // ─────────────────────────────────────────────────────────────
-  // PRONÓSTICO DE VIENTO EN ALTURA POR WAYPOINT (HORA DEL VUELO)
+  // PRONÓSTICO DE VIENTOS EN ALTURA (HORA DEL VUELO & WINDY)
   // ─────────────────────────────────────────────────────────────
   async function fetchWindsAloftForRoute() {
     const btn = document.getElementById('fpl-btn-fetch-winds');
     const originalText = btn ? btn.innerHTML : '';
     if (btn) {
       btn.disabled = true;
-      btn.innerHTML = '<span>⏳</span> Obteniendo vientos...';
+      btn.innerHTML = '<span>⏳</span> Consultando...';
     }
 
-    showToastNotification('🌤️ Consultando pronóstico de vientos en altura (Open-Meteo Winds Aloft)...');
+    showToastNotification('🌤️ Obteniendo pronóstico de vientos en altura (Open-Meteo Winds Aloft)...');
 
     const dateVal = document.getElementById('fpl-date')?.value || new Date().toISOString().split('T')[0];
     const toTimeStr = document.getElementById('fpl-takeoff-time')?.value || '10:00';
@@ -7334,7 +7510,7 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
             }
           }
         } catch (err) {
-          console.warn('Winds aloft fetch error for waypoint', wp.name, err);
+          console.warn('Error en winds aloft para', wp.name, err);
         }
       }
     }
@@ -7342,7 +7518,7 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
     if (successCount > 0) {
       showToastNotification(`✅ Vientos en altura actualizados (${dateVal} @ ${toTimeStr}): ${successCount} tramos.`);
     } else {
-      showToastNotification('ℹ️ Modo offline: se aplicó estimación de viento por altitud y orografía.');
+      showToastNotification('ℹ️ Modo offline: se aplicó estimación orográfica por altitud.');
       applyOfflineWindsGradient();
     }
 
@@ -7373,42 +7549,161 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
     });
   }
 
-  // Resumen y verificación del margen de combustible
+  function openRouteInWindy() {
+    let lat = 40.37, lon = -3.78;
+    if (fplWaypoints.length > 1) {
+      const last = fplWaypoints[fplWaypoints.length - 1];
+      if (last.lat && last.lon) {
+        lat = ((fplWaypoints[0].lat || 40.37) + last.lat) / 2;
+        lon = ((fplWaypoints[0].lon || -3.78) + last.lon) / 2;
+      }
+    }
+    const url = `https://www.windy.com/?${lat.toFixed(4)},${lon.toFixed(4)},8,m:elev`;
+    window.open(url, '_blank');
+  }
+
+  // ─────────────────────────────────────────────────────────────
+  // ACTUALIZAR METARS OFICIALES DE SALIDA Y LLEGADA EN DIRECTO
+  // ─────────────────────────────────────────────────────────────
+  async function useMetarWindInFPL() {
+    const btn = document.getElementById('fpl-btn-metar-refresh');
+    const originalText = btn ? btn.innerHTML : '';
+    if (btn) {
+      btn.disabled = true;
+      btn.innerHTML = '<span>⏳</span> Descargando METARs...';
+    }
+
+    showToastNotification('📡 Descargando METARs oficiales de Salida y Destino...');
+
+    const depInput = document.getElementById('fpl-departure-name')?.value || 'LECU';
+    const destInput = document.getElementById('fpl-destination-name')?.value || 'LEVD';
+    const depIcao = depInput.split('/')[0].trim().toUpperCase() || 'LECU';
+    const destIcao = destInput.split('/')[0].trim().toUpperCase() || 'LEVD';
+
+    try {
+      const url = `https://aviationweather.gov/api/data/metar?ids=${depIcao},${destIcao},LEMD,LESA&format=raw`;
+      const res = await fetch(url);
+      if (res.ok) {
+        const rawText = await res.text();
+        const metarLines = rawText.split('\n').filter(l => l.trim().length > 0);
+
+        function parseMetarLine(line) {
+          const windMatch = line.match(/(\d{3}|VRB)(\d{2})KT/);
+          const qnhMatch = line.match(/Q(\d{4})/);
+          const tempMatch = line.match(/\s(M?\d{2})\/(M?\d{2})\s/);
+          const visMatch = line.match(/\s(\d{4}|CAVOK)\s/);
+          const cloudMatch = line.match(/(FEW|SCT|BKN|OVC)(\d{3})/);
+
+          return {
+            windDir: windMatch ? (windMatch[1] === 'VRB' ? '240' : windMatch[1]) : '240',
+            windSpd: windMatch ? windMatch[2] : '12',
+            qnh: qnhMatch ? qnhMatch[1] : '1018',
+            temp: tempMatch ? tempMatch[1].replace('M', '-') : '20',
+            vis: visMatch ? (visMatch[1] === 'CAVOK' ? '9999' : visMatch[1]) : '9999',
+            cloud: cloudMatch ? `${cloudMatch[1]}${cloudMatch[2]}` : (line.includes('CAVOK') ? 'CAVOK' : 'FEW045'),
+            raw: line.trim()
+          };
+        }
+
+        let depMetar = metarLines.find(l => l.includes(depIcao));
+        if (!depMetar && (depIcao === 'LECU' || depIcao === 'LEVS')) {
+          depMetar = metarLines.find(l => l.includes('LEMD')); // Alternativa Barajas si Cuatro Vientos está cerrado
+        }
+
+        let destMetar = metarLines.find(l => l.includes(destIcao));
+
+        if (depMetar) {
+          const d = parseMetarLine(depMetar);
+          const windBox = document.getElementById('fpl-wind-input');
+          if (windBox) windBox.value = `${d.windDir}/${d.windSpd}`;
+          const toQnh = document.getElementById('fpl-to-qnh');
+          if (toQnh) toQnh.value = d.qnh;
+          const toTemp = document.getElementById('fpl-to-temp');
+          if (toTemp) toTemp.value = d.temp;
+          const toVis = document.getElementById('fpl-to-vis');
+          if (toVis) toVis.value = d.vis;
+          const toCloud = document.getElementById('fpl-to-cloud');
+          if (toCloud) toCloud.value = d.cloud;
+
+          // Seleccionar pista de salida óptima según viento
+          const toRwy = document.getElementById('fpl-to-rwy');
+          if (toRwy && depIcao === 'LECU') {
+            const wDeg = parseInt(d.windDir, 10) || 240;
+            toRwy.value = (wDeg >= 180 && wDeg <= 360) ? '27' : '09';
+          }
+        }
+
+        if (destMetar) {
+          const d = parseMetarLine(destMetar);
+          const ldQnh = document.getElementById('fpl-ld-qnh');
+          if (ldQnh) ldQnh.value = d.qnh;
+          const ldTemp = document.getElementById('fpl-ld-temp');
+          if (ldTemp) ldTemp.value = d.temp;
+          const ldVis = document.getElementById('fpl-ld-vis');
+          if (ldVis) ldVis.value = d.vis;
+          const ldCloud = document.getElementById('fpl-ld-cloud');
+          if (ldCloud) ldCloud.value = d.cloud;
+
+          // Seleccionar pista de aterrizaje según viento
+          const ldRwy = document.getElementById('fpl-ld-rwy');
+          if (ldRwy && destIcao === 'LEVD') {
+            const wDeg = parseInt(d.windDir, 10) || 240;
+            ldRwy.value = (wDeg >= 300 || wDeg <= 120) ? '05' : '23';
+          }
+        }
+
+        showToastNotification(`✅ METARs actualizados con éxito: Salida (${depIcao}) y Llegada (${destIcao}).`);
+        updateNavLogCalculationsAndDOM();
+      }
+    } catch (err) {
+      console.warn('Error al descargar METARs:', err);
+      showToastNotification('⚠️ No se pudo conectar con el servidor METAR. Comprueba tu conexión a internet.');
+    }
+
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = originalText;
+    }
+  }
+
+  // ─────────────────────────────────────────────────────────────
+  // GESTIÓN DE COMBUSTIBLE EN GALONES (C172 US GALLONS)
+  // ─────────────────────────────────────────────────────────────
   function calculateFuelSummary() {
-    const hourlyBurn = getAircraftHourlyBurnLph();
-    const climb = parseFloat(document.getElementById('fpl-fuel-climb')?.value || '8.0') || 8.0;
-    const cruise = parseFloat(document.getElementById('fpl-fuel-cruise')?.value || '18.5') || 18.5;
-    const descent = parseFloat(document.getElementById('fpl-fuel-descent')?.value || '2.5') || 2.5;
+    const hourlyBurnGal = getAircraftHourlyBurnGal();
+    const climb = parseFloat(document.getElementById('fpl-fuel-climb')?.value || '1.5') || 1.5;
+    const cruise = parseFloat(document.getElementById('fpl-fuel-cruise')?.value || '4.8') || 4.8;
+    const descent = parseFloat(document.getElementById('fpl-fuel-descent')?.value || '0.5') || 0.5;
     const totalTrip = parseFloat((climb + cruise + descent).toFixed(1));
 
     const totalTripInput = document.getElementById('fpl-fuel-total-trip');
-    if (totalTripInput) totalTripInput.value = `${totalTrip} L`;
+    if (totalTripInput) totalTripInput.value = `${totalTrip} Gal`;
 
     const tripReqInput = document.getElementById('fpl-fuel-trip');
-    if (tripReqInput) tripReqInput.value = `${totalTrip} L`;
+    if (tripReqInput) tripReqInput.value = `${totalTrip} Gal`;
 
-    const altFuel = parseFloat(document.getElementById('fpl-fuel-alt')?.value || '15.0') || 15.0;
-    const finalReserve = parseFloat(((45 / 60) * hourlyBurn).toFixed(1)); // Reserva 45 min
+    const altFuel = parseFloat(document.getElementById('fpl-fuel-alt')?.value || '4.0') || 4.0;
+    const finalReserve = parseFloat(((45 / 60) * hourlyBurnGal).toFixed(1)); // Reserva 45 min
     const contingency = parseFloat((totalTrip * 0.10).toFixed(1)); // 10% contingencia
     const minReq = parseFloat((totalTrip + altFuel + finalReserve + contingency).toFixed(1));
 
     const minReqInput = document.getElementById('fpl-fuel-min-req');
-    if (minReqInput) minReqInput.value = `${minReq} L`;
+    if (minReqInput) minReqInput.value = `${minReq} Gal`;
 
-    const fob = parseFloat(document.getElementById('fpl-fuel-fob')?.value || '80.0') || 80.0;
+    const fob = parseFloat(document.getElementById('fpl-fuel-fob')?.value || '40.0') || 40.0;
     const margin = parseFloat((fob - minReq).toFixed(1));
 
     const badge = document.getElementById('fpl-fuel-safety-margin-badge');
     if (badge) {
       if (margin >= 0) {
-        const extraHours = Math.floor(margin / hourlyBurn);
-        const extraMins = Math.round(((margin / hourlyBurn) % 1) * 60);
-        badge.innerHTML = `✅ Margen Seguro: +${margin} L (${extraHours}h ${extraMins}m extra a ${hourlyBurn.toFixed(1)} L/h)`;
+        const extraHours = Math.floor(margin / hourlyBurnGal);
+        const extraMins = Math.round(((margin / hourlyBurnGal) % 1) * 60);
+        badge.innerHTML = `✅ Margen Seguro: +${margin} Gal (${extraHours}h ${extraMins}m extra a ${hourlyBurnGal.toFixed(1)} Gal/h)`;
         badge.style.background = 'rgba(46,160,67,0.15)';
         badge.style.borderColor = '#2ea043';
         badge.style.color = '#56d364';
       } else {
-        badge.innerHTML = `⚠️ Combustible Insuficiente: ${margin} L por debajo del mínimo reglamentario`;
+        badge.innerHTML = `⚠️ Combustible Insuficiente: ${margin} Gal por debajo del mínimo reglamentario`;
         badge.style.background = 'rgba(248,81,73,0.15)';
         badge.style.borderColor = '#f85149';
         badge.style.color = '#ff7b72';
@@ -7421,48 +7716,106 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
     const modelInput = document.getElementById('fpl-model');
     const iasInput = document.getElementById('fpl-ias-input');
     const consumInput = document.getElementById('fpl-aircraft-consumption');
-    const unitSel = document.getElementById('fpl-aircraft-consumption-unit');
     if (!sel) return;
 
     if (sel.value === 'C172') {
       if (modelInput) modelInput.value = 'C172';
       if (iasInput) iasInput.value = '90';
       if (consumInput) consumInput.value = '8.0';
-      if (unitSel) unitSel.value = 'gal';
     } else if (sel.value === 'P2008JC') {
       if (modelInput) modelInput.value = 'P2008JC';
       if (iasInput) iasInput.value = '95';
       if (consumInput) consumInput.value = '4.5';
-      if (unitSel) unitSel.value = 'gal';
     } else if (sel.value === 'P2006T') {
       if (modelInput) modelInput.value = 'P2006T';
       if (iasInput) iasInput.value = '140';
       if (consumInput) consumInput.value = '9.0';
-      if (unitSel) unitSel.value = 'gal';
     } else if (sel.value === 'DA40') {
       if (modelInput) modelInput.value = 'DA40 NG';
       if (iasInput) iasInput.value = '125';
       if (consumInput) consumInput.value = '5.8';
-      if (unitSel) unitSel.value = 'gal';
     }
 
-    handleAircraftConsumptionChange();
     renderNavLogTable();
     updateNavLogCalculationsAndDOM();
   }
 
-  function useMetarWindInFPL() {
-    const metarRaw = document.getElementById('metar-raw-output')?.textContent || '';
-    const match = metarRaw.match(/(\d{3})(\d{2})KT/);
-    if (match) {
-      const dir = match[1];
-      const spd = match[2];
-      const windInput = document.getElementById('fpl-wind-input');
-      if (windInput) windInput.value = `${dir}/${spd}`;
-      showToastNotification(`🌬️ Viento ${dir}°/${spd}kt aplicado desde el METAR oficial.`);
-      updateNavLogCalculationsAndDOM();
+  // ─────────────────────────────────────────────────────────────
+  // COPIAR RESUMEN COMPLETO DEL PLAN DE VUELO AL PORTAPAPELES
+  // ─────────────────────────────────────────────────────────────
+  function copyFlightPlanSummaryToClipboard() {
+    const model = document.getElementById('fpl-model')?.value || 'C172';
+    const reg = document.getElementById('fpl-reg')?.value || 'EC-XYZ';
+    const pic = document.getElementById('fpl-pic')?.value || 'FERNANDO CHOZAS';
+    const dateVal = document.getElementById('fpl-date')?.value || new Date().toISOString().split('T')[0];
+    const toTime = document.getElementById('fpl-takeoff-time')?.value || '10:00';
+    const dep = document.getElementById('fpl-departure-name')?.value || 'LECU / CUATRO VIENTOS';
+    const dest = document.getElementById('fpl-destination-name')?.value || 'LEVD / VALLADOLID';
+    const alt = document.getElementById('fpl-alternate-name')?.value || 'LESA / SALAMANCA';
+    const ias = document.getElementById('fpl-ias-input')?.value || '90';
+    const burn = document.getElementById('fpl-aircraft-consumption')?.value || '8.0';
+
+    let summary = '===================================================\n';
+    summary += '✈️ PLAN DE VUELO OPERACIONAL (OFP) · WORLD AVIATION\n';
+    summary += '===================================================\n';
+    summary += `AERONAVE: ${model} (${reg}) · CRUCERO: ${ias} kt · CONSUMO: ${burn} Gal/h\n`;
+    summary += `FECHA: ${dateVal} · DESPEGUE ESTIMADO: ${toTime} UTC · PIC: ${pic}\n`;
+    summary += `RUTA: ${dep} ➔ ${dest} (ALT: ${alt})\n\n`;
+
+    summary += '---------------------------------------------------\n';
+    summary += 'LOG DE NAVEGACIÓN (NAVLOG OFICIAL):\n';
+    summary += '---------------------------------------------------\n';
+
+    fplWaypoints.forEach((wp, idx) => {
+      if (idx === 0) {
+        summary += `[01] SALIDA: ${wp.name}\n     Alt: ${wp.alt} ft | Hora Despegue: ${wp.eta} | Fuel: 0.0 Gal\n\n`;
+      } else {
+        summary += `[${String(idx + 1).padStart(2, '0')}] ${wp.name}\n`;
+        summary += `     TC: ${wp.tc}° | VAR: ${wp.varDeg}° | MC: ${wp.mc}° | Viento: ${wp.wind || '240/12'}\n`;
+        summary += `     MH: ${wp.mh}° | Alt: ${wp.alt} ft | Dist: ${wp.dist} NM | TAS: ${wp.tas} kt | GS: ${Math.round(wp.gs)} kt\n`;
+        summary += `     ETE: ${wp.ete} | ETA: ${wp.eta} | ATA: ${wp.ata || '--:--'} | Fuel: ${wp.legFuel} (Acum: ${wp.totFuel})\n\n`;
+      }
+    });
+
+    const totDist = document.getElementById('fpl-total-dist-badge')?.textContent || '0 NM';
+    const totTime = document.getElementById('fpl-total-time-badge')?.textContent || '00m';
+    const totFuel = document.getElementById('fpl-total-fuel-badge')?.textContent || '0 Gal';
+
+    summary += '---------------------------------------------------\n';
+    summary += `TOTALES: Distancia: ${totDist} | Tiempo ETE: ${totTime} | Trip Fuel: ${totFuel}\n`;
+    summary += '---------------------------------------------------\n';
+
+    const fob = document.getElementById('fpl-fuel-fob')?.value || '40.0 Gal';
+    const minReq = document.getElementById('fpl-fuel-min-req')?.value || '17.5 Gal';
+    const altFuel = document.getElementById('fpl-fuel-alt')?.value || '4.0 Gal';
+
+    summary += 'GESTIÓN DE COMBUSTIBLE (GALONES US):\n';
+    summary += `• Trip Fuel: ${totFuel}\n`;
+    summary += `• Alternate Fuel: ${altFuel}\n`;
+    summary += `• Reserva Final (45 min): ${(parseFloat(burn) * 0.75).toFixed(1)} Gal\n`;
+    summary += `• Mínimo Requerido: ${minReq}\n`;
+    summary += `• A Bordo (FOB): ${fob}\n\n`;
+
+    summary += 'METEOROLOGÍA & PISTAS (ATIS):\n';
+    const toRwy = document.getElementById('fpl-to-rwy')?.value || '27';
+    const toQnh = document.getElementById('fpl-to-qnh')?.value || '1018';
+    const ldRwy = document.getElementById('fpl-ld-rwy')?.value || '05';
+    const ldQnh = document.getElementById('fpl-ld-qnh')?.value || '1022';
+    const ldCall = document.getElementById('fpl-ld-firstcall')?.value || '122.200';
+    const ldAvail = document.getElementById('fpl-perf-ld-avail')?.value || '3000 m';
+
+    summary += `• SALIDA (${dep}): RWY ${toRwy} · QNH ${toQnh} · Viento ${document.getElementById('fpl-wind-input')?.value || '240/12'}\n`;
+    summary += `• LLEGADA (${dest}): RWY ${ldRwy} · QNH ${ldQnh} · TWR: ${ldCall} · LDA: ${ldAvail}\n`;
+    summary += '===================================================';
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(summary).then(() => {
+        showToastNotification('📋 Plan de Vuelo completo copiado al portapapeles. Listo para pegar.');
+      }).catch(() => {
+        prompt('Copia tu plan de vuelo:', summary);
+      });
     } else {
-      showToastNotification('⚠️ Primero selecciona un aeródromo con METAR activo en la pestaña Simuladores & METAR.');
+      prompt('Copia tu plan de vuelo:', summary);
     }
   }
 
@@ -7548,15 +7901,15 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
       // Alternate (Fila 11)
       setCell('O11', `ALTERNATE:  ${document.getElementById('fpl-alternate-name')?.value || 'LEVD / VALLADOLID'}`);
 
-      // Combustible (Filas 18, 20, 22, 24)
-      setCell('Q18', document.getElementById('fpl-fuel-climb')?.value || '8.0 L');
-      setCell('V18', document.getElementById('fpl-fuel-alt')?.value || '15.0 L');
-      setCell('Q20', document.getElementById('fpl-fuel-cruise')?.value || '18.5 L');
-      setCell('V20', document.getElementById('fpl-fuel-trip')?.value || '29.0 L');
-      setCell('Q22', document.getElementById('fpl-fuel-descent')?.value || '2.5 L');
-      setCell('V22', document.getElementById('fpl-fuel-min-req')?.value || '54.0 L');
-      setCell('Q24', document.getElementById('fpl-fuel-total-trip')?.value || '29.0 L');
-      setCell('V24', document.getElementById('fpl-fuel-fob')?.value || '80.0 L');
+      // Combustible en Galones (Filas 18, 20, 22, 24)
+      setCell('Q18', document.getElementById('fpl-fuel-climb')?.value || '1.5 Gal');
+      setCell('V18', document.getElementById('fpl-fuel-alt')?.value || '4.0 Gal');
+      setCell('Q20', document.getElementById('fpl-fuel-cruise')?.value || '4.8 Gal');
+      setCell('V20', document.getElementById('fpl-fuel-trip')?.value || '6.8 Gal');
+      setCell('Q22', document.getElementById('fpl-fuel-descent')?.value || '0.5 Gal');
+      setCell('V22', document.getElementById('fpl-fuel-min-req')?.value || '17.5 Gal');
+      setCell('Q24', document.getElementById('fpl-fuel-total-trip')?.value || '6.8 Gal');
+      setCell('V24', document.getElementById('fpl-fuel-fob')?.value || '40.0 Gal');
 
       // Rendimiento de pista (Filas 30, 32, 34, 36)
       setCell('Q30', document.getElementById('fpl-perf-to-req')?.value || '480 m');

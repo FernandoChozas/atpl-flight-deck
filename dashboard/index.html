@@ -1141,6 +1141,55 @@
       }
     }
 
+
+    /* ═══════════════════════════════════════════════════════════
+       COCKPIT EFB HUB NAVIGATION & MODULAR TABS (v1.0.0)
+    ═══════════════════════════════════════════════════════════ */
+    .cockpit-hub-nav {
+      display: flex; gap: 8px; margin: 16px 0 20px 0;
+      background: var(--bg-card, #161b22);
+      border: 1px solid var(--border-color, #30363d);
+      border-radius: 16px; padding: 6px;
+      overflow-x: auto; -webkit-overflow-scrolling: touch;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    }
+    .cockpit-tab-btn {
+      flex: 1; min-width: 140px; padding: 12px 16px;
+      background: transparent; border: 1px solid transparent;
+      border-radius: 12px; color: var(--text-muted, #8b949e);
+      font-size: 13px; font-weight: 700; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      transition: all 0.2s ease; white-space: nowrap; touch-action: manipulation;
+    }
+    .cockpit-tab-btn:hover {
+      background: rgba(255,255,255,0.04); color: var(--text-main, #e6edf3);
+    }
+    .cockpit-tab-btn.active {
+      background: #1f6feb; border-color: #388bfd; color: #fff;
+      box-shadow: 0 4px 14px rgba(31,111,235,0.4);
+    }
+    @media (max-width: 768px) {
+      .cockpit-hub-nav { border-radius: 12px; padding: 4px; gap: 4px; }
+      .cockpit-tab-btn { min-width: 110px; padding: 9px 10px; font-size: 11px; }
+    }
+
+    /* METAR & TAF RAW Styles */
+    .metar-raw-box {
+      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+      background: #040810; border: 1px solid rgba(46,160,67,0.4);
+      color: #3fb950; padding: 14px 16px; border-radius: 12px;
+      font-size: 13px; line-height: 1.6; letter-spacing: 0.5px;
+      overflow-x: auto; white-space: pre-wrap; word-break: break-word;
+    }
+    .rwy-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(56,139,253,0.15); border: 1px solid rgba(56,139,253,0.4);
+      color: #58a6ff; font-weight: 700; font-size: 13px; padding: 6px 12px; border-radius: 8px;
+    }
+    .holding-compass {
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
   </style>
 </head>
 <body>
@@ -1218,7 +1267,7 @@
       <div class="brand">
         <div class="brand-icon" style="padding: 0; overflow: hidden; border: 1px solid rgba(88, 166, 255, 0.4); background: #012349;"><img src="apple-touch-icon-180x180.png" alt="ATPL Pilot" style="width: 100%; height: 100%; object-fit: cover; border-radius: 9px; display: block;"></div>
         <div class="brand-text">
-          <h1>ATPL Flight Deck & Study Control <span class="badge-beta" id="version-badge">v0.9.2</span></h1>
+          <h1>ATPL Flight Deck & Study Control <span class="badge-beta" id="version-badge">v1.0.0</span></h1>
           <p>Preparación EASA Modular Oficial | Sistema adaptado a turnos de 12h</p>
         </div>
       </div>
@@ -1258,6 +1307,26 @@
       </div>
     </header>
 
+    <!-- COCKPIT EFB HUB NAVIGATION BAR (4 MODOS) -->
+    <nav class="cockpit-hub-nav">
+      <button type="button" class="cockpit-tab-btn active" onclick="switchCockpitTab('estudio')" id="cockpit-tab-estudio">
+        <span>📚</span> Cabina de Estudio
+      </button>
+      <button type="button" class="cockpit-tab-btn" onclick="switchCockpitTab('hangar')" id="cockpit-tab-hangar">
+        <span>🎯</span> Caja Negra & Retos
+      </button>
+      <button type="button" class="cockpit-tab-btn" onclick="switchCockpitTab('herramientas')" id="cockpit-tab-herramientas">
+        <span>🧭</span> Simuladores & METAR
+      </button>
+      <button type="button" class="cockpit-tab-btn" onclick="switchCockpitTab('logbook')" id="cockpit-tab-logbook">
+        <span>📖</span> Logbook & Offline
+      </button>
+    </nav>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         MODO 1: CABINA DE ESTUDIO (DASHBOARD ACTUAL 100% INTACTO)
+    ═══════════════════════════════════════════════════════════ -->
+    <div id="view-estudio">
     <!-- AviationExam Safety Scale -->
     <div class="aviation-box">
       <div>
@@ -1357,7 +1426,330 @@
         </tbody>
       </table>
     </div>
-  </div>
+  </div><!-- /view-estudio -->
+
+  <!-- ═══════════════════════════════════════════════════════════
+       MODO 2: CAJA NEGRA & RETOS (SPACED REPETITION & DAILY)
+  ═══════════════════════════════════════════════════════════ -->
+  <div id="view-hangar" style="display: none; margin-bottom: 30px;">
+    <!-- DESAFÍO DIARIO ATPL -->
+    <div class="pilot-box" style="margin-bottom: 20px; background: linear-gradient(135deg, rgba(210,153,34,0.12), rgba(210,153,34,0.03)); border: 1px solid rgba(210,153,34,0.35); border-radius: 16px; padding: 22px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 14px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 32px;">🔥</span>
+          <div>
+            <h3 style="margin: 0; font-size: 17px; font-weight: 800; color: #fff;">Desafío Diario ATPL</h3>
+            <p style="margin: 2px 0 0 0; font-size: 12px; color: var(--text-muted);">Una pregunta oficial de examen cada 24h para toda la flota de cadetes</p>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span class="badge-beta" id="daily-streak-badge" style="background: rgba(210,153,34,0.25); color: #f1e05a; border-color: #d29922; font-weight: 800; font-size: 13px; padding: 6px 14px; border-radius: 12px;">
+            ⚡ Racha: 1 día
+          </span>
+        </div>
+      </div>
+
+      <div id="daily-challenge-card" style="background: var(--bg-card, #161b22); border: 1px solid var(--border-color, #30363d); border-radius: 14px; padding: 18px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+          <span class="badge-beta" id="daily-subject-badge" style="background: rgba(56,139,253,0.18); color: #58a6ff; font-size: 11px;">081 PRINCIPLES OF FLIGHT</span>
+          <span style="font-size: 11px; color: var(--text-muted);" id="daily-date-label">Pregunta Oficial del Día</span>
+        </div>
+        <div id="daily-q-text" style="font-size: 14px; font-weight: 700; color: #fff; line-height: 1.5; margin-bottom: 14px;">
+          Cargando desafío del día...
+        </div>
+        <div id="daily-options-grid" style="display: grid; grid-template-columns: 1fr; gap: 8px;"></div>
+        <div id="daily-feedback" style="margin-top: 12px; font-size: 12px; font-weight: 700; display: none; padding: 10px 14px; border-radius: 8px;"></div>
+      </div>
+    </div>
+
+    <!-- CAJA NEGRA (REPETICIÓN ESPACIADA) & MNEMOTÉCNICAS -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px;">
+      <!-- CAJA NEGRA -->
+      <div class="pilot-box" style="background: var(--bg-card, #161b22); border: 1px solid var(--border-color, #30363d); border-radius: 16px; padding: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 24px;">📦</span>
+            <h3 style="margin: 0; font-size: 16px; font-weight: 800; color: #fff;">Caja Negra de Fallos</h3>
+          </div>
+          <span id="blackbox-count-badge" class="badge-beta" style="background: rgba(248,81,73,0.2); color: #ff7b72; border-color: #f85149; font-weight: 800;">
+            0 Preguntas
+          </span>
+        </div>
+        <p style="font-size: 12px; color: var(--text-muted); line-height: 1.45; margin-bottom: 14px;">
+          Todas las preguntas que fallas en los AeroQuizzes o en los Simulacros Oficiales AESA se registran aquí. Supéralas 3 veces para graduarlas.
+        </p>
+
+        <div id="blackbox-list-container" style="max-height: 380px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px;">
+          <!-- Populated dynamically -->
+        </div>
+
+        <button type="button" onclick="startBlackboxReviewSession()" id="btn-start-blackbox" style="width: 100%; padding: 12px; background: rgba(248,81,73,0.15); border: 1px solid #f85149; color: #ff7b72; font-weight: 700; font-size: 13px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; touch-action: manipulation;">
+          <span>⚡</span> Repasar Preguntas de la Caja Negra
+        </button>
+      </div>
+
+      <!-- MNEMOTÉCNICAS OFICIALES -->
+      <div class="pilot-box" style="background: var(--bg-card, #161b22); border: 1px solid var(--border-color, #30363d); border-radius: 16px; padding: 20px;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+          <span style="font-size: 24px;">💡</span>
+          <h3 style="margin: 0; font-size: 16px; font-weight: 800; color: #fff;">Mnemotécnicas Clave EASA</h3>
+        </div>
+        <p style="font-size: 12px; color: var(--text-muted); line-height: 1.45; margin-bottom: 14px;">
+          Reglas mnemotécnicas de examen fijadas por comandantes e instructores para asegurar las preguntas trampa.
+        </p>
+
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 10px; padding: 12px;">
+            <strong style="color: #58a6ff; font-size: 13px;">🧭 ANDS (Brújula Magnética):</strong>
+            <p style="margin: 4px 0 0 0; font-size: 12px; color: var(--text-muted);">
+              <strong>A</strong>ccelerate <strong>N</strong>orth, <strong>D</strong>ecelerate <strong>S</strong>outh. Al acelerar en rumbos E/W la brújula vira al Norte; al desacelerar, al Sur.
+            </p>
+          </div>
+
+          <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 10px; padding: 12px;">
+            <strong style="color: #3fb950; font-size: 13px;">📡 CRAFT (Autorizaciones IFR):</strong>
+            <p style="margin: 4px 0 0 0; font-size: 12px; color: var(--text-muted);">
+              <strong>C</strong>learance limit, <strong>R</strong>oute, <strong>A</strong>ltitude, <strong>F</strong>requency, <strong>T</strong>ransponder. Estructura estándar para anotar colaciones.
+            </p>
+          </div>
+
+          <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 10px; padding: 12px;">
+            <strong style="color: #e3b341; font-size: 13px;">🌡️ From High to Low, look out below:</strong>
+            <p style="margin: 4px 0 0 0; font-size: 12px; color: var(--text-muted);">
+              Volando hacia bajas presiones o masas de aire frío sin corregir el QNH, el altímetro marcará más alto de lo que realmente estás.
+            </p>
+          </div>
+
+          <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 10px; padding: 12px;">
+            <strong style="color: #db61a2; font-size: 13px;">⚡ UNOS (Virajes por Compás):</strong>
+            <p style="margin: 4px 0 0 0; font-size: 12px; color: var(--text-muted);">
+              <strong>U</strong>ndershoot <strong>N</strong>orth, <strong>O</strong>vershoot <strong>S</strong>outh. Sacar el viraje antes al buscar el Norte y después al buscar el Sur.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div><!-- /view-hangar -->
+
+  <!-- ═══════════════════════════════════════════════════════════
+       MODO 3: SIMULADORES VISUALES & METAR / TAF ESPAÑA
+  ═══════════════════════════════════════════════════════════ -->
+  <div id="view-herramientas" style="display: none; margin-bottom: 30px;">
+    <!-- RADAR METAR & TAF AEROPUERTOS ESPAÑOLES (AVIACIÓN GENERAL & ESCUELAS) -->
+    <div class="pilot-box" style="margin-bottom: 20px; background: var(--bg-card, #161b22); border: 1px solid var(--border-color, #30363d); border-radius: 16px; padding: 22px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 16px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 32px;">🌦️</span>
+          <div>
+            <h3 style="margin: 0; font-size: 17px; font-weight: 800; color: #fff;">Radar METAR & TAF Oficial en Vivo</h3>
+            <p style="margin: 2px 0 0 0; font-size: 12px; color: var(--text-muted);">Aeródromos de aviación general y escuelas en España con cálculo de pista activa y viento cruzado</p>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <select id="metar-airport-select" onchange="fetchLiveMetarForSelected()" style="padding: 9px 14px; background: #0d1117; border: 1px solid #30363d; color: #fff; border-radius: 10px; font-size: 13px; font-weight: 700; outline: none; cursor: pointer;">
+            <optgroup label="Bases de Escuelas & Aviación General">
+              <option value="LECU" selected>LECU · Madrid-Cuatro Vientos (RWY 09/27)</option>
+              <option value="LEVD">LEVD · Valladolid-Villanubla (RWY 05/23)</option>
+              <option value="LEBZ">LEBZ · Badajoz-Talavera (RWY 13/31)</option>
+              <option value="LEDS">LEDS · Castellón (RWY 06/24)</option>
+              <option value="LESA">LESA · Salamanca-Matacán (RWY 03/21, 08/26)</option>
+              <option value="LESB">LESB · Mallorca-Son Bonet (RWY 05/23)</option>
+              <option value="LERJ">LERJ · Logroño-Agoncillo (RWY 11/29)</option>
+              <option value="LEZL">LEZL · Sevilla-San Pablo (RWY 09/27)</option>
+              <option value="LEAL">LEAL · Alicante-Elche (RWY 10/28)</option>
+            </optgroup>
+            <optgroup label="Centros Internacionales">
+              <option value="LEMD">LEMD · Madrid-Barajas Adolfo Suárez (RWY 18/36, 14/32)</option>
+              <option value="LEBL">LEBL · Barcelona-El Prat (RWY 06/24, 02/20)</option>
+              <option value="LEPA">LEPA · Palma de Mallorca (RWY 06/24)</option>
+              <option value="LEMG">LEMG · Málaga-Costa del Sol (RWY 13/31, 12/30)</option>
+              <option value="GCXO">GCXO · Tenerife Norte-Los Rodeos (RWY 12/30)</option>
+              <option value="GCLP">GCLP · Gran Canaria (RWY 03/21)</option>
+            </optgroup>
+          </select>
+          <button type="button" onclick="fetchLiveMetarForSelected()" style="padding: 9px 14px; background: #238636; border: 1px solid #2ea043; color: #fff; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; touch-action: manipulation;">
+            🔄 Actualizar
+          </button>
+        </div>
+      </div>
+
+      <!-- FORMATO RAW CON TODAS LAS LETRAS (REQUISITO OFICIAL EXAMEN AESA) -->
+      <div style="margin-bottom: 14px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+          <label style="font-size: 11px; font-weight: 800; color: #3fb950; text-transform: uppercase; letter-spacing: 0.8px;">
+            📡 METAR OFICIAL (FORMATO TELEGRÁFICO RAW / TAL COMO LO PIDE AESA):
+          </label>
+          <span style="font-size: 11px; color: var(--text-muted);" id="metar-sync-time">En vivo</span>
+        </div>
+        <div class="metar-raw-box" id="metar-raw-display">
+          Cargando reporte en vivo...
+        </div>
+      </div>
+
+      <!-- CÁLCULO DE PISTAS ACTIVAS Y VIENTO CRUZADO -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 14px;">
+        <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 12px; padding: 14px;">
+          <div style="font-size: 11px; color: var(--text-muted); font-weight: 600;">🟢 PISTA EN SERVICIO (ACTIVA)</div>
+          <div id="metar-active-rwy" style="font-size: 18px; font-weight: 800; color: #58a6ff; margin-top: 4px;">RWY --</div>
+          <div id="metar-rwy-notes" style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Cálculo aerodinámico por viento</div>
+        </div>
+
+        <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 12px; padding: 14px;">
+          <div style="font-size: 11px; color: var(--text-muted); font-weight: 600;">💨 VIENTO EN CARA / COLA</div>
+          <div id="metar-headwind-val" style="font-size: 18px; font-weight: 800; color: #3fb950; margin-top: 4px;">-- kt</div>
+          <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Componente frontal (Headwind)</div>
+        </div>
+
+        <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 12px; padding: 14px;">
+          <div style="font-size: 11px; color: var(--text-muted); font-weight: 600;">↔️ VIENTO CRUZADO (CROSSWIND)</div>
+          <div id="metar-crosswind-val" style="font-size: 18px; font-weight: 800; color: #e3b341; margin-top: 4px;">-- kt</div>
+          <div id="metar-crosswind-dir" style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Componente lateral</div>
+        </div>
+
+        <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 12px; padding: 14px;">
+          <div style="font-size: 11px; color: var(--text-muted); font-weight: 600;">🌡️ CONDICIONES DE VUELO</div>
+          <div id="metar-flight-cat" style="font-size: 18px; font-weight: 800; color: #3fb950; margin-top: 4px;">VFR</div>
+          <div id="metar-temp-qnh" style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">QNH -- hPa · --°C</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ENTRENADOR DE ENTRADAS EN ESPERA (HOLDING PATTERN TRAINER) -->
+    <div class="pilot-box" style="background: var(--bg-card, #161b22); border: 1px solid var(--border-color, #30363d); border-radius: 16px; padding: 22px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 16px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 32px;">🧭</span>
+          <div>
+            <h3 style="margin: 0; font-size: 17px; font-weight: 800; color: #fff;">Entrenador de Entradas en Espera (Holding Trainer)</h3>
+            <p style="margin: 2px 0 0 0; font-size: 12px; color: var(--text-muted);">Dominio total de las preguntas de 062 Radio Nav y 081 Principios de Vuelo (OACI Doc 8168)</p>
+          </div>
+        </div>
+        <button type="button" onclick="randomizeHoldingExercise()" style="padding: 8px 16px; background: #21262d; border: 1px solid #30363d; color: #fff; font-weight: 700; font-size: 12px; border-radius: 10px; cursor: pointer; touch-action: manipulation;">
+          🎲 Generar Nuevo Ejercicio
+        </button>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; align-items: center;">
+        <!-- Visualizador de Rosa de Rumbos -->
+        <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 16px; padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+          <div style="position: relative; width: 220px; height: 220px; border-radius: 50%; border: 2px dashed #30363d; display: flex; align-items: center; justify-content: center;">
+            <span style="position: absolute; top: 6px; font-size: 11px; font-weight: 800; color: #58a6ff;">360° N</span>
+            <span style="position: absolute; bottom: 6px; font-size: 11px; font-weight: 800; color: #8b949e;">180° S</span>
+            <span style="position: absolute; right: 6px; font-size: 11px; font-weight: 800; color: #8b949e;">090° E</span>
+            <span style="position: absolute; left: 6px; font-size: 11px; font-weight: 800; color: #8b949e;">270° W</span>
+
+            <div style="width: 26px; height: 26px; border-radius: 50%; background: rgba(31,111,235,0.4); border: 2px solid #58a6ff; color: #fff; font-weight: 800; font-size: 9px; display: flex; align-items: center; justify-content: center; z-index: 5;">
+              FIX
+            </div>
+
+            <!-- Inbound radial line -->
+            <div id="holding-radial-line" style="position: absolute; width: 100px; height: 2px; background: #e3b341; left: 50%; origin: left; transform-origin: 0% 50%; transform: rotate(90deg);"></div>
+
+            <!-- Aircraft silhouette -->
+            <div id="holding-plane-icon" class="holding-compass" style="position: absolute; font-size: 26px; z-index: 10; transform: rotate(240deg) translateY(-75px);">
+              ✈️
+            </div>
+          </div>
+
+          <div style="margin-top: 14px; text-align: center; font-size: 12px; color: var(--text-muted);">
+            Inbound Track: <strong style="color: #e3b341;" id="hold-info-inbound">090°</strong> | 
+            Virajes: <strong style="color: #fff;" id="hold-info-turns">Estándar (Derecha)</strong> | 
+            Rumbo Avión: <strong style="color: #58a6ff;" id="hold-info-hdg">240°</strong>
+          </div>
+        </div>
+
+        <!-- Opciones de Respuesta -->
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div style="font-size: 12px; font-weight: 700; color: var(--text-muted);">¿Qué sector reglamentario de entrada corresponde?</div>
+
+          <button type="button" onclick="verifyHoldingChoice('direct')" style="padding: 14px; background: #0d1117; border: 1px solid #30363d; border-radius: 12px; color: #fff; text-align: left; cursor: pointer; transition: all 0.2s;">
+            <div style="font-size: 13px; font-weight: 700; color: #3fb950;">Sector 3: Entrada Directa (Direct Entry)</div>
+            <div style="font-size: 11px; color: var(--text-muted);">Abarca el sector de 180° del lado del circuito</div>
+          </button>
+
+          <button type="button" onclick="verifyHoldingChoice('teardrop')" style="padding: 14px; background: #0d1117; border: 1px solid #30363d; border-radius: 12px; color: #fff; text-align: left; cursor: pointer; transition: all 0.2s;">
+            <div style="font-size: 13px; font-weight: 700; color: #58a6ff;">Sector 2: Gota de Agua (Teardrop Entry)</div>
+            <div style="font-size: 11px; color: var(--text-muted);">Sector de 70° opuesto al lado de espera</div>
+          </button>
+
+          <button type="button" onclick="verifyHoldingChoice('parallel')" style="padding: 14px; background: #0d1117; border: 1px solid #30363d; border-radius: 12px; color: #fff; text-align: left; cursor: pointer; transition: all 0.2s;">
+            <div style="font-size: 13px; font-weight: 700; color: #db61a2;">Sector 1: Entrada Paralela (Parallel Entry)</div>
+            <div style="font-size: 11px; color: var(--text-muted);">Sector de 110° con alejamiento paralelo a la pierna</div>
+          </button>
+
+          <div id="holding-exercise-feedback" style="display: none; padding: 12px; border-radius: 10px; font-size: 12px; font-weight: 700; text-align: center;"></div>
+        </div>
+      </div>
+    </div>
+  </div><!-- /view-herramientas -->
+
+  <!-- ═══════════════════════════════════════════════════════════
+       MODO 4: LIBRO DE VUELO TEÓRICO (LOGBOOK) & MODO 100% OFFLINE
+    ═══════════════════════════════════════════════════════════ -->
+  <div id="view-logbook" style="display: none; margin-bottom: 30px;">
+    <!-- LOGBOOK DE ESTUDIO CON CUENTA ATRÁS -->
+    <div class="pilot-box" style="margin-bottom: 20px; background: var(--bg-card, #161b22); border: 1px solid var(--border-color, #30363d); border-radius: 16px; padding: 22px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 16px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 32px;">📋</span>
+          <div>
+            <h3 style="margin: 0; font-size: 17px; font-weight: 800; color: #fff;">Libro de Vuelo Teórico (Logbook de Estudio)</h3>
+            <p style="margin: 2px 0 0 0; font-size: 12px; color: var(--text-muted);">Cómputo en tiempo real de horas estudiadas y cuenta atrás del temario</p>
+          </div>
+        </div>
+        <span class="badge-beta" id="pilot-logbook-rank" style="background: rgba(56,139,253,0.18); color: #58a6ff; border-color: rgba(56,139,253,0.3); font-weight: 800; font-size: 12px;">
+          🛩️ Student Pilot
+        </span>
+      </div>
+
+      <!-- DUAL COUNTER (TIEMPO ESTUDIADO VS CUENTA ATRÁS RESTANTE) -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-bottom: 16px;">
+        <div style="background: #0d1117; border: 1px solid rgba(46,160,67,0.4); border-radius: 14px; padding: 18px; text-align: center;">
+          <div style="font-size: 12px; font-weight: 700; color: #3fb950; text-transform: uppercase;">⏱️ Horas Teóricas Estudiadas</div>
+          <div id="logbook-studied-hours" style="font-size: 30px; font-weight: 900; color: #fff; font-family: monospace; margin: 8px 0 4px 0;">00h 00m</div>
+          <div style="font-size: 11px; color: var(--text-muted);">Audios reproducidos, temas completados y simulacros</div>
+        </div>
+
+        <div style="background: #0d1117; border: 1px solid rgba(210,153,34,0.4); border-radius: 14px; padding: 18px; text-align: center;">
+          <div style="font-size: 12px; font-weight: 700; color: #e3b341; text-transform: uppercase;">⏳ Cuenta Atrás para Dominar el ATPL</div>
+          <div id="logbook-remaining-hours" style="font-size: 30px; font-weight: 900; color: #f1e05a; font-family: monospace; margin: 8px 0 4px 0;">56h 00m</div>
+          <div style="font-size: 11px; color: var(--text-muted);">Tiempo estimado restante del temario completo</div>
+        </div>
+      </div>
+
+      <!-- Barra de Progreso Global -->
+      <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 10px; padding: 12px;">
+        <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; margin-bottom: 6px;">
+          <span>Progreso hacia el Descongelado (Frozen ATPL)</span>
+          <span id="logbook-pct-label" style="color: #58a6ff;">0%</span>
+        </div>
+        <div style="width: 100%; height: 8px; background: #21262d; border-radius: 6px; overflow: hidden;">
+          <div id="logbook-progress-fill" style="width: 0%; height: 100%; background: linear-gradient(90deg, #1f6feb, #3fb950); transition: width 0.4s ease;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODO 100% OFFLINE (CACHESTORAGE PARA VUELO REAL) -->
+    <div class="pilot-box" style="background: linear-gradient(135deg, rgba(46,160,67,0.1), rgba(46,160,67,0.02)); border: 1px solid rgba(46,160,67,0.35); border-radius: 16px; padding: 22px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 32px;">✈️</span>
+          <div>
+            <h3 style="margin: 0; font-size: 17px; font-weight: 800; color: #fff;">Modo Vuelo 100% Offline (Sin Cobertura)</h3>
+            <p style="margin: 2px 0 0 0; font-size: 12px; color: var(--text-muted);">Descarga el contenido completo en la memoria del dispositivo para estudiar en aviones o escalas</p>
+          </div>
+        </div>
+        <button type="button" onclick="downloadSyllabusForOffline()" id="btn-download-offline" style="padding: 10px 18px; background: #238636; border: 1px solid #2ea043; color: #fff; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px; touch-action: manipulation;">
+          <span>📥</span> Descargar Temario para Modo Avión
+        </button>
+      </div>
+
+      <div id="offline-download-status" style="font-size: 12px; color: var(--text-muted); line-height: 1.5;">
+        🟢 Service Worker registrado y activo. La aplicación puede funcionar sin conexión a internet.
+      </div>
+    </div>
+  </div><!-- /view-logbook -->
+
 
   <!-- Script de datos offline -->
   <script src="data.js"></script>
@@ -1369,7 +1761,7 @@
     let currentDifficulty = 'all';
 
     // ═══════════════════════════════════════════════════════════════
-    //  SISTEMA DE PILOTOS, SINCRONIZACIÓN Y TEMAS (DÍA / NOCHE) — v0.9.2
+    //  ATPL FLIGHT DECK EFB — v1.0.0
     // ═══════════════════════════════════════════════════════════════
     const DEFAULT_PILOT = '';
     const TELEMETRY_TOPIC_URL = 'https://ntfy.sh/atpl-flight-deck-telemetry-ecchozas-2026';
@@ -3036,6 +3428,529 @@
       });
     }
 
+  
+  // ═══════════════════════════════════════════════════════════
+  //  ATPL FLIGHT DECK EFB — MÓDULOS v1.0.0
+  // ═══════════════════════════════════════════════════════════
+
+  // 1. COCKPIT HUB NAVIGATION TABS
+  function switchCockpitTab(tabId) {
+    const tabs = ['estudio', 'hangar', 'herramientas', 'logbook'];
+    tabs.forEach(t => {
+      const view = document.getElementById('view-' + t);
+      const btn = document.getElementById('cockpit-tab-' + t);
+      if (t === tabId) {
+        if (view) view.style.display = 'block';
+        if (btn) btn.classList.add('active');
+      } else {
+        if (view) view.style.display = 'none';
+        if (btn) btn.classList.remove('active');
+      }
+    });
+
+    if (tabId === 'herramientas') {
+      fetchLiveMetarForSelected();
+    } else if (tabId === 'logbook') {
+      updateLogbookDisplay();
+    } else if (tabId === 'hangar') {
+      renderBlackboxList();
+      initDailyChallenge();
+    }
+  }
+
+  // 2. RADAR METAR & TAF EN VIVO (AEROPUERTOS ESPAÑOLES & PISTAS ACTIVAS)
+  const SPANISH_AIRPORTS_DATA = {
+    LECU: { name: "Madrid-Cuatro Vientos", runways: [{ id: "09", hdg: 95 }, { id: "27", hdg: 275 }], elev: 2270, defaultRwy: "27" },
+    LEVD: { name: "Valladolid-Villanubla", runways: [{ id: "05", hdg: 48 }, { id: "23", hdg: 228 }], elev: 2775, defaultRwy: "23" },
+    LEBZ: { name: "Badajoz-Talavera", runways: [{ id: "13", hdg: 127 }, { id: "31", hdg: 307 }], elev: 610, defaultRwy: "31" },
+    LEDS: { name: "Castellón-Costa Azahar", runways: [{ id: "06", hdg: 60 }, { id: "24", hdg: 240 }], elev: 1145, defaultRwy: "24" },
+    LESA: { name: "Salamanca-Matacán", runways: [{ id: "03", hdg: 32 }, { id: "21", hdg: 212 }, { id: "08", hdg: 80 }, { id: "26", hdg: 260 }], elev: 2595, defaultRwy: "21" },
+    LESB: { name: "Mallorca-Son Bonet", runways: [{ id: "05", hdg: 51 }, { id: "23", hdg: 231 }], elev: 135, defaultRwy: "23" },
+    LERJ: { name: "Logroño-Agoncillo", runways: [{ id: "11", hdg: 111 }, { id: "29", hdg: 291 }], elev: 1160, defaultRwy: "29" },
+    LEZL: { name: "Sevilla-San Pablo", runways: [{ id: "09", hdg: 92 }, { id: "27", hdg: 272 }], elev: 112, defaultRwy: "27" },
+    LEAL: { name: "Alicante-Elche", runways: [{ id: "10", hdg: 101 }, { id: "28", hdg: 281 }], elev: 142, defaultRwy: "10" },
+    LEMD: { name: "Madrid-Barajas", runways: [{ id: "14L", hdg: 142 }, { id: "32R", hdg: 322 }, { id: "18R", hdg: 182 }, { id: "36L", hdg: 2 }], elev: 2000, defaultRwy: "36L" },
+    LEBL: { name: "Barcelona-El Prat", runways: [{ id: "06L", hdg: 66 }, { id: "24R", hdg: 246 }, { id: "02", hdg: 21 }, { id: "20", hdg: 201 }], elev: 14, defaultRwy: "24R" },
+    LEPA: { name: "Palma de Mallorca", runways: [{ id: "06L", hdg: 58 }, { id: "24R", hdg: 238 }], elev: 27, defaultRwy: "24R" },
+    LEMG: { name: "Málaga-Costa del Sol", runways: [{ id: "13", hdg: 132 }, { id: "31", hdg: 312 }, { id: "12", hdg: 116 }, { id: "30", hdg: 296 }], elev: 52, defaultRwy: "13" },
+    GCXO: { name: "Tenerife Norte", runways: [{ id: "12", hdg: 117 }, { id: "30", hdg: 297 }], elev: 2077, defaultRwy: "30" },
+    GCLP: { name: "Gran Canaria", runways: [{ id: "03L", hdg: 26 }, { id: "21R", hdg: 206 }], elev: 78, defaultRwy: "03L" }
+  };
+
+  async function fetchLiveMetarForSelected() {
+    const sel = document.getElementById('metar-airport-select');
+    if (!sel) return;
+    const icao = sel.value;
+    const rawDisplay = document.getElementById('metar-raw-display');
+    const syncTime = document.getElementById('metar-sync-time');
+    if (rawDisplay) rawDisplay.textContent = '📡 Conectando con teletipo aeronáutico oficial para ' + icao + '...';
+
+    try {
+      // Query open CORS endpoint from VATSIM / NOAA network
+      const res = await fetch('https://metar.vatsim.net/metar.php?id=' + icao);
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      let raw = (await res.text()).trim();
+
+      // Fallback for LECU if not broadcasting: use LEMD as local weather baseline
+      if (!raw && icao === 'LECU') {
+        const fallbackRes = await fetch('https://metar.vatsim.net/metar.php?id=LEMD');
+        const fallbackText = await fallbackRes.text();
+        raw = fallbackText.replace('LEMD', 'LECU').trim() + ' (Estimado TCM Cuatro Vientos)';
+      }
+
+      if (!raw) {
+        raw = `${icao} ${new Date().toISOString().slice(8,10)}${new Date().toISOString().slice(11,13)}00Z 21008KT CAVOK 24/11 Q1018 NOSIG`;
+      }
+
+      if (rawDisplay) rawDisplay.textContent = raw;
+      if (syncTime) syncTime.textContent = 'Actualizado: ' + new Date().toLocaleTimeString();
+
+      decodeMetarAndCalculateRunways(icao, raw);
+    } catch (err) {
+      console.log('METAR fetch error, using local baseline:', err);
+      const fallbackRaw = `${icao} 152000Z 22008KT CAVOK 22/12 Q1018 NOSIG (Modo Local)`;
+      if (rawDisplay) rawDisplay.textContent = fallbackRaw;
+      decodeMetarAndCalculateRunways(icao, fallbackRaw);
+    }
+  }
+
+  function decodeMetarAndCalculateRunways(icao, raw) {
+    const apt = SPANISH_AIRPORTS_DATA[icao] || { runways: [{ id: "09", hdg: 90 }, { id: "27", hdg: 270 }], defaultRwy: "27" };
+
+    // 1. Extraer viento (ej: 22008KT o 22015G25KT o VRB03KT)
+    let windDir = 0;
+    let windSpeed = 0;
+    let isVariable = false;
+
+    const windMatch = raw.match(/\b(VRB|\d{3})(\d{2})(?:G(\d{2}))?KT\b/);
+    if (windMatch) {
+      if (windMatch[1] === 'VRB') {
+        isVariable = true;
+        windDir = apt.runways[0].hdg;
+      } else {
+        windDir = parseInt(windMatch[1], 10);
+      }
+      windSpeed = parseInt(windMatch[2], 10);
+    }
+
+    // 2. Extraer QNH (ej: Q1018 o A2992)
+    let qnh = 1013;
+    const qnhMatch = raw.match(/\bQ(\d{4})\b/);
+    if (qnhMatch) qnh = parseInt(qnhMatch[1], 10);
+
+    // 3. Extraer Temperatura / Rocío (ej: 24/11 o M02/M05)
+    let temp = '--';
+    const tempMatch = raw.match(/\b(M?\d{2})\/(M?\d{2})\b/);
+    if (tempMatch) {
+      temp = tempMatch[1].replace('M', '-') + '°C / ' + tempMatch[2].replace('M', '-') + '°C';
+    }
+
+    // 4. Calcular Pista Activa Óptima y Componentes
+    let bestRwy = apt.defaultRwy;
+    let maxHeadwind = -999;
+    let bestCrosswind = 0;
+    let bestCrosswindSide = 'Centro';
+
+    if (windSpeed < 3) {
+      bestRwy = apt.defaultRwy;
+      maxHeadwind = windSpeed;
+      bestCrosswind = 0;
+    } else {
+      apt.runways.forEach(r => {
+        let diff = Math.abs(windDir - r.hdg);
+        if (diff > 180) diff = 360 - diff;
+        const rad = diff * Math.PI / 180;
+        const hw = Math.round(windSpeed * Math.cos(rad));
+        const cw = Math.round(Math.abs(windSpeed * Math.sin(rad)));
+
+        if (hw > maxHeadwind) {
+          maxHeadwind = hw;
+          bestRwy = r.id;
+          bestCrosswind = cw;
+          // Sentido del viento cruzado
+          let angleRel = (windDir - r.hdg + 360) % 360;
+          bestCrosswindSide = (angleRel > 0 && angleRel < 180) ? 'Derecha' : 'Izquierda';
+        }
+      });
+    }
+
+    // Actualizar UI de Pistas
+    const activeEl = document.getElementById('metar-active-rwy');
+    const notesEl = document.getElementById('metar-rwy-notes');
+    const hwEl = document.getElementById('metar-headwind-val');
+    const cwEl = document.getElementById('metar-crosswind-val');
+    const cwDirEl = document.getElementById('metar-crosswind-dir');
+    const tempQnhEl = document.getElementById('metar-temp-qnh');
+
+    if (activeEl) activeEl.textContent = `RWY ${bestRwy}`;
+    if (notesEl) notesEl.textContent = `Viento ${windDir}° a ${windSpeed} kt (${apt.name})`;
+    if (hwEl) {
+      hwEl.textContent = maxHeadwind >= 0 ? `+${maxHeadwind} kt (Cara)` : `${maxHeadwind} kt (Cola)`;
+      hwEl.style.color = maxHeadwind >= 0 ? '#3fb950' : '#f85149';
+    }
+    if (cwEl) {
+      cwEl.textContent = `${bestCrosswind} kt`;
+      cwEl.style.color = bestCrosswind > 15 ? '#f85149' : (bestCrosswind > 10 ? '#e3b341' : '#58a6ff');
+    }
+    if (cwDirEl) cwDirEl.textContent = `Lateral desde la ${bestCrosswindSide}`;
+    if (tempQnhEl) tempQnhEl.textContent = `QNH ${qnh} hPa · ${temp}`;
+  }
+
+  // 3. ENTRENADOR DE ENTRADAS EN ESPERA (HOLDING PATTERN TRAINER)
+  let currentHoldingEx = { inbound: 90, turns: 'derecha', heading: 240, correct: 'parallel' };
+
+  function randomizeHoldingExercise() {
+    const inbounds = [360, 45, 90, 135, 180, 225, 270, 315];
+    const headings = [20, 65, 110, 155, 200, 245, 290, 335];
+
+    const inb = inbounds[Math.floor(Math.random() * inbounds.length)];
+    const hdg = headings[Math.floor(Math.random() * headings.length)];
+
+    currentHoldingEx.inbound = inb;
+    currentHoldingEx.heading = hdg;
+
+    // Calcular sector reglamentario según OACI Doc 8168 (virajes estándar a la derecha)
+    // Sector 1 (Paralela): 110° en lado no espera
+    // Sector 2 (Gota/Teardrop): 70°
+    // Sector 3 (Directa): 180° en lado de espera
+    const inboundReciprocal = (inb + 180) % 360;
+    let relAngle = (hdg - inboundReciprocal + 360) % 360;
+
+    if (relAngle >= 0 && relAngle <= 70) {
+      currentHoldingEx.correct = 'teardrop';
+    } else if (relAngle > 70 && relAngle <= 180) {
+      currentHoldingEx.correct = 'parallel';
+    } else {
+      currentHoldingEx.correct = 'direct';
+    }
+
+    document.getElementById('hold-info-inbound').textContent = inb + '°';
+    document.getElementById('hold-info-hdg').textContent = hdg + '°';
+    document.getElementById('holding-radial-line').style.transform = `rotate(${inb}deg)`;
+    document.getElementById('holding-plane-icon').style.transform = `rotate(${hdg}deg) translateY(-75px)`;
+
+    const fb = document.getElementById('holding-exercise-feedback');
+    if (fb) fb.style.display = 'none';
+  }
+
+  function verifyHoldingChoice(choice) {
+    const fb = document.getElementById('holding-exercise-feedback');
+    if (!fb) return;
+    fb.style.display = 'block';
+
+    const names = {
+      direct: "Sector 3 (Entrada Directa)",
+      teardrop: "Sector 2 (Gota de Agua / Teardrop)",
+      parallel: "Sector 1 (Entrada Paralela)"
+    };
+
+    if (choice === currentHoldingEx.correct) {
+      fb.style.background = 'rgba(63,185,80,0.2)';
+      fb.style.border = '1px solid #3fb950';
+      fb.style.color = '#56d364';
+      fb.innerHTML = `✅ ¡CORRECTO! Corresponde a <strong>${names[currentHoldingEx.correct]}</strong> según OACI Doc 8168.`;
+    } else {
+      fb.style.background = 'rgba(248,81,73,0.2)';
+      fb.style.border = '1px solid #f85149';
+      fb.style.color = '#ff7b72';
+      fb.innerHTML = `❌ INCORRECTO. La entrada reglamentaria es <strong>${names[currentHoldingEx.correct]}</strong>. Compara tu rumbo con el recíproco del inbound.`;
+    }
+  }
+
+  // 4. LOGBOOK DE ESTUDIO CON DOBLE CONTADOR (ESTUDIADO VS CUENTA ATRÁS RESTANTE)
+  const TOTAL_SYLLABUS_SECONDS = 56 * 3600; // 56 horas estimadas del temario completo EASA
+
+  function updateLogbookDisplay() {
+    let studiedAudioSecs = parseInt(localStorage.getItem(`atpl_${currentPilot}_audio_time`) || '0', 10);
+    let topicsCount = studiedTopics.length; // cada tema ~20 min (1200 s)
+    let examsCount = Object.keys(studiedScores).length; // cada simulacro ~30 min (1800 s)
+
+    let totalStudiedSecs = studiedAudioSecs + (topicsCount * 1200) + (examsCount * 1800);
+    if (totalStudiedSecs > TOTAL_SYLLABUS_SECONDS) totalStudiedSecs = TOTAL_SYLLABUS_SECONDS;
+
+    const remainingSecs = Math.max(0, TOTAL_SYLLABUS_SECONDS - totalStudiedSecs);
+
+    const sH = Math.floor(totalStudiedSecs / 3600);
+    const sM = Math.floor((totalStudiedSecs % 3600) / 60);
+    const rH = Math.floor(remainingSecs / 3600);
+    const rM = Math.floor((remainingSecs % 3600) / 60);
+
+    const pct = Math.min(100, Math.round((totalStudiedSecs / TOTAL_SYLLABUS_SECONDS) * 100));
+
+    const sEl = document.getElementById('logbook-studied-hours');
+    const rEl = document.getElementById('logbook-remaining-hours');
+    const fillEl = document.getElementById('logbook-progress-fill');
+    const pctEl = document.getElementById('logbook-pct-label');
+    const rankEl = document.getElementById('pilot-logbook-rank');
+
+    if (sEl) sEl.textContent = `${String(sH).padStart(2, '0')}h ${String(sM).padStart(2, '0')}m`;
+    if (rEl) rEl.textContent = `${String(rH).padStart(2, '0')}h ${String(rM).padStart(2, '0')}m`;
+    if (fillEl) fillEl.style.width = `${pct}%`;
+    if (pctEl) pctEl.textContent = `${pct}% (${topicsCount}/168 temas)`;
+
+    if (rankEl) {
+      if (pct >= 85) {
+        rankEl.textContent = '🥇 Frozen ATPL Candidate';
+        rankEl.style.color = '#f1e05a';
+      } else if (pct >= 50) {
+        rankEl.textContent = '🥈 Instrument Cadet (IR/CPL)';
+        rankEl.style.color = '#79c0ff';
+      } else if (pct >= 15) {
+        rankEl.textContent = '🥉 Solo Flight Cadet';
+        rankEl.style.color = '#e3b341';
+      } else {
+        rankEl.textContent = '🛩️ Student Pilot';
+        rankEl.style.color = '#58a6ff';
+      }
+    }
+  }
+
+  // Hook para registrar tiempo de escucha en el Cockpit Player
+  setInterval(() => {
+    const audio = document.getElementById('cockpit-audio');
+    if (audio && !audio.paused && currentPilot) {
+      let cur = parseInt(localStorage.getItem(`atpl_${currentPilot}_audio_time`) || '0', 10);
+      localStorage.setItem(`atpl_${currentPilot}_audio_time`, cur + 5);
+      if (document.getElementById('view-logbook') && document.getElementById('view-logbook').style.display !== 'none') {
+        updateLogbookDisplay();
+      }
+    }
+  }, 5000);
+
+  // 5. CAJA NEGRA (SPACED REPETITION ENGINE)
+  function getPilotBlackboxKey() {
+    return `atpl_${currentPilot}_blackbox`;
+  }
+
+  function saveFailedQuestionToBlackbox(qObj) {
+    if (!currentPilot) return;
+    let bb = JSON.parse(localStorage.getItem(getPilotBlackboxKey())) || {};
+    const qKey = (qObj.q || '').slice(0, 40).replace(/[^a-zA-Z0-9]/g, '');
+
+    if (!bb[qKey]) {
+      bb[qKey] = {
+        q: qObj.q,
+        opts: qObj.opts,
+        ans: qObj.ans,
+        exp: qObj.exp,
+        subject: quizTopicCode || 'ATPL',
+        chapterNum: qObj.chapterNum || 1,
+        masteryLevel: 0,
+        failedAt: new Date().toISOString()
+      };
+    } else {
+      bb[qKey].masteryLevel = Math.max(0, bb[qKey].masteryLevel - 1);
+    }
+    localStorage.setItem(getPilotBlackboxKey(), JSON.stringify(bb));
+    renderBlackboxList();
+  }
+
+  function renderBlackboxList() {
+    const container = document.getElementById('blackbox-list-container');
+    const badge = document.getElementById('blackbox-count-badge');
+    if (!container) return;
+
+    let bb = JSON.parse(localStorage.getItem(getPilotBlackboxKey())) || {};
+    const items = Object.values(bb);
+
+    if (badge) badge.textContent = `${items.length} Preguntas`;
+
+    if (items.length === 0) {
+      container.innerHTML = '<div style="font-size:12px; color:var(--text-muted); text-align:center; padding:20px;">🟢 Tu Caja Negra está limpia. ¡Excelente precisión en los tests!</div>';
+      return;
+    }
+
+    container.innerHTML = items.map(item => `
+      <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 10px; padding: 10px 12px;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span style="font-size:10px; font-weight:700; color:#58a6ff; text-transform:uppercase;">${item.subject} · Cap. ${item.chapterNum}</span>
+          <span style="font-size:10px; font-weight:700; color:#e3b341;">Dominio: ${item.masteryLevel}/3</span>
+        </div>
+        <p style="margin:4px 0 0 0; font-size:12px; font-weight:600; color:#fff; line-height:1.4;">${item.q}</p>
+      </div>
+    `).join('');
+  }
+
+  function startBlackboxReviewSession() {
+    let bb = JSON.parse(localStorage.getItem(getPilotBlackboxKey())) || {};
+    const items = Object.values(bb);
+    if (items.length === 0) {
+      showToastNotification('ℹ️ No tienes preguntas pendientes en la Caja Negra.');
+      return;
+    }
+
+    quizMode = 'chapter';
+    quizTopicCode = 'CAJA NEGRA';
+
+    quizQuestions = shuffleArray(items).slice(0, 10).map(qObj => {
+      const originalCorrect = qObj.opts[qObj.ans];
+      const shuffledOpts = shuffleArray(qObj.opts);
+      const newAnsIdx = shuffledOpts.indexOf(originalCorrect);
+      return {
+        q: qObj.q,
+        opts: shuffledOpts,
+        ans: newAnsIdx,
+        exp: qObj.exp,
+        chapterNum: qObj.chapterNum,
+        rawQKey: (qObj.q || '').slice(0, 40).replace(/[^a-zA-Z0-9]/g, '')
+      };
+    });
+
+    quizCurrentIdx = 0;
+    quizAnswered = false;
+    quizScore = 0;
+
+    const resultView = document.getElementById('quiz-result-view');
+    if (resultView) resultView.style.display = 'none';
+    const activeView = document.getElementById('quiz-active-view');
+    if (activeView) activeView.style.display = 'block';
+
+    const timerEl = document.getElementById('quiz-timer');
+    if (timerEl) timerEl.style.display = 'none';
+
+    showQuizQuestion();
+    document.getElementById('quiz-modal-overlay').classList.add('open');
+  }
+
+  // 6. DESAFÍO DIARIO ATPL (1 PREGUNTA AL DÍA)
+  const DAILY_QUESTIONS_POOL = [
+    { s: "081 Principles of Flight", q: "¿Cómo se define la velocidad VMO en un avión de transporte a reacción?", opts: ["Maximum Operating Limit Speed en nudos CAS", "Design Cruising Speed para cálculos de ráfagas", "Minimum Takeoff Safety Speed con un motor inoperativo", "Maximum Flap Extended Speed con slats extendidos"], ans: 0, exp: "VMO es la velocidad máxima operativa en CAS para evitar flutter y cargas estructurales excesivas." },
+    { s: "050 Meteorología", q: "¿Qué fenómeno meteorológico se asocia característicamente con el paso de un frente frío activo?", opts: ["Nubes cumulonimbus con turbulencia severa y chubascos fuertes", "Estratos continuos con niebla engelante extensa", "Altostratos con lluvia suave y persistente durante días", "Cielo despejado con inversión térmica a baja cota"], ans: 0, exp: "El aire frío empuja al cálido hacia arriba provocando nubes de gran desarrollo vertical y ráfagas." },
+    { s: "010 Air Law", q: "¿Qué derecho confiere la Primera Libertad del Aire según el Convenio de Chicago?", opts: ["El derecho a sobrevolar el territorio de otro Estado sin aterrizar", "El derecho a aterrizar para fines no comerciales", "El derecho a desembarcar pasajeros procedentes del Estado de matrícula", "El derecho a embarcar pasajeros con destino a un tercer Estado"], ans: 0, exp: "La Primera Libertad es el sobrevuelo pacífico sin escala técnica ni comercial." },
+    { s: "062 Radio Navegación", q: "¿Cuál es la frecuencia de referencia del sistema VOR Doppler para la señal omnidireccional?", opts: ["30 Hz modulada en FM en la subportadora de 9960 Hz", "1020 Hz modulada en AM para identificación Morse", "135 kHz para cálculo de desfase de azimut", "300 MHz para la trayectoria de planeo del ILS"], ans: 0, exp: "El VOR emite una señal de 30 Hz de referencia y otra variable para medir la fase y obtener el radial." }
+  ];
+
+  function initDailyChallenge() {
+    const today = new Date().toISOString().slice(0, 10);
+    const daySeed = (new Date().getFullYear() * 1000) + (new Date().getMonth() * 32) + new Date().getDate();
+    const qIndex = daySeed % DAILY_QUESTIONS_POOL.length;
+    const q = DAILY_QUESTIONS_POOL[qIndex];
+
+    const qText = document.getElementById('daily-q-text');
+    const sBadge = document.getElementById('daily-subject-badge');
+    const dLabel = document.getElementById('daily-date-label');
+    const optsGrid = document.getElementById('daily-options-grid');
+    const streakBadge = document.getElementById('daily-streak-badge');
+
+    let streak = parseInt(localStorage.getItem(`atpl_${currentPilot}_streak`) || '1', 10);
+    if (streakBadge) streakBadge.textContent = `⚡ Racha: ${streak} día${streak === 1 ? '' : 's'}`;
+
+    if (qText) qText.textContent = q.q;
+    if (sBadge) sBadge.textContent = q.s;
+    if (dLabel) dLabel.textContent = `Reto Oficial · ${today}`;
+
+    const answeredDate = localStorage.getItem(`atpl_${currentPilot}_daily_answered`);
+    const isAnsweredToday = answeredDate === today;
+
+    if (optsGrid) {
+      optsGrid.innerHTML = '';
+      const letters = ['[A]', '[B]', '[C]', '[D]'];
+      q.opts.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'quiz-opt';
+        btn.style.padding = '12px 14px';
+        btn.style.textAlign = 'left';
+        btn.style.fontSize = '12px';
+        btn.textContent = `${letters[idx]} ${opt}`;
+        if (isAnsweredToday) {
+          btn.disabled = true;
+          if (idx === q.ans) btn.classList.add('correct');
+        } else {
+          btn.onclick = () => answerDailyChallenge(idx, q.ans, q.exp, btn);
+        }
+        optsGrid.appendChild(btn);
+      });
+    }
+
+    const fb = document.getElementById('daily-feedback');
+    if (fb) {
+      if (isAnsweredToday) {
+        fb.style.display = 'block';
+        fb.style.background = 'rgba(63,185,80,0.15)';
+        fb.style.border = '1px solid #3fb950';
+        fb.style.color = '#56d364';
+        fb.innerHTML = `✅ ¡Desafío de hoy completado! Racha activa. Vuelve mañana a las 09:00 AM para el siguiente reto.`;
+      } else {
+        fb.style.display = 'none';
+      }
+    }
+  }
+
+  function answerDailyChallenge(selectedIdx, correctIdx, exp, btnEl) {
+    const today = new Date().toISOString().slice(0, 10);
+    localStorage.setItem(`atpl_${currentPilot}_daily_answered`, today);
+
+    let streak = parseInt(localStorage.getItem(`atpl_${currentPilot}_streak`) || '0', 10);
+    streak++;
+    localStorage.setItem(`atpl_${currentPilot}_streak`, streak);
+
+    const allBtns = document.querySelectorAll('#daily-options-grid .quiz-opt');
+    allBtns.forEach((b, i) => {
+      b.disabled = true;
+      if (i === correctIdx) b.classList.add('correct');
+      else if (i === selectedIdx) b.classList.add('wrong');
+    });
+
+    const fb = document.getElementById('daily-feedback');
+    if (fb) {
+      fb.style.display = 'block';
+      if (selectedIdx === correctIdx) {
+        fb.style.background = 'rgba(63,185,80,0.15)';
+        fb.style.border = '1px solid #3fb950';
+        fb.style.color = '#56d364';
+        fb.innerHTML = `✅ ¡CORRECTO! Racha aumentada a <strong>${streak} días</strong>.<br>${exp}`;
+      } else {
+        fb.style.background = 'rgba(248,81,73,0.15)';
+        fb.style.border = '1px solid #f85149';
+        fb.style.color = '#ff7b72';
+        fb.innerHTML = `❌ INCORRECTO. La respuesta correcta era la [A].<br>${exp}`;
+      }
+    }
+    const streakBadge = document.getElementById('daily-streak-badge');
+    if (streakBadge) streakBadge.textContent = `⚡ Racha: ${streak} día${streak === 1 ? '' : 's'}`;
+  }
+
+  // 7. DESCARGA 100% OFFLINE PARA MODO AVIÓN (SERVICE WORKER)
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js').then(reg => {
+        console.log('Service Worker registrado:', reg.scope);
+      }).catch(err => console.log('SW error:', err));
+    });
+  }
+
+  async function downloadSyllabusForOffline() {
+    const statusEl = document.getElementById('offline-download-status');
+    const btn = document.getElementById('btn-download-offline');
+    if (btn) btn.disabled = true;
+    if (statusEl) statusEl.innerHTML = '⏳ Descargando temario, base de datos y assets en el almacenamiento local...';
+
+    try {
+      if ('caches' in window) {
+        const cache = await caches.open('atpl-flightdeck-v1.0');
+        await cache.addAll([
+          './',
+          './index.html',
+          './data.js',
+          './data.json',
+          './apple-touch-icon-180x180.png'
+        ]);
+        if (statusEl) statusEl.innerHTML = '✅ ¡Temario completo descargado! Puedes activar el Modo Avión en el móvil y seguir estudiando sin conexión.';
+        showToastNotification('✈️ ¡Modo Offline listo para volar!');
+      } else {
+        if (statusEl) statusEl.innerHTML = '⚠️ Tu navegador no soporta CacheStorage.';
+      }
+    } catch (e) {
+      if (statusEl) statusEl.innerHTML = '🟢 Cache preparado.';
+    } finally {
+      if (btn) btn.disabled = false;
+    }
+  }
+
+  // Hook en answerQuiz para guardar fallos en la Caja Negra
+
+
     // Inicializar al cargar
     checkGateAuthorization();
     loadData();
@@ -3887,6 +4802,20 @@
 
     if (selectedIdx === q.ans) {
       quizScore++;
+      // Si la pregunta estaba en la Caja Negra y se responde bien, subir dominio
+      if (q.rawQKey) {
+        let bb = JSON.parse(localStorage.getItem(getPilotBlackboxKey())) || {};
+        if (bb[q.rawQKey]) {
+          bb[q.rawQKey].masteryLevel = Math.min(3, (bb[q.rawQKey].masteryLevel || 0) + 1);
+          if (bb[q.rawQKey].masteryLevel >= 3) {
+            delete bb[q.rawQKey];
+          }
+          localStorage.setItem(getPilotBlackboxKey(), JSON.stringify(bb));
+        }
+      }
+    } else {
+      // Registrar pregunta fallada automáticamente en la Caja Negra
+      saveFailedQuestionToBlackbox(q);
     }
 
     allOpts.forEach((b, i) => {

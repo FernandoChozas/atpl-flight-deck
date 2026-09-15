@@ -4,6 +4,45 @@ Todos los cambios notables, evoluciones y correcciones de este proyecto se regis
 
 ---
 
+## [1.0.0] - 2026-09-15
+
+### 🚀 Novedades y Mejoras Principales
+- **Cockpit Hub EFB (Arquitectura Modular y Nuevo Layout)**:
+  - Nueva barra de navegación superior estilo Glass Cockpit con 4 vistas operativas fluidas y sin recargas:
+    1. 📚 **Cabina de Estudio**: El campus ATPL completo e intacto (13 asignaturas, convocatorias, Libro Maestro, audiotemas, simulador oficial AESA y PDFs).
+    2. 🎯 **Caja Negra & Retos**: Repaso espaciado de errores, desafío diario y cheat-codes mnemotécnicos EASA.
+    3. 🧭 **Simuladores & METAR**: METAR/TAF en vivo en modo RAW con cálculo automático de pistas activas y entrenador interactivo de esperas (Holding Pattern Trainer).
+    4. 📖 **Logbook & Offline**: Registro de horas de vuelo/estudio con temporizador de cuenta atrás y descarga offline completa.
+- **Caja Negra de Fallos (Spaced Repetition)**:
+  - Registro automático de cualquier pregunta fallada en los tests y exámenes AESA.
+  - Algoritmo de repetición espaciada: cada pregunta parte de 0/3 aciertos; requiere 3 respuestas correctas consecutivas para graduarse y archivarse como dominada.
+  - Mnemotécnicas EASA integradas con tarjetas de memoria rápida (AN/UNDS, CARF, ORO, 1 in 60 rule, etc.).
+- **Live Spanish METAR & TAF en Modo RAW + Deducción de Pistas Activas**:
+  - Enfoque prioritario en aeródromos y bases de escuelas de Aviación General en España: Cuatro Vientos (`LECU`), Valladolid (`LEVD`), Badajoz (`LEBZ`), Castellón (`LEDS`), Salamanca (`LESA`), Son Bonet (`LESB`), Logroño (`LERJ`), etc., junto con los aeropuertos principales (`LEMD`, `LEBL`, `LEZL`, `LEMG`, `LEAL`).
+  - Presentación teletípica en **Modo RAW**, exactamente como se exige en los exámenes teóricos de AESA.
+  - Algoritmo trigonométrico de viento relativo: calcula en tiempo real viento en cara (*Headwind*) y viento cruzado (*Crosswind*) para cada cabecera, deduciendo y destacando la **Pista Activa en Servicio**.
+- **Holding Pattern Trainer (Entrenador Interactivo de Esperas ICAO)**:
+  - Simulador visual interactivo basado en ICAO Doc 8168 (PANS-OPS).
+  - Cálculo trigonométrico de rumbo relativo respecto al inbound y recíproco.
+  - Clasificación de sectores de entrada: Sector 1 (Paralela), Sector 2 (Gota / Teardrop) y Sector 3 (Directa).
+  - Generador de ejercicios aleatorios con validación inmediata y rosa de los vientos interactiva.
+- **Logbook de Estudio con Cuenta Atrás de Temario Restante**:
+  - Doble métrica de dedicación aeronáutica:
+    1. Tiempo total de estudio registrado.
+    2. **Cuenta atrás exacta (horas y minutos)** que faltan para dominar el 100% del temario y audios oficiales del curso ATPL (basado en las 56 horas totales estimadas).
+- **Desafío Diario ATPL & Racha (Daily Streak)**:
+  - Pregunta diaria determinista generada en función de la fecha para fomentar la disciplina diaria de los cadetes.
+  - Contador de días consecutivos de racha de estudio.
+- **Modo Offline 100% (Service Worker & CacheStorage)**:
+  - Implementación de `dashboard/sw.js` con estrategia Cache-First.
+  - Permite estudiar a 35.000 pies o en modo avión sin conexión a Internet.
+  - Panel de verificación de estado de caché y botón de precarga en el Logbook.
+- **Seguridad e Integridad**:
+  - Punto 2 (Instructor de radio IA) excluido estrictamente según la decisión del usuario.
+  - Compatibilidad total con la telemetría de flota, control de cadetes y acceso Master (`EC-CHOZAS`).
+
+---
+
 ## [0.9.2] - 2026-09-12
 
 ### 🚀 Novedades y Mejoras Principales

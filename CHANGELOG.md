@@ -2,6 +2,24 @@
 
 Todos los cambios notables, evoluciones y correcciones de este proyecto se registran de forma cronológica en este documento, siguiendo las directrices de [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/) y versionado semántico [SemVer](https://semver.org/lang/es/).
 
+## [1.5.0] - 2026-09-16
+
+### 🚀 Novedades y Mejoras Implementadas
+- **Desplegables Oficiales de Aeropuertos Españoles (Salida, Destino y Alternativo)**:
+  - Selector desplegable para **Aeropuerto de Salida** con los 16 aeródromos de la base de datos VAC oficial (LECU, LEMT, LEVD, LESA, etc.).
+  - **Aeropuerto de Destino Unificado**: Eliminadas las casillas duplicadas. Un único selector elegante que deduce automáticamente la **pista en uso óptima** en función de la componente de viento del METAR al momento de llegada.
+  - Selector desplegable para **Aeropuerto Alternativo**, sincronizando de inmediato las pistas disponibles y el combustible de reserva de alternativo (~30 min).
+- **Reactividad Total de las Tablas Inferiores (Tarjetas 3, 4 y 5)**:
+  - **Tarjeta 3 (Combustible)**: Sincronización dinámica de combustible de crucero, subida, descenso, alternativo, reserva final de 45 min y margen de seguridad en Galones US en tiempo real ante cualquier cambio de consumo, horas o ruta.
+  - **Tarjeta 4 (Calzos y Tiempos)**: Cálculo automático de tiempo de vuelo (`flight time`), hora estimada de aterrizaje (`landing time`), `off-block` (-10m), `on-block` (+10m) y `block time` (+20m rodaje).
+  - **Tarjeta 5 (Rendimiento de Pistas)**: Sincronización instantánea de distancias disponibles de despegue y aterrizaje en salida, destino y alternativo, así como distancias requeridas según el modelo de aeronave.
+- **Simulador Interactivo de Computador de Vuelo CR-3 (Jeppesen / AerotestPPL)**:
+  - Integrado en la pestaña **`🧭 Simuladores & METAR`**.
+  - **Cara 1 (Calculadora Circular)**: Escalas logarítmicas de precisión, disco interior rotatorio mediante arrastre táctil y ratón, alineación asistida del índice triangular ▲ 60 (RATE), inspector digital en tiempo real y botones de microgiro (±1°, ±10°).
+  - **Cara 2 (Disco de Viento)**: Rosa circular de 360°, resolución vectorial del triángulo de viento, cálculo de corrección de deriva (WCA), rumbo de aguja (TH/MH), Ground Speed (GS) y componentes de viento cruzado y de cara/cola.
+  - **Guía Didáctica "Para Dummies" & Examen EASA**: Explicación paso a paso de las escalas, la regla del índice 60 y cómo resolver velocidad, tiempo, distancia y combustible.
+  - **Banco de Ejercicios Prácticos con Giro Automático**: 6 problemas de navegación interactivos con verificación inmediata y botón *"🎯 Demostrar en el CR3"* que gira el disco animado hasta la solución exacta.
+
 ---
 
 ## [1.4.1] - 2026-09-15

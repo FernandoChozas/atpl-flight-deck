@@ -1379,7 +1379,7 @@
       <div class="brand">
         <div class="brand-icon" style="padding: 0; overflow: hidden; border: 1px solid rgba(88, 166, 255, 0.4); background: #012349;"><img src="apple-touch-icon-180x180.png" alt="ATPL Pilot" style="width: 100%; height: 100%; object-fit: cover; border-radius: 9px; display: block;"></div>
         <div class="brand-text">
-          <h1>ATPL Flight Deck & Study Control <span class="badge-beta" id="version-badge" onclick="forceCheckAppUpdate(true)" style="cursor:pointer;" title="Versión v1.4.1 EFB — Clic para forzar actualización limpia">v1.4.1 EFB</span></h1>
+          <h1>ATPL Flight Deck & Study Control <span class="badge-beta" id="version-badge" onclick="forceCheckAppUpdate(true)" style="cursor:pointer;" title="Versión v1.5.0 EFB — Clic para forzar actualización limpia">v1.5.0 EFB</span></h1>
           <p>Preparación EASA Modular Oficial | Sistema adaptado a turnos de 12h</p>
         </div>
       </div>
@@ -1814,6 +1814,356 @@
         </div>
       </div>
     </div>
+  
+    <!-- ═══════════════════════════════════════════════════════
+         SIMULADOR INTERACTIVO COMPUTADOR DE VUELO CR3 (JEPPESEN CR-3)
+         ESCALAS LOGARÍTMICAS, CÁLCULOS, GUÍA DIDÁCTICA Y EJERCICIOS
+    ═══════════════════════════════════════════════════════════ -->
+    <div class="pilot-box" style="margin-top: 24px; background: var(--bg-card, #161b22); border: 1px solid var(--border-color, #30363d); border-radius: 16px; padding: 22px;">
+      <!-- Cabecera del Simulador CR3 -->
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 16px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 32px;">🎛️</span>
+          <div>
+            <h3 style="margin: 0; font-size: 17px; font-weight: 800; color: #fff;">Simulador Interactivo Computador de Vuelo CR-3</h3>
+            <p style="margin: 2px 0 0 0; font-size: 12px; color: var(--text-muted);">
+              Calculadora circular de navegación aérea (PPL / ATPL) · Discos giratorios táctiles, triángulo de viento, guía didáctica y ejercicios guiados
+            </p>
+          </div>
+        </div>
+
+        <!-- Selector de Modo / Cara del CR3 -->
+        <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+          <button type="button" class="btn-filter" id="cr3-tab-calc" onclick="switchCR3Face('calc')" style="background: rgba(56,139,253,0.2); border-color: #388bfd; color: #58a6ff; font-weight: 800; font-size: 12px; padding: 6px 14px; border-radius: 8px; cursor: pointer;">
+            🧮 Cara 1: Calculadora Circular
+          </button>
+          <button type="button" class="btn-filter" id="cr3-tab-wind" onclick="switchCR3Face('wind')" style="background: #0d1117; border-color: #30363d; color: #fff; font-weight: 700; font-size: 12px; padding: 6px 14px; border-radius: 8px; cursor: pointer;">
+            💨 Cara 2: Disco de Viento (WCA & GS)
+          </button>
+          <button type="button" class="btn-filter" id="cr3-tab-guide" onclick="switchCR3Face('guide')" style="background: #0d1117; border-color: #30363d; color: #e3b341; font-weight: 700; font-size: 12px; padding: 6px 14px; border-radius: 8px; cursor: pointer;">
+            📖 Guía de Uso ("Para Dummies")
+          </button>
+          <button type="button" class="btn-filter" id="cr3-tab-exercises" onclick="switchCR3Face('exercises')" style="background: #0d1117; border-color: #30363d; color: #3fb950; font-weight: 700; font-size: 12px; padding: 6px 14px; border-radius: 8px; cursor: pointer;">
+            🎯 Ejercicios de Examen
+          </button>
+        </div>
+      </div>
+
+      <!-- CARA 1: CALCULADORA CIRCULAR (SLIDE RULE) -->
+      <div id="cr3-view-calc" style="display: block;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; align-items: center;">
+          <!-- Discos interactivos SVG -->
+          <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; background: #0d1117; border: 1px solid #30363d; border-radius: 16px; padding: 18px; position: relative;">
+            <div style="font-size: 11px; font-weight: 800; color: #58a6ff; margin-bottom: 8px; display: flex; justify-content: space-between; width: 100%;">
+              <span>DISCO EXTERIOR FIJO (Distancia / Gasto / kt)</span>
+              <span>DISCO INTERIOR MÓVIL (Tiempo / 60)</span>
+            </div>
+
+            <!-- SVG Container para el CR3 con eventos de arrastre táctil / ratón -->
+            <div id="cr3-dial-container" style="position: relative; width: 330px; height: 330px; user-select: none; touch-action: none; cursor: grab;">
+              <svg id="cr3-svg" width="330" height="330" viewBox="0 0 330 330" style="overflow: visible;">
+                <defs>
+                  <radialGradient id="cr3OuterGrad" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#141c2b"/>
+                    <stop offset="90%" stop-color="#0b111a"/>
+                    <stop offset="100%" stop-color="#06090f"/>
+                  </radialGradient>
+                  <radialGradient id="cr3InnerGrad" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#1e293b"/>
+                    <stop offset="85%" stop-color="#111827"/>
+                    <stop offset="100%" stop-color="#0f172a"/>
+                  </radialGradient>
+                </defs>
+
+                <!-- 1. DISCO EXTERIOR (ESTATOR FIJO) -->
+                <circle cx="165" cy="165" r="160" fill="url(#cr3OuterGrad)" stroke="#388bfd" stroke-width="2.5"/>
+                <circle cx="165" cy="165" r="130" fill="none" stroke="#30363d" stroke-width="1"/>
+                
+                <!-- Escala Exterior (Generada Dinámicamente) -->
+                <g id="cr3-outer-scale-marks"></g>
+
+                <!-- 2. DISCO INTERIOR (ROTOR GIRATORIO) -->
+                <g id="cr3-inner-rotor" style="transform-origin: 165px 165px; transition: transform 0.05s linear;">
+                  <circle cx="165" cy="165" r="128" fill="url(#cr3InnerGrad)" stroke="#e3b341" stroke-width="2"/>
+                  <circle cx="165" cy="165" r="85" fill="#0d1117" stroke="#30363d" stroke-width="1.5"/>
+                  
+                  <!-- Escala Interior (Marcas y Horas/Minutos) -->
+                  <g id="cr3-inner-scale-marks"></g>
+
+                  <!-- Centro metálico -->
+                  <circle cx="165" cy="165" r="22" fill="#1f293d" stroke="#58a6ff" stroke-width="2"/>
+                  <circle cx="165" cy="165" r="8" fill="#e3b341"/>
+                  <text x="165" y="169" font-size="8" font-weight="900" fill="#fff" text-anchor="middle" font-family="monospace">CR-3</text>
+                </g>
+
+                <!-- Puntero Inspector / Cursor Transparente Superior -->
+                <line id="cr3-hairline" x1="165" y1="5" x2="165" y2="325" stroke="rgba(248,81,73,0.7)" stroke-width="1.5" stroke-dasharray="3,3" pointer-events="none"/>
+              </svg>
+            </div>
+
+            <!-- Controles de Giro Fino y Rápido -->
+            <div style="display: flex; gap: 8px; margin-top: 14px; align-items: center; flex-wrap: wrap; justify-content: center;">
+              <button type="button" class="btn-filter" onclick="rotateCR3By(-10)" style="font-size: 11px; padding: 4px 10px; background: #21262d;">⏪ -10°</button>
+              <button type="button" class="btn-filter" onclick="rotateCR3By(-1)" style="font-size: 11px; padding: 4px 10px; background: #21262d;">◀ -1°</button>
+              <span id="cr3-current-angle-label" style="font-size: 12px; font-weight: 800; color: #f1e05a; font-family: monospace; min-width: 65px; text-align: center;">0.0°</span>
+              <button type="button" class="btn-filter" onclick="rotateCR3By(1)" style="font-size: 11px; padding: 4px 10px; background: #21262d;">+1° ▶</button>
+              <button type="button" class="btn-filter" onclick="rotateCR3By(10)" style="font-size: 11px; padding: 4px 10px; background: #21262d;">+10° ⏩</button>
+              <button type="button" class="btn-filter" onclick="resetCR3Dial()" style="font-size: 11px; padding: 4px 10px; background: rgba(248,81,73,0.2); color: #ff7b72; border-color: #f85149;">🔄 Reiniciar</button>
+            </div>
+            <div style="margin-top: 6px; font-size: 11px; color: var(--text-muted);">
+              💡 <em>Arrastra el disco interior con el ratón o el dedo para girarlo libremente</em>
+            </div>
+          </div>
+
+          <!-- Panel de Control y Lectura en Tiempo Real -->
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <!-- Alineación Rápida Asistida -->
+            <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 12px; padding: 14px;">
+              <strong style="font-size: 12px; color: #58a6ff; display: block; margin-bottom: 8px;">
+                🎯 Alineación Rápida del Índice 60 (RATE / Tasa Horaria)
+              </strong>
+              <div style="display: flex; gap: 8px; align-items: center;">
+                <input type="number" id="cr3-quick-rate-input" value="90" min="20" max="300" step="1" style="width: 80px; padding: 6px 10px; background: #161b22; border: 1px solid #30363d; color: #58a6ff; font-weight: 800; font-size: 13px; border-radius: 8px; text-align: center;">
+                <span style="font-size: 12px; color: var(--text-muted);">kt o Gal/h</span>
+                <button type="button" class="btn-sync-action" onclick="alignCR3IndexToValue(parseFloat(document.getElementById('cr3-quick-rate-input').value))" style="background: #238636; border-color: #2ea043; font-size: 11px; padding: 6px 14px; white-space: nowrap;">
+                  Alinear Índice 60
+                </button>
+              </div>
+              <div style="display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap;">
+                <button type="button" class="btn-filter" onclick="alignCR3IndexToValue(90)" style="font-size: 10px; padding: 2px 8px;">C172 Cruceiro: 90 kt</button>
+                <button type="button" class="btn-filter" onclick="alignCR3IndexToValue(80)" style="font-size: 10px; padding: 2px 8px;">C172 Consumo: 8.0 Gal/h</button>
+                <button type="button" class="btn-filter" onclick="alignCR3IndexToValue(120)" style="font-size: 10px; padding: 2px 8px;">120 kt (2 NM/min)</button>
+              </div>
+            </div>
+
+            <!-- Inspector de Correspondencias en Tiempo Real -->
+            <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 12px; padding: 14px;">
+              <strong style="font-size: 12px; color: #3fb950; display: block; margin-bottom: 8px;">
+                🔍 Inspector Digital de Lectura (Correspondencia Disco Ext vs Int)
+              </strong>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div style="background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 8px;">
+                  <div style="font-size: 10px; color: var(--text-muted); font-weight: 700;">TASA EN ÍNDICE 60:</div>
+                  <div id="cr3-readout-rate" style="font-size: 16px; font-weight: 800; color: #e3b341; margin-top: 2px;">90.0 kt / Gal/h</div>
+                </div>
+                <div style="background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 8px;">
+                  <div style="font-size: 10px; color: var(--text-muted); font-weight: 700;">FACTOR DE VELOCIDAD:</div>
+                  <div id="cr3-readout-speed-factor" style="font-size: 16px; font-weight: 800; color: #58a6ff; margin-top: 2px;">1.50 NM/min</div>
+                </div>
+              </div>
+
+              <!-- Calculador rápido interactivo vinculado al ángulo actual del disco -->
+              <div style="margin-top: 10px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                <div>
+                  <label style="font-size: 10px; color: var(--text-muted); font-weight: 700; display: block; margin-bottom: 2px;">TIEMPO DE VUELO:</label>
+                  <div style="display: flex; align-items: center; gap: 4px;">
+                    <input type="number" id="cr3-inspect-time" value="30" min="1" max="600" oninput="updateCR3InspectorFromTime(this.value)" style="width: 100%; padding: 5px 8px; background: #161b22; border: 1px solid #30363d; color: #fff; font-size: 12px; font-weight: 800; border-radius: 6px;">
+                    <span style="font-size: 11px; color: var(--text-muted);">min</span>
+                  </div>
+                </div>
+                <div>
+                  <label style="font-size: 10px; color: #3fb950; font-weight: 700; display: block; margin-bottom: 2px;">DISTANCIA / COMBUSTIBLE:</label>
+                  <div id="cr3-inspect-result" style="padding: 5px 8px; background: #161b22; border: 1px solid #2ea043; color: #3fb950; font-size: 12px; font-weight: 800; border-radius: 6px;">
+                    45.0 NM / 4.0 Gal
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Fórmulas rápidas mnemotécnicas -->
+            <div style="background: rgba(56,139,253,0.06); border: 1px solid rgba(56,139,253,0.2); border-radius: 10px; padding: 10px; font-size: 11px; color: var(--text-muted); line-height: 1.45;">
+              <strong style="color: #58a6ff;">💡 Regla de oro del CR3:</strong> El puntero triangular <strong>▲ 60</strong> representa <em>1 hora (60 minutos)</em>. Alinea el puntero con tu velocidad (nudos) o consumo horario (Gal/h). Directamente enfrente de los minutos en el disco interior leerás las millas náuticas o galones en el exterior.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARA 2: DISCO DE VIENTO (TRIÁNGULO DE VIENTO, WCA & GROUND SPEED) -->
+      <div id="cr3-view-wind" style="display: none;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; align-items: center;">
+          <!-- Rosa de Vientos Interactiva SVG -->
+          <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; background: #0d1117; border: 1px solid #30363d; border-radius: 16px; padding: 18px;">
+            <div style="font-size: 11px; font-weight: 800; color: #58a6ff; margin-bottom: 8px;">
+              ROSA CIRCULAR DE RUMBOS & RESOLUCIÓN VECTORIAL DE VIENTO
+            </div>
+            
+            <svg id="cr3-wind-svg" width="300" height="300" viewBox="0 0 300 300" style="overflow: visible;">
+              <!-- Círculo exterior con rumbos -->
+              <circle cx="150" cy="150" r="140" fill="#0d1117" stroke="#388bfd" stroke-width="2"/>
+              <circle cx="150" cy="150" r="105" fill="#161b22" stroke="#30363d" stroke-width="1"/>
+              <circle cx="150" cy="150" r="70" fill="none" stroke="#21262d" stroke-width="1" stroke-dasharray="2,2"/>
+              <circle cx="150" cy="150" r="35" fill="none" stroke="#21262d" stroke-width="1" stroke-dasharray="2,2"/>
+
+              <!-- Marcas de Rumbo Generadas Dinámicamente -->
+              <g id="cr3-wind-rose-marks"></g>
+
+              <!-- Vector Rumbo Deseado (True Course) -->
+              <line id="cr3-vector-tc" x1="150" y1="150" x2="150" y2="25" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+
+              <!-- Vector Viento (Wind Vector) -->
+              <line id="cr3-vector-wind" x1="150" y1="25" x2="180" y2="55" stroke="#3fb950" stroke-width="3" stroke-linecap="round"/>
+
+              <!-- Vector Rumbo de Aguja / Heading (TH) -->
+              <line id="cr3-vector-heading" x1="150" y1="150" x2="180" y2="55" stroke="#d2a8ff" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="4,3"/>
+
+              <!-- Centro fijo -->
+              <circle cx="150" cy="150" r="5" fill="#e3b341"/>
+            </svg>
+
+            <div style="display: flex; gap: 12px; margin-top: 10px; font-size: 11px;">
+              <span style="color: #58a6ff;">● Rumbo Deseado (TC)</span>
+              <span style="color: #3fb950;">● Vector Viento</span>
+              <span style="color: #d2a8ff;">● Rumbo a Volar (TH)</span>
+            </div>
+          </div>
+
+          <!-- Parámetros de Entrada y Solución -->
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 12px; padding: 14px;">
+              <strong style="font-size: 12px; color: #fff; display: block; margin-bottom: 8px;">
+                💨 Parámetros de Vuelo y Viento
+              </strong>
+              <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
+                <div>
+                  <label style="font-size: 9px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 2px;">RUMBO (TC):</label>
+                  <input type="number" id="cr3-wind-tc" value="345" min="0" max="360" oninput="calculateCR3WindTriangle()" style="width: 100%; padding: 6px 8px; background: #161b22; border: 1px solid #30363d; color: #58a6ff; font-weight: 800; font-size: 12px; border-radius: 6px; text-align: center;">
+                </div>
+                <div>
+                  <label style="font-size: 9px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 2px;">VIENTO (DIR/KT):</label>
+                  <input type="text" id="cr3-wind-wind" value="290/20" oninput="calculateCR3WindTriangle()" style="width: 100%; padding: 6px 8px; background: #161b22; border: 1px solid #30363d; color: #3fb950; font-weight: 800; font-size: 12px; border-radius: 6px; text-align: center;">
+                </div>
+                <div>
+                  <label style="font-size: 9px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 2px;">TAS (NUDOS):</label>
+                  <input type="number" id="cr3-wind-tas" value="97" min="40" max="300" oninput="calculateCR3WindTriangle()" style="width: 100%; padding: 6px 8px; background: #161b22; border: 1px solid #30363d; color: #fff; font-weight: 800; font-size: 12px; border-radius: 6px; text-align: center;">
+                </div>
+              </div>
+            </div>
+
+            <!-- Resultados del Triángulo de Viento -->
+            <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 12px; padding: 14px;">
+              <strong style="font-size: 12px; color: #3fb950; display: block; margin-bottom: 8px;">
+                ⚡ Solución de Navegación Obtenida
+              </strong>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div style="background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 8px;">
+                  <div style="font-size: 10px; color: var(--text-muted); font-weight: 700;">CORRECCIÓN DERIVA (WCA):</div>
+                  <div id="cr3-sol-wca" style="font-size: 16px; font-weight: 800; color: #e3b341; margin-top: 2px;">-9° (Izquierda)</div>
+                </div>
+                <div style="background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 8px;">
+                  <div style="font-size: 10px; color: var(--text-muted); font-weight: 700;">RUMBO VERDADERO (TH):</div>
+                  <div id="cr3-sol-th" style="font-size: 16px; font-weight: 800; color: #d2a8ff; margin-top: 2px;">336°</div>
+                </div>
+                <div style="background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 8px;">
+                  <div style="font-size: 10px; color: var(--text-muted); font-weight: 700;">VELOCIDAD SUELO (GS):</div>
+                  <div id="cr3-sol-gs" style="font-size: 16px; font-weight: 800; color: #58a6ff; margin-top: 2px;">84 kt</div>
+                </div>
+                <div style="background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 8px;">
+                  <div style="font-size: 10px; color: var(--text-muted); font-weight: 700;">COMPONENTES VIENTO:</div>
+                  <div id="cr3-sol-components" style="font-size: 12px; font-weight: 700; color: #fff; margin-top: 4px;">Cara: -16 kt | Cruzado: 12 kt Izq</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARA 3: GUÍA DE USO ("PARA DUMMIES" & EXAMEN EASA / PPL) -->
+      <div id="cr3-view-guide" style="display: none;">
+        <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 14px; padding: 18px; line-height: 1.55;">
+          <h4 style="margin: 0 0 12px 0; font-size: 15px; color: #e3b341;">
+            📖 Manual Rápido del Computador de Vuelo CR-3 ("Para Dummies")
+          </h4>
+          
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px;">
+            <div style="background: #161b22; border: 1px solid #30363d; border-radius: 10px; padding: 12px;">
+              <strong style="color: #58a6ff; font-size: 12px;">1. Las Dos Escalas Fundamentales</strong>
+              <p style="font-size: 11px; color: var(--text-muted); margin: 6px 0 0 0;">
+                • <strong>Disco Exterior (Estator)</strong>: Escala fija para cantidades: Distancia (NM o Km), Velocidad (Nudos) y Combustible (Galones o Litros).<br>
+                • <strong>Disco Interior (Rotor)</strong>: Escala giratoria para el Tiempo (Minutos en número grande y Horas en número pequeño) y el <strong>Índice Triangular ▲ 60</strong>.
+              </p>
+            </div>
+
+            <div style="background: #161b22; border: 1px solid #30363d; border-radius: 10px; padding: 12px;">
+              <strong style="color: #3fb950; font-size: 12px;">2. La Regla de Oro: Índice ▲ 60</strong>
+              <p style="font-size: 11px; color: var(--text-muted); margin: 6px 0 0 0;">
+                El triángulo <strong>▲ 60</strong> siempre representa <em>1 HORA (60 minutos)</em>. Para cualquier cálculo de velocidad o combustible:<br>
+                1. Gira el disco interior hasta que el triángulo ▲ 60 apunte a tu <strong>velocidad</strong> (ej. 90 kt) o a tu <strong>consumo</strong> (ej. 8.0 Gal/h).<br>
+                2. ¡Listo! Ya tienes configurada la proporción horaria.
+              </p>
+            </div>
+
+            <div style="background: #161b22; border: 1px solid #30363d; border-radius: 10px; padding: 12px;">
+              <strong style="color: #e3b341; font-size: 12px;">3. Calcular Distancia y Tiempo</strong>
+              <p style="font-size: 11px; color: var(--text-muted); margin: 6px 0 0 0;">
+                • <em>Si sabes el tiempo</em>: Busca los minutos en el disco interior; enfrente en el exterior verás las millas náuticas recorridas.<br>
+                • <em>Si sabes la distancia</em>: Busca las millas en el disco exterior; enfrente en el interior leerás los minutos que tardarás.
+              </p>
+            </div>
+
+            <div style="background: #161b22; border: 1px solid #30363d; border-radius: 10px; padding: 12px;">
+              <strong style="color: #d2a8ff; font-size: 12px;">4. Calcular Consumo de Combustible</strong>
+              <p style="font-size: 11px; color: var(--text-muted); margin: 6px 0 0 0;">
+                Para una Cessna 172 que gasta 8.0 Gal/h:<br>
+                1. Coloca el triángulo ▲ 60 apuntando al número <strong>80</strong> de la escala exterior.<br>
+                2. Busca el tiempo de vuelo en el disco interior (ej. 45 min).<br>
+                3. En el disco exterior lees <strong>60</strong> $
+ightarrow$ 6.0 Galones.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARA 4: BANCO DE EJERCICIOS PRÁCTICOS DE EXAMEN -->
+      <div id="cr3-view-exercises" style="display: none;">
+        <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 14px; padding: 18px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 14px;">
+            <div>
+              <h4 style="margin: 0; font-size: 15px; color: #3fb950;">
+                🎯 Banco de Ejercicios Guiados (PPL / ATPL)
+              </h4>
+              <p style="margin: 2px 0 0 0; font-size: 11px; color: var(--text-muted);">
+                Prueba tus habilidades de cálculo analógico. Introduce tu respuesta o pulsa "Demostrar en el CR3" para ver el disco girar automáticamente a la solución.
+              </p>
+            </div>
+            <div id="cr3-exercises-score-badge" style="font-size: 12px; font-weight: 800; background: rgba(56,139,253,0.15); border: 1px solid #388bfd; color: #58a6ff; padding: 4px 10px; border-radius: 8px;">
+              Progreso: 0/6 Acertados
+            </div>
+          </div>
+
+          <!-- Selector de Ejercicio -->
+          <div style="display: flex; gap: 6px; margin-bottom: 14px; overflow-x: auto; padding-bottom: 4px;">
+            <button type="button" class="btn-filter active" id="cr3-btn-ex-1" onclick="loadCR3Exercise(1)" style="font-size: 11px; padding: 5px 10px; white-space: nowrap;">Ex 1: Tiempo Vuelo</button>
+            <button type="button" class="btn-filter" id="cr3-btn-ex-2" onclick="loadCR3Exercise(2)" style="font-size: 11px; padding: 5px 10px; white-space: nowrap;">Ex 2: Distancia</button>
+            <button type="button" class="btn-filter" id="cr3-btn-ex-3" onclick="loadCR3Exercise(3)" style="font-size: 11px; padding: 5px 10px; white-space: nowrap;">Ex 3: Consumo C172</button>
+            <button type="button" class="btn-filter" id="cr3-btn-ex-4" onclick="loadCR3Exercise(4)" style="font-size: 11px; padding: 5px 10px; white-space: nowrap;">Ex 4: Ground Speed</button>
+            <button type="button" class="btn-filter" id="cr3-btn-ex-5" onclick="loadCR3Exercise(5)" style="font-size: 11px; padding: 5px 10px; white-space: nowrap;">Ex 5: Galones a Litros</button>
+            <button type="button" class="btn-filter" id="cr3-btn-ex-6" onclick="loadCR3Exercise(6)" style="font-size: 11px; padding: 5px 10px; white-space: nowrap;">Ex 6: Deriva Viento</button>
+          </div>
+
+          <!-- Tarjeta del Ejercicio Actual -->
+          <div id="cr3-exercise-card" style="background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 16px;">
+            <div id="cr3-ex-title" style="font-size: 13px; font-weight: 800; color: #fff; margin-bottom: 6px;"></div>
+            <div id="cr3-ex-prompt" style="font-size: 12px; color: var(--text-muted); line-height: 1.5; margin-bottom: 12px;"></div>
+
+            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+              <input type="number" id="cr3-ex-user-input" placeholder="Tu resultado..." step="0.1" style="width: 120px; padding: 8px 12px; background: #0d1117; border: 1px solid #30363d; color: #fff; font-weight: 800; font-size: 13px; border-radius: 8px;">
+              <span id="cr3-ex-unit-label" style="font-size: 12px; font-weight: bold; color: var(--text-muted);"></span>
+              <button type="button" class="btn-sync-action" onclick="verifyCR3ExerciseAnswer()" style="background: #238636; border-color: #2ea043; padding: 8px 16px; font-weight: 700;">
+                Comprobar
+              </button>
+              <button type="button" class="btn-sync-action" onclick="demonstrateCR3ExerciseSolution()" style="background: rgba(56,139,253,0.2); border-color: #388bfd; color: #79c0ff; padding: 8px 16px; font-weight: 700;">
+                🎯 Demostrar en el CR3 (Giro Automático)
+              </button>
+            </div>
+
+            <!-- Feedback del Ejercicio -->
+            <div id="cr3-ex-feedback" style="display: none; margin-top: 12px; padding: 12px; border-radius: 8px; font-size: 12px; line-height: 1.5;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div><!-- /view-herramientas -->
 
   <!-- ═══════════════════════════════════════════════════════════
@@ -1985,34 +2335,65 @@
             </div>
             <div>
               <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">🛫 AERÓDROMO SALIDA</label>
-              <input type="text" id="fpl-departure-name" value="LECU / CUATRO VIENTOS" onchange="handleDepartureAirportChange(this.value)" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #58a6ff; font-weight: 700; font-size: 12px; padding: 7px 10px; border-radius: 8px;">
+              <select id="fpl-departure-select" onchange="handleDepartureSelectChange(this.value)" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #58a6ff; font-weight: 800; font-size: 12px; padding: 7px 10px; border-radius: 8px; outline: none; cursor: pointer;">
+                <option value="LECU" selected>LECU · Cuatro Vientos (Madrid)</option>
+                <option value="LEVD">LEVD · Valladolid-Villanubla</option>
+                <option value="LEMT">LEMT · Casarrubios del Monte</option>
+                <option value="LESA">LESA · Salamanca-Matacán</option>
+                <option value="LERM">LERM · Robledillo de Mohernando</option>
+                <option value="LETO">LETO · Toledo</option>
+                <option value="LEOC">LEOC · Ocaña</option>
+                <option value="LEBZ">LEBZ · Badajoz-Talavera</option>
+                <option value="LEDS">LEDS · Castellón-Costa Azahar</option>
+                <option value="LESB">LESB · Mallorca-Son Bonet</option>
+                <option value="LERJ">LERJ · Logroño-Agoncillo</option>
+                <option value="LEMU">LEMU · Muchamiel (Mutxamel)</option>
+                <option value="LEAX">LEAX · La Axarquía (Vélez-Málaga)</option>
+                <option value="LEZL">LEZL · Sevilla-San Pablo</option>
+                <option value="LEJR">LEJR · Jerez de la Frontera</option>
+                <option value="LEMG">LEMG · Málaga-Costa del Sol</option>
+                <option value="LEMD">LEMD · Madrid-Barajas</option>
+              </select>
             </div>
             <div>
-              <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">🛬 AERÓDROMO DESTINO</label>
-              <div style="display: flex; gap: 4px;">
-                <select id="fpl-destination-select" onchange="handleDestinationSelectChange(this.value)" style="width: 45%; background: #161b22; border: 1px solid #30363d; color: #3fb950; font-weight: 800; font-size: 11px; padding: 7px 4px; border-radius: 8px; outline: none;">
-                  <option value="LEVD" selected>LEVD (Valladolid)</option>
-                  <option value="LECU">LECU (Cuatro Vientos)</option>
-                  <option value="LEMT">LEMT (Casarrubios)</option>
-                  <option value="LESA">LESA (Salamanca)</option>
-                  <option value="LEBZ">LEBZ (Badajoz)</option>
-                  <option value="LEDS">LEDS (Castellón)</option>
-                  <option value="LESB">LESB (Son Bonet)</option>
-                  <option value="LERJ">LERJ (Logroño)</option>
-                  <option value="LETO">LETO (Toledo)</option>
-                  <option value="LERM">LERM (Robledillo)</option>
-                  <option value="LEOC">LEOC (Ocaña)</option>
-                  <option value="LEZL">LEZL (Sevilla)</option>
-                  <option value="LEJR">LEJR (Jerez)</option>
-                  <option value="LEMG">LEMG (Málaga)</option>
-                  <option value="LEMD">LEMD (Barajas)</option>
-                </select>
-                <input type="text" id="fpl-destination-name" value="LEVD / VALLADOLID" onchange="handleDestinationAirportChange(this.value)" style="width: 55%; background: #161b22; border: 1px solid #30363d; color: #3fb950; font-weight: 800; font-size: 12px; padding: 7px 8px; border-radius: 8px;">
-              </div>
+              <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">🛬 AERÓDROMO DESTINO (Pista deducida por METAR)</label>
+              <select id="fpl-destination-select" onchange="handleDestinationSelectChange(this.value)" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #3fb950; font-weight: 800; font-size: 12px; padding: 7px 10px; border-radius: 8px; outline: none; cursor: pointer;">
+                <option value="LEVD" selected>LEVD · Valladolid-Villanubla</option>
+                <option value="LECU">LECU · Cuatro Vientos (Madrid)</option>
+                <option value="LEMT">LEMT · Casarrubios del Monte</option>
+                <option value="LESA">LESA · Salamanca-Matacán</option>
+                <option value="LERM">LERM · Robledillo de Mohernando</option>
+                <option value="LETO">LETO · Toledo</option>
+                <option value="LEOC">LEOC · Ocaña</option>
+                <option value="LEBZ">LEBZ · Badajoz-Talavera</option>
+                <option value="LEDS">LEDS · Castellón-Costa Azahar</option>
+                <option value="LESB">LESB · Mallorca-Son Bonet</option>
+                <option value="LERJ">LERJ · Logroño-Agoncillo</option>
+                <option value="LEMU">LEMU · Muchamiel (Mutxamel)</option>
+                <option value="LEAX">LEAX · La Axarquía (Vélez-Málaga)</option>
+                <option value="LEZL">LEZL · Sevilla-San Pablo</option>
+                <option value="LEJR">LEJR · Jerez de la Frontera</option>
+                <option value="LEMG">LEMG · Málaga-Costa del Sol</option>
+                <option value="LEMD">LEMD · Madrid-Barajas</option>
+              </select>
             </div>
             <div>
-              <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">AERÓDROMO ALTERNATIVO</label>
-              <input type="text" id="fpl-alternate-name" value="LESA / SALAMANCA" onchange="handleAlternateAirportChange(this.value)" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #e3b341; font-weight: 700; font-size: 12px; padding: 7px 10px; border-radius: 8px;">
+              <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">🔄 AERÓDROMO ALTERNATIVO</label>
+              <select id="fpl-alternate-select" onchange="handleAlternateSelectChange(this.value)" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #e3b341; font-weight: 800; font-size: 12px; padding: 7px 10px; border-radius: 8px; outline: none; cursor: pointer;">
+                <option value="LESA" selected>LESA · Salamanca-Matacán</option>
+                <option value="LEVD">LEVD · Valladolid-Villanubla</option>
+                <option value="LECU">LECU · Cuatro Vientos (Madrid)</option>
+                <option value="LEMT">LEMT · Casarrubios del Monte</option>
+                <option value="LERM">LERM · Robledillo de Mohernando</option>
+                <option value="LETO">LETO · Toledo</option>
+                <option value="LEOC">LEOC · Ocaña</option>
+                <option value="LEBZ">LEBZ · Badajoz-Talavera</option>
+                <option value="LEDS">LEDS · Castellón-Costa Azahar</option>
+                <option value="LESB">LESB · Mallorca-Son Bonet</option>
+                <option value="LERJ">LERJ · Logroño-Agoncillo</option>
+                <option value="LEZL">LEZL · Sevilla-San Pablo</option>
+                <option value="LEMD">LEMD · Madrid-Barajas</option>
+              </select>
             </div>
             <div>
               <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">MATRÍCULA</label>
@@ -2808,7 +3189,7 @@
     function exportProgressToICloud() {
       const data = {
         application: "ATPL Flight Deck",
-        version: "v1.4.1",
+        version: "v1.5.0",
         pilot: currentPilot,
         exportedAt: new Date().toISOString(),
         topics: studiedTopics,
@@ -4194,6 +4575,7 @@
 
   // 1. COCKPIT HUB NAVIGATION TABS
   function switchCockpitTab(tabId) {
+    if (tabId === 'herramientas') { setTimeout(initCR3Simulator, 80); }
     const tabs = ['estudio', 'hangar', 'herramientas', 'logbook', 'fpl'];
     tabs.forEach(t => {
       const view = document.getElementById('view-' + t);
@@ -5008,7 +5390,7 @@
 
     try {
       if ('caches' in window) {
-        const cache = await caches.open('atpl-flightdeck-v1.4.1');
+        const cache = await caches.open('atpl-flightdeck-v1.5.0');
         await cache.addAll([
           './',
           './index.html',
@@ -5216,7 +5598,7 @@
         <!-- Sección 5: Versión del Sistema y Forzar Actualización PWA -->
         <div class="pilot-box" style="margin-top: 12px; background: rgba(56,139,253,0.06); border: 1px solid rgba(56,139,253,0.25);">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-            <strong style="color:var(--text-title); font-size:12px;">🚀 Versión del Sistema: <span style="color:#58a6ff;">v1.4.1 EFB</span></strong>
+            <strong style="color:var(--text-title); font-size:12px;">🚀 Versión del Sistema: <span style="color:#58a6ff;">v1.5.0 EFB</span></strong>
             <span style="font-size:10px; background:rgba(46,160,67,0.2); color:#56d364; padding:2px 8px; border-radius:10px; font-weight:700;">PRODUCCIÓN</span>
           </div>
           <p style="font-size:11px; color:var(--text-muted); margin-bottom:8px; line-height:1.4;">
@@ -6599,7 +6981,7 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
     const fullName = `${icao} (${cleanName})`;
     addWaypointFromPreset(fullName, lat, lon, alt);
 
-    const altInput = document.getElementById('fpl-alternate-name');
+    const altInput = document.getElementById('fpl-alternate-select');
     if (altInput && (!altInput.value || altInput.value === 'LEVD / VALLADOLID')) {
       if (icao !== 'LEVD') {
         altInput.value = `${icao} / ${cleanName.toUpperCase()}`;
@@ -6992,47 +7374,90 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
     return SPANISH_VAC_DATABASE.find(ad => ad.icao === clean || ad.name.toUpperCase().includes(clean));
   }
 
-  function handleDepartureAirportChange(val) {
-    const ap = getSpanishAirport(val);
-    if (ap) {
-      const toRwyInput = document.getElementById('fpl-to-rwy');
-      if (toRwyInput && ap.runways) {
-        const m = ap.runways.match(/(\d{2})\//);
-        if (m) toRwyInput.value = m[1];
-      }
-      const toAvail = document.getElementById('fpl-perf-to-avail');
-      if (toAvail && ap.runways) {
-        toAvail.value = `${ap.runways.split('·')[0].trim()} (${ap.icao})`;
-      }
+  // Deducción inteligente de pista en servicio según el viento
+  function calculateBestRunwayForAirport(ap, windDir) {
+    if (!ap || !ap.runways) return '27';
+    // Buscar pares de pista en el string (ej. "09/27" o "05/23")
+    const match = ap.runways.match(/(\d{2})\/(\d{2})/);
+    if (!match) {
+      const single = ap.runways.match(/(\d{2})/);
+      return single ? single[1] : '27';
     }
+
+    const rwyA = parseInt(match[1], 10);
+    const rwyB = parseInt(match[2], 10);
+    const headingA = rwyA * 10;
+    const headingB = rwyB * 10;
+
+    if (windDir === null || isNaN(windDir)) return String(rwyA).padStart(2, '0');
+
+    // Componente de viento de cara (Headwind = cos(windDir - rwyHeading))
+    const hwA = Math.cos((windDir - headingA) * Math.PI / 180);
+    const hwB = Math.cos((windDir - headingB) * Math.PI / 180);
+
+    return (hwA >= hwB) ? String(rwyA).padStart(2, '0') : String(rwyB).padStart(2, '0');
+  }
+
+  function handleDepartureSelectChange(icao) {
+    const ap = getSpanishAirport(icao);
+    if (!ap) return;
+
+    // Obtener viento para deducir pista
+    let windDir = 240;
+    const windInput = document.getElementById('fpl-wind-input')?.value || '240/12';
+    const wp = parseWind(windInput);
+    if (wp) windDir = wp.dir;
+
+    const bestRwy = calculateBestRunwayForAirport(ap, windDir);
+    const toRwyInput = document.getElementById('fpl-to-rwy');
+    if (toRwyInput) toRwyInput.value = bestRwy;
+
+    const toAvail = document.getElementById('fpl-perf-to-avail');
+    if (toAvail && ap.runways) {
+      toAvail.value = `${ap.runways.split('·')[0].trim()} (${ap.icao})`;
+    }
+
+    const toCallInput = document.getElementById('fpl-to-firstcall');
+    if (toCallInput && ap.freqs) {
+      const twr = (ap.freqs.twr && ap.freqs.twr !== '—') ? ap.freqs.twr : (ap.freqs.fis || '123.500');
+      toCallInput.value = `${twr} (${ap.icao} ${ap.freqs.twr !== '—' ? 'TWR' : 'RADIO'})`;
+    }
+
+    const park1 = document.getElementById('fpl-parking-1');
+    if (park1) park1.value = `${ap.icao} Plataforma`;
+
+    // Actualizar waypoint 0 si es el punto de salida
+    if (fplWaypoints && fplWaypoints.length > 0) {
+      fplWaypoints[0].name = `${ap.icao} (Salida)`;
+      fplWaypoints[0].lat = ap.lat;
+      fplWaypoints[0].lon = ap.lon;
+      fplWaypoints[0].alt = ap.elev ? parseInt(ap.elev.replace(/[^0-9]/g, ''), 10) : 2270;
+      updateNavLogCalculationsAndDOM();
+      renderNavLogTable();
+    }
+
+    syncLowerTablesWithFlightPlan();
+    showToastNotification(`🛫 Aeropuerto de Salida configurado: ${ap.name} (${ap.icao})`);
   }
 
   function handleDestinationSelectChange(icao) {
     const ap = getSpanishAirport(icao);
-    const nameInput = document.getElementById('fpl-destination-name');
-    if (nameInput && ap) {
-      nameInput.value = `${ap.icao} / ${ap.name.toUpperCase()}`;
-    }
+    if (!ap) return;
+
     applyDestinationAirportData(icao);
   }
 
-  function handleDestinationAirportChange(val) {
-    const ap = getSpanishAirport(val);
-    if (ap) {
-      const select = document.getElementById('fpl-destination-select');
-      if (select) select.value = ap.icao;
-      applyDestinationAirportData(ap.icao);
-    }
-  }
+  function handleAlternateSelectChange(icao) {
+    const ap = getSpanishAirport(icao);
+    if (!ap) return;
 
-  function handleAlternateAirportChange(val) {
-    const ap = getSpanishAirport(val);
-    if (ap) {
-      const toAlt = document.getElementById('fpl-perf-to-avail-alt');
-      if (toAlt && ap.runways) toAlt.value = `${ap.runways.split('·')[0].trim()} (${ap.icao})`;
-      const ldAlt = document.getElementById('fpl-perf-ld-avail-alt');
-      if (ldAlt && ap.runways) ldAlt.value = `${ap.runways.split('·')[0].trim()} (${ap.icao})`;
-    }
+    const toAlt = document.getElementById('fpl-perf-to-avail-alt');
+    if (toAlt && ap.runways) toAlt.value = `${ap.runways.split('·')[0].trim()} (${ap.icao})`;
+    const ldAlt = document.getElementById('fpl-perf-ld-avail-alt');
+    if (ldAlt && ap.runways) ldAlt.value = `${ap.runways.split('·')[0].trim()} (${ap.icao})`;
+
+    syncLowerTablesWithFlightPlan();
+    showToastNotification(`🔄 Aeródromo Alternativo: ${ap.name} (${ap.icao})`);
   }
 
   // ─────────────────────────────────────────────────────────────
@@ -7056,21 +7481,30 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
       ldCallInput.value = `${twr} (${ap.icao} ${ap.freqs.twr !== '—' ? 'TWR' : 'RADIO'})`;
     }
 
-    // Actualizar Pista de llegada
+    // Deducción automática de la pista activa en uso según viento
+    let windDir = 240;
+    const windInput = document.getElementById('fpl-wind-input')?.value || '240/12';
+    const wp = parseWind(windInput);
+    if (wp) windDir = wp.dir;
+
+    const bestRwy = calculateBestRunwayForAirport(ap, windDir);
     const ldRwyInput = document.getElementById('fpl-ld-rwy');
-    if (ldRwyInput && ap.runways) {
-      const m = ap.runways.match(/(\d{2})\//);
-      if (m) ldRwyInput.value = m[1];
-    }
+    if (ldRwyInput) ldRwyInput.value = bestRwy;
 
     // Actualizar Parking de llegada
     const park2 = document.getElementById('fpl-parking-2');
     if (park2) park2.value = `${ap.icao} Plataforma`;
 
-    // Actualizar frecuencias operacionales
+    // Actualizar frecuencias operacionales completas
     const freqsBox = document.getElementById('fpl-frequencies');
     if (freqsBox && ap.freqs) {
-      let fStr = `SALIDA (LECU): TWR 118.150 | GND 121.800 | ATIS 130.850\nLLEGADA (${ap.icao}): `;
+      const depIcao = document.getElementById('fpl-departure-select')?.value || 'LECU';
+      const depAp = getSpanishAirport(depIcao);
+      const depTwr = depAp?.freqs?.twr || '118.150';
+      const depGnd = depAp?.freqs?.gnd || '121.800';
+      const depAtis = depAp?.freqs?.atis || '130.850';
+
+      let fStr = `SALIDA (${depIcao}): TWR ${depTwr} | GND ${depGnd} | ATIS ${depAtis}\nLLEGADA (${ap.icao}): `;
       Object.entries(ap.freqs).forEach(([k, v]) => {
         if (v && v !== '—') fStr += `${k.toUpperCase()} ${v} · `;
       });
@@ -7079,21 +7513,20 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
     }
 
     // Actualizar último tramo de la ruta si es el destino
-    if (fplWaypoints.length > 1) {
+    if (fplWaypoints && fplWaypoints.length > 1) {
       const last = fplWaypoints[fplWaypoints.length - 1];
-      if (last.lat === null || last.name.startsWith('TRAMO') || last.name.includes('LEVD') || last.name.includes('DESTINO')) {
-        last.name = `${ap.icao} (${ap.name.split('/')[0].trim()})`;
-        last.lat = ap.lat;
-        last.lon = ap.lon;
-        last.alt = ap.elev ? (parseInt(ap.elev.replace(/[^0-9]/g, ''), 10) + 1000) : 4500;
-        last.manualDist = false;
-        last.manualTC = false;
-        updateNavLogCalculationsAndDOM();
-        renderNavLogTable();
-      }
+      last.name = `${ap.icao} (${ap.name.split('/')[0].trim()})`;
+      last.lat = ap.lat;
+      last.lon = ap.lon;
+      last.alt = ap.elev ? (parseInt(ap.elev.replace(/[^0-9]/g, ''), 10) + 1000) : 4500;
+      last.manualDist = false;
+      last.manualTC = false;
+      updateNavLogCalculationsAndDOM();
+      renderNavLogTable();
     }
 
-    showToastNotification(`🛬 Pistas y ATIS actualizados para ${ap.name} (${ap.icao}): ${ap.runways.split('·')[0].trim()}`);
+    syncLowerTablesWithFlightPlan();
+    showToastNotification(`🛬 Destino: ${ap.name} (${ap.icao}) | RWY activa: ${bestRwy} (${ap.runways.split('·')[0].trim()})`);
   }
   // ─────────────────────────────────────────────────────────────
   // AÑADIR TRAMO MANUAL Y EDICIÓN NATIVA ROBUSTA
@@ -7386,7 +7819,7 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
     const cruiseFuelInput = document.getElementById('fpl-fuel-cruise');
     if (cruiseFuelInput) cruiseFuelInput.value = `${totalFuelGal.toFixed(1)} Gal`;
 
-    calculateFuelSummary();
+    syncLowerTablesWithFlightPlan();
     updateVFRMapDisplay();
   }
 
@@ -7637,8 +8070,8 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
 
     showToastNotification('📡 Descargando METARs oficiales de Salida y Destino...');
 
-    const depInput = document.getElementById('fpl-departure-name')?.value || 'LECU';
-    const destInput = document.getElementById('fpl-destination-name')?.value || 'LEVD';
+    const depInput = document.getElementById('fpl-departure-select')?.value || 'LECU';
+    const destInput = document.getElementById('fpl-destination-select')?.value || 'LEVD';
     const depIcao = depInput.split('/')[0].trim().toUpperCase() || 'LECU';
     const destIcao = destInput.split('/')[0].trim().toUpperCase() || 'LEVD';
 
@@ -7731,6 +8164,123 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
   // ─────────────────────────────────────────────────────────────
   // GESTIÓN DE COMBUSTIBLE EN GALONES (C172 US GALLONS)
   // ─────────────────────────────────────────────────────────────
+  
+  // ─────────────────────────────────────────────────────────────
+  // REACTIVIDAD TOTAL DE TABLAS INFERIORES (TARJETAS 3, 4 Y 5)
+  // ─────────────────────────────────────────────────────────────
+  function syncLowerTablesWithFlightPlan() {
+    const hourlyBurnGal = getAircraftHourlyBurnGal();
+    const depIcao = document.getElementById('fpl-departure-select')?.value || 'LECU';
+    const destIcao = document.getElementById('fpl-destination-select')?.value || 'LEVD';
+    const altIcao = document.getElementById('fpl-alternate-select')?.value || 'LESA';
+
+    const depAp = getSpanishAirport(depIcao);
+    const destAp = getSpanishAirport(destIcao);
+    const altAp = getSpanishAirport(altIcao);
+
+    // 1. Sincronizar Tarjeta 5: Rendimiento de Pistas (Performance)
+    const toAvail = document.getElementById('fpl-perf-to-avail');
+    if (toAvail && depAp && depAp.runways) {
+      toAvail.value = `${depAp.runways.split('·')[0].trim()} (${depAp.icao})`;
+    }
+    const ldAvail = document.getElementById('fpl-perf-ld-avail');
+    if (ldAvail && destAp && destAp.runways) {
+      ldAvail.value = `${destAp.runways.split('·')[0].trim()} (${destAp.icao})`;
+    }
+    const toAltAvail = document.getElementById('fpl-perf-to-avail-alt');
+    if (toAltAvail && altAp && altAp.runways) {
+      toAltAvail.value = `${altAp.runways.split('·')[0].trim()} (${altAp.icao})`;
+    }
+    const ldAltAvail = document.getElementById('fpl-perf-ld-avail-alt');
+    if (ldAltAvail && altAp && altAp.runways) {
+      ldAltAvail.value = `${altAp.runways.split('·')[0].trim()} (${altAp.icao})`;
+    }
+
+    // Distancias requeridas según aeronave
+    const aircraftModel = (document.getElementById('fpl-model')?.value || 'C172').toUpperCase();
+    const toReqInput = document.getElementById('fpl-perf-to-req');
+    const ldReqInput = document.getElementById('fpl-perf-ld-req');
+    const toReqAltInput = document.getElementById('fpl-perf-to-req-alt');
+    const ldReqAltInput = document.getElementById('fpl-perf-ld-req-alt');
+
+    let baseToReq = 480;
+    let baseLdReq = 390;
+    if (aircraftModel.includes('P2008')) {
+      baseToReq = 370; baseLdReq = 330;
+    } else if (aircraftModel.includes('P2006')) {
+      baseToReq = 420; baseLdReq = 360;
+    } else if (aircraftModel.includes('DA40')) {
+      baseToReq = 450; baseLdReq = 370;
+    }
+    if (toReqInput) toReqInput.value = `${baseToReq} m`;
+    if (ldReqInput) ldReqInput.value = `${baseLdReq} m`;
+    if (toReqAltInput) toReqAltInput.value = `${Math.round(baseToReq * 1.05)} m`;
+    if (ldReqAltInput) ldReqAltInput.value = `${Math.round(baseLdReq * 1.05)} m`;
+
+    // 2. Sincronizar Tarjeta 4: Tiempos de Vuelo y Calzos (Block Time)
+    const takeoffTimeStr = document.getElementById('fpl-takeoff-time')?.value || '10:00';
+    const toTimeInput = document.getElementById('fpl-to-time');
+    if (toTimeInput) toTimeInput.value = takeoffTimeStr;
+
+    // Minutos totales acumulados de la ruta
+    let totalMinutes = 0;
+    if (fplWaypoints && fplWaypoints.length > 1) {
+      const lastWp = fplWaypoints[fplWaypoints.length - 1];
+      totalMinutes = lastWp.cumMin || 0;
+    }
+
+    const flightHours = Math.floor(totalMinutes / 60);
+    const flightMins = Math.round(totalMinutes % 60);
+    const flightTimeFormatted = `${String(flightHours).padStart(2, '0')}h ${String(flightMins).padStart(2, '0')}m`;
+
+    const flightTimeInput = document.getElementById('fpl-flight-time');
+    if (flightTimeInput) flightTimeInput.value = flightTimeFormatted;
+
+    // Calcular Landing Time (Takeoff + Total Minutes)
+    const [toH, toM] = takeoffTimeStr.split(':').map(n => parseInt(n, 10) || 0);
+    const totalLandingMin = (toH * 60 + toM + totalMinutes) % 1440;
+    const ldH = Math.floor(totalLandingMin / 60);
+    const ldM = Math.round(totalLandingMin % 60);
+    const landingTimeFormatted = `${String(ldH).padStart(2, '0')}:${String(ldM).padStart(2, '0')}`;
+
+    const ldTimeInput = document.getElementById('fpl-ld-time');
+    if (ldTimeInput) ldTimeInput.value = landingTimeFormatted;
+
+    // Off block (-10 min) y On block (+10 min)
+    const offBlockMin = (toH * 60 + toM - 10 + 1440) % 1440;
+    const offH = Math.floor(offBlockMin / 60);
+    const offM = Math.round(offBlockMin % 60);
+    const offBlockInput = document.getElementById('fpl-off-block');
+    if (offBlockInput) offBlockInput.value = `${String(offH).padStart(2, '0')}:${String(offM).padStart(2, '0')}`;
+
+    const onBlockMin = (totalLandingMin + 10) % 1440;
+    const onH = Math.floor(onBlockMin / 60);
+    const onM = Math.round(onBlockMin % 60);
+    const onBlockInput = document.getElementById('fpl-on-block');
+    if (onBlockInput) onBlockInput.value = `${String(onH).padStart(2, '0')}:${String(onM).padStart(2, '0')}`;
+
+    const blockMinutes = totalMinutes + 20; // 10 rodaje salida + 10 rodaje llegada
+    const bH = Math.floor(blockMinutes / 60);
+    const bM = Math.round(blockMinutes % 60);
+    const blockTimeInput = document.getElementById('fpl-block-time');
+    if (blockTimeInput) blockTimeInput.value = `${String(bH).padStart(2, '0')}h ${String(bM).padStart(2, '0')}m`;
+
+    // 3. Sincronizar Tarjeta 3: Gestión de Combustible
+    const climbFuel = parseFloat((hourlyBurnGal * 0.18).toFixed(1));
+    const climbInput = document.getElementById('fpl-fuel-climb');
+    if (climbInput) climbInput.value = `${climbFuel} Gal`;
+
+    const descentFuel = parseFloat((hourlyBurnGal * 0.06).toFixed(1));
+    const descentInput = document.getElementById('fpl-fuel-descent');
+    if (descentInput) descentInput.value = `${descentFuel} Gal`;
+
+    const altFuel = parseFloat(((30 / 60) * hourlyBurnGal).toFixed(1));
+    const altFuelInput = document.getElementById('fpl-fuel-alt');
+    if (altFuelInput) altFuelInput.value = `${altFuel} Gal`;
+
+    calculateFuelSummary();
+  }
+
   function calculateFuelSummary() {
     const hourlyBurnGal = getAircraftHourlyBurnGal();
     const climb = parseFloat(document.getElementById('fpl-fuel-climb')?.value || '1.5') || 1.5;
@@ -7811,9 +8361,9 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
     const pic = document.getElementById('fpl-pic')?.value || 'FERNANDO CHOZAS';
     const dateVal = document.getElementById('fpl-date')?.value || new Date().toISOString().split('T')[0];
     const toTime = document.getElementById('fpl-takeoff-time')?.value || '10:00';
-    const dep = document.getElementById('fpl-departure-name')?.value || 'LECU / CUATRO VIENTOS';
-    const dest = document.getElementById('fpl-destination-name')?.value || 'LEVD / VALLADOLID';
-    const alt = document.getElementById('fpl-alternate-name')?.value || 'LESA / SALAMANCA';
+    const dep = document.getElementById('fpl-departure-select')?.value || 'LECU';
+    const dest = document.getElementById('fpl-destination-select')?.value || 'LEVD';
+    const alt = document.getElementById('fpl-alternate-select')?.value || 'LESA';
     const ias = document.getElementById('fpl-ias-input')?.value || '90';
     const burn = document.getElementById('fpl-aircraft-consumption')?.value || '8.0';
 
@@ -7961,7 +8511,7 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
       setCell('J9', `FLIGHT TIME:  ${document.getElementById('fpl-flight-time')?.value || '01h 05m'}`);
 
       // Alternate (Fila 11)
-      setCell('O11', `ALTERNATE:  ${document.getElementById('fpl-alternate-name')?.value || 'LEVD / VALLADOLID'}`);
+      setCell('O11', `ALTERNATE:  ${document.getElementById('fpl-alternate-select')?.value || 'LESA'}`);
 
       // Combustible en Galones (Filas 18, 20, 22, 24)
       setCell('Q18', document.getElementById('fpl-fuel-climb')?.value || '1.5 Gal');
@@ -8047,6 +8597,544 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
     } catch (err) {
       console.error('Error al exportar Excel oficial:', err);
       showToastNotification('❌ Error al exportar archivo Excel: ' + err.message);
+    }
+  }
+
+  
+  // ═══════════════════════════════════════════════════════════════
+  // 9. MOTOR INTERACTIVO DEL COMPUTADOR DE VUELO CR3 (JEPPESEN)
+  // ═══════════════════════════════════════════════════════════════
+  let cr3CurrentAngle = 0; // Ángulo de rotación del disco interior en grados
+  let cr3IsDragging = false;
+  let cr3StartAngle = 0;
+  let cr3CenterPos = { x: 165, y: 165 };
+  let cr3SolvedExerciseCount = 0;
+  let cr3CurrentExerciseIndex = 0;
+
+  // Escala Logarítmica del Computador Circular (10 a 100)
+  function cr3ValueToAngle(val) {
+    if (val <= 0) return 0;
+    return (360 * Math.log10(val / 10)) % 360;
+  }
+
+  function cr3AngleToValue(deg) {
+    const norm = ((deg % 360) + 360) % 360;
+    return 10 * Math.pow(10, norm / 360);
+  }
+
+  // Generador de Marcas SVG del CR3
+  function initCR3Simulator() {
+    const outerGroup = document.getElementById('cr3-outer-scale-marks');
+    const innerGroup = document.getElementById('cr3-inner-scale-marks');
+    if (!outerGroup || !innerGroup) return;
+
+    // Valores mayores de la escala logarítmica (10 a 100)
+    const majorValues = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 25, 30, 35, 40, 45, 50, 55, 60, 70, 80, 90];
+    const subValues = [10.5, 11.5, 12.5, 13.5, 14.5, 15.5, 21, 22, 23, 24, 26, 27, 28, 29, 31, 32, 33, 34, 36, 37, 38, 39, 41, 42, 43, 44, 46, 47, 48, 49, 51, 52, 53, 54, 65, 75, 85, 95];
+
+    let outerSvg = '';
+    let innerSvg = '';
+
+    const cx = 165, cy = 165;
+
+    // DIBUJAR ESCALA EXTERIOR (ESTATOR FIJO)
+    majorValues.forEach(val => {
+      const deg = cr3ValueToAngle(val) - 90;
+      const rad = deg * Math.PI / 180;
+      const x1 = cx + 160 * Math.cos(rad);
+      const y1 = cy + 160 * Math.sin(rad);
+      const x2 = cx + 148 * Math.cos(rad);
+      const y2 = cy + 148 * Math.sin(rad);
+      const xt = cx + 138 * Math.cos(rad);
+      const yt = cy + 138 * Math.sin(rad);
+
+      const label = val >= 10 ? val.toString() : '';
+      outerSvg += `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#79c0ff" stroke-width="1.5"/>`;
+      outerSvg += `<text x="${xt.toFixed(1)}" y="${(yt + 3).toFixed(1)}" font-size="9" font-weight="800" fill="#fff" text-anchor="middle" font-family="monospace">${label}</text>`;
+    });
+
+    subValues.forEach(val => {
+      const deg = cr3ValueToAngle(val) - 90;
+      const rad = deg * Math.PI / 180;
+      const x1 = cx + 160 * Math.cos(rad);
+      const y1 = cy + 160 * Math.sin(rad);
+      const x2 = cx + 153 * Math.cos(rad);
+      const y2 = cy + 153 * Math.sin(rad);
+      outerSvg += `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#58a6ff" stroke-width="0.8"/>`;
+    });
+
+    // Marcadores especiales en disco exterior (NM, GAL, KM)
+    const nmRad = (cr3ValueToAngle(60) - 90) * Math.PI / 180;
+    outerSvg += `<text x="${(cx + 120 * Math.cos(nmRad)).toFixed(1)}" y="${(cy + 120 * Math.sin(nmRad)).toFixed(1)}" font-size="7" font-weight="900" fill="#3fb950" text-anchor="middle">NM</text>`;
+
+    outerGroup.innerHTML = outerSvg;
+
+    // DIBUJAR ESCALA INTERIOR (ROTOR GIRATORIO)
+    majorValues.forEach(val => {
+      const deg = cr3ValueToAngle(val) - 90;
+      const rad = deg * Math.PI / 180;
+      const x1 = cx + 128 * Math.cos(rad);
+      const y1 = cy + 128 * Math.sin(rad);
+      const x2 = cx + 117 * Math.cos(rad);
+      const y2 = cy + 117 * Math.sin(rad);
+      const xt = cx + 107 * Math.cos(rad);
+      const yt = cy + 107 * Math.sin(rad);
+
+      // Si es 60, dibujar el famoso triángulo dorado RATE / ▲ 60
+      if (val === 60) {
+        innerSvg += `<polygon points="${x1},${y1} ${cx + 112 * Math.cos(rad - 0.06)},${cy + 112 * Math.sin(rad - 0.06)} ${cx + 112 * Math.cos(rad + 0.06)},${cy + 112 * Math.sin(rad + 0.06)}" fill="#f1e05a" stroke="#d29922" stroke-width="1.5"/>`;
+        innerSvg += `<text x="${xt.toFixed(1)}" y="${(yt + 3).toFixed(1)}" font-size="10" font-weight="900" fill="#f1e05a" text-anchor="middle" font-family="monospace">▲ 60</text>`;
+      } else {
+        innerSvg += `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#e3b341" stroke-width="1.5"/>`;
+        innerSvg += `<text x="${xt.toFixed(1)}" y="${(yt + 3).toFixed(1)}" font-size="8.5" font-weight="700" fill="#e3b341" text-anchor="middle" font-family="monospace">${val}</text>`;
+      }
+    });
+
+    subValues.forEach(val => {
+      const deg = cr3ValueToAngle(val) - 90;
+      const rad = deg * Math.PI / 180;
+      const x1 = cx + 128 * Math.cos(rad);
+      const y1 = cy + 128 * Math.sin(rad);
+      const x2 = cx + 122 * Math.cos(rad);
+      const y2 = cy + 122 * Math.sin(rad);
+      innerSvg += `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#d29922" stroke-width="0.8"/>`;
+    });
+
+    // Escala de Horas (1:10, 1:20, 1:30, 2:00, 3:00, etc.)
+    const hourMarks = [
+      { min: 70, label: '1:10' }, { min: 80, label: '1:20' }, { min: 90, label: '1:30' },
+      { min: 100, label: '1:40' }, { min: 120, label: '2:00' }, { min: 150, label: '2:30' },
+      { min: 180, label: '3:00' }, { min: 240, label: '4:00' }
+    ];
+    hourMarks.forEach(hm => {
+      const deg = cr3ValueToAngle(hm.min > 100 ? (hm.min / 10) * 10 : hm.min) - 90;
+      const rad = deg * Math.PI / 180;
+      const xt = cx + 94 * Math.cos(rad);
+      const yt = cy + 94 * Math.sin(rad);
+      innerSvg += `<text x="${xt.toFixed(1)}" y="${(yt + 3).toFixed(1)}" font-size="7" font-weight="700" fill="#94a3b8" text-anchor="middle" font-family="monospace">${hm.label}</text>`;
+    });
+
+    innerGroup.innerHTML = innerSvg;
+
+    // Rosa de los vientos en Cara 2
+    initCR3WindRose();
+
+    // Eventos táctiles y de ratón para rotar el rotor
+    setupCR3DragEvents();
+
+    // Cargar primer ejercicio
+    loadCR3Exercise(1);
+
+    // Alinear inicialmente a 90 kt (Cessna 172)
+    alignCR3IndexToValue(90);
+  }
+
+  function initCR3WindRose() {
+    const roseGroup = document.getElementById('cr3-wind-rose-marks');
+    if (!roseGroup) return;
+
+    let svg = '';
+    const cx = 150, cy = 150;
+    for (let deg = 0; deg < 360; deg += 10) {
+      const rad = (deg - 90) * Math.PI / 180;
+      const x1 = cx + 140 * Math.cos(rad);
+      const y1 = cy + 140 * Math.sin(rad);
+      const x2 = cx + (deg % 30 === 0 ? 122 : 128) * Math.cos(rad);
+      const y2 = cy + (deg % 30 === 0 ? 122 : 128) * Math.sin(rad);
+      svg += `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#79c0ff" stroke-width="${deg % 30 === 0 ? 2 : 1}"/>`;
+
+      if (deg % 30 === 0) {
+        const xt = cx + 112 * Math.cos(rad);
+        const yt = cy + 112 * Math.sin(rad);
+        const label = deg === 0 ? 'N' : (deg === 90 ? 'E' : (deg === 180 ? 'S' : (deg === 270 ? 'W' : String(deg / 10).padStart(2, '0'))));
+        svg += `<text x="${xt.toFixed(1)}" y="${(yt + 3.5).toFixed(1)}" font-size="9" font-weight="800" fill="#fff" text-anchor="middle" font-family="monospace">${label}</text>`;
+      }
+    }
+    roseGroup.innerHTML = svg;
+    calculateCR3WindTriangle();
+  }
+
+  function setupCR3DragEvents() {
+    const container = document.getElementById('cr3-dial-container');
+    if (!container) return;
+
+    function getPointerAngle(e) {
+      const rect = container.getBoundingClientRect();
+      const clientX = e.clientX !== undefined ? e.clientX : (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
+      const clientY = e.clientY !== undefined ? e.clientY : (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
+      const x = clientX - (rect.left + rect.width / 2);
+      const y = clientY - (rect.top + rect.height / 2);
+      return Math.atan2(y, x) * 180 / Math.PI;
+    }
+
+    container.addEventListener('pointerdown', (e) => {
+      cr3IsDragging = true;
+      container.style.cursor = 'grabbing';
+      cr3StartAngle = getPointerAngle(e) - cr3CurrentAngle;
+      e.preventDefault();
+    });
+
+    window.addEventListener('pointermove', (e) => {
+      if (!cr3IsDragging) return;
+      const currentPointerAngle = getPointerAngle(e);
+      setCR3Rotation(currentPointerAngle - cr3StartAngle);
+    });
+
+    window.addEventListener('pointerup', () => {
+      if (cr3IsDragging) {
+        cr3IsDragging = false;
+        container.style.cursor = 'grab';
+      }
+    });
+  }
+
+  function setCR3Rotation(deg) {
+    cr3CurrentAngle = ((deg % 360) + 360) % 360;
+    const rotor = document.getElementById('cr3-inner-rotor');
+    if (rotor) {
+      rotor.style.transform = `rotate(${cr3CurrentAngle.toFixed(2)}deg)`;
+    }
+    const label = document.getElementById('cr3-current-angle-label');
+    if (label) {
+      label.textContent = `${cr3CurrentAngle.toFixed(1)}°`;
+    }
+    updateCR3Readouts();
+  }
+
+  function rotateCR3By(deltaDeg) {
+    setCR3Rotation(cr3CurrentAngle + deltaDeg);
+  }
+
+  function resetCR3Dial() {
+    alignCR3IndexToValue(90);
+  }
+
+  // Alinear el puntero 60 a un valor específico con animación fluida
+  function alignCR3IndexToValue(targetVal) {
+    if (!targetVal || targetVal <= 0) return;
+    const angleTarget = cr3ValueToAngle(targetVal);
+    const angle60 = cr3ValueToAngle(60);
+    let targetRotation = ((angleTarget - angle60) % 360 + 360) % 360;
+
+    const rotor = document.getElementById('cr3-inner-rotor');
+    if (rotor) {
+      rotor.style.transition = 'transform 0.5s cubic-bezier(0.2, 0.8, 0.3, 1)';
+      setCR3Rotation(targetRotation);
+      setTimeout(() => {
+        if (rotor) rotor.style.transition = 'transform 0.05s linear';
+      }, 520);
+    } else {
+      setCR3Rotation(targetRotation);
+    }
+  }
+
+  function updateCR3Readouts() {
+    // El ángulo de 60 en el rotor es cr3ValueToAngle(60) = 280.13°
+    // Al rotar cr3CurrentAngle, se posiciona en (280.13 + cr3CurrentAngle) en el estator
+    const angle60 = cr3ValueToAngle(60);
+    const outerAngleAt60 = (angle60 + cr3CurrentAngle) % 360;
+    const currentRate = cr3AngleToValue(outerAngleAt60);
+
+    const rateLabel = document.getElementById('cr3-readout-rate');
+    if (rateLabel) rateLabel.textContent = `${currentRate.toFixed(1)} kt / Gal/h`;
+
+    const factorLabel = document.getElementById('cr3-readout-speed-factor');
+    if (factorLabel) factorLabel.textContent = `${(currentRate / 60).toFixed(2)} NM/min`;
+
+    // Actualizar inspector rápido si hay tiempo
+    const timeInput = document.getElementById('cr3-inspect-time');
+    if (timeInput) updateCR3InspectorFromTime(timeInput.value);
+  }
+
+  function updateCR3InspectorFromTime(mins) {
+    const m = parseFloat(mins) || 30;
+    const angle60 = cr3ValueToAngle(60);
+    const currentRate = cr3AngleToValue((angle60 + cr3CurrentAngle) % 360);
+
+    const dist = (currentRate * (m / 60)).toFixed(1);
+    const fuel = (currentRate * (m / 60) / 10).toFixed(1);
+
+    const res = document.getElementById('cr3-inspect-result');
+    if (res) res.textContent = `${dist} NM / ${fuel} Gal`;
+  }
+
+  // Alternador de Pestañas del CR3
+  function switchCR3Face(face) {
+    ['calc', 'wind', 'guide', 'exercises'].forEach(f => {
+      const view = document.getElementById(`cr3-view-${f}`);
+      const btn = document.getElementById(`cr3-tab-${f}`);
+      if (view) view.style.display = (f === face) ? 'block' : 'none';
+      if (btn) {
+        if (f === face) {
+          btn.style.background = 'rgba(56,139,253,0.2)';
+          btn.style.borderColor = '#388bfd';
+          btn.style.color = '#58a6ff';
+          btn.style.fontWeight = '800';
+        } else {
+          btn.style.background = '#0d1117';
+          btn.style.borderColor = '#30363d';
+          btn.style.color = '#fff';
+          btn.style.fontWeight = '700';
+        }
+      }
+    });
+
+    if (face === 'calc') {
+      setTimeout(updateCR3Readouts, 50);
+    } else if (face === 'wind') {
+      setTimeout(calculateCR3WindTriangle, 50);
+    }
+  }
+
+  // Triángulo de Viento en Cara 2
+  function calculateCR3WindTriangle() {
+    const tc = parseFloat(document.getElementById('cr3-wind-tc')?.value || '345');
+    const tas = parseFloat(document.getElementById('cr3-wind-tas')?.value || '97');
+    const windStr = document.getElementById('cr3-wind-wind')?.value || '290/20';
+
+    const wp = parseWind(windStr) || { dir: 290, spd: 20 };
+    const windRad = wp.dir * Math.PI / 180;
+    const tcRad = tc * Math.PI / 180;
+
+    // Componentes del viento relativo al rumbo
+    const relAngle = (wp.dir - tc) * Math.PI / 180;
+    const crosswind = wp.spd * Math.sin(relAngle);
+    const headwind = wp.spd * Math.cos(relAngle);
+
+    // Ángulo de corrección de deriva (WCA)
+    const sinWca = crosswind / tas;
+    const clampedSin = Math.max(-1, Math.min(1, sinWca));
+    const wcaDeg = Math.round(Math.asin(clampedSin) * 180 / Math.PI);
+
+    const trueHeading = ((tc + wcaDeg) % 360 + 360) % 360;
+    const groundSpeed = Math.max(10, Math.round(tas - headwind));
+
+    const wcaEl = document.getElementById('cr3-sol-wca');
+    if (wcaEl) {
+      wcaEl.textContent = `${wcaDeg > 0 ? '+' + wcaDeg : wcaDeg}° (${wcaDeg >= 0 ? 'Derecha' : 'Izquierda'})`;
+      wcaEl.style.color = wcaDeg === 0 ? '#3fb950' : (wcaDeg > 0 ? '#3fb950' : '#e3b341');
+    }
+
+    const thEl = document.getElementById('cr3-sol-th');
+    if (thEl) thEl.textContent = `${String(trueHeading).padStart(3, '0')}°`;
+
+    const gsEl = document.getElementById('cr3-sol-gs');
+    if (gsEl) gsEl.textContent = `${groundSpeed} kt`;
+
+    const compEl = document.getElementById('cr3-sol-components');
+    if (compEl) {
+      const hwText = headwind >= 0 ? `Cara: -${Math.round(headwind)} kt` : `Cola: +${Math.round(-headwind)} kt`;
+      const cwText = Math.abs(crosswind) < 1 ? 'Sin deriva' : `Cruzado: ${Math.round(Math.abs(crosswind))} kt ${crosswind >= 0 ? 'Der' : 'Izq'}`;
+      compEl.textContent = `${hwText} | ${cwText}`;
+    }
+
+    // Actualizar vectores en SVG
+    const cx = 150, cy = 150;
+    const tcLine = document.getElementById('cr3-vector-tc');
+    const tcAngleRad = (tc - 90) * Math.PI / 180;
+    const tcX2 = cx + 110 * Math.cos(tcAngleRad);
+    const tcY2 = cy + 110 * Math.sin(tcAngleRad);
+    if (tcLine) {
+      tcLine.setAttribute('x2', tcX2.toFixed(1));
+      tcLine.setAttribute('y2', tcY2.toFixed(1));
+    }
+
+    const windLine = document.getElementById('cr3-vector-wind');
+    const windAngleRad = (wp.dir + 90) * Math.PI / 180; // Viento sopla HACIA el centro
+    const wLen = Math.min(60, wp.spd * 2);
+    const windX2 = tcX2 + wLen * Math.cos(windAngleRad);
+    const windY2 = tcY2 + wLen * Math.sin(windAngleRad);
+    if (windLine) {
+      windLine.setAttribute('x1', tcX2.toFixed(1));
+      windLine.setAttribute('y1', tcY2.toFixed(1));
+      windLine.setAttribute('x2', windX2.toFixed(1));
+      windLine.setAttribute('y2', windY2.toFixed(1));
+    }
+
+    const hdgLine = document.getElementById('cr3-vector-heading');
+    if (hdgLine) {
+      hdgLine.setAttribute('x2', windX2.toFixed(1));
+      hdgLine.setAttribute('y2', windY2.toFixed(1));
+    }
+  }
+
+  // ─────────────────────────────────────────────────────────────
+  // BANCO DE EJERCICIOS GUIADOS DEL CR3
+  // ─────────────────────────────────────────────────────────────
+  const CR3_EXERCISES = [
+    {
+      id: 1,
+      title: "Ejercicio 1: Cálculo de Tiempo de Vuelo (Cessna 172)",
+      prompt: "Vuelas en tu Cessna 172 a una velocidad de crucero constante de <strong>90 nudos (Ground Speed)</strong>. La distancia hasta el siguiente punto de notificación es de <strong>45 NM</strong>. ¿Cuántos minutos tardarás en llegar?",
+      rate: 90,
+      targetVal: 45,
+      expected: 30,
+      unit: "minutos",
+      face: "calc",
+      explanation: "Alinea el índice ▲ 60 con el número 90 del disco exterior. Luego busca 45 en el disco exterior: directamente enfrente en el disco interior leerás exactamente 30 minutos."
+    },
+    {
+      id: 2,
+      title: "Ejercicio 2: Cálculo de Distancia Recorrida",
+      prompt: "Mantienes una velocidad sobre el suelo de <strong>95 nudos</strong> durante <strong>36 minutos</strong>. ¿Qué distancia en Millas Náuticas (NM) habrás recorrido?",
+      rate: 95,
+      targetVal: 57,
+      expected: 57,
+      unit: "NM",
+      face: "calc",
+      explanation: "Alinea ▲ 60 con 95 en el disco exterior. Busca 36 en el disco interior (tiempo): justo enfrente en el disco exterior se lee 57 NM."
+    },
+    {
+      id: 3,
+      title: "Ejercicio 3: Consumo de Combustible C172 en Galones",
+      prompt: "El régimen de crucero de tu C172 consume <strong>8.0 Galones/hora</strong>. El tiempo estimado de vuelo para la pierna es de <strong>54 minutos</strong>. ¿Cuántos Galones US consumirás?",
+      rate: 80, // Representado como 80 en la escala
+      targetVal: 72,
+      expected: 7.2,
+      unit: "Gal",
+      face: "calc",
+      explanation: "Coloca ▲ 60 en el número 80 del disco exterior (representa 8.0 Gal/h). Busca 54 minutos en el disco interior: enfrente en el exterior leerás 72, es decir, 7.2 Galones US."
+    },
+    {
+      id: 4,
+      title: "Ejercicio 4: Cálculo de Velocidad sobre el Suelo (GS)",
+      prompt: "Has cronometrado el paso entre dos puntos visuales separados por <strong>32 NM</strong> y has tardado exactamente <strong>24 minutos</strong>. ¿Cuál es tu Ground Speed (GS) en nudos?",
+      rate: 80,
+      targetVal: 32,
+      expected: 80,
+      unit: "nudos",
+      face: "calc",
+      explanation: "Gira el disco interior hasta que los 24 minutos queden justo debajo del 32 en el disco exterior. Mira ahora el triángulo ▲ 60: apunta exactamente al número 80 (80 nudos)."
+    },
+    {
+      id: 5,
+      title: "Ejercicio 5: Conversión de Combustible (Galones US a Litros)",
+      prompt: "Llevas los tanques estándar de la C172 llenos con <strong>40 Galones US</strong> utilizables. ¿A cuántos litros equivale? (1 Gal US = 3.785 L).",
+      rate: 37.85,
+      targetVal: 151.4,
+      expected: 151.4,
+      unit: "Litros",
+      face: "calc",
+      explanation: "Coloca el índice de Galones US frente a Litros (o multiplica 40 x 3.785). El resultado es 151.4 Litros."
+    },
+    {
+      id: 6,
+      title: "Ejercicio 6: Triángulo de Viento y Corrección de Deriva (WCA)",
+      prompt: "Rumbo Verdadero deseado (TC): <strong>345°</strong>. Viento reportado en altura: <strong>290° a 20 nudos</strong>. Velocidad Verdadera (TAS): <strong>97 nudos</strong>. ¿Cuál es el ángulo de corrección de deriva (WCA) y el Rumbo Verdadero a volar (TH)?",
+      tc: 345,
+      wind: "290/20",
+      tas: 97,
+      expected: 335, // TH
+      unit: "° TH",
+      face: "wind",
+      explanation: "Con viento de la izquierda (290° respecto a 345° es 55° a la izquierda), la deriva es hacia la derecha (+). Debes corregir -10° hacia la izquierda (WCA = -10°). Por tanto, el Rumbo a volar TH = 345° - 10° = 335° (o 336°)."
+    }
+  ];
+
+  function loadCR3Exercise(id) {
+    const ex = CR3_EXERCISES.find(e => e.id === id);
+    if (!ex) return;
+    cr3CurrentExerciseIndex = id;
+
+    // Actualizar botones de selector
+    for (let i = 1; i <= 6; i++) {
+      const btn = document.getElementById(`cr3-btn-ex-${i}`);
+      if (btn) {
+        if (i === id) {
+          btn.style.background = 'rgba(56,139,253,0.25)';
+          btn.style.borderColor = '#388bfd';
+          btn.style.color = '#79c0ff';
+          btn.style.fontWeight = '800';
+        } else {
+          btn.style.background = '#0d1117';
+          btn.style.borderColor = '#30363d';
+          btn.style.color = '#fff';
+          btn.style.fontWeight = '700';
+        }
+      }
+    }
+
+    const titleEl = document.getElementById('cr3-ex-title');
+    const promptEl = document.getElementById('cr3-ex-prompt');
+    const unitEl = document.getElementById('cr3-ex-unit-label');
+    const feedbackEl = document.getElementById('cr3-ex-feedback');
+    const inputEl = document.getElementById('cr3-ex-user-input');
+
+    if (titleEl) titleEl.textContent = ex.title;
+    if (promptEl) promptEl.innerHTML = ex.prompt;
+    if (unitEl) unitEl.textContent = ex.unit;
+    if (inputEl) { inputEl.value = ''; inputEl.focus(); }
+    if (feedbackEl) feedbackEl.style.display = 'none';
+  }
+
+  function verifyCR3ExerciseAnswer() {
+    const ex = CR3_EXERCISES.find(e => e.id === cr3CurrentExerciseIndex);
+    if (!ex) return;
+
+    const userVal = parseFloat(document.getElementById('cr3-ex-user-input')?.value);
+    const feedbackEl = document.getElementById('cr3-ex-feedback');
+    if (!feedbackEl) return;
+
+    if (isNaN(userVal)) {
+      showToastNotification('⚠️ Introduce un valor numérico antes de comprobar.');
+      return;
+    }
+
+    const tolerance = ex.expected * 0.03 + 0.5;
+    const isCorrect = Math.abs(userVal - ex.expected) <= tolerance;
+
+    feedbackEl.style.display = 'block';
+    if (isCorrect) {
+      feedbackEl.style.background = 'rgba(46,160,67,0.15)';
+      feedbackEl.style.border = '1px solid #2ea043';
+      feedbackEl.style.color = '#56d364';
+      feedbackEl.innerHTML = `✅ <strong>¡Correcto!</strong> Respuesta: <strong>${ex.expected} ${ex.unit}</strong>.<br>${ex.explanation}`;
+      cr3SolvedExerciseCount = Math.min(6, cr3SolvedExerciseCount + 1);
+      const scoreBadge = document.getElementById('cr3-exercises-score-badge');
+      if (scoreBadge) scoreBadge.textContent = `Progreso: ${cr3SolvedExerciseCount}/6 Acertados`;
+      showToastNotification('🎉 ¡Excelente cálculo! Ejercicio superado.');
+    } else {
+      feedbackEl.style.background = 'rgba(248,81,73,0.15)';
+      feedbackEl.style.border = '1px solid #f85149';
+      feedbackEl.style.color = '#ff7b72';
+      feedbackEl.innerHTML = `❌ <strong>No es correcto.</strong> Tu respuesta fue ${userVal} ${ex.unit}. La respuesta esperada es <strong>${ex.expected} ${ex.unit}</strong>.<br>${ex.explanation}`;
+    }
+  }
+
+  function demonstrateCR3ExerciseSolution() {
+    const ex = CR3_EXERCISES.find(e => e.id === cr3CurrentExerciseIndex);
+    if (!ex) return;
+
+    switchCR3Face(ex.face);
+
+    if (ex.face === 'calc') {
+      alignCR3IndexToValue(ex.rate);
+      const feedbackEl = document.getElementById('cr3-ex-feedback');
+      if (feedbackEl) {
+        feedbackEl.style.display = 'block';
+        feedbackEl.style.background = 'rgba(56,139,253,0.15)';
+        feedbackEl.style.border = '1px solid #388bfd';
+        feedbackEl.style.color = '#79c0ff';
+        feedbackEl.innerHTML = `🎯 <strong>Demostración en el Disco CR3:</strong><br>El disco interior ha girado automáticamente colocando el índice ▲ 60 en la tasa de <strong>${ex.rate}</strong>.<br>${ex.explanation}`;
+      }
+      showToastNotification(`🎯 Disco alineado a la tasa ${ex.rate}. Observa la solución en el computador.`);
+    } else if (ex.face === 'wind') {
+      const tcInput = document.getElementById('cr3-wind-tc');
+      const tasInput = document.getElementById('cr3-wind-tas');
+      const windInput = document.getElementById('cr3-wind-wind');
+      if (tcInput) tcInput.value = ex.tc;
+      if (tasInput) tasInput.value = ex.tas;
+      if (windInput) windInput.value = ex.wind;
+      calculateCR3WindTriangle();
+      const feedbackEl = document.getElementById('cr3-ex-feedback');
+      if (feedbackEl) {
+        feedbackEl.style.display = 'block';
+        feedbackEl.style.background = 'rgba(56,139,253,0.15)';
+        feedbackEl.style.border = '1px solid #388bfd';
+        feedbackEl.style.color = '#79c0ff';
+        feedbackEl.innerHTML = `🎯 <strong>Demostración de Triángulo de Viento:</strong><br>${ex.explanation}`;
+      }
+      showToastNotification(`🎯 Triángulo de viento resuelto: Rumbo ${ex.expected}°`);
     }
   }
 

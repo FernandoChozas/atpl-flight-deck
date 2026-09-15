@@ -2,6 +2,29 @@
 
 Todos los cambios notables, evoluciones y correcciones de este proyecto se registran de forma cronológica en este documento, siguiendo las directrices de [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/) y versionado semántico [SemVer](https://semver.org/lang/es/).
 
+## [1.5.1] - 2026-09-16
+
+### 🎨 Corrección Integral del Modo Claro (Light Mode Engine)
+- **Legibilidad y Contraste al 100% (Texto Invisible Solucionado)**:
+  - Corregido el campo de búsqueda (`.search-box input`), cuyo color de texto blanco sobre fondo claro impedía ver los caracteres tecleados.
+  - Corregidos todos los encabezados `h1`, `h2`, `h3` y `h4` que forzaban `color: #fff`, provocando texto blanco invisible sobre tarjetas blancas en modo diurno.
+  - Corregidos títulos y textos de modales (`#pdf-modal`, `#quiz-modal`, `.gate-card`, `#cockpit-player`) para utilizar variables semánticas `--text-title` y `--text-main`.
+  - Corregida la celda de ETA en el NavLog (`fpl-cell-eta`), que forzaba gris casi blanco (`#e6edf3`), pasando a utilizar `var(--text-main)` de alto contraste.
+  - Corregido el cuadro de preguntas de la Caja Negra (`renderBlackboxList`), desafío diario (`#daily-q-text`) y título del ejercicio CR-3 (`#cr3-ex-title`).
+- **Adaptación a Blanco de la Parte Nueva (CR-3, OFP & Tarjetas Inferiores)**:
+  - Definidas nuevas variables CSS semánticas: `--bg-subbox`, `--bg-subbox-card`, `--bg-input` y `--text-input` tanto en `:root` como en `[data-theme="light"]`, `@media (prefers-color-scheme: light)` y `[data-theme="dark"]`.
+  - **Computador CR-3**: Los contenedores de la guía, ejercicios y visor interactivo ahora adaptan sus fondos a blanco/gris suave (`#ffffff` / `#f6f8fa`) con bordes nítidos (`#d0d7de`), eliminando los bloques negros fijos (`#0d1117`).
+  - **Pestañas y Botones de Ejercicios CR-3**: En estado inactivo se integran en el tema claro con fondo claro y texto legible, destacando con acento azul en estado activo.
+  - **Plan de Vuelo (OFP - Tarjetas 1 a 5)**:
+    - Tarjeta 1 (Aeronave), Tarjeta 2 (Vientos/CR3), Tarjeta 3 (Combustible), Tarjeta 4 (ATIS/Calzos) y Tarjeta 5 (Performance) adaptan todos sus sub-contenedores a fondos claros.
+    - Todos los desplegables (`select`) e `inputs` ahora cambian dinámicamente a fondo blanco con borde suave y texto de alta legibilidad, preservando los acentos cromáticos (azul para rumbos/velocidades, verde para QNH/consumo, amarillo para alternativo/mínimos).
+    - Áreas de texto (`textarea`) para frecuencias, autorizaciones ATC, NOTAMs y espacios aéreos adaptadas a fondo blanco.
+  - **Tabla NavLog**: Filas alternadas en blanco (`#ffffff`) y gris suave (`#f8fafc`), cabecera adaptada con `var(--table-header-bg)` e inputs de tramo con fondo blanco limpio.
+- **Sincronización Automática de Modo Día/Noche en JS**:
+  - `applyTheme()` ahora garantiza que el atributo `data-theme` en `<html>` se establezca explícitamente tanto en selección manual como en modo `auto` diurno/nocturno, activando al instante todas las reglas de la hoja de estilo.
+
+---
+
 ## [1.5.0] - 2026-09-16
 
 ### 🚀 Novedades y Mejoras Implementadas

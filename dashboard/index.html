@@ -36,6 +36,10 @@
       --badge-bg: #21262d;
       --modal-bg: #161b22;
       --modal-overlay: rgba(0, 0, 0, 0.75);
+      --bg-subbox: #0d1117;
+      --bg-subbox-card: #161b22;
+      --bg-input: #0d1117;
+      --text-input: #ffffff;
       --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
 
@@ -57,6 +61,10 @@
         --badge-bg: #e2e8f0;
         --modal-bg: #ffffff;
         --modal-overlay: rgba(15, 23, 42, 0.6);
+        --bg-subbox: #f6f8fa;
+        --bg-subbox-card: #ffffff;
+        --bg-input: #ffffff;
+        --text-input: #1f2328;
       }
     }
 
@@ -77,6 +85,10 @@
       --badge-bg: #e2e8f0;
       --modal-bg: #ffffff;
       --modal-overlay: rgba(15, 23, 42, 0.6);
+      --bg-subbox: #f6f8fa;
+      --bg-subbox-card: #ffffff;
+      --bg-input: #ffffff;
+      --text-input: #1f2328;
     }
 
     [data-theme="dark"] {
@@ -96,6 +108,10 @@
       --badge-bg: #21262d;
       --modal-bg: #161b22;
       --modal-overlay: rgba(0, 0, 0, 0.75);
+      --bg-subbox: #0d1117;
+      --bg-subbox-card: #161b22;
+      --bg-input: #0d1117;
+      --text-input: #ffffff;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -338,7 +354,7 @@
       width: 100%;
       background: var(--bg-card);
       border: 1px solid var(--border-color);
-      color: #fff;
+      color: var(--text-main);
       padding: 8px 14px 8px 36px;
       border-radius: 6px;
       font-size: 13px;
@@ -400,7 +416,7 @@
       min-width: 800px;
     }
     th {
-      background-color: #1c2128;
+      background-color: var(--table-header-bg);
       color: var(--text-muted);
       font-weight: 600;
       padding: 12px 16px;
@@ -466,7 +482,7 @@
       flex-wrap: wrap;
       gap: 12px;
     }
-    .aviation-title { font-size: 16px; font-weight: 600; color: #fff; margin-bottom: 4px; }
+    .aviation-title { font-size: 16px; font-weight: 600; color: var(--text-title); margin-bottom: 4px; }
     .aviation-desc { font-size: 13px; color: var(--text-muted); }
     .aviation-scale {
       display: flex;
@@ -511,7 +527,7 @@
       flex: 1; min-width: 200px;
     }
     #cockpit-player .player-title {
-      font-size: 13px; font-weight: 700; color: #fff;
+      font-size: 13px; font-weight: 700; color: var(--text-title);
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 300px;
     }
     #cockpit-player .player-sub {
@@ -632,7 +648,7 @@
       animation: modalPop 0.2s ease;
     }
     @keyframes modalPop { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-    #pdf-modal h3 { font-size: 17px; color: #fff; margin-bottom: 8px; }
+    #pdf-modal h3 { font-size: 17px; color: var(--text-title); margin-bottom: 8px; }
     #pdf-modal p { font-size: 13px; color: #8b949e; margin-bottom: 22px; }
     .pdf-choice-btn {
       display: block; width: 100%; padding: 14px 20px;
@@ -699,7 +715,7 @@
     }
     #quiz-modal .quiz-subject { font-size: 12px; font-weight: 700; color: #79c0ff; letter-spacing: 0.8px; }
     #quiz-modal .quiz-q {
-      font-size: 16px; color: #c9d1d9; font-weight: 600; line-height: 1.5;
+      font-size: 16px; color: var(--text-title); font-weight: 600; line-height: 1.5;
       margin-bottom: 20px; min-height: 70px;
     }
     .quiz-opt {
@@ -1298,6 +1314,127 @@
     }
   }
 
+
+    /* ─── BOTONES DE FILTRO Y SELECTORES ADAPTABLES ─── */
+    .btn-filter {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      border-radius: 8px;
+    }
+    .btn-filter:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--accent-blue);
+    }
+    .btn-filter.active {
+      background: rgba(56, 139, 253, 0.2) !important;
+      border-color: var(--accent-blue) !important;
+      color: var(--accent-blue) !important;
+    }
+
+    /* ─── REGLAS GLOBALES MODO CLARO (LIGHT MODE ENGINE) ─── */
+    [data-theme="light"] input:not([type="checkbox"]):not([type="radio"]):not(.btn-sync-action),
+    [data-theme="light"] select,
+    [data-theme="light"] textarea {
+      background-color: var(--bg-input) !important;
+      color: var(--text-main);
+      border-color: var(--border-color) !important;
+    }
+    [data-theme="light"] input::placeholder,
+    [data-theme="light"] textarea::placeholder {
+      color: var(--text-muted) !important;
+      opacity: 0.85;
+    }
+    [data-theme="light"] .search-box input {
+      color: var(--text-main) !important;
+    }
+    [data-theme="light"] h1,
+    [data-theme="light"] h2,
+    [data-theme="light"] h3,
+    [data-theme="light"] h4 {
+      color: var(--text-title) !important;
+    }
+    [data-theme="light"] .badge-counter {
+      background: var(--badge-bg) !important;
+      border-color: var(--border-color) !important;
+      color: var(--text-muted) !important;
+    }
+    [data-theme="light"] .btn-summary,
+    [data-theme="light"] .btn-audio,
+    [data-theme="light"] .btn-quiz,
+    [data-theme="light"] .btn-master-audio {
+      background: var(--bg-card) !important;
+      border-color: var(--border-color) !important;
+      color: var(--text-main) !important;
+    }
+    [data-theme="light"] .btn-pdf-topic {
+      background: rgba(9, 105, 218, 0.08) !important;
+      border-color: rgba(9, 105, 218, 0.3) !important;
+      color: var(--accent-blue) !important;
+    }
+    [data-theme="light"] .cockpit-tab-btn:hover {
+      background: var(--bg-card-hover) !important;
+      color: var(--text-title) !important;
+    }
+    [data-theme="light"] .pill:hover,
+    [data-theme="light"] .pill.active {
+      background-color: var(--badge-bg) !important;
+      color: var(--text-title) !important;
+      border-color: var(--accent-blue) !important;
+    }
+    [data-theme="light"] #pdf-modal,
+    [data-theme="light"] #quiz-modal,
+    [data-theme="light"] .gate-card {
+      background: var(--modal-bg) !important;
+      border-color: var(--border-color) !important;
+      box-shadow: 0 20px 60px rgba(15, 23, 42, 0.15) !important;
+    }
+    [data-theme="light"] #pdf-modal p {
+      color: var(--text-muted) !important;
+    }
+    [data-theme="light"] .quiz-opt {
+      background: var(--bg-subbox) !important;
+      border-color: var(--border-color) !important;
+      color: var(--text-main) !important;
+    }
+    [data-theme="light"] .quiz-opt:hover {
+      background: var(--bg-card-hover) !important;
+      border-color: var(--accent-blue) !important;
+      color: var(--accent-blue) !important;
+    }
+    [data-theme="light"] .quiz-nav-btn {
+      background: var(--badge-bg) !important;
+      border-color: var(--border-color) !important;
+      color: var(--text-main) !important;
+    }
+    [data-theme="light"] #cockpit-player {
+      background: rgba(255, 255, 255, 0.96) !important;
+      border-top-color: var(--border-color) !important;
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.08) !important;
+    }
+    [data-theme="light"] .player-btn {
+      background: var(--badge-bg) !important;
+      border-color: var(--border-color) !important;
+      color: var(--text-main) !important;
+    }
+    [data-theme="light"] #fpl-friendly-navlog-tbody tr:nth-child(even) {
+      background: #ffffff !important;
+    }
+    [data-theme="light"] #fpl-friendly-navlog-tbody tr:nth-child(odd) {
+      background: #f8fafc !important;
+    }
+    [data-theme="light"] #fpl-friendly-navlog-tbody tr {
+      border-bottom-color: var(--border-color) !important;
+    }
+    [data-theme="light"] .fpl-cell-eta {
+      color: var(--text-main) !important;
+    }
+    [data-theme="light"] .fpl-cell-fuel {
+      color: var(--text-main) !important;
+    }
+
 </style>
   <!-- Leaflet VFR Map Engine & SheetJS Excel Engine (100% Offline) -->
   <link rel="stylesheet" href="leaflet/leaflet.css" />
@@ -1311,7 +1448,7 @@
   <div id="cockpit-gate-screen" style="display: none; position: fixed; inset: 0; background: #06090f; z-index: 100000; align-items: center; justify-content: center; padding: 16px; overflow-y: auto;">
     <div class="gate-card">
       <div style="font-size: 48px; margin-bottom: 12px;">🔒</div>
-      <h2 style="font-size: 20px; font-weight: 800; color: #fff; margin: 0 0 6px 0;">ATPL Flight Deck</h2>
+      <h2 style="font-size: 20px; font-weight: 800; color: var(--text-title); margin: 0 0 6px 0;">ATPL Flight Deck</h2>
       <div style="margin-bottom: 14px;">
         <span style="font-size: 11px; font-weight: 700; background: rgba(218,54,51,0.2); color: #f85149; border: 1px solid rgba(218,54,51,0.4); padding: 3px 12px; border-radius: 12px; text-transform: uppercase; letter-spacing: 0.5px;">Cabina Privada · Acceso Restringido</span>
       </div>
@@ -1320,7 +1457,7 @@
       </p>
 
       <form onsubmit="event.preventDefault(); verifyGatePin();" style="display: flex; flex-direction: column; gap: 10px;">
-        <input type="password" id="gate-pin-input" placeholder="Introduce el PIN de Vuelo" autocomplete="current-password" style="width: 100%; padding: 13px; background: #0d1117; border: 1px solid #30363d; color: #fff; border-radius: 8px; font-size: 16px; text-align: center; font-weight: 700; letter-spacing: 3px; outline: none; box-sizing: border-box;">
+        <input type="password" id="gate-pin-input" placeholder="Introduce el PIN de Vuelo" autocomplete="current-password" style="width: 100%; padding: 13px; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-title); border-radius: 8px; font-size: 16px; text-align: center; font-weight: 700; letter-spacing: 3px; outline: none; box-sizing: border-box;">
         <button type="button" onclick="verifyGatePin()" style="width: 100%; padding: 13px; background: #238636; border: 1px solid #2ea043; color: #fff; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; touch-action: manipulation;">
           🔓 Desbloquear Cabina
         </button>
@@ -1335,7 +1472,7 @@
   <div id="cadet-onboarding-modal-overlay" style="display: none; position: fixed; inset: 0; background: #06090f; z-index: 99999; align-items: center; justify-content: center; padding: 16px; overflow-y: auto;">
     <div class="gate-card" style="max-width: 450px; width: 100%; text-align: center; border-color: rgba(56,139,253,0.4); box-shadow: 0 25px 70px rgba(0,0,0,0.85); animation: modalPop 0.25s ease;">
       <div style="font-size: 48px; margin-bottom: 8px;">👨‍✈️</div>
-      <h2 style="font-size: 21px; font-weight: 800; color: #fff; margin-bottom: 6px;">
+      <h2 style="font-size: 21px; font-weight: 800; color: var(--text-title); margin-bottom: 6px;">
         Identificación de Cadete
       </h2>
       <p style="font-size: 13px; color: #8b949e; line-height: 1.5; margin-bottom: 18px;">
@@ -1356,7 +1493,7 @@
           <label for="onboard-cadet-name-input" style="font-size: 12px; font-weight: 700; color: #c9d1d9; display: block; margin-bottom: 6px;">
             ✏️ O escribe tu Nombre / Call Sign:
           </label>
-          <input type="text" id="onboard-cadet-name-input" placeholder="Ej: CARLOS, ALEX, MARTA..." autocomplete="name" maxlength="25" style="width: 100%; padding: 13px 14px; background: #0d1117; border: 1px solid #30363d; color: #fff; border-radius: 8px; font-size: 16px; font-weight: 700; text-transform: uppercase; outline: none; box-sizing: border-box;">
+          <input type="text" id="onboard-cadet-name-input" placeholder="Ej: CARLOS, ALEX, MARTA..." autocomplete="name" maxlength="25" style="width: 100%; padding: 13px 14px; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-title); border-radius: 8px; font-size: 16px; font-weight: 700; text-transform: uppercase; outline: none; box-sizing: border-box;">
         </div>
 
         <p id="onboard-error-msg" style="color: #f85149; font-size: 12px; margin: 0; display: none; font-weight: 600;"></p>
@@ -1379,7 +1516,7 @@
       <div class="brand">
         <div class="brand-icon" style="padding: 0; overflow: hidden; border: 1px solid rgba(88, 166, 255, 0.4); background: #012349;"><img src="apple-touch-icon-180x180.png" alt="ATPL Pilot" style="width: 100%; height: 100%; object-fit: cover; border-radius: 9px; display: block;"></div>
         <div class="brand-text">
-          <h1>ATPL Flight Deck & Study Control <span class="badge-beta" id="version-badge" onclick="forceCheckAppUpdate(true)" style="cursor:pointer;" title="Versión v1.5.0 EFB — Clic para forzar actualización limpia">v1.5.0 EFB</span></h1>
+          <h1>ATPL Flight Deck & Study Control <span class="badge-beta" id="version-badge" onclick="forceCheckAppUpdate(true)" style="cursor:pointer;" title="Versión v1.5.1 EFB — Clic para forzar actualización limpia">v1.5.1 EFB</span></h1>
           <p>Preparación EASA Modular Oficial | Sistema adaptado a turnos de 12h</p>
         </div>
       </div>
@@ -1568,7 +1705,7 @@
         <div style="display: flex; align-items: center; gap: 10px;">
           <span style="font-size: 32px;">🔥</span>
           <div>
-            <h3 style="margin: 0; font-size: 17px; font-weight: 800; color: #fff;">Desafío Diario ATPL</h3>
+            <h3 style="margin: 0; font-size: 17px; font-weight: 800; color: var(--text-title);">Desafío Diario ATPL</h3>
             <p style="margin: 2px 0 0 0; font-size: 12px; color: var(--text-muted);">Una pregunta oficial de examen cada 24h para toda la flota de cadetes</p>
           </div>
         </div>
@@ -1587,7 +1724,7 @@
           <span class="badge-beta" id="daily-subject-badge" style="background: rgba(56,139,253,0.18); color: #58a6ff; font-size: 11px;">081 PRINCIPLES OF FLIGHT</span>
           <span style="font-size: 11px; color: var(--text-muted);" id="daily-date-label">Pregunta Oficial del Día</span>
         </div>
-        <div id="daily-q-text" style="font-size: 14px; font-weight: 700; color: #fff; line-height: 1.5; margin-bottom: 14px;">
+        <div id="daily-q-text" style="font-size: 14px; font-weight: 700; color: var(--text-title); line-height: 1.5; margin-bottom: 14px;">
           Cargando desafío del día...
         </div>
         <div id="daily-options-grid" style="display: grid; grid-template-columns: 1fr; gap: 8px;"></div>
@@ -1602,7 +1739,7 @@
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
           <div style="display: flex; align-items: center; gap: 8px;">
             <span style="font-size: 24px;">📦</span>
-            <h3 style="margin: 0; font-size: 16px; font-weight: 800; color: #fff;">Caja Negra de Fallos</h3>
+            <h3 style="margin: 0; font-size: 16px; font-weight: 800; color: var(--text-title);">Caja Negra de Fallos</h3>
           </div>
           <span id="blackbox-count-badge" class="badge-beta" style="background: rgba(248,81,73,0.2); color: #ff7b72; border-color: #f85149; font-weight: 800;">
             0 Preguntas
@@ -1625,35 +1762,35 @@
       <div class="pilot-box" style="background: var(--bg-card, #161b22); border: 1px solid var(--border-color, #30363d); border-radius: 16px; padding: 20px;">
         <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
           <span style="font-size: 24px;">💡</span>
-          <h3 style="margin: 0; font-size: 16px; font-weight: 800; color: #fff;">Mnemotécnicas Clave EASA</h3>
+          <h3 style="margin: 0; font-size: 16px; font-weight: 800; color: var(--text-title);">Mnemotécnicas Clave EASA</h3>
         </div>
         <p style="font-size: 12px; color: var(--text-muted); line-height: 1.45; margin-bottom: 14px;">
           Reglas mnemotécnicas de examen fijadas por comandantes e instructores para asegurar las preguntas trampa.
         </p>
 
         <div style="display: flex; flex-direction: column; gap: 10px;">
-          <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 10px; padding: 12px;">
+          <div style="background: var(--bg-subbox); border: 1px solid var(--border-color); border-radius: 10px; padding: 12px;">
             <strong style="color: #58a6ff; font-size: 13px;">🧭 ANDS (Brújula Magnética):</strong>
             <p style="margin: 4px 0 0 0; font-size: 12px; color: var(--text-muted);">
               <strong>A</strong>ccelerate <strong>N</strong>orth, <strong>D</strong>ecelerate <strong>S</strong>outh. Al acelerar en rumbos E/W la brújula vira al Norte; al desacelerar, al Sur.
             </p>
           </div>
 
-          <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 10px; padding: 12px;">
+          <div style="background: var(--bg-subbox); border: 1px solid var(--border-color); border-radius: 10px; padding: 12px;">
             <strong style="color: #3fb950; font-size: 13px;">📡 CRAFT (Autorizaciones IFR):</strong>
             <p style="margin: 4px 0 0 0; font-size: 12px; color: var(--text-muted);">
               <strong>C</strong>learance limit, <strong>R</strong>oute, <strong>A</strong>ltitude, <strong>F</strong>requency, <strong>T</strong>ransponder. Estructura estándar para anotar colaciones.
             </p>
           </div>
 
-          <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 10px; padding: 12px;">
+          <div style="background: var(--bg-subbox); border: 1px solid var(--border-color); border-radius: 10px; padding: 12px;">
             <strong style="color: #e3b341; font-size: 13px;">🌡️ From High to Low, look out below:</strong>
             <p style="margin: 4px 0 0 0; font-size: 12px; color: var(--text-muted);">
               Volando hacia bajas presiones o masas de aire frío sin corregir el QNH, el altímetro marcará más alto de lo que realmente estás.
             </p>
           </div>
 
-          <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 10px; padding: 12px;">
+          <div style="background: var(--bg-subbox); border: 1px solid var(--border-color); border-radius: 10px; padding: 12px;">
             <strong style="color: #db61a2; font-size: 13px;">⚡ UNOS (Virajes por Compás):</strong>
             <p style="margin: 4px 0 0 0; font-size: 12px; color: var(--text-muted);">
               <strong>U</strong>ndershoot <strong>N</strong>orth, <strong>O</strong>vershoot <strong>S</strong>outh. Sacar el viraje antes al buscar el Norte y después al buscar el Sur.
@@ -1674,12 +1811,12 @@
         <div style="display: flex; align-items: center; gap: 10px;">
           <span style="font-size: 32px;">🌦️</span>
           <div>
-            <h3 style="margin: 0; font-size: 17px; font-weight: 800; color: #fff;">Radar METAR & TAF Oficial en Vivo</h3>
+            <h3 style="margin: 0; font-size: 17px; font-weight: 800; color: var(--text-title);">Radar METAR & TAF Oficial en Vivo</h3>
             <p style="margin: 2px 0 0 0; font-size: 12px; color: var(--text-muted);">Aeródromos de aviación general y escuelas en España con cálculo de pista activa y viento cruzado</p>
           </div>
         </div>
         <div style="display: flex; align-items: center; gap: 8px;">
-          <select id="metar-airport-select" onchange="fetchLiveMetarForSelected()" style="padding: 9px 14px; background: #0d1117; border: 1px solid #30363d; color: #fff; border-radius: 10px; font-size: 13px; font-weight: 700; outline: none; cursor: pointer;">
+          <select id="metar-airport-select" onchange="fetchLiveMetarForSelected()" style="padding: 9px 14px; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-title); border-radius: 10px; font-size: 13px; font-weight: 700; outline: none; cursor: pointer;">
             <optgroup label="Bases de Escuelas & Aviación General">
               <option value="LECU" selected>LECU · Madrid-Cuatro Vientos (RWY 09/27)</option>
               <option value="LEVD">LEVD · Valladolid-Villanubla (RWY 05/23)</option>
@@ -1721,25 +1858,25 @@
 
       <!-- CÁLCULO DE PISTAS ACTIVAS Y VIENTO CRUZADO -->
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 14px;">
-        <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 12px; padding: 14px;">
+        <div style="background: var(--bg-subbox); border: 1px solid var(--border-color); border-radius: 12px; padding: 14px;">
           <div style="font-size: 11px; color: var(--text-muted); font-weight: 600;">🟢 PISTA EN SERVICIO (ACTIVA)</div>
           <div id="metar-active-rwy" style="font-size: 18px; font-weight: 800; color: #58a6ff; margin-top: 4px;">RWY --</div>
           <div id="metar-rwy-notes" style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Cálculo aerodinámico por viento</div>
         </div>
 
-        <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 12px; padding: 14px;">
+        <div style="background: var(--bg-subbox); border: 1px solid var(--border-color); border-radius: 12px; padding: 14px;">
           <div style="font-size: 11px; color: var(--text-muted); font-weight: 600;">💨 VIENTO EN CARA / COLA</div>
           <div id="metar-headwind-val" style="font-size: 18px; font-weight: 800; color: #3fb950; margin-top: 4px;">-- kt</div>
           <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Componente frontal (Headwind)</div>
         </div>
 
-        <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 12px; padding: 14px;">
+        <div style="background: var(--bg-subbox); border: 1px solid var(--border-color); border-radius: 12px; padding: 14px;">
           <div style="font-size: 11px; color: var(--text-muted); font-weight: 600;">↔️ VIENTO CRUZADO (CROSSWIND)</div>
           <div id="metar-crosswind-val" style="font-size: 18px; font-weight: 800; color: #e3b341; margin-top: 4px;">-- kt</div>
           <div id="metar-crosswind-dir" style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Componente lateral</div>
         </div>
 
-        <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 12px; padding: 14px;">
+        <div style="background: var(--bg-subbox); border: 1px solid var(--border-color); border-radius: 12px; padding: 14px;">
           <div style="font-size: 11px; color: var(--text-muted); font-weight: 600;">🌡️ CONDICIONES DE VUELO</div>
           <div id="metar-flight-cat" style="font-size: 18px; font-weight: 800; color: #3fb950; margin-top: 4px;">VFR</div>
           <div id="metar-temp-qnh" style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">QNH -- hPa · --°C</div>
@@ -1753,19 +1890,19 @@
         <div style="display: flex; align-items: center; gap: 10px;">
           <span style="font-size: 32px;">🧭</span>
           <div>
-            <h3 style="margin: 0; font-size: 17px; font-weight: 800; color: #fff;">Entrenador de Entradas en Espera (Holding Trainer)</h3>
+            <h3 style="margin: 0; font-size: 17px; font-weight: 800; color: var(--text-title);">Entrenador de Entradas en Espera (Holding Trainer)</h3>
             <p style="margin: 2px 0 0 0; font-size: 12px; color: var(--text-muted);">Dominio total de las preguntas de 062 Radio Nav y 081 Principios de Vuelo (OACI Doc 8168)</p>
           </div>
         </div>
-        <button type="button" onclick="randomizeHoldingExercise()" style="padding: 8px 16px; background: #21262d; border: 1px solid #30363d; color: #fff; font-weight: 700; font-size: 12px; border-radius: 10px; cursor: pointer; touch-action: manipulation;">
+        <button type="button" onclick="randomizeHoldingExercise()" style="padding: 8px 16px; background: var(--badge-bg); border: 1px solid var(--border-color); color: var(--text-main); font-weight: 700; font-size: 12px; border-radius: 10px; cursor: pointer; touch-action: manipulation;">
           🎲 Generar Nuevo Ejercicio
         </button>
       </div>
 
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; align-items: center;">
         <!-- Visualizador de Rosa de Rumbos -->
-        <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 16px; padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-          <div style="position: relative; width: 220px; height: 220px; border-radius: 50%; border: 2px dashed #30363d; display: flex; align-items: center; justify-content: center;">
+        <div style="background: var(--bg-subbox); border: 1px solid var(--border-color); border-radius: 16px; padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+          <div style="position: relative; width: 220px; height: 220px; border-radius: 50%; border: 2px dashed var(--border-color); display: flex; align-items: center; justify-content: center;">
             <span style="position: absolute; top: 6px; font-size: 11px; font-weight: 800; color: #58a6ff;">360° N</span>
             <span style="position: absolute; bottom: 6px; font-size: 11px; font-weight: 800; color: #8b949e;">180° S</span>
             <span style="position: absolute; right: 6px; font-size: 11px; font-weight: 800; color: #8b949e;">090° E</span>
@@ -1786,7 +1923,7 @@
 
           <div style="margin-top: 14px; text-align: center; font-size: 12px; color: var(--text-muted);">
             Inbound Track: <strong style="color: #e3b341;" id="hold-info-inbound">090°</strong> | 
-            Virajes: <strong style="color: #fff;" id="hold-info-turns">Estándar (Derecha)</strong> | 
+            Virajes: <strong style="color: var(--text-title);" id="hold-info-turns">Estándar (Derecha)</strong> | 
             Rumbo Avión: <strong style="color: #58a6ff;" id="hold-info-hdg">240°</strong>
           </div>
         </div>
@@ -1795,17 +1932,17 @@
         <div style="display: flex; flex-direction: column; gap: 10px;">
           <div style="font-size: 12px; font-weight: 700; color: var(--text-muted);">¿Qué sector reglamentario de entrada corresponde?</div>
 
-          <button type="button" onclick="verifyHoldingChoice('direct')" style="padding: 14px; background: #0d1117; border: 1px solid #30363d; border-radius: 12px; color: #fff; text-align: left; cursor: pointer; transition: all 0.2s;">
+          <button type="button" onclick="verifyHoldingChoice('direct')" style="padding: 14px; background: var(--bg-subbox); border: 1px solid var(--border-color); border-radius: 12px; color: var(--text-main); text-align: left; cursor: pointer; transition: all 0.2s;">
             <div style="font-size: 13px; font-weight: 700; color: #3fb950;">Sector 3: Entrada Directa (Direct Entry)</div>
             <div style="font-size: 11px; color: var(--text-muted);">Abarca el sector de 180° del lado del circuito</div>
           </button>
 
-          <button type="button" onclick="verifyHoldingChoice('teardrop')" style="padding: 14px; background: #0d1117; border: 1px solid #30363d; border-radius: 12px; color: #fff; text-align: left; cursor: pointer; transition: all 0.2s;">
+          <button type="button" onclick="verifyHoldingChoice('teardrop')" style="padding: 14px; background: var(--bg-subbox); border: 1px solid var(--border-color); border-radius: 12px; color: var(--text-main); text-align: left; cursor: pointer; transition: all 0.2s;">
             <div style="font-size: 13px; font-weight: 700; color: #58a6ff;">Sector 2: Gota de Agua (Teardrop Entry)</div>
             <div style="font-size: 11px; color: var(--text-muted);">Sector de 70° opuesto al lado de espera</div>
           </button>
 
-          <button type="button" onclick="verifyHoldingChoice('parallel')" style="padding: 14px; background: #0d1117; border: 1px solid #30363d; border-radius: 12px; color: #fff; text-align: left; cursor: pointer; transition: all 0.2s;">
+          <button type="button" onclick="verifyHoldingChoice('parallel')" style="padding: 14px; background: var(--bg-subbox); border: 1px solid var(--border-color); border-radius: 12px; color: var(--text-main); text-align: left; cursor: pointer; transition: all 0.2s;">
             <div style="font-size: 13px; font-weight: 700; color: #db61a2;">Sector 1: Entrada Paralela (Parallel Entry)</div>
             <div style="font-size: 11px; color: var(--text-muted);">Sector de 110° con alejamiento paralelo a la pierna</div>
           </button>
@@ -1825,7 +1962,7 @@
         <div style="display: flex; align-items: center; gap: 10px;">
           <span style="font-size: 32px;">🎛️</span>
           <div>
-            <h3 style="margin: 0; font-size: 17px; font-weight: 800; color: #fff;">Computador de Vuelo CR-3 Oficial (AerotestPPL)</h3>
+            <h3 style="margin: 0; font-size: 17px; font-weight: 800; color: var(--text-title);">Computador de Vuelo CR-3 Oficial (AerotestPPL)</h3>
             <p style="margin: 2px 0 0 0; font-size: 12px; color: var(--text-muted);">
               Computador analógico de vuelo oficial para medir <strong>rumbos (Heading/Course)</strong>, <strong>velocidades (TAS/GS)</strong>, <strong>viento (W/V)</strong> y <strong>deriva (Drift/WCA)</strong>
             </p>
@@ -1837,13 +1974,13 @@
           <button type="button" class="btn-filter" id="cr3-tab-embed" onclick="switchCR3Section('embed')" style="background: rgba(56,139,253,0.2); border-color: #388bfd; color: #58a6ff; font-weight: 800; font-size: 12px; padding: 6px 14px; border-radius: 8px; cursor: pointer;">
             🎛️ Computador Interactivo
           </button>
-          <button type="button" class="btn-filter" id="cr3-tab-guide" onclick="switchCR3Section('guide')" style="background: #0d1117; border-color: #30363d; color: #e3b341; font-weight: 700; font-size: 12px; padding: 6px 14px; border-radius: 8px; cursor: pointer;">
+          <button type="button" class="btn-filter" id="cr3-tab-guide" onclick="switchCR3Section('guide')" style="background: var(--bg-card); border-color: var(--border-color); color: #e3b341; font-weight: 700; font-size: 12px; padding: 6px 14px; border-radius: 8px; cursor: pointer;">
             📖 Guía: Rumbos y Velocidades
           </button>
-          <button type="button" class="btn-filter" id="cr3-tab-exercises" onclick="switchCR3Section('exercises')" style="background: #0d1117; border-color: #30363d; color: #3fb950; font-weight: 700; font-size: 12px; padding: 6px 14px; border-radius: 8px; cursor: pointer;">
+          <button type="button" class="btn-filter" id="cr3-tab-exercises" onclick="switchCR3Section('exercises')" style="background: var(--bg-card); border-color: var(--border-color); color: #3fb950; font-weight: 700; font-size: 12px; padding: 6px 14px; border-radius: 8px; cursor: pointer;">
             🎯 Ejercicios de Navegación
           </button>
-          <button type="button" onclick="reloadCR3Iframe()" style="background: #21262d; border: 1px solid #30363d; color: #fff; font-size: 12px; padding: 6px 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 4px;" title="Recargar simulador">
+          <button type="button" onclick="reloadCR3Iframe()" style="background: var(--badge-bg); border: 1px solid var(--border-color); color: var(--text-main); font-size: 12px; padding: 6px 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 4px;" title="Recargar simulador">
             <span>🔄</span> Recargar
           </button>
           <a href="https://aerotestppl.es/cr3/" target="_blank" rel="noopener noreferrer" style="padding: 6px 14px; background: #238636; border: 1px solid #2ea043; color: #fff; font-weight: 800; font-size: 12px; border-radius: 8px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;" title="Abrir en pantalla completa o pestaña nueva">
@@ -1854,7 +1991,7 @@
 
       <!-- SECCIÓN 1: COMPUTADOR EMBEBIDO OFICIAL DIRECTO DE AEROTESTPPL.ES/CR3 -->
       <div id="cr3-section-embed" style="display: block;">
-        <div style="position: relative; width: 100%; height: 840px; border-radius: 14px; overflow: hidden; background: #0d1117; border: 1px solid #30363d; box-shadow: 0 8px 24px rgba(0,0,0,0.4);">
+        <div style="position: relative; width: 100%; height: 840px; border-radius: 14px; overflow: hidden; background: var(--bg-card); border: 1px solid var(--border-color); box-shadow: 0 8px 24px rgba(0,0,0,0.15);">
           <iframe id="cr3-official-iframe" src="https://aerotestppl.es/cr3/" style="width: 100%; height: 100%; border: none; display: block;" allowfullscreen loading="lazy" title="Computador de Vuelo CR3 Oficial AerotestPPL"></iframe>
         </div>
         <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px; font-size: 11px; color: var(--text-muted); flex-wrap: wrap; gap: 8px;">
@@ -1865,18 +2002,18 @@
 
       <!-- SECCIÓN 2: GUÍA PASO A PASO: CÓMO MEDIR RUMBOS Y VELOCIDADES ("PARA DUMMIES") -->
       <div id="cr3-section-guide" style="display: none;">
-        <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 14px; padding: 20px; line-height: 1.6;">
+        <div style="background: var(--bg-subbox); border: 1px solid var(--border-color); border-radius: 14px; padding: 20px; line-height: 1.6;">
           <h4 style="margin: 0 0 14px 0; font-size: 16px; color: #e3b341; display: flex; align-items: center; gap: 8px;">
             <span>🧭</span> Cómo Medir Rumbos, Velocidades y Deriva en el CR-3 ("Para Dummies")
           </h4>
           
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px;">
             <!-- Caso 1: Hallar Rumbo de Aguja (Heading) y GS -->
-            <div style="background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 14px;">
+            <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 14px;">
               <strong style="color: #58a6ff; font-size: 13px; display: block; margin-bottom: 8px;">
                 🎯 Problema 1: Hallar Rumbo a Volar (Heading) y Ground Speed (GS)
               </strong>
-              <div style="font-size: 11px; color: #c9d1d9;">
+              <div style="font-size: 11px; color: var(--text-main);">
                 <strong>Datos conocidos</strong>: Rumbo deseado (True Course, ej. 345°), TAS (ej. 95 kt) y Viento (ej. 290°/20 kt).<br><br>
                 <strong>Procedimiento en el CR-3 (Cara de Viento / Side B)</strong>:
                 <ol style="margin: 6px 0 0 16px; padding: 0;">
@@ -1893,11 +2030,11 @@
             </div>
 
             <!-- Caso 2: Hallar el Viento en Vuelo (Wind W/V) -->
-            <div style="background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 14px;">
+            <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 14px;">
               <strong style="color: #3fb950; font-size: 13px; display: block; margin-bottom: 8px;">
                 🌪️ Problema 2: Hallar Dirección y Fuerza del Viento en Vuelo
               </strong>
-              <div style="font-size: 11px; color: #c9d1d9;">
+              <div style="font-size: 11px; color: var(--text-main);">
                 <strong>Datos conocidos</strong>: Rumbo del avión (Heading), Rumbo sobre el terreno (Track/Course), TAS e instrumentos de cabina / GPS (GS).<br><br>
                 <strong>Procedimiento en el CR-3</strong>:
                 <ol style="margin: 6px 0 0 16px; padding: 0;">
@@ -1910,11 +2047,11 @@
             </div>
 
             <!-- Caso 3: Tiempos, Distancias y Consumo (Cara A) -->
-            <div style="background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 14px;">
+            <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 14px;">
               <strong style="color: #e3b341; font-size: 13px; display: block; margin-bottom: 8px;">
                 ⏱️ Problema 3: Tiempo en Ruta y Consumo de Combustible (Cara A)
               </strong>
-              <div style="font-size: 11px; color: #c9d1d9;">
+              <div style="font-size: 11px; color: var(--text-main);">
                 Pulsa el botón <strong>"Change side"</strong> en la barra de herramientas para pasar a la Cara de Cálculo:<br><br>
                 • <strong>Velocidad y Tiempo</strong>: Pon el triángulo <strong>▲ 60</strong> en tu velocidad (ej. 90 kt). Frente a cualquier tiempo en minutos (disco interior), lees las Millas Náuticas (disco exterior).<br>
                 • <strong>Consumo Cessna 172</strong>: Pon el triángulo <strong>▲ 60</strong> en 80 (representa 8.0 Gal/h). Frente al tiempo de vuelo (ej. 45 min), lees 6.0 Galones.
@@ -1926,7 +2063,7 @@
 
       <!-- SECCIÓN 3: BANCO DE EJERCICIOS DE NAVEGACIÓN -->
       <div id="cr3-section-exercises" style="display: none;">
-        <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 14px; padding: 18px;">
+        <div style="background: var(--bg-subbox); border: 1px solid var(--border-color); border-radius: 14px; padding: 18px;">
           <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 14px;">
             <div>
               <h4 style="margin: 0; font-size: 15px; color: #3fb950;">
@@ -1952,12 +2089,12 @@
           </div>
 
           <!-- Tarjeta del Ejercicio Actual -->
-          <div id="cr3-exercise-card" style="background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 16px;">
-            <div id="cr3-ex-title" style="font-size: 13px; font-weight: 800; color: #fff; margin-bottom: 6px;"></div>
+          <div id="cr3-exercise-card" style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 16px;">
+            <div id="cr3-ex-title" style="font-size: 13px; font-weight: 800; color: var(--text-title); margin-bottom: 6px;"></div>
             <div id="cr3-ex-prompt" style="font-size: 12px; color: var(--text-muted); line-height: 1.5; margin-bottom: 12px;"></div>
 
             <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-              <input type="number" id="cr3-ex-user-input" placeholder="Tu resultado..." step="0.1" style="width: 130px; padding: 8px 12px; background: #0d1117; border: 1px solid #30363d; color: #fff; font-weight: 800; font-size: 13px; border-radius: 8px;">
+              <input type="number" id="cr3-ex-user-input" placeholder="Tu resultado..." step="0.1" style="width: 130px; padding: 8px 12px; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-title); font-weight: 800; font-size: 13px; border-radius: 8px;">
               <span id="cr3-ex-unit-label" style="font-size: 12px; font-weight: bold; color: var(--text-muted);"></span>
               <button type="button" class="btn-sync-action" onclick="verifyCR3ExerciseAnswer()" style="background: #238636; border-color: #2ea043; padding: 8px 16px; font-weight: 700;">
                 Comprobar
@@ -1983,7 +2120,7 @@
         <div style="display: flex; align-items: center; gap: 10px;">
           <span style="font-size: 32px;">📋</span>
           <div>
-            <h3 style="margin: 0; font-size: 17px; font-weight: 800; color: #fff;">Libro de Vuelo Teórico (Logbook de Estudio)</h3>
+            <h3 style="margin: 0; font-size: 17px; font-weight: 800; color: var(--text-title);">Libro de Vuelo Teórico (Logbook de Estudio)</h3>
             <p style="margin: 2px 0 0 0; font-size: 12px; color: var(--text-muted);">Cómputo en tiempo real de horas estudiadas y cuenta atrás del temario</p>
           </div>
         </div>
@@ -1994,13 +2131,13 @@
 
       <!-- DUAL COUNTER (TIEMPO ESTUDIADO VS CUENTA ATRÁS RESTANTE) -->
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-bottom: 16px;">
-        <div style="background: #0d1117; border: 1px solid rgba(46,160,67,0.4); border-radius: 14px; padding: 18px; text-align: center;">
+        <div style="background: var(--bg-subbox); border: 1px solid rgba(46,160,67,0.4); border-radius: 14px; padding: 18px; text-align: center;">
           <div style="font-size: 12px; font-weight: 700; color: #3fb950; text-transform: uppercase;">⏱️ Horas Teóricas Estudiadas</div>
-          <div id="logbook-studied-hours" style="font-size: 30px; font-weight: 900; color: #fff; font-family: monospace; margin: 8px 0 4px 0;">00h 00m</div>
+          <div id="logbook-studied-hours" style="font-size: 30px; font-weight: 900; color: var(--text-title); font-family: monospace; margin: 8px 0 4px 0;">00h 00m</div>
           <div style="font-size: 11px; color: var(--text-muted);">Audios reproducidos, temas completados y simulacros</div>
         </div>
 
-        <div style="background: #0d1117; border: 1px solid rgba(210,153,34,0.4); border-radius: 14px; padding: 18px; text-align: center;">
+        <div style="background: var(--bg-subbox); border: 1px solid rgba(210,153,34,0.4); border-radius: 14px; padding: 18px; text-align: center;">
           <div style="font-size: 12px; font-weight: 700; color: #e3b341; text-transform: uppercase;">⏳ Cuenta Atrás para Dominar el ATPL</div>
           <div id="logbook-remaining-hours" style="font-size: 30px; font-weight: 900; color: #f1e05a; font-family: monospace; margin: 8px 0 4px 0;">56h 00m</div>
           <div style="font-size: 11px; color: var(--text-muted);">Tiempo estimado restante del temario completo</div>
@@ -2008,7 +2145,7 @@
       </div>
 
       <!-- Barra de Progreso Global -->
-      <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 10px; padding: 12px;">
+      <div style="background: var(--bg-subbox); border: 1px solid var(--border-color); border-radius: 10px; padding: 12px;">
         <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; margin-bottom: 6px;">
           <span>Progreso hacia el Descongelado (Frozen ATPL)</span>
           <span id="logbook-pct-label" style="color: #58a6ff;">0%</span>
@@ -2039,7 +2176,7 @@
         <div style="display: flex; align-items: center; gap: 10px;">
           <span style="font-size: 32px;">✈️</span>
           <div>
-            <h3 style="margin: 0; font-size: 17px; font-weight: 800; color: #fff;">Modo Vuelo 100% Offline (Sin Cobertura)</h3>
+            <h3 style="margin: 0; font-size: 17px; font-weight: 800; color: var(--text-title);">Modo Vuelo 100% Offline (Sin Cobertura)</h3>
             <p style="margin: 2px 0 0 0; font-size: 12px; color: var(--text-muted);">Descarga el contenido completo en la memoria del dispositivo para estudiar en aviones o escalas</p>
           </div>
         </div>
@@ -2082,7 +2219,7 @@
               ✈️
             </div>
             <div>
-              <h3 style="margin: 0; font-size: 16px; font-weight: 800; color: #fff; letter-spacing: 0.5px;">Plan de Vuelo Operacional · World Aviation</h3>
+              <h3 style="margin: 0; font-size: 16px; font-weight: 800; color: var(--text-title); letter-spacing: 0.5px;">Plan de Vuelo Operacional · World Aviation</h3>
               <p style="margin: 3px 0 0 0; font-size: 11px; color: var(--text-muted);">
                 Formulario operacional optimizado para cabina con cálculo automático CR3 y exportación a la plantilla oficial
               </p>
@@ -2095,10 +2232,10 @@
             <button type="button" onclick="copyFlightPlanSummaryToClipboard()" style="padding: 9px 14px; background: #1f6feb; border: 1px solid #388bfd; color: #fff; font-weight: 800; font-size: 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px;" title="Copiar todo el resumen y tramos del plan de vuelo al portapapeles para pegar o compartir">
               <span>📋</span> Copiar Plan de Vuelo
             </button>
-            <button type="button" onclick="exportFlightPlanToPDF()" style="padding: 9px 14px; background: #21262d; border: 1px solid #30363d; color: #fff; font-weight: 700; font-size: 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px;" title="Imprimir o guardar PDF del NavLog limpio">
+            <button type="button" onclick="exportFlightPlanToPDF()" style="padding: 9px 14px; background: var(--badge-bg); border: 1px solid var(--border-color); color: var(--text-main); font-weight: 700; font-size: 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px;" title="Imprimir o guardar PDF del NavLog limpio">
               <span>📄</span> Imprimir / PDF
             </button>
-            <button type="button" onclick="saveFlightPlanLocally()" style="padding: 9px 12px; background: #21262d; border: 1px solid #30363d; color: #58a6ff; font-weight: 700; font-size: 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 5px;">
+            <button type="button" onclick="saveFlightPlanLocally()" style="padding: 9px 12px; background: var(--badge-bg); border: 1px solid var(--border-color); color: #58a6ff; font-weight: 700; font-size: 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 5px;">
               <span>💾</span> Guardar
             </button>
             <button type="button" onclick="resetFlightPlanRoute()" style="padding: 9px 12px; background: rgba(248,81,73,0.15); border: 1px solid rgba(248,81,73,0.35); color: #ff7b72; font-size: 12px; font-weight: 700; border-radius: 8px; cursor: pointer;">
@@ -2108,14 +2245,14 @@
         </div>
 
         <!-- TARJETA 1: DATOS GENERALES Y AERONAVE -->
-        <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 12px; padding: 14px; margin-bottom: 14px;">
+        <div style="background: var(--bg-subbox); border: 1px solid var(--border-color); border-radius: 12px; padding: 14px; margin-bottom: 14px;">
           <div style="font-size: 11px; font-weight: 800; color: #58a6ff; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; letter-spacing: 0.5px;">
             <span>📋</span> DATOS GENERALES DEL VUELO & AERONAVE
           </div>
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px;">
             <div>
               <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">✈️ MODELO PRESET</label>
-              <select id="fpl-aircraft-select" onchange="applyAircraftPreset()" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #fff; font-size: 12px; padding: 7px 10px; border-radius: 8px; outline: none;">
+              <select id="fpl-aircraft-select" onchange="applyAircraftPreset()" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-main); font-size: 12px; padding: 7px 10px; border-radius: 8px; outline: none;">
                 <option value="C172" selected>Cessna 172 (90kt · 8.0 Gal/h)</option>
                 <option value="P2008JC">Tecnam P2008JC (95kt · 4.5 Gal/h)</option>
                 <option value="P2006T">Tecnam P2006T (140kt · 9.0 Gal/h)</option>
@@ -2124,25 +2261,25 @@
             </div>
             <div>
               <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">MODELO (EN PLAN)</label>
-              <input type="text" id="fpl-model" value="C172" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #fff; font-weight: 700; font-size: 12px; padding: 7px 10px; border-radius: 8px;">
+              <input type="text" id="fpl-model" value="C172" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-main); font-weight: 700; font-size: 12px; padding: 7px 10px; border-radius: 8px;">
             </div>
             <div>
               <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">⚡ VELOCIDAD DE CRUCERO (IAS)</label>
               <div style="display: flex; align-items: center; gap: 6px;">
-                <input type="number" id="fpl-ias-input" value="90" min="40" max="250" oninput="handleAircraftIASChange(this.value)" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #58a6ff; font-weight: 800; font-size: 13px; padding: 7px 10px; border-radius: 8px;">
+                <input type="number" id="fpl-ias-input" value="90" min="40" max="250" oninput="handleAircraftIASChange(this.value)" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--accent-blue); font-weight: 800; font-size: 13px; padding: 7px 10px; border-radius: 8px;">
                 <span style="font-size: 12px; color: var(--text-muted); font-weight: bold;">kt</span>
               </div>
             </div>
             <div>
               <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">⛽ CONSUMO HORARIO (FUEL FLOW)</label>
               <div style="display: flex; align-items: center; gap: 6px;">
-                <input type="number" id="fpl-aircraft-consumption" value="8.0" step="0.1" min="1" max="60" oninput="handleAircraftConsumptionChange()" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #3fb950; font-weight: 800; font-size: 13px; padding: 7px 10px; border-radius: 8px;">
+                <input type="number" id="fpl-aircraft-consumption" value="8.0" step="0.1" min="1" max="60" oninput="handleAircraftConsumptionChange()" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--pass-green); font-weight: 800; font-size: 13px; padding: 7px 10px; border-radius: 8px;">
                 <span style="font-size: 12px; color: #3fb950; font-weight: 800;">Gal/h</span>
               </div>
             </div>
             <div>
               <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">🛫 AERÓDROMO SALIDA</label>
-              <select id="fpl-departure-select" onchange="handleDepartureSelectChange(this.value)" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #58a6ff; font-weight: 800; font-size: 12px; padding: 7px 10px; border-radius: 8px; outline: none; cursor: pointer;">
+              <select id="fpl-departure-select" onchange="handleDepartureSelectChange(this.value)" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--accent-blue); font-weight: 800; font-size: 12px; padding: 7px 10px; border-radius: 8px; outline: none; cursor: pointer;">
                 <option value="LECU" selected>LECU · Cuatro Vientos (Madrid)</option>
                 <option value="LEVD">LEVD · Valladolid-Villanubla</option>
                 <option value="LEMT">LEMT · Casarrubios del Monte</option>
@@ -2164,7 +2301,7 @@
             </div>
             <div>
               <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">🛬 AERÓDROMO DESTINO (Pista deducida por METAR)</label>
-              <select id="fpl-destination-select" onchange="handleDestinationSelectChange(this.value)" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #3fb950; font-weight: 800; font-size: 12px; padding: 7px 10px; border-radius: 8px; outline: none; cursor: pointer;">
+              <select id="fpl-destination-select" onchange="handleDestinationSelectChange(this.value)" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--pass-green); font-weight: 800; font-size: 12px; padding: 7px 10px; border-radius: 8px; outline: none; cursor: pointer;">
                 <option value="LEVD" selected>LEVD · Valladolid-Villanubla</option>
                 <option value="LECU">LECU · Cuatro Vientos (Madrid)</option>
                 <option value="LEMT">LEMT · Casarrubios del Monte</option>
@@ -2186,7 +2323,7 @@
             </div>
             <div>
               <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">🔄 AERÓDROMO ALTERNATIVO</label>
-              <select id="fpl-alternate-select" onchange="handleAlternateSelectChange(this.value)" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #e3b341; font-weight: 800; font-size: 12px; padding: 7px 10px; border-radius: 8px; outline: none; cursor: pointer;">
+              <select id="fpl-alternate-select" onchange="handleAlternateSelectChange(this.value)" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--warn-yellow); font-weight: 800; font-size: 12px; padding: 7px 10px; border-radius: 8px; outline: none; cursor: pointer;">
                 <option value="LESA" selected>LESA · Salamanca-Matacán</option>
                 <option value="LEVD">LEVD · Valladolid-Villanubla</option>
                 <option value="LECU">LECU · Cuatro Vientos (Madrid)</option>
@@ -2204,29 +2341,29 @@
             </div>
             <div>
               <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">MATRÍCULA</label>
-              <input type="text" id="fpl-reg" value="EC-XYZ" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #fff; font-weight: 700; font-size: 12px; padding: 7px 10px; border-radius: 8px; text-transform: uppercase;">
+              <input type="text" id="fpl-reg" value="EC-XYZ" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-main); font-weight: 700; font-size: 12px; padding: 7px 10px; border-radius: 8px; text-transform: uppercase;">
             </div>
             <div>
               <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">CALLSIGN (ARCID)</label>
-              <input type="text" id="fpl-arcid" value="WDA01" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #58a6ff; font-weight: 800; font-size: 12px; padding: 7px 10px; border-radius: 8px;">
+              <input type="text" id="fpl-arcid" value="WDA01" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--accent-blue); font-weight: 800; font-size: 12px; padding: 7px 10px; border-radius: 8px;">
             </div>
             <div>
               <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">FECHA VUELO</label>
-              <input type="date" id="fpl-date" value="2026-09-16" onchange="updateNavLogCalculationsAndDOM()" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #fff; font-size: 12px; padding: 6px 10px; border-radius: 8px;">
+              <input type="date" id="fpl-date" value="2026-09-16" onchange="updateNavLogCalculationsAndDOM()" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-main); font-size: 12px; padding: 6px 10px; border-radius: 8px;">
             </div>
             <div>
               <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">PILOTO AL MANDO (PIC)</label>
-              <input type="text" id="fpl-pic" value="FERNANDO CHOZAS" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #fff; font-weight: 700; font-size: 12px; padding: 7px 10px; border-radius: 8px;">
+              <input type="text" id="fpl-pic" value="FERNANDO CHOZAS" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-main); font-weight: 700; font-size: 12px; padding: 7px 10px; border-radius: 8px;">
             </div>
             <div>
               <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">TRANSPONDER (SQUAWK)</label>
-              <input type="text" id="fpl-squawk" value="7000" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #3fb950; font-weight: 800; font-size: 12px; padding: 7px 10px; border-radius: 8px; text-align: center;">
+              <input type="text" id="fpl-squawk" value="7000" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--pass-green); font-weight: 800; font-size: 12px; padding: 7px 10px; border-radius: 8px; text-align: center;">
             </div>
           </div>
         </div>
 
         <!-- TARJETA 2: PARÁMETROS AERONÁUTICOS (CR3 / VIENTO / TAS) -->
-        <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 12px; padding: 14px;">
+        <div style="background: var(--bg-subbox); border: 1px solid var(--border-color); border-radius: 12px; padding: 14px;">
           <div style="font-size: 11px; font-weight: 800; color: #3fb950; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; letter-spacing: 0.5px;">
             <div style="display: flex; align-items: center; gap: 6px;">
               <span>🧭</span> COMPUTADOR DE VUELO CR3 & PRONÓSTICO DE VIENTOS EN RUTA
@@ -2246,16 +2383,16 @@
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; align-items: flex-end;">
             <div>
               <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">🛫 HORA ESTIMADA DE DESPEGUE (UTC / LOCAL)</label>
-              <input type="text" id="fpl-takeoff-time" value="10:00" oninput="handleTakeoffTimeChange(this.value)" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #58a6ff; font-weight: 800; font-size: 13px; padding: 7px 10px; border-radius: 8px; text-align: center;">
+              <input type="text" id="fpl-takeoff-time" value="10:00" oninput="handleTakeoffTimeChange(this.value)" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--accent-blue); font-weight: 800; font-size: 13px; padding: 7px 10px; border-radius: 8px; text-align: center;">
             </div>
             <div>
               <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">💨 VIENTO BASE GENERAL (DIR/KT)</label>
-              <input type="text" id="fpl-wind-input" value="240/12" placeholder="240/12" oninput="handleGlobalWindChange(this.value)" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #3fb950; font-weight: 800; font-size: 13px; padding: 7px 10px; border-radius: 8px; text-align: center;">
+              <input type="text" id="fpl-wind-input" value="240/12" placeholder="240/12" oninput="handleGlobalWindChange(this.value)" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--pass-green); font-weight: 800; font-size: 13px; padding: 7px 10px; border-radius: 8px; text-align: center;">
             </div>
             <div>
               <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">🧭 DECLINACIÓN MAGNÉTICA (VAR GENERAL)</label>
               <div style="display: flex; align-items: center; gap: 6px;">
-                <input type="text" id="fpl-var-input" value="-1" oninput="handleGlobalVarChange(this.value)" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #fff; font-weight: 700; font-size: 13px; padding: 7px 10px; border-radius: 8px; text-align: center;">
+                <input type="text" id="fpl-var-input" value="-1" oninput="handleGlobalVarChange(this.value)" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-main); font-weight: 700; font-size: 13px; padding: 7px 10px; border-radius: 8px; text-align: center;">
                 <span style="font-size: 12px; color: var(--text-muted); font-weight: bold;">° W</span>
               </div>
             </div>
@@ -2274,7 +2411,7 @@
       <div class="pilot-box" style="margin-bottom: 16px; background: var(--bg-card, #161b22); border: 1px solid var(--border-color, #30363d); border-radius: 16px; padding: 16px;">
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 12px;">
           <div>
-            <h4 style="margin: 0; font-size: 14px; font-weight: 800; color: #fff;">🗺️ NavLog de Navegación Operacional (Tramos de Ruta)</h4>
+            <h4 style="margin: 0; font-size: 14px; font-weight: 800; color: var(--text-title);">🗺️ NavLog de Navegación Operacional (Tramos de Ruta)</h4>
             <p style="margin: 2px 0 0 0; font-size: 11px; color: var(--text-muted);">
               Secuencia oficial: TC · VAR · MC · Viento · MH · Alt · Dist · TAS · GS · ETE · ETA · ATA · Fuel (Gal)
             </p>
@@ -2292,7 +2429,7 @@
         <div style="overflow-x: auto; border-radius: 10px; border: 1px solid #30363d;">
           <table style="width: 100%; min-width: 1040px; border-collapse: collapse; font-size: 12px; text-align: left;">
             <thead>
-              <tr style="background: #0d1117; color: var(--text-muted); border-bottom: 2px solid #30363d; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">
+              <tr style="background: var(--table-header-bg); color: var(--text-muted); border-bottom: 2px solid var(--border-color); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">
                 <th style="padding: 10px 4px; width: 35px; text-align: center;">#</th>
                 <th style="padding: 10px 6px; min-width: 170px;">Waypoint / Punto</th>
                 <th style="padding: 10px 4px; width: 68px; text-align: center; color: #58a6ff;">TC (°)</th>
@@ -2315,7 +2452,7 @@
               <!-- Renderizado dinámico -->
             </tbody>
             <tfoot>
-              <tr style="background: #0d1117; border-top: 2px solid #30363d; font-weight: 800; font-size: 12px;">
+              <tr style="background: var(--table-header-bg); border-top: 2px solid var(--border-color); font-weight: 800; font-size: 12px;">
                 <td colspan="8" style="padding: 10px 12px; text-align: right; color: var(--text-muted);">
                   TOTALES DE LA RUTA PLANIFICADA:
                 </td>
@@ -2352,7 +2489,7 @@
       <div class="pilot-box" style="margin-bottom: 16px; background: var(--bg-card, #161b22); border: 1px solid var(--border-color, #30363d); border-radius: 16px; padding: 16px;">
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 14px;">
           <div>
-            <h4 style="margin: 0; font-size: 14px; font-weight: 800; color: #fff;">⛽ Gestión de Combustible Reglamentario (Galones US · C172)</h4>
+            <h4 style="margin: 0; font-size: 14px; font-weight: 800; color: var(--text-title);">⛽ Gestión de Combustible Reglamentario (Galones US · C172)</h4>
             <p style="margin: 2px 0 0 0; font-size: 11px; color: var(--text-muted);">
               Cálculo en Galones US (Gal · 8.0 Gal/h): consumo de viaje, alternativo, 45 min de reserva final y contingencia
             </p>
@@ -2364,47 +2501,47 @@
 
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px;">
           <!-- COLUMNA TRIP FUEL -->
-          <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 12px; padding: 12px;">
+          <div style="background: var(--bg-subbox); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px;">
             <div style="font-size: 11px; font-weight: 800; color: #58a6ff; margin-bottom: 10px;">TRIP FUEL (CONSUMO DE VUELO)</div>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
               <div>
                 <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">Climb (Subida)</label>
-                <input type="text" id="fpl-fuel-climb" value="1.5 Gal" onchange="calculateFuelSummary()" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #fff; font-weight: 700; font-size: 12px; padding: 6px 10px; border-radius: 6px; text-align: center;">
+                <input type="text" id="fpl-fuel-climb" value="1.5 Gal" onchange="calculateFuelSummary()" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-main); font-weight: 700; font-size: 12px; padding: 6px 10px; border-radius: 6px; text-align: center;">
               </div>
               <div>
                 <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">Cruise (Crucero)</label>
-                <input type="text" id="fpl-fuel-cruise" value="4.8 Gal" onchange="calculateFuelSummary()" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #fff; font-weight: 700; font-size: 12px; padding: 6px 10px; border-radius: 6px; text-align: center;">
+                <input type="text" id="fpl-fuel-cruise" value="4.8 Gal" onchange="calculateFuelSummary()" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-main); font-weight: 700; font-size: 12px; padding: 6px 10px; border-radius: 6px; text-align: center;">
               </div>
               <div>
                 <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">Descent (Descenso)</label>
-                <input type="text" id="fpl-fuel-descent" value="0.5 Gal" onchange="calculateFuelSummary()" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #fff; font-weight: 700; font-size: 12px; padding: 6px 10px; border-radius: 6px; text-align: center;">
+                <input type="text" id="fpl-fuel-descent" value="0.5 Gal" onchange="calculateFuelSummary()" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-main); font-weight: 700; font-size: 12px; padding: 6px 10px; border-radius: 6px; text-align: center;">
               </div>
               <div>
                 <label style="font-size: 10px; font-weight: 800; color: #58a6ff; display: block; margin-bottom: 4px;">TOTAL TRIP FUEL</label>
-                <input type="text" id="fpl-fuel-total-trip" value="6.8 Gal" style="width: 100%; background: #161b22; border: 1px solid #388bfd; color: #58a6ff; font-weight: 800; font-size: 12px; padding: 6px 10px; border-radius: 6px; text-align: center;">
+                <input type="text" id="fpl-fuel-total-trip" value="6.8 Gal" style="width: 100%; background: var(--bg-input); border: 1px solid var(--accent-blue); color: var(--accent-blue); font-weight: 800; font-size: 12px; padding: 6px 10px; border-radius: 6px; text-align: center;">
               </div>
             </div>
           </div>
 
           <!-- COLUMNA RESERVAS & FOB -->
-          <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 12px; padding: 12px;">
+          <div style="background: var(--bg-subbox); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px;">
             <div style="font-size: 11px; font-weight: 800; color: #3fb950; margin-bottom: 10px;">RESERVAS & COMBUSTIBLE TOTAL A BORDO</div>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
               <div>
                 <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">Alternate Fuel (Alternativo)</label>
-                <input type="text" id="fpl-fuel-alt" value="4.0 Gal" onchange="calculateFuelSummary()" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #fff; font-weight: 700; font-size: 12px; padding: 6px 10px; border-radius: 6px; text-align: center;">
+                <input type="text" id="fpl-fuel-alt" value="4.0 Gal" onchange="calculateFuelSummary()" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-main); font-weight: 700; font-size: 12px; padding: 6px 10px; border-radius: 6px; text-align: center;">
               </div>
               <div>
                 <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">Trip Fuel Requerido</label>
-                <input type="text" id="fpl-fuel-trip" value="6.8 Gal" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #fff; font-weight: 700; font-size: 12px; padding: 6px 10px; border-radius: 6px; text-align: center;">
+                <input type="text" id="fpl-fuel-trip" value="6.8 Gal" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-main); font-weight: 700; font-size: 12px; padding: 6px 10px; border-radius: 6px; text-align: center;">
               </div>
               <div>
                 <label style="font-size: 10px; font-weight: 800; color: #e3b341; display: block; margin-bottom: 4px;">MIN. REQUIRED FUEL</label>
-                <input type="text" id="fpl-fuel-min-req" value="17.5 Gal" onchange="calculateFuelSummary()" style="width: 100%; background: #161b22; border: 1px solid #d29922; color: #f1e05a; font-weight: 800; font-size: 12px; padding: 6px 10px; border-radius: 6px; text-align: center;">
+                <input type="text" id="fpl-fuel-min-req" value="17.5 Gal" onchange="calculateFuelSummary()" style="width: 100%; background: var(--bg-input); border: 1px solid var(--warn-yellow); color: var(--warn-yellow); font-weight: 800; font-size: 12px; padding: 6px 10px; border-radius: 6px; text-align: center;">
               </div>
               <div>
                 <label style="font-size: 10px; font-weight: 800; color: #3fb950; display: block; margin-bottom: 4px;">FUEL ON BOARD (FOB)</label>
-                <input type="text" id="fpl-fuel-fob" value="40.0 Gal" onchange="calculateFuelSummary()" style="width: 100%; background: #161b22; border: 1px solid #2ea043; color: #3fb950; font-weight: 900; font-size: 13px; padding: 6px 10px; border-radius: 6px; text-align: center;">
+                <input type="text" id="fpl-fuel-fob" value="40.0 Gal" onchange="calculateFuelSummary()" style="width: 100%; background: var(--bg-input); border: 1px solid var(--pass-green); color: var(--pass-green); font-weight: 900; font-size: 13px; padding: 6px 10px; border-radius: 6px; text-align: center;">
               </div>
             </div>
           </div>
@@ -2414,130 +2551,130 @@
            TARJETA 4: METEOROLOGÍA, PISTAS, CALZOS Y CLEARANCE
       ─────────────────────────────────────────────────────────── -->
       <div class="pilot-box" style="margin-bottom: 16px; background: var(--bg-card, #161b22); border: 1px solid var(--border-color, #30363d); border-radius: 16px; padding: 16px;">
-        <h4 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 800; color: #fff;">
+        <h4 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 800; color: var(--text-title);">
           🌤️ Meteorología de Pistas (ATIS), Horas de Calzos y Autorización ATC
         </h4>
 
         <!-- DATOS DESPEGUE Y ATERRIZAJE -->
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 14px; margin-bottom: 14px;">
           <!-- TAKE OFF ATIS -->
-          <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 12px; padding: 12px;">
+          <div style="background: var(--bg-subbox); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px;">
             <div style="font-size: 11px; font-weight: 800; color: #58a6ff; margin-bottom: 8px;">🛫 TAKE OFF DATA (DATOS DESPEGUE)</div>
             <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px;">
               <div>
                 <label style="font-size: 9px; color: var(--text-muted); display: block;">INFO</label>
-                <input id="fpl-to-info" value="C" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #fff; text-align: center; font-size: 11px; padding: 4px; border-radius: 6px;">
+                <input id="fpl-to-info" value="C" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-main); text-align: center; font-size: 11px; padding: 4px; border-radius: 6px;">
               </div>
               <div>
                 <label style="font-size: 9px; color: var(--text-muted); display: block;">TIME</label>
-                <input id="fpl-to-time" value="10:00" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #fff; text-align: center; font-size: 11px; padding: 4px; border-radius: 6px;">
+                <input id="fpl-to-time" value="10:00" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-main); text-align: center; font-size: 11px; padding: 4px; border-radius: 6px;">
               </div>
               <div>
                 <label style="font-size: 9px; color: var(--text-muted); display: block;">RWY</label>
-                <input id="fpl-to-rwy" value="27" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #58a6ff; font-weight: bold; text-align: center; font-size: 11px; padding: 4px; border-radius: 6px;">
+                <input id="fpl-to-rwy" value="27" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--accent-blue); font-weight: bold; text-align: center; font-size: 11px; padding: 4px; border-radius: 6px;">
               </div>
               <div>
                 <label style="font-size: 9px; color: var(--text-muted); display: block;">TL</label>
-                <input id="fpl-to-tl" value="60" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #fff; text-align: center; font-size: 11px; padding: 4px; border-radius: 6px;">
+                <input id="fpl-to-tl" value="60" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-main); text-align: center; font-size: 11px; padding: 4px; border-radius: 6px;">
               </div>
               <div>
                 <label style="font-size: 9px; color: var(--text-muted); display: block;">1ST CALL</label>
-                <input id="fpl-to-firstcall" value="118.15" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #fff; text-align: center; font-size: 11px; padding: 4px; border-radius: 6px;">
+                <input id="fpl-to-firstcall" value="118.15" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-main); text-align: center; font-size: 11px; padding: 4px; border-radius: 6px;">
               </div>
               <div>
                 <label style="font-size: 9px; color: var(--text-muted); display: block;">VIS</label>
-                <input id="fpl-to-vis" value="9999" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #fff; text-align: center; font-size: 11px; padding: 4px; border-radius: 6px;">
+                <input id="fpl-to-vis" value="9999" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-main); text-align: center; font-size: 11px; padding: 4px; border-radius: 6px;">
               </div>
               <div style="grid-column: span 2;">
                 <label style="font-size: 9px; color: var(--text-muted); display: block;">CLOUD</label>
-                <input id="fpl-to-cloud" value="SCT040" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #fff; text-align: center; font-size: 11px; padding: 4px; border-radius: 6px;">
+                <input id="fpl-to-cloud" value="SCT040" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-main); text-align: center; font-size: 11px; padding: 4px; border-radius: 6px;">
               </div>
               <div>
                 <label style="font-size: 9px; color: var(--text-muted); display: block;">TEMP</label>
-                <input id="fpl-to-temp" value="18" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #fff; text-align: center; font-size: 11px; padding: 4px; border-radius: 6px;">
+                <input id="fpl-to-temp" value="18" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-main); text-align: center; font-size: 11px; padding: 4px; border-radius: 6px;">
               </div>
               <div>
                 <label style="font-size: 9px; color: var(--text-muted); display: block;">QNH</label>
-                <input id="fpl-to-qnh" value="1018" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #3fb950; font-weight: bold; text-align: center; font-size: 11px; padding: 4px; border-radius: 6px;">
+                <input id="fpl-to-qnh" value="1018" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--pass-green); font-weight: bold; text-align: center; font-size: 11px; padding: 4px; border-radius: 6px;">
               </div>
             </div>
           </div>
 
           <!-- LANDING ATIS -->
-          <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 12px; padding: 12px;">
+          <div style="background: var(--bg-subbox); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px;">
             <div style="font-size: 11px; font-weight: 800; color: #3fb950; margin-bottom: 8px;">🛬 LANDING DATA (DATOS ATERRIZAJE)</div>
             <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px;">
               <div>
                 <label style="font-size: 9px; color: var(--text-muted); display: block;">INFO</label>
-                <input id="fpl-ld-info" value="" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #fff; text-align: center; font-size: 11px; padding: 4px; border-radius: 6px;">
+                <input id="fpl-ld-info" value="" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-main); text-align: center; font-size: 11px; padding: 4px; border-radius: 6px;">
               </div>
               <div>
                 <label style="font-size: 9px; color: var(--text-muted); display: block;">TIME</label>
-                <input id="fpl-ld-time" value="" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #fff; text-align: center; font-size: 11px; padding: 4px; border-radius: 6px;">
+                <input id="fpl-ld-time" value="" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-main); text-align: center; font-size: 11px; padding: 4px; border-radius: 6px;">
               </div>
               <div>
                 <label style="font-size: 9px; color: var(--text-muted); display: block;">RWY</label>
-                <input id="fpl-ld-rwy" value="27" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #3fb950; font-weight: bold; text-align: center; font-size: 11px; padding: 4px; border-radius: 6px;">
+                <input id="fpl-ld-rwy" value="27" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--pass-green); font-weight: bold; text-align: center; font-size: 11px; padding: 4px; border-radius: 6px;">
               </div>
               <div>
                 <label style="font-size: 9px; color: var(--text-muted); display: block;">TL</label>
-                <input id="fpl-ld-tl" value="60" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #fff; text-align: center; font-size: 11px; padding: 4px; border-radius: 6px;">
+                <input id="fpl-ld-tl" value="60" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-main); text-align: center; font-size: 11px; padding: 4px; border-radius: 6px;">
               </div>
               <div>
                 <label style="font-size: 9px; color: var(--text-muted); display: block;">1ST CALL</label>
-                <input id="fpl-ld-firstcall" value="118.15" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #fff; text-align: center; font-size: 11px; padding: 4px; border-radius: 6px;">
+                <input id="fpl-ld-firstcall" value="118.15" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-main); text-align: center; font-size: 11px; padding: 4px; border-radius: 6px;">
               </div>
               <div>
                 <label style="font-size: 9px; color: var(--text-muted); display: block;">VIS</label>
-                <input id="fpl-ld-vis" value="9999" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #fff; text-align: center; font-size: 11px; padding: 4px; border-radius: 6px;">
+                <input id="fpl-ld-vis" value="9999" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-main); text-align: center; font-size: 11px; padding: 4px; border-radius: 6px;">
               </div>
               <div style="grid-column: span 2;">
                 <label style="font-size: 9px; color: var(--text-muted); display: block;">CLOUD</label>
-                <input id="fpl-ld-cloud" value="FEW045" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #fff; text-align: center; font-size: 11px; padding: 4px; border-radius: 6px;">
+                <input id="fpl-ld-cloud" value="FEW045" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-main); text-align: center; font-size: 11px; padding: 4px; border-radius: 6px;">
               </div>
               <div>
                 <label style="font-size: 9px; color: var(--text-muted); display: block;">TEMP</label>
-                <input id="fpl-ld-temp" value="20" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #fff; text-align: center; font-size: 11px; padding: 4px; border-radius: 6px;">
+                <input id="fpl-ld-temp" value="20" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-main); text-align: center; font-size: 11px; padding: 4px; border-radius: 6px;">
               </div>
               <div>
                 <label style="font-size: 9px; color: var(--text-muted); display: block;">QNH</label>
-                <input id="fpl-ld-qnh" value="1018" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #3fb950; font-weight: bold; text-align: center; font-size: 11px; padding: 4px; border-radius: 6px;">
+                <input id="fpl-ld-qnh" value="1018" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--pass-green); font-weight: bold; text-align: center; font-size: 11px; padding: 4px; border-radius: 6px;">
               </div>
             </div>
           </div>
         </div>
 
         <!-- HORAS DE CALZOS Y VUELO -->
-        <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 12px; padding: 12px; margin-bottom: 14px;">
+        <div style="background: var(--bg-subbox); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; margin-bottom: 14px;">
           <div style="font-size: 11px; font-weight: 800; color: #e3b341; margin-bottom: 8px;">⏱️ TIEMPOS DE CALZOS (BLOCK) Y TIEMPO DE VUELO</div>
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px;">
             <div>
               <label style="font-size: 9px; color: var(--text-muted); display: block;">PARKING SALIDA</label>
-              <input id="fpl-parking-1" value="A-12" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #fff; text-align: center; font-size: 11px; padding: 6px; border-radius: 6px;">
+              <input id="fpl-parking-1" value="A-12" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-main); text-align: center; font-size: 11px; padding: 6px; border-radius: 6px;">
             </div>
             <div>
               <label style="font-size: 9px; color: var(--text-muted); display: block;">OFF BLOCK</label>
-              <input id="fpl-off-block" value="09:50" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #fff; text-align: center; font-size: 11px; padding: 6px; border-radius: 6px;">
+              <input id="fpl-off-block" value="09:50" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-main); text-align: center; font-size: 11px; padding: 6px; border-radius: 6px;">
             </div>
             <div>
               <label style="font-size: 9px; color: var(--text-muted); display: block;">ON BLOCK</label>
-              <input id="fpl-on-block" value="11:15" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #fff; text-align: center; font-size: 11px; padding: 6px; border-radius: 6px;">
+              <input id="fpl-on-block" value="11:15" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-main); text-align: center; font-size: 11px; padding: 6px; border-radius: 6px;">
             </div>
             <div>
               <label style="font-size: 9px; color: var(--text-muted); display: block;">BLOCK TIME</label>
-              <input id="fpl-block-time" value="01h 25m" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #58a6ff; font-weight: bold; text-align: center; font-size: 11px; padding: 6px; border-radius: 6px;">
+              <input id="fpl-block-time" value="01h 25m" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--accent-blue); font-weight: bold; text-align: center; font-size: 11px; padding: 6px; border-radius: 6px;">
             </div>
             <div>
               <label style="font-size: 9px; color: var(--text-muted); display: block;">PARKING DESTINO</label>
-              <input id="fpl-parking-2" value="A-12" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #fff; text-align: center; font-size: 11px; padding: 6px; border-radius: 6px;">
+              <input id="fpl-parking-2" value="A-12" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-main); text-align: center; font-size: 11px; padding: 6px; border-radius: 6px;">
             </div>
             <div>
               <label style="font-size: 9px; color: var(--text-muted); display: block;">LANDING TIME</label>
-              <input id="fpl-landing-time" value="11:05" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #fff; text-align: center; font-size: 11px; padding: 6px; border-radius: 6px;">
+              <input id="fpl-landing-time" value="11:05" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-main); text-align: center; font-size: 11px; padding: 6px; border-radius: 6px;">
             </div>
             <div>
               <label style="font-size: 9px; color: var(--text-muted); display: block;">FLIGHT TIME</label>
-              <input id="fpl-flight-time" value="01h 05m" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #3fb950; font-weight: bold; text-align: center; font-size: 11px; padding: 6px; border-radius: 6px;">
+              <input id="fpl-flight-time" value="01h 05m" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--pass-green); font-weight: bold; text-align: center; font-size: 11px; padding: 6px; border-radius: 6px;">
             </div>
           </div>
         </div>
@@ -2546,11 +2683,11 @@
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 14px;">
           <div>
             <label style="font-size: 11px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">📻 FRECUENCIAS OPERACIONALES</label>
-            <textarea id="fpl-frequencies" style="width: 100%; background: #0d1117; border: 1px solid #30363d; color: #fff; font-size: 12px; padding: 8px 10px; border-radius: 8px; min-height: 55px; resize: vertical;" placeholder="TWR: 118.150 | GND: 121.800 | ATIS: 130.850 | MADRID INFO: 124.025 | FIS: 127.100"></textarea>
+            <textarea id="fpl-frequencies" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-main); font-size: 12px; padding: 8px 10px; border-radius: 8px; min-height: 55px; resize: vertical;" placeholder="TWR: 118.150 | GND: 121.800 | ATIS: 130.850 | MADRID INFO: 124.025 | FIS: 127.100"></textarea>
           </div>
           <div>
             <label style="font-size: 11px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">📝 AUTORIZACIÓN ATC (CLEARANCE)</label>
-            <textarea id="fpl-clearance" style="width: 100%; background: #0d1117; border: 1px solid #30363d; color: #fff; font-size: 12px; padding: 8px 10px; border-radius: 8px; min-height: 55px; resize: vertical;" placeholder="Autorización ATC: Salida VFR por Punto W a 3000ft, Transponder 7000..."></textarea>
+            <textarea id="fpl-clearance" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-main); font-size: 12px; padding: 8px 10px; border-radius: 8px; min-height: 55px; resize: vertical;" placeholder="Autorización ATC: Salida VFR por Punto W a 3000ft, Transponder 7000..."></textarea>
           </div>
         </div>
       </div>
@@ -2559,44 +2696,44 @@
            TARJETA 5: RENDIMIENTO DE PISTA, NOTAMS Y ESPACIOS AÉREOS
       ─────────────────────────────────────────────────────────── -->
       <div class="pilot-box" style="margin-bottom: 24px; background: var(--bg-card, #161b22); border: 1px solid var(--border-color, #30363d); border-radius: 16px; padding: 16px;">
-        <h4 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 800; color: #fff;">
+        <h4 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 800; color: var(--text-title);">
           🛫 Rendimiento de Pista (Performance), NOTAMs y Espacios Aéreos
         </h4>
 
         <!-- DISTANCIAS DE PISTA -->
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin-bottom: 14px;">
-          <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 10px; padding: 10px;">
+          <div style="background: var(--bg-subbox); border: 1px solid var(--border-color); border-radius: 10px; padding: 10px;">
             <div style="font-size: 10px; font-weight: 800; color: #58a6ff; margin-bottom: 6px;">DESPEGUE (SALIDA)</div>
             <div style="display: flex; gap: 6px; margin-bottom: 6px;">
-              <input id="fpl-perf-to-req" value="480 m" placeholder="Req" style="width: 50%; background: #161b22; border: 1px solid #30363d; color: #fff; font-size: 11px; padding: 5px; border-radius: 6px; text-align: center;">
-              <input id="fpl-perf-to-avail" value="1500 m (LECU)" placeholder="Avail" style="width: 50%; background: #161b22; border: 1px solid #30363d; color: #3fb950; font-weight: bold; font-size: 11px; padding: 5px; border-radius: 6px; text-align: center;">
+              <input id="fpl-perf-to-req" value="480 m" placeholder="Req" style="width: 50%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-main); font-size: 11px; padding: 5px; border-radius: 6px; text-align: center;">
+              <input id="fpl-perf-to-avail" value="1500 m (LECU)" placeholder="Avail" style="width: 50%; background: var(--bg-input); border: 1px solid var(--border-color); color: #3fb950; font-weight: bold; font-size: 11px; padding: 5px; border-radius: 6px; text-align: center;">
             </div>
             <span style="font-size: 9px; color: var(--text-muted);">Req vs Avail</span>
           </div>
 
-          <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 10px; padding: 10px;">
+          <div style="background: var(--bg-subbox); border: 1px solid var(--border-color); border-radius: 10px; padding: 10px;">
             <div style="font-size: 10px; font-weight: 800; color: #3fb950; margin-bottom: 6px;">ATERRIZAJE (DESTINO)</div>
             <div style="display: flex; gap: 6px; margin-bottom: 6px;">
-              <input id="fpl-perf-ld-req" value="390 m" placeholder="Req" style="width: 50%; background: #161b22; border: 1px solid #30363d; color: #fff; font-size: 11px; padding: 5px; border-radius: 6px; text-align: center;">
-              <input id="fpl-perf-ld-avail" value="1500 m (LECU)" placeholder="Avail" style="width: 50%; background: #161b22; border: 1px solid #30363d; color: #3fb950; font-weight: bold; font-size: 11px; padding: 5px; border-radius: 6px; text-align: center;">
+              <input id="fpl-perf-ld-req" value="390 m" placeholder="Req" style="width: 50%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-main); font-size: 11px; padding: 5px; border-radius: 6px; text-align: center;">
+              <input id="fpl-perf-ld-avail" value="1500 m (LECU)" placeholder="Avail" style="width: 50%; background: var(--bg-input); border: 1px solid var(--border-color); color: #3fb950; font-weight: bold; font-size: 11px; padding: 5px; border-radius: 6px; text-align: center;">
             </div>
             <span style="font-size: 9px; color: var(--text-muted);">Req vs Avail</span>
           </div>
 
-          <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 10px; padding: 10px;">
+          <div style="background: var(--bg-subbox); border: 1px solid var(--border-color); border-radius: 10px; padding: 10px;">
             <div style="font-size: 10px; font-weight: 800; color: #e3b341; margin-bottom: 6px;">DESPEGUE (ALTERNATIVO)</div>
             <div style="display: flex; gap: 6px; margin-bottom: 6px;">
-              <input id="fpl-perf-to-req-alt" value="510 m" placeholder="Req" style="width: 50%; background: #161b22; border: 1px solid #30363d; color: #fff; font-size: 11px; padding: 5px; border-radius: 6px; text-align: center;">
-              <input id="fpl-perf-to-avail-alt" value="3000 m (LEVD)" placeholder="Avail" style="width: 50%; background: #161b22; border: 1px solid #30363d; color: #e3b341; font-weight: bold; font-size: 11px; padding: 5px; border-radius: 6px; text-align: center;">
+              <input id="fpl-perf-to-req-alt" value="510 m" placeholder="Req" style="width: 50%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-main); font-size: 11px; padding: 5px; border-radius: 6px; text-align: center;">
+              <input id="fpl-perf-to-avail-alt" value="3000 m (LEVD)" placeholder="Avail" style="width: 50%; background: var(--bg-input); border: 1px solid var(--border-color); color: #e3b341; font-weight: bold; font-size: 11px; padding: 5px; border-radius: 6px; text-align: center;">
             </div>
             <span style="font-size: 9px; color: var(--text-muted);">Req vs Avail</span>
           </div>
 
-          <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 10px; padding: 10px;">
+          <div style="background: var(--bg-subbox); border: 1px solid var(--border-color); border-radius: 10px; padding: 10px;">
             <div style="font-size: 10px; font-weight: 800; color: #e3b341; margin-bottom: 6px;">ATERRIZAJE (ALTERNATIVO)</div>
             <div style="display: flex; gap: 6px; margin-bottom: 6px;">
-              <input id="fpl-perf-ld-req-alt" value="420 m" placeholder="Req" style="width: 50%; background: #161b22; border: 1px solid #30363d; color: #fff; font-size: 11px; padding: 5px; border-radius: 6px; text-align: center;">
-              <input id="fpl-perf-ld-avail-alt" value="3000 m (LEVD)" placeholder="Avail" style="width: 50%; background: #161b22; border: 1px solid #30363d; color: #e3b341; font-weight: bold; font-size: 11px; padding: 5px; border-radius: 6px; text-align: center;">
+              <input id="fpl-perf-ld-req-alt" value="420 m" placeholder="Req" style="width: 50%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-main); font-size: 11px; padding: 5px; border-radius: 6px; text-align: center;">
+              <input id="fpl-perf-ld-avail-alt" value="3000 m (LEVD)" placeholder="Avail" style="width: 50%; background: var(--bg-input); border: 1px solid var(--border-color); color: #e3b341; font-weight: bold; font-size: 11px; padding: 5px; border-radius: 6px; text-align: center;">
             </div>
             <span style="font-size: 9px; color: var(--text-muted);">Req vs Avail</span>
           </div>
@@ -2606,11 +2743,11 @@
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 14px;">
           <div>
             <label style="font-size: 11px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">⚠️ NOTAMs SIGNIFICATIVOS</label>
-            <textarea id="fpl-notams" style="width: 100%; background: #0d1117; border: 1px solid #30363d; color: #fff; font-size: 12px; padding: 8px 10px; border-radius: 8px; min-height: 60px; resize: vertical;" placeholder="NOTAMs de ruta, pistas activas, grúas, frecuencias fuera de servicio..."></textarea>
+            <textarea id="fpl-notams" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-main); font-size: 12px; padding: 8px 10px; border-radius: 8px; min-height: 60px; resize: vertical;" placeholder="NOTAMs de ruta, pistas activas, grúas, frecuencias fuera de servicio..."></textarea>
           </div>
           <div>
             <label style="font-size: 11px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">🛡️ AIRSPACE ZONES (ESPACIOS AÉREOS CRUZADOS)</label>
-            <textarea id="fpl-airspace-zones" style="width: 100%; background: #0d1117; border: 1px solid #30363d; color: #fff; font-size: 12px; padding: 8px 10px; border-radius: 8px; min-height: 60px; resize: vertical;" placeholder="CTR Cuatro Vientos (D), TMA Madrid (A), LER71, LED52..."></textarea>
+            <textarea id="fpl-airspace-zones" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-main); font-size: 12px; padding: 8px 10px; border-radius: 8px; min-height: 60px; resize: vertical;" placeholder="CTR Cuatro Vientos (D), TMA Madrid (A), LER71, LED52..."></textarea>
           </div>
         </div>
       </div>
@@ -2623,12 +2760,12 @@
       <div class="pilot-box no-print" style="margin-bottom: 16px; background: var(--bg-card, #161b22); border: 1px solid var(--border-color, #30363d); border-radius: 16px; padding: 16px;">
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 12px;">
           <div>
-            <h3 style="margin: 0; font-size: 15px; font-weight: 800; color: #fff;">Carta de Navegación Visual VFR · Trazador de Ruta</h3>
+            <h3 style="margin: 0; font-size: 15px; font-weight: 800; color: var(--text-title);">Carta de Navegación Visual VFR · Trazador de Ruta</h3>
             <p style="margin: 2px 0 0 0; font-size: 11px; color: var(--text-muted);">Espacios aéreos CTR/TMA, puntos de notificación VFR y cálculo de distancias</p>
           </div>
           <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
             <!-- SELECTOR DE CAPA CARTOGRÁFICA -->
-            <select id="vfr-map-layer-select" onchange="changeVFRMapBaseLayer(this.value)" style="background: #21262d; border: 1px solid #30363d; color: #fff; font-size: 11px; padding: 6px 10px; border-radius: 6px; font-weight: 700;">
+            <select id="vfr-map-layer-select" onchange="changeVFRMapBaseLayer(this.value)" style="background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-title); font-size: 11px; padding: 6px 10px; border-radius: 6px; font-weight: 700;">
               <option value="topo">⛰️ Topográfica VFR (Curvas de Nivel / OpenTopoMap)</option>
               <option value="osm">🗺️ Mapa Aeronáutico Estándar (OSM / Carto)</option>
               <option value="satellite">🛰️ Vista Satelital Visual (Esri World Imagery)</option>
@@ -2667,7 +2804,7 @@
       <div class="pilot-box no-print" style="margin-bottom: 16px; background: var(--bg-card, #161b22); border: 1px solid var(--border-color, #30363d); border-radius: 16px; padding: 18px;">
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px;">
           <div>
-            <h3 style="margin: 0; font-size: 16px; font-weight: 800; color: #fff;">🗂️ Biblioteca de Cartas Visuales de España (AIP & VAC ENAIRE)</h3>
+            <h3 style="margin: 0; font-size: 16px; font-weight: 800; color: var(--text-title);">🗂️ Biblioteca de Cartas Visuales de España (AIP & VAC ENAIRE)</h3>
             <p style="margin: 2px 0 0 0; font-size: 11px; color: var(--text-muted);">Cartas de aproximación visual (VAC), planos de aeródromo (ADC), frecuencias y circuitos de tráfico oficiales</p>
           </div>
           <div style="display: flex; gap: 8px; flex-wrap: wrap;">
@@ -3843,17 +3980,15 @@
     function applyTheme() {
       const html = document.documentElement;
       const btn = document.getElementById('theme-btn');
-      if (currentThemeMode === 'light') {
-        html.setAttribute('data-theme', 'light');
-        if (btn) btn.innerHTML = '☀️ Día';
-      } else if (currentThemeMode === 'dark') {
-        html.setAttribute('data-theme', 'dark');
-        if (btn) btn.innerHTML = '🌙 Noche';
-      } else {
-        html.removeAttribute('data-theme');
+      let effectiveTheme = currentThemeMode;
+      if (effectiveTheme === 'auto') {
         const isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        effectiveTheme = isDark ? 'dark' : 'light';
         if (btn) btn.innerHTML = isDark ? '🌙 Auto' : '☀️ Auto';
+      } else {
+        if (btn) btn.innerHTML = (effectiveTheme === 'light') ? '☀️ Día' : '🌙 Noche';
       }
+      html.setAttribute('data-theme', effectiveTheme);
     }
 
     function cycleTheme() {
@@ -4716,12 +4851,12 @@
     }
 
     container.innerHTML = items.map(item => `
-      <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 10px; padding: 10px 12px;">
+      <div style="background: var(--bg-subbox); border: 1px solid var(--border-color); border-radius: 10px; padding: 10px 12px;">
         <div style="display:flex; justify-content:space-between; align-items:center;">
           <span style="font-size:10px; font-weight:700; color:#58a6ff; text-transform:uppercase;">${item.subject} · Cap. ${item.chapterNum}</span>
           <span style="font-size:10px; font-weight:700; color:#e3b341;">Dominio: ${item.masteryLevel}/3</span>
         </div>
-        <p style="margin:4px 0 0 0; font-size:12px; font-weight:600; color:#fff; line-height:1.4;">${item.q}</p>
+        <p style="margin:4px 0 0 0; font-size:12px; font-weight:600; color:var(--text-title); line-height:1.4;">${item.q}</p>
       </div>
     `).join('');
   }
@@ -5405,7 +5540,7 @@
         <!-- Sección 5: Versión del Sistema y Forzar Actualización PWA -->
         <div class="pilot-box" style="margin-top: 12px; background: rgba(56,139,253,0.06); border: 1px solid rgba(56,139,253,0.25);">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-            <strong style="color:var(--text-title); font-size:12px;">🚀 Versión del Sistema: <span style="color:#58a6ff;">v1.5.0 EFB</span></strong>
+            <strong style="color:var(--text-title); font-size:12px;">🚀 Versión del Sistema: <span style="color:#58a6ff;">v1.5.1 EFB</span></strong>
             <span style="font-size:10px; background:rgba(46,160,67,0.2); color:#56d364; padding:2px 8px; border-radius:10px; font-weight:700;">PRODUCCIÓN</span>
           </div>
           <p style="font-size:11px; color:var(--text-muted); margin-bottom:8px; line-height:1.4;">
@@ -6702,12 +6837,12 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
       const chartSource = isControlled ? 'ENAIRE AIP (AD 2)' : 'Guía VFR';
 
       html += `
-        <div class="pilot-box" style="background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 14px; display: flex; flex-direction: column; justify-content: space-between;">
+        <div class="pilot-box" style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; justify-content: space-between;">
           <div>
             <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
               <div>
                 <span style="font-family: monospace; font-size: 16px; font-weight: 900; color: #58a6ff; letter-spacing: 1px;">${ad.icao}</span>
-                <h4 style="margin: 2px 0 0 0; font-size: 13px; font-weight: 800; color: #fff;">${ad.name}</h4>
+                <h4 style="margin: 2px 0 0 0; font-size: 13px; font-weight: 800; color: var(--text-title);">${ad.name}</h4>
                 <span style="font-size: 11px; color: var(--text-muted);">📍 ${ad.city} · Elev: ${ad.elev}</span>
               </div>
               <span style="font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 12px; background: ${badgeBg}; border: 1px solid ${badgeBorder}; color: ${badgeColor}; white-space: nowrap;">
@@ -6716,21 +6851,21 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
             </div>
 
             <!-- DATOS OPERACIONALES CLAVE -->
-            <div style="background: #0d1117; border-radius: 8px; padding: 8px 10px; margin-bottom: 10px; font-size: 11px;">
+            <div style="background: var(--bg-subbox); border: 1px solid var(--border-color); border-radius: 8px; padding: 8px 10px; margin-bottom: 10px; font-size: 11px;">
               <div style="margin-bottom: 4px; display: flex; justify-content: space-between;">
                 <span style="color: var(--text-muted);">🛫 Pistas:</span>
-                <span style="font-weight: 700; color: #e6edf3;">${ad.runways}</span>
+                <span style="font-weight: 700; color: var(--text-main);">${ad.runways}</span>
               </div>
               <div style="margin-bottom: 4px; display: flex; justify-content: space-between;">
                 <span style="color: var(--text-muted);">🔄 Circuito:</span>
-                <span style="font-weight: 700; color: #e6edf3;">${ad.circuit}</span>
+                <span style="font-weight: 700; color: var(--text-main);">${ad.circuit}</span>
               </div>
-              <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px; margin-top: 6px; padding-top: 6px; border-top: 1px solid #21262d;">
+              <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px; margin-top: 6px; padding-top: 6px; border-top: 1px solid var(--border-color);">
                 <span style="color: var(--text-muted);">📻 Frecuencias:</span>
                 <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-                  ${ad.freqs.twr !== '—' ? `<span style="background: #21262d; padding: 2px 6px; border-radius: 4px; font-family: monospace; color: #3fb950; font-weight: 700;">TWR ${ad.freqs.twr}</span>` : ''}
-                  ${ad.freqs.gnd && ad.freqs.gnd !== '—' ? `<span style="background: #21262d; padding: 2px 6px; border-radius: 4px; font-family: monospace; color: #58a6ff; font-weight: 700;">GND ${ad.freqs.gnd}</span>` : ''}
-                  ${ad.freqs.fis && ad.freqs.fis !== '—' ? `<span style="background: #21262d; padding: 2px 6px; border-radius: 4px; font-family: monospace; color: #e3b341; font-weight: 700;">FIS ${ad.freqs.fis}</span>` : ''}
+                  ${ad.freqs.twr !== '—' ? `<span style="background: var(--badge-bg); border: 1px solid var(--border-color); padding: 2px 6px; border-radius: 4px; font-family: monospace; color: #3fb950; font-weight: 700;">TWR ${ad.freqs.twr}</span>` : ''}
+                  ${ad.freqs.gnd && ad.freqs.gnd !== '—' ? `<span style="background: var(--badge-bg); border: 1px solid var(--border-color); padding: 2px 6px; border-radius: 4px; font-family: monospace; color: #58a6ff; font-weight: 700;">GND ${ad.freqs.gnd}</span>` : ''}
+                  ${ad.freqs.fis && ad.freqs.fis !== '—' ? `<span style="background: var(--badge-bg); border: 1px solid var(--border-color); padding: 2px 6px; border-radius: 4px; font-family: monospace; color: #e3b341; font-weight: 700;">FIS ${ad.freqs.fis}</span>` : ''}
                 </div>
               </div>
             </div>
@@ -6744,16 +6879,16 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
           <div style="display: flex; flex-direction: column; gap: 6px;">
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
               <!-- ENLACE DIRECTO A LA CARTA DEL AERÓDROMO -->
-              <a href="${ad.aipUrl}" target="_blank" rel="noopener" style="text-decoration: none; padding: 7px 8px; background: #21262d; border: 1px solid #388bfd; color: #58a6ff; font-size: 11px; font-weight: 800; border-radius: 6px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 4px;" title="Abrir sección oficial del aeródromo en ${chartSource}">
+              <a href="${ad.aipUrl}" target="_blank" rel="noopener" style="text-decoration: none; padding: 7px 8px; background: var(--badge-bg); border: 1px solid #388bfd; color: #58a6ff; font-size: 11px; font-weight: 800; border-radius: 6px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 4px;" title="Abrir sección oficial del aeródromo en ${chartSource}">
                 <span>📄</span> Carta VAC ${ad.icao}
               </a>
               <!-- ENLACE DIRECTO A INSIGNIA VFR -->
-              <a href="${ad.insigniaUrl}" target="_blank" rel="noopener" style="text-decoration: none; padding: 7px 8px; background: rgba(56,139,253,0.12); border: 1px solid #30363d; color: #e6edf3; font-size: 11px; font-weight: 700; border-radius: 6px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 4px;" title="Ver en visor Insignia VFR de ENAIRE">
+              <a href="${ad.insigniaUrl}" target="_blank" rel="noopener" style="text-decoration: none; padding: 7px 8px; background: var(--badge-bg); border: 1px solid var(--border-color); color: var(--text-main); font-size: 11px; font-weight: 700; border-radius: 6px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 4px;" title="Ver en visor Insignia VFR de ENAIRE">
                 <span>🌐</span> Insignia VFR
               </a>
             </div>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
-              <button type="button" onclick="focusAirportOnMap(${ad.lat}, ${ad.lon}, '${ad.icao}')" style="padding: 6px 8px; background: #21262d; border: 1px solid #30363d; color: #e6edf3; font-size: 11px; font-weight: 700; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px;">
+              <button type="button" onclick="focusAirportOnMap(${ad.lat}, ${ad.lon}, '${ad.icao}')" style="padding: 6px 8px; background: var(--badge-bg); border: 1px solid var(--border-color); color: var(--text-main); font-size: 11px; font-weight: 700; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px;">
                 <span>🗺️</span> Ver en Mapa
               </button>
               <button type="button" onclick="setAirportAsDestination('${ad.icao}', '${ad.name}', ${ad.lat}, ${ad.lon}, ${parseInt(ad.elev) + 1000})" style="padding: 6px 8px; background: #238636; border: 1px solid #2ea043; color: #fff; font-size: 11px; font-weight: 800; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px;">
@@ -7651,7 +7786,7 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
     fplWaypoints.forEach((wp, idx) => {
       const isOrigin = (idx === 0);
       html += `
-        <tr id="fpl-nav-row-${idx}" style="border-bottom: 1px solid #21262d; background: ${idx % 2 === 0 ? 'rgba(22, 27, 34, 0.6)' : '#161b22'}; transition: background 0.15s ease;">
+        <tr id="fpl-nav-row-${idx}" style="border-bottom: 1px solid var(--border-color); background: ${idx % 2 === 0 ? 'var(--bg-card)' : 'var(--bg-subbox)'}; transition: background 0.15s ease;">
           <!-- # -->
           <td style="padding: 8px 4px; text-align: center; color: var(--text-muted); font-weight: 800;">
             ${idx + 1}
@@ -7659,73 +7794,73 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
 
           <!-- WAYPOINT -->
           <td style="padding: 8px 6px;">
-            <input type="text" class="fpl-input-name" data-idx="${idx}" value="${wp.name}" oninput="handleNavlogInput(${idx}, 'name', this.value)" onchange="handleNavlogChange(${idx}, 'name', this.value)" placeholder="${isOrigin ? 'Punto Salida' : 'Nombre del tramo'}" style="width: 100%; background: #0d1117; border: 1px solid #30363d; color: #fff; font-weight: 700; font-size: 12px; padding: 6px 8px; border-radius: 6px; outline: none;">
+            <input type="text" class="fpl-input-name" data-idx="${idx}" value="${wp.name}" oninput="handleNavlogInput(${idx}, 'name', this.value)" onchange="handleNavlogChange(${idx}, 'name', this.value)" placeholder="${isOrigin ? 'Punto Salida' : 'Nombre del tramo'}" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-main); font-weight: 700; font-size: 12px; padding: 6px 8px; border-radius: 6px; outline: none;">
           </td>
 
           <!-- TC (°) -->
           <td style="padding: 8px 4px; text-align: center;">
-            ${isOrigin ? '—' : `<input type="number" class="fpl-input-tc" data-idx="${idx}" value="${wp.tc ?? 0}" oninput="handleNavlogInput(${idx}, 'tc', this.value)" onchange="handleNavlogChange(${idx}, 'tc', this.value)" min="0" max="360" style="width: 58px; background: #0d1117; border: 1px solid #30363d; color: #58a6ff; font-weight: 700; font-size: 12px; padding: 5px 2px; border-radius: 6px; text-align: center;">`}
+            ${isOrigin ? '—' : `<input type="number" class="fpl-input-tc" data-idx="${idx}" value="${wp.tc ?? 0}" oninput="handleNavlogInput(${idx}, 'tc', this.value)" onchange="handleNavlogChange(${idx}, 'tc', this.value)" min="0" max="360" style="width: 58px; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--accent-blue); font-weight: 700; font-size: 12px; padding: 5px 2px; border-radius: 6px; text-align: center;">`}
           </td>
 
           <!-- VAR -->
           <td style="padding: 8px 4px; text-align: center;">
-            ${isOrigin ? '—' : `<input type="text" class="fpl-input-var" data-idx="${idx}" value="${wp.varDeg ?? globalVar}" oninput="handleNavlogInput(${idx}, 'var', this.value)" onchange="handleNavlogChange(${idx}, 'var', this.value)" style="width: 46px; background: #0d1117; border: 1px solid #30363d; color: #8b949e; font-size: 11px; padding: 5px 2px; border-radius: 6px; text-align: center;">`}
+            ${isOrigin ? '—' : `<input type="text" class="fpl-input-var" data-idx="${idx}" value="${wp.varDeg ?? globalVar}" oninput="handleNavlogInput(${idx}, 'var', this.value)" onchange="handleNavlogChange(${idx}, 'var', this.value)" style="width: 46px; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-muted); font-size: 11px; padding: 5px 2px; border-radius: 6px; text-align: center;">`}
           </td>
 
           <!-- MC (°) -->
           <td style="padding: 8px 4px; text-align: center;">
-            ${isOrigin ? '—' : `<input type="number" class="fpl-input-mc" data-idx="${idx}" value="${wp.mc ?? 0}" oninput="handleNavlogInput(${idx}, 'mc', this.value)" onchange="handleNavlogChange(${idx}, 'mc', this.value)" min="0" max="360" style="width: 58px; background: #0d1117; border: 1px solid #30363d; color: #79c0ff; font-weight: 800; font-size: 12px; padding: 5px 2px; border-radius: 6px; text-align: center;">`}
+            ${isOrigin ? '—' : `<input type="number" class="fpl-input-mc" data-idx="${idx}" value="${wp.mc ?? 0}" oninput="handleNavlogInput(${idx}, 'mc', this.value)" onchange="handleNavlogChange(${idx}, 'mc', this.value)" min="0" max="360" style="width: 58px; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--accent-blue); font-weight: 800; font-size: 12px; padding: 5px 2px; border-radius: 6px; text-align: center;">`}
           </td>
 
           <!-- VIENTO -->
           <td style="padding: 8px 4px; text-align: center;">
-            ${isOrigin ? '—' : `<input type="text" class="fpl-input-wind" data-idx="${idx}" value="${wp.wind || globalWind}" oninput="handleNavlogInput(${idx}, 'wind', this.value)" onchange="handleNavlogChange(${idx}, 'wind', this.value)" placeholder="240/12" style="width: 80px; background: #0d1117; border: 1px solid #30363d; color: #3fb950; font-weight: 700; font-family: monospace; font-size: 11px; padding: 5px 4px; border-radius: 6px; text-align: center;">`}
+            ${isOrigin ? '—' : `<input type="text" class="fpl-input-wind" data-idx="${idx}" value="${wp.wind || globalWind}" oninput="handleNavlogInput(${idx}, 'wind', this.value)" onchange="handleNavlogChange(${idx}, 'wind', this.value)" placeholder="240/12" style="width: 80px; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--pass-green); font-weight: 700; font-family: monospace; font-size: 11px; padding: 5px 4px; border-radius: 6px; text-align: center;">`}
           </td>
 
           <!-- MH (°) -->
           <td style="padding: 8px 4px; text-align: center;">
-            ${isOrigin ? '—' : `<input type="number" class="fpl-input-mh" data-idx="${idx}" value="${wp.mh ?? 0}" oninput="handleNavlogInput(${idx}, 'mh', this.value)" onchange="handleNavlogChange(${idx}, 'mh', this.value)" min="0" max="360" style="width: 58px; background: #0d1117; border: 1px solid #30363d; color: #d2a8ff; font-weight: 800; font-size: 13px; padding: 5px 2px; border-radius: 6px; text-align: center;" title="Rumbo de navegación magnético corregido por viento">`}
+            ${isOrigin ? '—' : `<input type="number" class="fpl-input-mh" data-idx="${idx}" value="${wp.mh ?? 0}" oninput="handleNavlogInput(${idx}, 'mh', this.value)" onchange="handleNavlogChange(${idx}, 'mh', this.value)" min="0" max="360" style="width: 58px; background: var(--bg-input); border: 1px solid var(--border-color); color: #8a63d2; font-weight: 800; font-size: 13px; padding: 5px 2px; border-radius: 6px; text-align: center;" title="Rumbo de navegación magnético corregido por viento">`}
           </td>
 
           <!-- ALTITUD (ft numérico limpio) -->
           <td style="padding: 8px 4px; text-align: center;">
-            <input type="number" step="500" min="500" max="25000" class="fpl-input-alt" data-idx="${idx}" value="${wp.alt}" oninput="handleNavlogInput(${idx}, 'alt', this.value)" onchange="handleNavlogChange(${idx}, 'alt', this.value)" style="width: 72px; background: #0d1117; border: 1px solid #30363d; color: #58a6ff; font-weight: 700; font-size: 12px; padding: 5px 4px; border-radius: 6px; text-align: center;">
+            <input type="number" step="500" min="500" max="25000" class="fpl-input-alt" data-idx="${idx}" value="${wp.alt}" oninput="handleNavlogInput(${idx}, 'alt', this.value)" onchange="handleNavlogChange(${idx}, 'alt', this.value)" style="width: 72px; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--accent-blue); font-weight: 700; font-size: 12px; padding: 5px 4px; border-radius: 6px; text-align: center;">
           </td>
 
           <!-- DIST (NM) -->
           <td style="padding: 8px 4px; text-align: center;">
-            ${isOrigin ? '—' : `<input type="number" step="0.1" min="0" class="fpl-input-dist" data-idx="${idx}" value="${(wp.dist || 0).toFixed(1)}" oninput="handleNavlogInput(${idx}, 'dist', this.value)" onchange="handleNavlogChange(${idx}, 'dist', this.value)" style="width: 68px; background: #0d1117; border: 1px solid #30363d; color: #56d364; font-weight: 800; font-size: 12px; padding: 5px 2px; border-radius: 6px; text-align: center;">`}
+            ${isOrigin ? '—' : `<input type="number" step="0.1" min="0" class="fpl-input-dist" data-idx="${idx}" value="${(wp.dist || 0).toFixed(1)}" oninput="handleNavlogInput(${idx}, 'dist', this.value)" onchange="handleNavlogChange(${idx}, 'dist', this.value)" style="width: 68px; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--pass-green); font-weight: 800; font-size: 12px; padding: 5px 2px; border-radius: 6px; text-align: center;">`}
           </td>
 
           <!-- TAS (kt) -->
           <td style="padding: 8px 4px; text-align: center;">
-            ${isOrigin ? '—' : `<input type="number" min="30" max="300" class="fpl-input-tas" data-idx="${idx}" value="${wp.tas || globalIas}" oninput="handleNavlogInput(${idx}, 'tas', this.value)" onchange="handleNavlogChange(${idx}, 'tas', this.value)" style="width: 56px; background: #0d1117; border: 1px solid #30363d; color: #8b949e; font-size: 12px; padding: 5px 2px; border-radius: 6px; text-align: center;">`}
+            ${isOrigin ? '—' : `<input type="number" min="30" max="300" class="fpl-input-tas" data-idx="${idx}" value="${wp.tas || globalIas}" oninput="handleNavlogInput(${idx}, 'tas', this.value)" onchange="handleNavlogChange(${idx}, 'tas', this.value)" style="width: 56px; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-muted); font-size: 12px; padding: 5px 2px; border-radius: 6px; text-align: center;">`}
           </td>
 
           <!-- GS (kt) -->
           <td style="padding: 8px 4px; text-align: center;">
-            ${isOrigin ? '—' : `<span class="fpl-cell-gs" data-idx="${idx}" style="color: #f1e05a; font-weight: 700; font-size: 12px;">${Math.round(wp.gs || globalIas)} kt</span>`}
+            ${isOrigin ? '—' : `<span class="fpl-cell-gs" data-idx="${idx}" style="color: var(--warn-yellow); font-weight: 700; font-size: 12px;">${Math.round(wp.gs || globalIas)} kt</span>`}
           </td>
 
           <!-- ETE -->
           <td style="padding: 8px 4px; text-align: center;">
-            ${isOrigin ? '—' : `<span class="fpl-cell-ete" data-idx="${idx}" style="color: #e3b341; font-weight: 800; font-size: 12px;">${wp.ete}</span>`}
+            ${isOrigin ? '—' : `<span class="fpl-cell-ete" data-idx="${idx}" style="color: var(--warn-yellow); font-weight: 800; font-size: 12px;">${wp.ete}</span>`}
           </td>
 
           <!-- ETA -->
           <td style="padding: 8px 4px; text-align: center;">
-            <span class="fpl-cell-eta" data-idx="${idx}" style="color: #e6edf3; font-weight: 700; font-size: 12px;">${wp.eta}</span>
+            <span class="fpl-cell-eta" data-idx="${idx}" style="color: var(--text-main); font-weight: 700; font-size: 12px;">${wp.eta}</span>
           </td>
 
           <!-- ATA -->
           <td style="padding: 8px 4px; text-align: center;">
-            <input type="text" class="fpl-input-ata" data-idx="${idx}" value="${wp.ata || ''}" oninput="handleNavlogInput(${idx}, 'ata', this.value)" onchange="handleNavlogChange(${idx}, 'ata', this.value)" placeholder="--:--" style="width: 55px; background: #0d1117; border: 1px solid #30363d; color: #fff; font-size: 11px; padding: 5px 2px; border-radius: 6px; text-align: center;">
+            <input type="text" class="fpl-input-ata" data-idx="${idx}" value="${wp.ata || ''}" oninput="handleNavlogInput(${idx}, 'ata', this.value)" onchange="handleNavlogChange(${idx}, 'ata', this.value)" placeholder="--:--" style="width: 55px; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-main); font-size: 11px; padding: 5px 2px; border-radius: 6px; text-align: center;">
           </td>
 
           <!-- FUEL (Gal) -->
           <td style="padding: 8px 4px; text-align: center;">
             <span class="fpl-cell-fuel" data-idx="${idx}" style="font-size: 11px;">
-              <span style="color: #8b949e;">${wp.legFuel}</span> · <strong style="color: #58a6ff;">${wp.totFuel}</strong>
+              <span style="color: var(--text-muted);">${wp.legFuel}</span> · <strong style="color: var(--accent-blue);">${wp.totFuel}</strong>
             </span>
           </td>
 
@@ -8421,13 +8556,13 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
       if (btn) {
         if (s === section) {
           btn.style.background = 'rgba(56,139,253,0.25)';
-          btn.style.borderColor = '#388bfd';
-          btn.style.color = '#79c0ff';
+          btn.style.borderColor = 'var(--accent-blue)';
+          btn.style.color = 'var(--accent-blue)';
           btn.style.fontWeight = '800';
         } else {
-          btn.style.background = '#0d1117';
-          btn.style.borderColor = '#30363d';
-          btn.style.color = '#fff';
+          btn.style.background = 'var(--bg-card)';
+          btn.style.borderColor = 'var(--border-color)';
+          btn.style.color = 'var(--text-muted)';
           btn.style.fontWeight = '700';
         }
       }
@@ -8510,9 +8645,9 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
           btn.style.color = '#79c0ff';
           btn.style.fontWeight = '800';
         } else {
-          btn.style.background = '#0d1117';
-          btn.style.borderColor = '#30363d';
-          btn.style.color = '#fff';
+          btn.style.background = 'var(--bg-subbox)';
+          btn.style.borderColor = 'var(--border-color)';
+          btn.style.color = 'var(--text-main)';
           btn.style.fontWeight = '700';
         }
       }

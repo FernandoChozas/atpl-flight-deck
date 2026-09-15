@@ -1814,316 +1814,126 @@
         </div>
       </div>
     </div>
-  
+
     <!-- ═══════════════════════════════════════════════════════
-         SIMULADOR INTERACTIVO COMPUTADOR DE VUELO CR3 (JEPPESEN CR-3)
-         ESCALAS LOGARÍTMICAS, CÁLCULOS, GUÍA DIDÁCTICA Y EJERCICIOS
+         COMPUTADOR DE VUELO CR-3 OFICIAL (AEROTESTPPL.ES/CR3)
+         MEDICIÓN OFICIAL DE RUMBOS, VELOCIDADES (TAS/GS) Y DERIVA (WCA)
     ═══════════════════════════════════════════════════════════ -->
     <div class="pilot-box" style="margin-top: 24px; background: var(--bg-card, #161b22); border: 1px solid var(--border-color, #30363d); border-radius: 16px; padding: 22px;">
-      <!-- Cabecera del Simulador CR3 -->
+      <!-- Cabecera del Computador CR3 Oficial -->
       <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 16px;">
         <div style="display: flex; align-items: center; gap: 10px;">
           <span style="font-size: 32px;">🎛️</span>
           <div>
-            <h3 style="margin: 0; font-size: 17px; font-weight: 800; color: #fff;">Simulador Interactivo Computador de Vuelo CR-3</h3>
+            <h3 style="margin: 0; font-size: 17px; font-weight: 800; color: #fff;">Computador de Vuelo CR-3 Oficial (AerotestPPL)</h3>
             <p style="margin: 2px 0 0 0; font-size: 12px; color: var(--text-muted);">
-              Calculadora circular de navegación aérea (PPL / ATPL) · Discos giratorios táctiles, triángulo de viento, guía didáctica y ejercicios guiados
+              Computador analógico de vuelo oficial para medir <strong>rumbos (Heading/Course)</strong>, <strong>velocidades (TAS/GS)</strong>, <strong>viento (W/V)</strong> y <strong>deriva (Drift/WCA)</strong>
             </p>
           </div>
         </div>
 
-        <!-- Selector de Modo / Cara del CR3 -->
-        <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
-          <button type="button" class="btn-filter" id="cr3-tab-calc" onclick="switchCR3Face('calc')" style="background: rgba(56,139,253,0.2); border-color: #388bfd; color: #58a6ff; font-weight: 800; font-size: 12px; padding: 6px 14px; border-radius: 8px; cursor: pointer;">
-            🧮 Cara 1: Calculadora Circular
+        <!-- Botones de Acción y Pestañas -->
+        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+          <button type="button" class="btn-filter" id="cr3-tab-embed" onclick="switchCR3Section('embed')" style="background: rgba(56,139,253,0.2); border-color: #388bfd; color: #58a6ff; font-weight: 800; font-size: 12px; padding: 6px 14px; border-radius: 8px; cursor: pointer;">
+            🎛️ Computador Interactivo
           </button>
-          <button type="button" class="btn-filter" id="cr3-tab-wind" onclick="switchCR3Face('wind')" style="background: #0d1117; border-color: #30363d; color: #fff; font-weight: 700; font-size: 12px; padding: 6px 14px; border-radius: 8px; cursor: pointer;">
-            💨 Cara 2: Disco de Viento (WCA & GS)
+          <button type="button" class="btn-filter" id="cr3-tab-guide" onclick="switchCR3Section('guide')" style="background: #0d1117; border-color: #30363d; color: #e3b341; font-weight: 700; font-size: 12px; padding: 6px 14px; border-radius: 8px; cursor: pointer;">
+            📖 Guía: Rumbos y Velocidades
           </button>
-          <button type="button" class="btn-filter" id="cr3-tab-guide" onclick="switchCR3Face('guide')" style="background: #0d1117; border-color: #30363d; color: #e3b341; font-weight: 700; font-size: 12px; padding: 6px 14px; border-radius: 8px; cursor: pointer;">
-            📖 Guía de Uso ("Para Dummies")
+          <button type="button" class="btn-filter" id="cr3-tab-exercises" onclick="switchCR3Section('exercises')" style="background: #0d1117; border-color: #30363d; color: #3fb950; font-weight: 700; font-size: 12px; padding: 6px 14px; border-radius: 8px; cursor: pointer;">
+            🎯 Ejercicios de Navegación
           </button>
-          <button type="button" class="btn-filter" id="cr3-tab-exercises" onclick="switchCR3Face('exercises')" style="background: #0d1117; border-color: #30363d; color: #3fb950; font-weight: 700; font-size: 12px; padding: 6px 14px; border-radius: 8px; cursor: pointer;">
-            🎯 Ejercicios de Examen
+          <button type="button" onclick="reloadCR3Iframe()" style="background: #21262d; border: 1px solid #30363d; color: #fff; font-size: 12px; padding: 6px 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 4px;" title="Recargar simulador">
+            <span>🔄</span> Recargar
           </button>
+          <a href="https://aerotestppl.es/cr3/" target="_blank" rel="noopener noreferrer" style="padding: 6px 14px; background: #238636; border: 1px solid #2ea043; color: #fff; font-weight: 800; font-size: 12px; border-radius: 8px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;" title="Abrir en pantalla completa o pestaña nueva">
+            <span>🌐</span> Abrir en Pantalla Completa ↗
+          </a>
         </div>
       </div>
 
-      <!-- CARA 1: CALCULADORA CIRCULAR (SLIDE RULE) -->
-      <div id="cr3-view-calc" style="display: block;">
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; align-items: center;">
-          <!-- Discos interactivos SVG -->
-          <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; background: #0d1117; border: 1px solid #30363d; border-radius: 16px; padding: 18px; position: relative;">
-            <div style="font-size: 11px; font-weight: 800; color: #58a6ff; margin-bottom: 8px; display: flex; justify-content: space-between; width: 100%;">
-              <span>DISCO EXTERIOR FIJO (Distancia / Gasto / kt)</span>
-              <span>DISCO INTERIOR MÓVIL (Tiempo / 60)</span>
-            </div>
-
-            <!-- SVG Container para el CR3 con eventos de arrastre táctil / ratón -->
-            <div id="cr3-dial-container" style="position: relative; width: 330px; height: 330px; user-select: none; touch-action: none; cursor: grab;">
-              <svg id="cr3-svg" width="330" height="330" viewBox="0 0 330 330" style="overflow: visible;">
-                <defs>
-                  <radialGradient id="cr3OuterGrad" cx="50%" cy="50%" r="50%">
-                    <stop offset="0%" stop-color="#141c2b"/>
-                    <stop offset="90%" stop-color="#0b111a"/>
-                    <stop offset="100%" stop-color="#06090f"/>
-                  </radialGradient>
-                  <radialGradient id="cr3InnerGrad" cx="50%" cy="50%" r="50%">
-                    <stop offset="0%" stop-color="#1e293b"/>
-                    <stop offset="85%" stop-color="#111827"/>
-                    <stop offset="100%" stop-color="#0f172a"/>
-                  </radialGradient>
-                </defs>
-
-                <!-- 1. DISCO EXTERIOR (ESTATOR FIJO) -->
-                <circle cx="165" cy="165" r="160" fill="url(#cr3OuterGrad)" stroke="#388bfd" stroke-width="2.5"/>
-                <circle cx="165" cy="165" r="130" fill="none" stroke="#30363d" stroke-width="1"/>
-                
-                <!-- Escala Exterior (Generada Dinámicamente) -->
-                <g id="cr3-outer-scale-marks"></g>
-
-                <!-- 2. DISCO INTERIOR (ROTOR GIRATORIO) -->
-                <g id="cr3-inner-rotor" style="transform-origin: 165px 165px; transition: transform 0.05s linear;">
-                  <circle cx="165" cy="165" r="128" fill="url(#cr3InnerGrad)" stroke="#e3b341" stroke-width="2"/>
-                  <circle cx="165" cy="165" r="85" fill="#0d1117" stroke="#30363d" stroke-width="1.5"/>
-                  
-                  <!-- Escala Interior (Marcas y Horas/Minutos) -->
-                  <g id="cr3-inner-scale-marks"></g>
-
-                  <!-- Centro metálico -->
-                  <circle cx="165" cy="165" r="22" fill="#1f293d" stroke="#58a6ff" stroke-width="2"/>
-                  <circle cx="165" cy="165" r="8" fill="#e3b341"/>
-                  <text x="165" y="169" font-size="8" font-weight="900" fill="#fff" text-anchor="middle" font-family="monospace">CR-3</text>
-                </g>
-
-                <!-- Puntero Inspector / Cursor Transparente Superior -->
-                <line id="cr3-hairline" x1="165" y1="5" x2="165" y2="325" stroke="rgba(248,81,73,0.7)" stroke-width="1.5" stroke-dasharray="3,3" pointer-events="none"/>
-              </svg>
-            </div>
-
-            <!-- Controles de Giro Fino y Rápido -->
-            <div style="display: flex; gap: 8px; margin-top: 14px; align-items: center; flex-wrap: wrap; justify-content: center;">
-              <button type="button" class="btn-filter" onclick="rotateCR3By(-10)" style="font-size: 11px; padding: 4px 10px; background: #21262d;">⏪ -10°</button>
-              <button type="button" class="btn-filter" onclick="rotateCR3By(-1)" style="font-size: 11px; padding: 4px 10px; background: #21262d;">◀ -1°</button>
-              <span id="cr3-current-angle-label" style="font-size: 12px; font-weight: 800; color: #f1e05a; font-family: monospace; min-width: 65px; text-align: center;">0.0°</span>
-              <button type="button" class="btn-filter" onclick="rotateCR3By(1)" style="font-size: 11px; padding: 4px 10px; background: #21262d;">+1° ▶</button>
-              <button type="button" class="btn-filter" onclick="rotateCR3By(10)" style="font-size: 11px; padding: 4px 10px; background: #21262d;">+10° ⏩</button>
-              <button type="button" class="btn-filter" onclick="resetCR3Dial()" style="font-size: 11px; padding: 4px 10px; background: rgba(248,81,73,0.2); color: #ff7b72; border-color: #f85149;">🔄 Reiniciar</button>
-            </div>
-            <div style="margin-top: 6px; font-size: 11px; color: var(--text-muted);">
-              💡 <em>Arrastra el disco interior con el ratón o el dedo para girarlo libremente</em>
-            </div>
-          </div>
-
-          <!-- Panel de Control y Lectura en Tiempo Real -->
-          <div style="display: flex; flex-direction: column; gap: 12px;">
-            <!-- Alineación Rápida Asistida -->
-            <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 12px; padding: 14px;">
-              <strong style="font-size: 12px; color: #58a6ff; display: block; margin-bottom: 8px;">
-                🎯 Alineación Rápida del Índice 60 (RATE / Tasa Horaria)
-              </strong>
-              <div style="display: flex; gap: 8px; align-items: center;">
-                <input type="number" id="cr3-quick-rate-input" value="90" min="20" max="300" step="1" style="width: 80px; padding: 6px 10px; background: #161b22; border: 1px solid #30363d; color: #58a6ff; font-weight: 800; font-size: 13px; border-radius: 8px; text-align: center;">
-                <span style="font-size: 12px; color: var(--text-muted);">kt o Gal/h</span>
-                <button type="button" class="btn-sync-action" onclick="alignCR3IndexToValue(parseFloat(document.getElementById('cr3-quick-rate-input').value))" style="background: #238636; border-color: #2ea043; font-size: 11px; padding: 6px 14px; white-space: nowrap;">
-                  Alinear Índice 60
-                </button>
-              </div>
-              <div style="display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap;">
-                <button type="button" class="btn-filter" onclick="alignCR3IndexToValue(90)" style="font-size: 10px; padding: 2px 8px;">C172 Cruceiro: 90 kt</button>
-                <button type="button" class="btn-filter" onclick="alignCR3IndexToValue(80)" style="font-size: 10px; padding: 2px 8px;">C172 Consumo: 8.0 Gal/h</button>
-                <button type="button" class="btn-filter" onclick="alignCR3IndexToValue(120)" style="font-size: 10px; padding: 2px 8px;">120 kt (2 NM/min)</button>
-              </div>
-            </div>
-
-            <!-- Inspector de Correspondencias en Tiempo Real -->
-            <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 12px; padding: 14px;">
-              <strong style="font-size: 12px; color: #3fb950; display: block; margin-bottom: 8px;">
-                🔍 Inspector Digital de Lectura (Correspondencia Disco Ext vs Int)
-              </strong>
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                <div style="background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 8px;">
-                  <div style="font-size: 10px; color: var(--text-muted); font-weight: 700;">TASA EN ÍNDICE 60:</div>
-                  <div id="cr3-readout-rate" style="font-size: 16px; font-weight: 800; color: #e3b341; margin-top: 2px;">90.0 kt / Gal/h</div>
-                </div>
-                <div style="background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 8px;">
-                  <div style="font-size: 10px; color: var(--text-muted); font-weight: 700;">FACTOR DE VELOCIDAD:</div>
-                  <div id="cr3-readout-speed-factor" style="font-size: 16px; font-weight: 800; color: #58a6ff; margin-top: 2px;">1.50 NM/min</div>
-                </div>
-              </div>
-
-              <!-- Calculador rápido interactivo vinculado al ángulo actual del disco -->
-              <div style="margin-top: 10px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-                <div>
-                  <label style="font-size: 10px; color: var(--text-muted); font-weight: 700; display: block; margin-bottom: 2px;">TIEMPO DE VUELO:</label>
-                  <div style="display: flex; align-items: center; gap: 4px;">
-                    <input type="number" id="cr3-inspect-time" value="30" min="1" max="600" oninput="updateCR3InspectorFromTime(this.value)" style="width: 100%; padding: 5px 8px; background: #161b22; border: 1px solid #30363d; color: #fff; font-size: 12px; font-weight: 800; border-radius: 6px;">
-                    <span style="font-size: 11px; color: var(--text-muted);">min</span>
-                  </div>
-                </div>
-                <div>
-                  <label style="font-size: 10px; color: #3fb950; font-weight: 700; display: block; margin-bottom: 2px;">DISTANCIA / COMBUSTIBLE:</label>
-                  <div id="cr3-inspect-result" style="padding: 5px 8px; background: #161b22; border: 1px solid #2ea043; color: #3fb950; font-size: 12px; font-weight: 800; border-radius: 6px;">
-                    45.0 NM / 4.0 Gal
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Fórmulas rápidas mnemotécnicas -->
-            <div style="background: rgba(56,139,253,0.06); border: 1px solid rgba(56,139,253,0.2); border-radius: 10px; padding: 10px; font-size: 11px; color: var(--text-muted); line-height: 1.45;">
-              <strong style="color: #58a6ff;">💡 Regla de oro del CR3:</strong> El puntero triangular <strong>▲ 60</strong> representa <em>1 hora (60 minutos)</em>. Alinea el puntero con tu velocidad (nudos) o consumo horario (Gal/h). Directamente enfrente de los minutos en el disco interior leerás las millas náuticas o galones en el exterior.
-            </div>
-          </div>
+      <!-- SECCIÓN 1: COMPUTADOR EMBEBIDO OFICIAL DIRECTO DE AEROTESTPPL.ES/CR3 -->
+      <div id="cr3-section-embed" style="display: block;">
+        <div style="position: relative; width: 100%; height: 840px; border-radius: 14px; overflow: hidden; background: #0d1117; border: 1px solid #30363d; box-shadow: 0 8px 24px rgba(0,0,0,0.4);">
+          <iframe id="cr3-official-iframe" src="https://aerotestppl.es/cr3/" style="width: 100%; height: 100%; border: none; display: block;" allowfullscreen loading="lazy" title="Computador de Vuelo CR3 Oficial AerotestPPL"></iframe>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px; font-size: 11px; color: var(--text-muted); flex-wrap: wrap; gap: 8px;">
+          <span>💡 <em>Gira el disco con el ratón o el dedo, dibuja vectores de viento y calcula Rumbos y Ground Speed con el menú lateral integrado.</em></span>
+          <span style="color: #58a6ff;">Herramienta original de navegación cortesía de AerotestPPL.es (Cara de Viento Side B activa)</span>
         </div>
       </div>
 
-      <!-- CARA 2: DISCO DE VIENTO (TRIÁNGULO DE VIENTO, WCA & GROUND SPEED) -->
-      <div id="cr3-view-wind" style="display: none;">
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; align-items: center;">
-          <!-- Rosa de Vientos Interactiva SVG -->
-          <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; background: #0d1117; border: 1px solid #30363d; border-radius: 16px; padding: 18px;">
-            <div style="font-size: 11px; font-weight: 800; color: #58a6ff; margin-bottom: 8px;">
-              ROSA CIRCULAR DE RUMBOS & RESOLUCIÓN VECTORIAL DE VIENTO
-            </div>
-            
-            <svg id="cr3-wind-svg" width="300" height="300" viewBox="0 0 300 300" style="overflow: visible;">
-              <!-- Círculo exterior con rumbos -->
-              <circle cx="150" cy="150" r="140" fill="#0d1117" stroke="#388bfd" stroke-width="2"/>
-              <circle cx="150" cy="150" r="105" fill="#161b22" stroke="#30363d" stroke-width="1"/>
-              <circle cx="150" cy="150" r="70" fill="none" stroke="#21262d" stroke-width="1" stroke-dasharray="2,2"/>
-              <circle cx="150" cy="150" r="35" fill="none" stroke="#21262d" stroke-width="1" stroke-dasharray="2,2"/>
-
-              <!-- Marcas de Rumbo Generadas Dinámicamente -->
-              <g id="cr3-wind-rose-marks"></g>
-
-              <!-- Vector Rumbo Deseado (True Course) -->
-              <line id="cr3-vector-tc" x1="150" y1="150" x2="150" y2="25" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
-
-              <!-- Vector Viento (Wind Vector) -->
-              <line id="cr3-vector-wind" x1="150" y1="25" x2="180" y2="55" stroke="#3fb950" stroke-width="3" stroke-linecap="round"/>
-
-              <!-- Vector Rumbo de Aguja / Heading (TH) -->
-              <line id="cr3-vector-heading" x1="150" y1="150" x2="180" y2="55" stroke="#d2a8ff" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="4,3"/>
-
-              <!-- Centro fijo -->
-              <circle cx="150" cy="150" r="5" fill="#e3b341"/>
-            </svg>
-
-            <div style="display: flex; gap: 12px; margin-top: 10px; font-size: 11px;">
-              <span style="color: #58a6ff;">● Rumbo Deseado (TC)</span>
-              <span style="color: #3fb950;">● Vector Viento</span>
-              <span style="color: #d2a8ff;">● Rumbo a Volar (TH)</span>
-            </div>
-          </div>
-
-          <!-- Parámetros de Entrada y Solución -->
-          <div style="display: flex; flex-direction: column; gap: 12px;">
-            <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 12px; padding: 14px;">
-              <strong style="font-size: 12px; color: #fff; display: block; margin-bottom: 8px;">
-                💨 Parámetros de Vuelo y Viento
-              </strong>
-              <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
-                <div>
-                  <label style="font-size: 9px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 2px;">RUMBO (TC):</label>
-                  <input type="number" id="cr3-wind-tc" value="345" min="0" max="360" oninput="calculateCR3WindTriangle()" style="width: 100%; padding: 6px 8px; background: #161b22; border: 1px solid #30363d; color: #58a6ff; font-weight: 800; font-size: 12px; border-radius: 6px; text-align: center;">
-                </div>
-                <div>
-                  <label style="font-size: 9px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 2px;">VIENTO (DIR/KT):</label>
-                  <input type="text" id="cr3-wind-wind" value="290/20" oninput="calculateCR3WindTriangle()" style="width: 100%; padding: 6px 8px; background: #161b22; border: 1px solid #30363d; color: #3fb950; font-weight: 800; font-size: 12px; border-radius: 6px; text-align: center;">
-                </div>
-                <div>
-                  <label style="font-size: 9px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 2px;">TAS (NUDOS):</label>
-                  <input type="number" id="cr3-wind-tas" value="97" min="40" max="300" oninput="calculateCR3WindTriangle()" style="width: 100%; padding: 6px 8px; background: #161b22; border: 1px solid #30363d; color: #fff; font-weight: 800; font-size: 12px; border-radius: 6px; text-align: center;">
-                </div>
-              </div>
-            </div>
-
-            <!-- Resultados del Triángulo de Viento -->
-            <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 12px; padding: 14px;">
-              <strong style="font-size: 12px; color: #3fb950; display: block; margin-bottom: 8px;">
-                ⚡ Solución de Navegación Obtenida
-              </strong>
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                <div style="background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 8px;">
-                  <div style="font-size: 10px; color: var(--text-muted); font-weight: 700;">CORRECCIÓN DERIVA (WCA):</div>
-                  <div id="cr3-sol-wca" style="font-size: 16px; font-weight: 800; color: #e3b341; margin-top: 2px;">-9° (Izquierda)</div>
-                </div>
-                <div style="background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 8px;">
-                  <div style="font-size: 10px; color: var(--text-muted); font-weight: 700;">RUMBO VERDADERO (TH):</div>
-                  <div id="cr3-sol-th" style="font-size: 16px; font-weight: 800; color: #d2a8ff; margin-top: 2px;">336°</div>
-                </div>
-                <div style="background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 8px;">
-                  <div style="font-size: 10px; color: var(--text-muted); font-weight: 700;">VELOCIDAD SUELO (GS):</div>
-                  <div id="cr3-sol-gs" style="font-size: 16px; font-weight: 800; color: #58a6ff; margin-top: 2px;">84 kt</div>
-                </div>
-                <div style="background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 8px;">
-                  <div style="font-size: 10px; color: var(--text-muted); font-weight: 700;">COMPONENTES VIENTO:</div>
-                  <div id="cr3-sol-components" style="font-size: 12px; font-weight: 700; color: #fff; margin-top: 4px;">Cara: -16 kt | Cruzado: 12 kt Izq</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- CARA 3: GUÍA DE USO ("PARA DUMMIES" & EXAMEN EASA / PPL) -->
-      <div id="cr3-view-guide" style="display: none;">
-        <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 14px; padding: 18px; line-height: 1.55;">
-          <h4 style="margin: 0 0 12px 0; font-size: 15px; color: #e3b341;">
-            📖 Manual Rápido del Computador de Vuelo CR-3 ("Para Dummies")
+      <!-- SECCIÓN 2: GUÍA PASO A PASO: CÓMO MEDIR RUMBOS Y VELOCIDADES ("PARA DUMMIES") -->
+      <div id="cr3-section-guide" style="display: none;">
+        <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 14px; padding: 20px; line-height: 1.6;">
+          <h4 style="margin: 0 0 14px 0; font-size: 16px; color: #e3b341; display: flex; align-items: center; gap: 8px;">
+            <span>🧭</span> Cómo Medir Rumbos, Velocidades y Deriva en el CR-3 ("Para Dummies")
           </h4>
           
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px;">
-            <div style="background: #161b22; border: 1px solid #30363d; border-radius: 10px; padding: 12px;">
-              <strong style="color: #58a6ff; font-size: 12px;">1. Las Dos Escalas Fundamentales</strong>
-              <p style="font-size: 11px; color: var(--text-muted); margin: 6px 0 0 0;">
-                • <strong>Disco Exterior (Estator)</strong>: Escala fija para cantidades: Distancia (NM o Km), Velocidad (Nudos) y Combustible (Galones o Litros).<br>
-                • <strong>Disco Interior (Rotor)</strong>: Escala giratoria para el Tiempo (Minutos en número grande y Horas en número pequeño) y el <strong>Índice Triangular ▲ 60</strong>.
-              </p>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px;">
+            <!-- Caso 1: Hallar Rumbo de Aguja (Heading) y GS -->
+            <div style="background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 14px;">
+              <strong style="color: #58a6ff; font-size: 13px; display: block; margin-bottom: 8px;">
+                🎯 Problema 1: Hallar Rumbo a Volar (Heading) y Ground Speed (GS)
+              </strong>
+              <div style="font-size: 11px; color: #c9d1d9;">
+                <strong>Datos conocidos</strong>: Rumbo deseado (True Course, ej. 345°), TAS (ej. 95 kt) y Viento (ej. 290°/20 kt).<br><br>
+                <strong>Procedimiento en el CR-3 (Cara de Viento / Side B)</strong>:
+                <ol style="margin: 6px 0 0 16px; padding: 0;">
+                  <li><strong>Alinear el Rumbo</strong>: Gira el disco hasta colocar tu <em>Rumbo Deseado (Course 345°)</em> bajo el índice superior (True Index).</li>
+                  <li><strong>Trazar el Viento</strong>: Con la herramienta de dibujo, coloca el punto de viento en la dirección de donde viene el viento (290°) a una distancia igual a su velocidad (20 nudos desde el centro).</li>
+                  <li><strong>Ajustar la TAS</strong>: Coloca tu velocidad verdadera (TAS 95 kt) en el centro de la retícula.</li>
+                  <li><strong>Leer la Deriva (WCA / Drift)</strong>: Mira en qué línea de deriva cae tu punto de viento:<br>
+                    • Si cae a la <em>izquierda</em>: resta los grados al rumbo (<strong style="color:#e3b341;">WCA = -9°</strong> ➔ <strong style="color:#79c0ff;">Heading = 336°</strong>).<br>
+                    • Si cae a la <em>derecha</em>: suma los grados al rumbo.
+                  </li>
+                  <li><strong>Leer la Ground Speed (GS)</strong>: La línea de velocidad que pasa por el punto de viento es tu velocidad sobre el suelo (<strong style="color:#3fb950;">GS = 84 kt</strong>).</li>
+                </ol>
+              </div>
             </div>
 
-            <div style="background: #161b22; border: 1px solid #30363d; border-radius: 10px; padding: 12px;">
-              <strong style="color: #3fb950; font-size: 12px;">2. La Regla de Oro: Índice ▲ 60</strong>
-              <p style="font-size: 11px; color: var(--text-muted); margin: 6px 0 0 0;">
-                El triángulo <strong>▲ 60</strong> siempre representa <em>1 HORA (60 minutos)</em>. Para cualquier cálculo de velocidad o combustible:<br>
-                1. Gira el disco interior hasta que el triángulo ▲ 60 apunte a tu <strong>velocidad</strong> (ej. 90 kt) o a tu <strong>consumo</strong> (ej. 8.0 Gal/h).<br>
-                2. ¡Listo! Ya tienes configurada la proporción horaria.
-              </p>
+            <!-- Caso 2: Hallar el Viento en Vuelo (Wind W/V) -->
+            <div style="background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 14px;">
+              <strong style="color: #3fb950; font-size: 13px; display: block; margin-bottom: 8px;">
+                🌪️ Problema 2: Hallar Dirección y Fuerza del Viento en Vuelo
+              </strong>
+              <div style="font-size: 11px; color: #c9d1d9;">
+                <strong>Datos conocidos</strong>: Rumbo del avión (Heading), Rumbo sobre el terreno (Track/Course), TAS e instrumentos de cabina / GPS (GS).<br><br>
+                <strong>Procedimiento en el CR-3</strong>:
+                <ol style="margin: 6px 0 0 16px; padding: 0;">
+                  <li>Coloca el <em>True Heading</em> en el índice superior.</li>
+                  <li>Ubica el punto donde se cruza tu <em>Ground Speed (GS)</em> con la línea de deriva medida (Drift).</li>
+                  <li>Haz una marca en ese punto.</li>
+                  <li>Gira el disco hasta que la marca quede directamente en la línea central inferior: en el índice superior leerás la <strong>Dirección del Viento</strong> y la distancia desde el centro te dará la <strong>Velocidad del Viento</strong>.</li>
+                </ol>
+              </div>
             </div>
 
-            <div style="background: #161b22; border: 1px solid #30363d; border-radius: 10px; padding: 12px;">
-              <strong style="color: #e3b341; font-size: 12px;">3. Calcular Distancia y Tiempo</strong>
-              <p style="font-size: 11px; color: var(--text-muted); margin: 6px 0 0 0;">
-                • <em>Si sabes el tiempo</em>: Busca los minutos en el disco interior; enfrente en el exterior verás las millas náuticas recorridas.<br>
-                • <em>Si sabes la distancia</em>: Busca las millas en el disco exterior; enfrente en el interior leerás los minutos que tardarás.
-              </p>
-            </div>
-
-            <div style="background: #161b22; border: 1px solid #30363d; border-radius: 10px; padding: 12px;">
-              <strong style="color: #d2a8ff; font-size: 12px;">4. Calcular Consumo de Combustible</strong>
-              <p style="font-size: 11px; color: var(--text-muted); margin: 6px 0 0 0;">
-                Para una Cessna 172 que gasta 8.0 Gal/h:<br>
-                1. Coloca el triángulo ▲ 60 apuntando al número <strong>80</strong> de la escala exterior.<br>
-                2. Busca el tiempo de vuelo en el disco interior (ej. 45 min).<br>
-                3. En el disco exterior lees <strong>60</strong> $
-ightarrow$ 6.0 Galones.
-              </p>
+            <!-- Caso 3: Tiempos, Distancias y Consumo (Cara A) -->
+            <div style="background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 14px;">
+              <strong style="color: #e3b341; font-size: 13px; display: block; margin-bottom: 8px;">
+                ⏱️ Problema 3: Tiempo en Ruta y Consumo de Combustible (Cara A)
+              </strong>
+              <div style="font-size: 11px; color: #c9d1d9;">
+                Pulsa el botón <strong>"Change side"</strong> en la barra de herramientas para pasar a la Cara de Cálculo:<br><br>
+                • <strong>Velocidad y Tiempo</strong>: Pon el triángulo <strong>▲ 60</strong> en tu velocidad (ej. 90 kt). Frente a cualquier tiempo en minutos (disco interior), lees las Millas Náuticas (disco exterior).<br>
+                • <strong>Consumo Cessna 172</strong>: Pon el triángulo <strong>▲ 60</strong> en 80 (representa 8.0 Gal/h). Frente al tiempo de vuelo (ej. 45 min), lees 6.0 Galones.
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- CARA 4: BANCO DE EJERCICIOS PRÁCTICOS DE EXAMEN -->
-      <div id="cr3-view-exercises" style="display: none;">
+      <!-- SECCIÓN 3: BANCO DE EJERCICIOS DE NAVEGACIÓN -->
+      <div id="cr3-section-exercises" style="display: none;">
         <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 14px; padding: 18px;">
           <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 14px;">
             <div>
               <h4 style="margin: 0; font-size: 15px; color: #3fb950;">
-                🎯 Banco de Ejercicios Guiados (PPL / ATPL)
+                🎯 Banco de Ejercicios Oficiales de Navegación (PPL / ATPL)
               </h4>
               <p style="margin: 2px 0 0 0; font-size: 11px; color: var(--text-muted);">
-                Prueba tus habilidades de cálculo analógico. Introduce tu respuesta o pulsa "Demostrar en el CR3" para ver el disco girar automáticamente a la solución.
+                Resuelve los problemas típicos de examen oficial con el computador CR-3 y comprueba tus resultados al instante.
               </p>
             </div>
             <div id="cr3-exercises-score-badge" style="font-size: 12px; font-weight: 800; background: rgba(56,139,253,0.15); border: 1px solid #388bfd; color: #58a6ff; padding: 4px 10px; border-radius: 8px;">
@@ -2138,7 +1948,7 @@ ightarrow$ 6.0 Galones.
             <button type="button" class="btn-filter" id="cr3-btn-ex-3" onclick="loadCR3Exercise(3)" style="font-size: 11px; padding: 5px 10px; white-space: nowrap;">Ex 3: Consumo C172</button>
             <button type="button" class="btn-filter" id="cr3-btn-ex-4" onclick="loadCR3Exercise(4)" style="font-size: 11px; padding: 5px 10px; white-space: nowrap;">Ex 4: Ground Speed</button>
             <button type="button" class="btn-filter" id="cr3-btn-ex-5" onclick="loadCR3Exercise(5)" style="font-size: 11px; padding: 5px 10px; white-space: nowrap;">Ex 5: Galones a Litros</button>
-            <button type="button" class="btn-filter" id="cr3-btn-ex-6" onclick="loadCR3Exercise(6)" style="font-size: 11px; padding: 5px 10px; white-space: nowrap;">Ex 6: Deriva Viento</button>
+            <button type="button" class="btn-filter" id="cr3-btn-ex-6" onclick="loadCR3Exercise(6)" style="font-size: 11px; padding: 5px 10px; white-space: nowrap;">Ex 6: Rumbo y Deriva (WCA)</button>
           </div>
 
           <!-- Tarjeta del Ejercicio Actual -->
@@ -2147,13 +1957,10 @@ ightarrow$ 6.0 Galones.
             <div id="cr3-ex-prompt" style="font-size: 12px; color: var(--text-muted); line-height: 1.5; margin-bottom: 12px;"></div>
 
             <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-              <input type="number" id="cr3-ex-user-input" placeholder="Tu resultado..." step="0.1" style="width: 120px; padding: 8px 12px; background: #0d1117; border: 1px solid #30363d; color: #fff; font-weight: 800; font-size: 13px; border-radius: 8px;">
+              <input type="number" id="cr3-ex-user-input" placeholder="Tu resultado..." step="0.1" style="width: 130px; padding: 8px 12px; background: #0d1117; border: 1px solid #30363d; color: #fff; font-weight: 800; font-size: 13px; border-radius: 8px;">
               <span id="cr3-ex-unit-label" style="font-size: 12px; font-weight: bold; color: var(--text-muted);"></span>
               <button type="button" class="btn-sync-action" onclick="verifyCR3ExerciseAnswer()" style="background: #238636; border-color: #2ea043; padding: 8px 16px; font-weight: 700;">
                 Comprobar
-              </button>
-              <button type="button" class="btn-sync-action" onclick="demonstrateCR3ExerciseSolution()" style="background: rgba(56,139,253,0.2); border-color: #388bfd; color: #79c0ff; padding: 8px 16px; font-weight: 700;">
-                🎯 Demostrar en el CR3 (Giro Automático)
               </button>
             </div>
 
@@ -4575,7 +4382,7 @@ ightarrow$ 6.0 Galones.
 
   // 1. COCKPIT HUB NAVIGATION TABS
   function switchCockpitTab(tabId) {
-    if (tabId === 'herramientas') { setTimeout(initCR3Simulator, 80); }
+    
     const tabs = ['estudio', 'hangar', 'herramientas', 'logbook', 'fpl'];
     tabs.forEach(t => {
       const view = document.getElementById('view-' + t);
@@ -8602,273 +8409,20 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
 
   
   // ═══════════════════════════════════════════════════════════════
-  // 9. MOTOR INTERACTIVO DEL COMPUTADOR DE VUELO CR3 (JEPPESEN)
-  // ═══════════════════════════════════════════════════════════════
-  let cr3CurrentAngle = 0; // Ángulo de rotación del disco interior en grados
-  let cr3IsDragging = false;
-  let cr3StartAngle = 0;
-  let cr3CenterPos = { x: 165, y: 165 };
+  // 9. CONTROLADOR DEL COMPUTADOR DE VUELO CR-3 OFICIAL (AEROTESTPPL)
   let cr3SolvedExerciseCount = 0;
-  let cr3CurrentExerciseIndex = 0;
+  let cr3CurrentExerciseIndex = 1;
 
-  // Escala Logarítmica del Computador Circular (10 a 100)
-  function cr3ValueToAngle(val) {
-    if (val <= 0) return 0;
-    return (360 * Math.log10(val / 10)) % 360;
-  }
-
-  function cr3AngleToValue(deg) {
-    const norm = ((deg % 360) + 360) % 360;
-    return 10 * Math.pow(10, norm / 360);
-  }
-
-  // Generador de Marcas SVG del CR3
-  function initCR3Simulator() {
-    const outerGroup = document.getElementById('cr3-outer-scale-marks');
-    const innerGroup = document.getElementById('cr3-inner-scale-marks');
-    if (!outerGroup || !innerGroup) return;
-
-    // Valores mayores de la escala logarítmica (10 a 100)
-    const majorValues = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 25, 30, 35, 40, 45, 50, 55, 60, 70, 80, 90];
-    const subValues = [10.5, 11.5, 12.5, 13.5, 14.5, 15.5, 21, 22, 23, 24, 26, 27, 28, 29, 31, 32, 33, 34, 36, 37, 38, 39, 41, 42, 43, 44, 46, 47, 48, 49, 51, 52, 53, 54, 65, 75, 85, 95];
-
-    let outerSvg = '';
-    let innerSvg = '';
-
-    const cx = 165, cy = 165;
-
-    // DIBUJAR ESCALA EXTERIOR (ESTATOR FIJO)
-    majorValues.forEach(val => {
-      const deg = cr3ValueToAngle(val) - 90;
-      const rad = deg * Math.PI / 180;
-      const x1 = cx + 160 * Math.cos(rad);
-      const y1 = cy + 160 * Math.sin(rad);
-      const x2 = cx + 148 * Math.cos(rad);
-      const y2 = cy + 148 * Math.sin(rad);
-      const xt = cx + 138 * Math.cos(rad);
-      const yt = cy + 138 * Math.sin(rad);
-
-      const label = val >= 10 ? val.toString() : '';
-      outerSvg += `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#79c0ff" stroke-width="1.5"/>`;
-      outerSvg += `<text x="${xt.toFixed(1)}" y="${(yt + 3).toFixed(1)}" font-size="9" font-weight="800" fill="#fff" text-anchor="middle" font-family="monospace">${label}</text>`;
-    });
-
-    subValues.forEach(val => {
-      const deg = cr3ValueToAngle(val) - 90;
-      const rad = deg * Math.PI / 180;
-      const x1 = cx + 160 * Math.cos(rad);
-      const y1 = cy + 160 * Math.sin(rad);
-      const x2 = cx + 153 * Math.cos(rad);
-      const y2 = cy + 153 * Math.sin(rad);
-      outerSvg += `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#58a6ff" stroke-width="0.8"/>`;
-    });
-
-    // Marcadores especiales en disco exterior (NM, GAL, KM)
-    const nmRad = (cr3ValueToAngle(60) - 90) * Math.PI / 180;
-    outerSvg += `<text x="${(cx + 120 * Math.cos(nmRad)).toFixed(1)}" y="${(cy + 120 * Math.sin(nmRad)).toFixed(1)}" font-size="7" font-weight="900" fill="#3fb950" text-anchor="middle">NM</text>`;
-
-    outerGroup.innerHTML = outerSvg;
-
-    // DIBUJAR ESCALA INTERIOR (ROTOR GIRATORIO)
-    majorValues.forEach(val => {
-      const deg = cr3ValueToAngle(val) - 90;
-      const rad = deg * Math.PI / 180;
-      const x1 = cx + 128 * Math.cos(rad);
-      const y1 = cy + 128 * Math.sin(rad);
-      const x2 = cx + 117 * Math.cos(rad);
-      const y2 = cy + 117 * Math.sin(rad);
-      const xt = cx + 107 * Math.cos(rad);
-      const yt = cy + 107 * Math.sin(rad);
-
-      // Si es 60, dibujar el famoso triángulo dorado RATE / ▲ 60
-      if (val === 60) {
-        innerSvg += `<polygon points="${x1},${y1} ${cx + 112 * Math.cos(rad - 0.06)},${cy + 112 * Math.sin(rad - 0.06)} ${cx + 112 * Math.cos(rad + 0.06)},${cy + 112 * Math.sin(rad + 0.06)}" fill="#f1e05a" stroke="#d29922" stroke-width="1.5"/>`;
-        innerSvg += `<text x="${xt.toFixed(1)}" y="${(yt + 3).toFixed(1)}" font-size="10" font-weight="900" fill="#f1e05a" text-anchor="middle" font-family="monospace">▲ 60</text>`;
-      } else {
-        innerSvg += `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#e3b341" stroke-width="1.5"/>`;
-        innerSvg += `<text x="${xt.toFixed(1)}" y="${(yt + 3).toFixed(1)}" font-size="8.5" font-weight="700" fill="#e3b341" text-anchor="middle" font-family="monospace">${val}</text>`;
-      }
-    });
-
-    subValues.forEach(val => {
-      const deg = cr3ValueToAngle(val) - 90;
-      const rad = deg * Math.PI / 180;
-      const x1 = cx + 128 * Math.cos(rad);
-      const y1 = cy + 128 * Math.sin(rad);
-      const x2 = cx + 122 * Math.cos(rad);
-      const y2 = cy + 122 * Math.sin(rad);
-      innerSvg += `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#d29922" stroke-width="0.8"/>`;
-    });
-
-    // Escala de Horas (1:10, 1:20, 1:30, 2:00, 3:00, etc.)
-    const hourMarks = [
-      { min: 70, label: '1:10' }, { min: 80, label: '1:20' }, { min: 90, label: '1:30' },
-      { min: 100, label: '1:40' }, { min: 120, label: '2:00' }, { min: 150, label: '2:30' },
-      { min: 180, label: '3:00' }, { min: 240, label: '4:00' }
-    ];
-    hourMarks.forEach(hm => {
-      const deg = cr3ValueToAngle(hm.min > 100 ? (hm.min / 10) * 10 : hm.min) - 90;
-      const rad = deg * Math.PI / 180;
-      const xt = cx + 94 * Math.cos(rad);
-      const yt = cy + 94 * Math.sin(rad);
-      innerSvg += `<text x="${xt.toFixed(1)}" y="${(yt + 3).toFixed(1)}" font-size="7" font-weight="700" fill="#94a3b8" text-anchor="middle" font-family="monospace">${hm.label}</text>`;
-    });
-
-    innerGroup.innerHTML = innerSvg;
-
-    // Rosa de los vientos en Cara 2
-    initCR3WindRose();
-
-    // Eventos táctiles y de ratón para rotar el rotor
-    setupCR3DragEvents();
-
-    // Cargar primer ejercicio
-    loadCR3Exercise(1);
-
-    // Alinear inicialmente a 90 kt (Cessna 172)
-    alignCR3IndexToValue(90);
-  }
-
-  function initCR3WindRose() {
-    const roseGroup = document.getElementById('cr3-wind-rose-marks');
-    if (!roseGroup) return;
-
-    let svg = '';
-    const cx = 150, cy = 150;
-    for (let deg = 0; deg < 360; deg += 10) {
-      const rad = (deg - 90) * Math.PI / 180;
-      const x1 = cx + 140 * Math.cos(rad);
-      const y1 = cy + 140 * Math.sin(rad);
-      const x2 = cx + (deg % 30 === 0 ? 122 : 128) * Math.cos(rad);
-      const y2 = cy + (deg % 30 === 0 ? 122 : 128) * Math.sin(rad);
-      svg += `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#79c0ff" stroke-width="${deg % 30 === 0 ? 2 : 1}"/>`;
-
-      if (deg % 30 === 0) {
-        const xt = cx + 112 * Math.cos(rad);
-        const yt = cy + 112 * Math.sin(rad);
-        const label = deg === 0 ? 'N' : (deg === 90 ? 'E' : (deg === 180 ? 'S' : (deg === 270 ? 'W' : String(deg / 10).padStart(2, '0'))));
-        svg += `<text x="${xt.toFixed(1)}" y="${(yt + 3.5).toFixed(1)}" font-size="9" font-weight="800" fill="#fff" text-anchor="middle" font-family="monospace">${label}</text>`;
-      }
-    }
-    roseGroup.innerHTML = svg;
-    calculateCR3WindTriangle();
-  }
-
-  function setupCR3DragEvents() {
-    const container = document.getElementById('cr3-dial-container');
-    if (!container) return;
-
-    function getPointerAngle(e) {
-      const rect = container.getBoundingClientRect();
-      const clientX = e.clientX !== undefined ? e.clientX : (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
-      const clientY = e.clientY !== undefined ? e.clientY : (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
-      const x = clientX - (rect.left + rect.width / 2);
-      const y = clientY - (rect.top + rect.height / 2);
-      return Math.atan2(y, x) * 180 / Math.PI;
-    }
-
-    container.addEventListener('pointerdown', (e) => {
-      cr3IsDragging = true;
-      container.style.cursor = 'grabbing';
-      cr3StartAngle = getPointerAngle(e) - cr3CurrentAngle;
-      e.preventDefault();
-    });
-
-    window.addEventListener('pointermove', (e) => {
-      if (!cr3IsDragging) return;
-      const currentPointerAngle = getPointerAngle(e);
-      setCR3Rotation(currentPointerAngle - cr3StartAngle);
-    });
-
-    window.addEventListener('pointerup', () => {
-      if (cr3IsDragging) {
-        cr3IsDragging = false;
-        container.style.cursor = 'grab';
-      }
-    });
-  }
-
-  function setCR3Rotation(deg) {
-    cr3CurrentAngle = ((deg % 360) + 360) % 360;
-    const rotor = document.getElementById('cr3-inner-rotor');
-    if (rotor) {
-      rotor.style.transform = `rotate(${cr3CurrentAngle.toFixed(2)}deg)`;
-    }
-    const label = document.getElementById('cr3-current-angle-label');
-    if (label) {
-      label.textContent = `${cr3CurrentAngle.toFixed(1)}°`;
-    }
-    updateCR3Readouts();
-  }
-
-  function rotateCR3By(deltaDeg) {
-    setCR3Rotation(cr3CurrentAngle + deltaDeg);
-  }
-
-  function resetCR3Dial() {
-    alignCR3IndexToValue(90);
-  }
-
-  // Alinear el puntero 60 a un valor específico con animación fluida
-  function alignCR3IndexToValue(targetVal) {
-    if (!targetVal || targetVal <= 0) return;
-    const angleTarget = cr3ValueToAngle(targetVal);
-    const angle60 = cr3ValueToAngle(60);
-    let targetRotation = ((angleTarget - angle60) % 360 + 360) % 360;
-
-    const rotor = document.getElementById('cr3-inner-rotor');
-    if (rotor) {
-      rotor.style.transition = 'transform 0.5s cubic-bezier(0.2, 0.8, 0.3, 1)';
-      setCR3Rotation(targetRotation);
-      setTimeout(() => {
-        if (rotor) rotor.style.transition = 'transform 0.05s linear';
-      }, 520);
-    } else {
-      setCR3Rotation(targetRotation);
-    }
-  }
-
-  function updateCR3Readouts() {
-    // El ángulo de 60 en el rotor es cr3ValueToAngle(60) = 280.13°
-    // Al rotar cr3CurrentAngle, se posiciona en (280.13 + cr3CurrentAngle) en el estator
-    const angle60 = cr3ValueToAngle(60);
-    const outerAngleAt60 = (angle60 + cr3CurrentAngle) % 360;
-    const currentRate = cr3AngleToValue(outerAngleAt60);
-
-    const rateLabel = document.getElementById('cr3-readout-rate');
-    if (rateLabel) rateLabel.textContent = `${currentRate.toFixed(1)} kt / Gal/h`;
-
-    const factorLabel = document.getElementById('cr3-readout-speed-factor');
-    if (factorLabel) factorLabel.textContent = `${(currentRate / 60).toFixed(2)} NM/min`;
-
-    // Actualizar inspector rápido si hay tiempo
-    const timeInput = document.getElementById('cr3-inspect-time');
-    if (timeInput) updateCR3InspectorFromTime(timeInput.value);
-  }
-
-  function updateCR3InspectorFromTime(mins) {
-    const m = parseFloat(mins) || 30;
-    const angle60 = cr3ValueToAngle(60);
-    const currentRate = cr3AngleToValue((angle60 + cr3CurrentAngle) % 360);
-
-    const dist = (currentRate * (m / 60)).toFixed(1);
-    const fuel = (currentRate * (m / 60) / 10).toFixed(1);
-
-    const res = document.getElementById('cr3-inspect-result');
-    if (res) res.textContent = `${dist} NM / ${fuel} Gal`;
-  }
-
-  // Alternador de Pestañas del CR3
-  function switchCR3Face(face) {
-    ['calc', 'wind', 'guide', 'exercises'].forEach(f => {
-      const view = document.getElementById(`cr3-view-${f}`);
-      const btn = document.getElementById(`cr3-tab-${f}`);
-      if (view) view.style.display = (f === face) ? 'block' : 'none';
+  function switchCR3Section(section) {
+    ['embed', 'guide', 'exercises'].forEach(s => {
+      const view = document.getElementById(`cr3-section-${s}`);
+      const btn = document.getElementById(`cr3-tab-${s}`);
+      if (view) view.style.display = (s === section) ? 'block' : 'none';
       if (btn) {
-        if (f === face) {
-          btn.style.background = 'rgba(56,139,253,0.2)';
+        if (s === section) {
+          btn.style.background = 'rgba(56,139,253,0.25)';
           btn.style.borderColor = '#388bfd';
-          btn.style.color = '#58a6ff';
+          btn.style.color = '#79c0ff';
           btn.style.fontWeight = '800';
         } else {
           btn.style.background = '#0d1117';
@@ -8878,156 +8432,67 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
         }
       }
     });
-
-    if (face === 'calc') {
-      setTimeout(updateCR3Readouts, 50);
-    } else if (face === 'wind') {
-      setTimeout(calculateCR3WindTriangle, 50);
-    }
   }
 
-  // Triángulo de Viento en Cara 2
-  function calculateCR3WindTriangle() {
-    const tc = parseFloat(document.getElementById('cr3-wind-tc')?.value || '345');
-    const tas = parseFloat(document.getElementById('cr3-wind-tas')?.value || '97');
-    const windStr = document.getElementById('cr3-wind-wind')?.value || '290/20';
-
-    const wp = parseWind(windStr) || { dir: 290, spd: 20 };
-    const windRad = wp.dir * Math.PI / 180;
-    const tcRad = tc * Math.PI / 180;
-
-    // Componentes del viento relativo al rumbo
-    const relAngle = (wp.dir - tc) * Math.PI / 180;
-    const crosswind = wp.spd * Math.sin(relAngle);
-    const headwind = wp.spd * Math.cos(relAngle);
-
-    // Ángulo de corrección de deriva (WCA)
-    const sinWca = crosswind / tas;
-    const clampedSin = Math.max(-1, Math.min(1, sinWca));
-    const wcaDeg = Math.round(Math.asin(clampedSin) * 180 / Math.PI);
-
-    const trueHeading = ((tc + wcaDeg) % 360 + 360) % 360;
-    const groundSpeed = Math.max(10, Math.round(tas - headwind));
-
-    const wcaEl = document.getElementById('cr3-sol-wca');
-    if (wcaEl) {
-      wcaEl.textContent = `${wcaDeg > 0 ? '+' + wcaDeg : wcaDeg}° (${wcaDeg >= 0 ? 'Derecha' : 'Izquierda'})`;
-      wcaEl.style.color = wcaDeg === 0 ? '#3fb950' : (wcaDeg > 0 ? '#3fb950' : '#e3b341');
-    }
-
-    const thEl = document.getElementById('cr3-sol-th');
-    if (thEl) thEl.textContent = `${String(trueHeading).padStart(3, '0')}°`;
-
-    const gsEl = document.getElementById('cr3-sol-gs');
-    if (gsEl) gsEl.textContent = `${groundSpeed} kt`;
-
-    const compEl = document.getElementById('cr3-sol-components');
-    if (compEl) {
-      const hwText = headwind >= 0 ? `Cara: -${Math.round(headwind)} kt` : `Cola: +${Math.round(-headwind)} kt`;
-      const cwText = Math.abs(crosswind) < 1 ? 'Sin deriva' : `Cruzado: ${Math.round(Math.abs(crosswind))} kt ${crosswind >= 0 ? 'Der' : 'Izq'}`;
-      compEl.textContent = `${hwText} | ${cwText}`;
-    }
-
-    // Actualizar vectores en SVG
-    const cx = 150, cy = 150;
-    const tcLine = document.getElementById('cr3-vector-tc');
-    const tcAngleRad = (tc - 90) * Math.PI / 180;
-    const tcX2 = cx + 110 * Math.cos(tcAngleRad);
-    const tcY2 = cy + 110 * Math.sin(tcAngleRad);
-    if (tcLine) {
-      tcLine.setAttribute('x2', tcX2.toFixed(1));
-      tcLine.setAttribute('y2', tcY2.toFixed(1));
-    }
-
-    const windLine = document.getElementById('cr3-vector-wind');
-    const windAngleRad = (wp.dir + 90) * Math.PI / 180; // Viento sopla HACIA el centro
-    const wLen = Math.min(60, wp.spd * 2);
-    const windX2 = tcX2 + wLen * Math.cos(windAngleRad);
-    const windY2 = tcY2 + wLen * Math.sin(windAngleRad);
-    if (windLine) {
-      windLine.setAttribute('x1', tcX2.toFixed(1));
-      windLine.setAttribute('y1', tcY2.toFixed(1));
-      windLine.setAttribute('x2', windX2.toFixed(1));
-      windLine.setAttribute('y2', windY2.toFixed(1));
-    }
-
-    const hdgLine = document.getElementById('cr3-vector-heading');
-    if (hdgLine) {
-      hdgLine.setAttribute('x2', windX2.toFixed(1));
-      hdgLine.setAttribute('y2', windY2.toFixed(1));
+  function reloadCR3Iframe() {
+    const frame = document.getElementById('cr3-official-iframe');
+    if (frame) {
+      frame.src = 'https://aerotestppl.es/cr3/';
+      showToastNotification('🔄 Computador de Vuelo CR-3 recargado correctamente.');
     }
   }
 
   // ─────────────────────────────────────────────────────────────
-  // BANCO DE EJERCICIOS GUIADOS DEL CR3
+  // BANCO DE EJERCICIOS GUIADOS DEL CR3 (PPL / ATPL)
   // ─────────────────────────────────────────────────────────────
   const CR3_EXERCISES = [
     {
       id: 1,
       title: "Ejercicio 1: Cálculo de Tiempo de Vuelo (Cessna 172)",
-      prompt: "Vuelas en tu Cessna 172 a una velocidad de crucero constante de <strong>90 nudos (Ground Speed)</strong>. La distancia hasta el siguiente punto de notificación es de <strong>45 NM</strong>. ¿Cuántos minutos tardarás en llegar?",
-      rate: 90,
-      targetVal: 45,
+      prompt: "Vuelas en tu Cessna 172 a una velocidad de crucero de <strong>90 nudos (Ground Speed)</strong>. La distancia hasta el siguiente punto de notificación es de <strong>45 NM</strong>. ¿Cuántos minutos tardarás en llegar?",
       expected: 30,
       unit: "minutos",
-      face: "calc",
-      explanation: "Alinea el índice ▲ 60 con el número 90 del disco exterior. Luego busca 45 en el disco exterior: directamente enfrente en el disco interior leerás exactamente 30 minutos."
+      explanation: "En la Cara A del CR-3, coloca el índice ▲ 60 en el número 90 del disco exterior. Busca 45 en el disco exterior: directamente enfrente en el disco interior leerás exactamente 30 minutos."
     },
     {
       id: 2,
       title: "Ejercicio 2: Cálculo de Distancia Recorrida",
       prompt: "Mantienes una velocidad sobre el suelo de <strong>95 nudos</strong> durante <strong>36 minutos</strong>. ¿Qué distancia en Millas Náuticas (NM) habrás recorrido?",
-      rate: 95,
-      targetVal: 57,
       expected: 57,
       unit: "NM",
-      face: "calc",
-      explanation: "Alinea ▲ 60 con 95 en el disco exterior. Busca 36 en el disco interior (tiempo): justo enfrente en el disco exterior se lee 57 NM."
+      explanation: "Coloca ▲ 60 en 95 en el disco exterior. Busca 36 en el disco interior (tiempo): justo enfrente en el disco exterior se lee 57 NM."
     },
     {
       id: 3,
       title: "Ejercicio 3: Consumo de Combustible C172 en Galones",
       prompt: "El régimen de crucero de tu C172 consume <strong>8.0 Galones/hora</strong>. El tiempo estimado de vuelo para la pierna es de <strong>54 minutos</strong>. ¿Cuántos Galones US consumirás?",
-      rate: 80, // Representado como 80 en la escala
-      targetVal: 72,
       expected: 7.2,
       unit: "Gal",
-      face: "calc",
       explanation: "Coloca ▲ 60 en el número 80 del disco exterior (representa 8.0 Gal/h). Busca 54 minutos en el disco interior: enfrente en el exterior leerás 72, es decir, 7.2 Galones US."
     },
     {
       id: 4,
       title: "Ejercicio 4: Cálculo de Velocidad sobre el Suelo (GS)",
       prompt: "Has cronometrado el paso entre dos puntos visuales separados por <strong>32 NM</strong> y has tardado exactamente <strong>24 minutos</strong>. ¿Cuál es tu Ground Speed (GS) en nudos?",
-      rate: 80,
-      targetVal: 32,
       expected: 80,
       unit: "nudos",
-      face: "calc",
       explanation: "Gira el disco interior hasta que los 24 minutos queden justo debajo del 32 en el disco exterior. Mira ahora el triángulo ▲ 60: apunta exactamente al número 80 (80 nudos)."
     },
     {
       id: 5,
       title: "Ejercicio 5: Conversión de Combustible (Galones US a Litros)",
       prompt: "Llevas los tanques estándar de la C172 llenos con <strong>40 Galones US</strong> utilizables. ¿A cuántos litros equivale? (1 Gal US = 3.785 L).",
-      rate: 37.85,
-      targetVal: 151.4,
       expected: 151.4,
       unit: "Litros",
-      face: "calc",
-      explanation: "Coloca el índice de Galones US frente a Litros (o multiplica 40 x 3.785). El resultado es 151.4 Litros."
+      explanation: "Multiplica 40 Galones por 3.785 o utiliza la flecha US GAL frente a LITRES en la escala de conversiones del CR-3. El resultado es 151.4 Litros."
     },
     {
       id: 6,
       title: "Ejercicio 6: Triángulo de Viento y Corrección de Deriva (WCA)",
-      prompt: "Rumbo Verdadero deseado (TC): <strong>345°</strong>. Viento reportado en altura: <strong>290° a 20 nudos</strong>. Velocidad Verdadera (TAS): <strong>97 nudos</strong>. ¿Cuál es el ángulo de corrección de deriva (WCA) y el Rumbo Verdadero a volar (TH)?",
-      tc: 345,
-      wind: "290/20",
-      tas: 97,
-      expected: 335, // TH
+      prompt: "Rumbo Verdadero deseado (True Course): <strong>345°</strong>. Viento en ruta: <strong>290° a 20 nudos</strong>. Velocidad Verdadera (TAS): <strong>97 nudos</strong>. ¿Cuál es el Rumbo Verdadero a volar (True Heading) corregido por el viento?",
+      expected: 335,
       unit: "° TH",
-      face: "wind",
-      explanation: "Con viento de la izquierda (290° respecto a 345° es 55° a la izquierda), la deriva es hacia la derecha (+). Debes corregir -10° hacia la izquierda (WCA = -10°). Por tanto, el Rumbo a volar TH = 345° - 10° = 335° (o 336°)."
+      explanation: "En la Cara de Viento (Side B): con viento de la izquierda (290° respecto a 345° son 55° a la izquierda), la corrección de deriva es WCA = -10° hacia la izquierda. Por tanto, el Rumbo a volar TH = 345° - 10° = 335° (o 336° según redondeo)."
     }
   ];
 
@@ -9036,7 +8501,6 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
     if (!ex) return;
     cr3CurrentExerciseIndex = id;
 
-    // Actualizar botones de selector
     for (let i = 1; i <= 6; i++) {
       const btn = document.getElementById(`cr3-btn-ex-${i}`);
       if (btn) {
@@ -9080,7 +8544,7 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
       return;
     }
 
-    const tolerance = ex.expected * 0.03 + 0.5;
+    const tolerance = ex.expected * 0.03 + 1.0;
     const isCorrect = Math.abs(userVal - ex.expected) <= tolerance;
 
     feedbackEl.style.display = 'block';
@@ -9098,43 +8562,6 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
       feedbackEl.style.border = '1px solid #f85149';
       feedbackEl.style.color = '#ff7b72';
       feedbackEl.innerHTML = `❌ <strong>No es correcto.</strong> Tu respuesta fue ${userVal} ${ex.unit}. La respuesta esperada es <strong>${ex.expected} ${ex.unit}</strong>.<br>${ex.explanation}`;
-    }
-  }
-
-  function demonstrateCR3ExerciseSolution() {
-    const ex = CR3_EXERCISES.find(e => e.id === cr3CurrentExerciseIndex);
-    if (!ex) return;
-
-    switchCR3Face(ex.face);
-
-    if (ex.face === 'calc') {
-      alignCR3IndexToValue(ex.rate);
-      const feedbackEl = document.getElementById('cr3-ex-feedback');
-      if (feedbackEl) {
-        feedbackEl.style.display = 'block';
-        feedbackEl.style.background = 'rgba(56,139,253,0.15)';
-        feedbackEl.style.border = '1px solid #388bfd';
-        feedbackEl.style.color = '#79c0ff';
-        feedbackEl.innerHTML = `🎯 <strong>Demostración en el Disco CR3:</strong><br>El disco interior ha girado automáticamente colocando el índice ▲ 60 en la tasa de <strong>${ex.rate}</strong>.<br>${ex.explanation}`;
-      }
-      showToastNotification(`🎯 Disco alineado a la tasa ${ex.rate}. Observa la solución en el computador.`);
-    } else if (ex.face === 'wind') {
-      const tcInput = document.getElementById('cr3-wind-tc');
-      const tasInput = document.getElementById('cr3-wind-tas');
-      const windInput = document.getElementById('cr3-wind-wind');
-      if (tcInput) tcInput.value = ex.tc;
-      if (tasInput) tasInput.value = ex.tas;
-      if (windInput) windInput.value = ex.wind;
-      calculateCR3WindTriangle();
-      const feedbackEl = document.getElementById('cr3-ex-feedback');
-      if (feedbackEl) {
-        feedbackEl.style.display = 'block';
-        feedbackEl.style.background = 'rgba(56,139,253,0.15)';
-        feedbackEl.style.border = '1px solid #388bfd';
-        feedbackEl.style.color = '#79c0ff';
-        feedbackEl.innerHTML = `🎯 <strong>Demostración de Triángulo de Viento:</strong><br>${ex.explanation}`;
-      }
-      showToastNotification(`🎯 Triángulo de viento resuelto: Rumbo ${ex.expected}°`);
     }
   }
 

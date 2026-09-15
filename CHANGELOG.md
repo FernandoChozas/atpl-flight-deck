@@ -13,12 +13,12 @@ Todos los cambios notables, evoluciones y correcciones de este proyecto se regis
   - **Tarjeta 3 (Combustible)**: Sincronización dinámica de combustible de crucero, subida, descenso, alternativo, reserva final de 45 min y margen de seguridad en Galones US en tiempo real ante cualquier cambio de consumo, horas o ruta.
   - **Tarjeta 4 (Calzos y Tiempos)**: Cálculo automático de tiempo de vuelo (`flight time`), hora estimada de aterrizaje (`landing time`), `off-block` (-10m), `on-block` (+10m) y `block time` (+20m rodaje).
   - **Tarjeta 5 (Rendimiento de Pistas)**: Sincronización instantánea de distancias disponibles de despegue y aterrizaje en salida, destino y alternativo, así como distancias requeridas según el modelo de aeronave.
-- **Simulador Interactivo de Computador de Vuelo CR-3 (Jeppesen / AerotestPPL)**:
-  - Integrado en la pestaña **`🧭 Simuladores & METAR`**.
-  - **Cara 1 (Calculadora Circular)**: Escalas logarítmicas de precisión, disco interior rotatorio mediante arrastre táctil y ratón, alineación asistida del índice triangular ▲ 60 (RATE), inspector digital en tiempo real y botones de microgiro (±1°, ±10°).
-  - **Cara 2 (Disco de Viento)**: Rosa circular de 360°, resolución vectorial del triángulo de viento, cálculo de corrección de deriva (WCA), rumbo de aguja (TH/MH), Ground Speed (GS) y componentes de viento cruzado y de cara/cola.
-  - **Guía Didáctica "Para Dummies" & Examen EASA**: Explicación paso a paso de las escalas, la regla del índice 60 y cómo resolver velocidad, tiempo, distancia y combustible.
-  - **Banco de Ejercicios Prácticos con Giro Automático**: 6 problemas de navegación interactivos con verificación inmediata y botón *"🎯 Demostrar en el CR3"* que gira el disco animado hasta la solución exacta.
+- **Computador de Vuelo Oficial CR-3 Embebido (AerotestPPL.es/cr3)**:
+  - Integrado de manera interactiva y responsiva en la pestaña **`🧭 Simuladores & METAR`** directamente desde `https://aerotestppl.es/cr3/`.
+  - Permite al piloto alumno utilizar la **herramienta original oficial** con su visor de alta resolución, Cara de Viento (Side B) activa por defecto, rosa de 360°, retícula de deriva (WCA), arcos de TAS, cálculo de Ground Speed (GS), herramientas de dibujo de vector de viento y menús de cálculo integrados.
+  - Botones de acceso rápido: `🌐 Abrir en Pantalla Completa ↗`, `🔄 Recargar`, `📖 Guía: Rumbos y Velocidades` y `🎯 Ejercicios de Navegación`.
+  - **Guía Didáctica ("Para Dummies" & Examen EASA / PPL)**: Procedimiento paso a paso para medir rumbos de aguja (Heading/Course), Ground Speed (GS), Viento en vuelo (Wind W/V) y tiempos/consumo.
+  - **Banco de Ejercicios Guiados**: 6 problemas interactivos oficiales con autocorrección y explicación detallada.
 
 ---
 

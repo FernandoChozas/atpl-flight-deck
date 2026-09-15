@@ -1,10 +1,11 @@
-const CACHE_NAME = 'atpl-flightdeck-v1.1';
+const CACHE_NAME = 'atpl-flightdeck-v1.2';
 const STATIC_ASSETS = [
   './',
   './index.html',
   './data.js',
   './data.json',
-  './apple-touch-icon-180x180.png'
+  './apple-touch-icon-180x180.png',
+  './world_aviation_logo.png'
 ];
 
 self.addEventListener('install', (event) => {

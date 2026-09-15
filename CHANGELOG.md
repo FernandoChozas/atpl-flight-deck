@@ -4,6 +4,35 @@ Todos los cambios notables, evoluciones y correcciones de este proyecto se regis
 
 ---
 
+## [1.2.0] - 2026-09-15
+
+### 🚀 Novedades y Mejoras Principales
+- **Plan de Vuelo Operacional (OFP) Oficial de World Aviation**:
+  - Recreación milimétrica y fidedigna de la plantilla oficial de **World Aviation Flight Academy** (`Plan+de+vuelo+operacional.xlsx`), garantizando total correspondencia con el formato oficial de la escuela.
+  - Logotipo oficial extraído y renderizado en alta resolución (`world_aviation_logo.png`).
+  - Cabecera y datos de vuelo: Model, Registration, ARCID, Date, PIC, Squawk, Frequencies, Parking, Off/On Block, Block Time, Take Off, Landing, Flight Time.
+  - Bloques de Despegue y Aterrizaje (Takeoff / Landing ATIS data): Info, Time, RWY, TL, First Call, Visibility, Cloud, Temp, QNH y espacio de autorización de salida (Clearance).
+  - NavLog operacional completo con 12 piernas y celdas duales superior/inferior para True Course (TC), Magnetic Course (MC), Viento (DIR/KT), Rumbo Magnético (MH), Altitud, Distancia (NM), TAS, Ground Speed (GS), ETE, ETA, ATA y Combustible por pierna y acumulado.
+  - Bloque de cálculo de combustible reglamentario (Climb, Cruise, Descent, Total Trip Fuel, Alternate Fuel, Minimum Required Fuel, Fuel on Board): **100% editable manualmente** para ajustes inmediatos a criterio del piloto.
+  - Bloques de distancia de pista requerida/disponible en destino y alternativo, zona NOTAMs y Airspace Zones (CTR, TMA, D, R, P).
+- **Cartas Visuales VFR Interactivas & Trazador de Ruta sobre Mapa (Leaflet.js)**:
+  - Visor cartográfico VFR integrado con capas topográficas y de navegación sobre la Península Ibérica.
+  - Entrada dual de puntos de notificación:
+    1. Clic sobre la carta para fijar waypoints georreferenciados.
+    2. Pastillas de acceso rápido a puntos VFR y aeródromos habituales (Cuatro Vientos `LECU`, Punto W, Punto S, Punto N, El Escorial, Pto. Los Leones, Casarrubios `LEMT`, Valladolid `LEVD`, etc.).
+    3. Edición manual directa en las casillas de la tabla o eliminación de tramos en 1 clic.
+  - Medición geodésica automática en **Millas Náuticas (NM)** y marcadores arrastrables para ajustar la ruta en tiempo real.
+- **Computador de Vuelo Automático CR3 / E6B (Triángulo del Viento)**:
+  - A partir de la velocidad indicada ($IAS$) y el viento en altura (`DIR/KT`), calcula trigonométricamente la velocidad verdadera ($TAS$), el ángulo de corrección de deriva ($WCA$), el rumbo magnético ($MH$), la velocidad sobre el suelo ($GS$), los tiempos estimados de pierna ($ETE$) y la acumulación horaria ($ETA$).
+  - Botón directo `🌬️ METAR` para importar el viento teletípico real desde el módulo meteorológico.
+- **Exportación / Descarga en PDF Oficial (A4 Horizontal Landscape)**:
+  - Reglas `@media print` milimétricas (`@page { size: A4 landscape; margin: 4mm; }`) que aíslan exclusivamente la plantilla oficial rellenada de World Aviation a pantalla completa sobre A4 horizontal.
+  - Salida limpia para imprimir en papel o guardar en PDF, idéntica visualmente al archivo Excel oficial de la escuela.
+- **Guardado y Persistencia Local**:
+  - Almacenamiento seguro del plan de vuelo en `localStorage` (`atpl_${currentPilot}_saved_ofp`) para no perder la ruta ni los datos entre sesiones.
+
+---
+
 ## [1.1.0] - 2026-09-15
 
 ### 🚀 Novedades y Mejoras Principales

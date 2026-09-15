@@ -1190,7 +1190,109 @@
       transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
-  </style>
+  
+  /* ═══════════════════════════════════════════════════════════════
+     ESTILOS OFICIALES WORLD AVIATION OPERATIONAL FLIGHT PLAN (v1.2.0)
+  ═══════════════════════════════════════════════════════════════ */
+  input.ofp-cell-input {
+    width: 100%;
+    border: none;
+    background: transparent;
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    padding: 1px 2px;
+    margin: 0;
+    outline: none;
+    color: #000;
+  }
+  input.ofp-cell-input:focus {
+    background: #eef6ff;
+  }
+  input.ofp-cell-input.center {
+    text-align: center;
+  }
+  input.ofp-cell-input.bold {
+    font-weight: bold;
+  }
+  textarea.ofp-cell-area {
+    width: 100%;
+    height: 100%;
+    min-height: 48px;
+    border: none;
+    background: transparent;
+    font-family: Arial, sans-serif;
+    font-size: 10px;
+    resize: none;
+    outline: none;
+    color: #000;
+  }
+  textarea.ofp-cell-area:focus {
+    background: #eef6ff;
+  }
+  .ofp-scroll-container::-webkit-scrollbar {
+    height: 8px;
+  }
+  .ofp-scroll-container::-webkit-scrollbar-thumb {
+    background: #8b949e;
+    border-radius: 4px;
+  }
+
+  @media print {
+    @page {
+      size: A4 landscape;
+      margin: 4mm;
+    }
+    html, body {
+      background: #fff !important;
+      color: #000 !important;
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+    body > *:not(.container) {
+      display: none !important;
+    }
+    .container {
+      width: 100% !important;
+      max-width: 100% !important;
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+    header, .cockpit-hub-nav, #view-estudio, #view-hangar, #view-herramientas, #view-logbook, .no-print, #quiz-modal-overlay, #pilot-modal, #atc-panel {
+      display: none !important;
+    }
+    #view-fpl {
+      display: block !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+    .ofp-scroll-container {
+      background: transparent !important;
+      padding: 0 !important;
+      border-radius: 0 !important;
+    }
+    #world-aviation-ofp-sheet {
+      width: 100% !important;
+      max-width: 100% !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      box-shadow: none !important;
+      border: none !important;
+    }
+    #world-aviation-ofp-sheet table {
+      width: 100% !important;
+    }
+    input.ofp-cell-input, textarea.ofp-cell-area {
+      color: #000 !important;
+      background: transparent !important;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+  }
+
+</style>
+  <!-- Leaflet VFR Map Engine -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 </head>
 <body>
   <!-- ═══════════════════════════════════════════════════════════
@@ -1267,7 +1369,7 @@
       <div class="brand">
         <div class="brand-icon" style="padding: 0; overflow: hidden; border: 1px solid rgba(88, 166, 255, 0.4); background: #012349;"><img src="apple-touch-icon-180x180.png" alt="ATPL Pilot" style="width: 100%; height: 100%; object-fit: cover; border-radius: 9px; display: block;"></div>
         <div class="brand-text">
-          <h1>ATPL Flight Deck & Study Control <span class="badge-beta" id="version-badge">v1.1.0 EFB</span></h1>
+          <h1>ATPL Flight Deck & Study Control <span class="badge-beta" id="version-badge">v1.2.0 EFB</span></h1>
           <p>Preparación EASA Modular Oficial | Sistema adaptado a turnos de 12h</p>
         </div>
       </div>
@@ -1321,6 +1423,9 @@
       </button>
       <button type="button" class="cockpit-tab-btn" onclick="switchCockpitTab('logbook')" id="cockpit-tab-logbook">
         <span>📖</span> Logbook & Offline
+      </button>
+      <button type="button" class="cockpit-tab-btn" onclick="switchCockpitTab('fpl')" id="cockpit-tab-fpl">
+        <span>🗺️</span> Plan de Vuelo (OFP) & Cartas VFR
       </button>
     </nav>
 
@@ -1781,6 +1886,347 @@
       </div>
     </div>
   </div><!-- /view-logbook -->
+  <!-- ═══════════════════════════════════════════════════════════
+       MODO 5: PLAN DE VUELO OPERACIONAL (WORLD AVIATION) & CARTAS VFR
+  ═══════════════════════════════════════════════════════════ -->
+  <div id="view-fpl" style="display: none; margin-bottom: 30px;">
+    <!-- TOOLBAR PRINCIPAL DEL PLAN DE VUELO -->
+    <div class="pilot-box no-print" style="margin-bottom: 16px; background: var(--bg-card, #161b22); border: 1px solid var(--border-color, #30363d); border-radius: 16px; padding: 18px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 28px;">🗺️</span>
+          <div>
+            <h3 style="margin: 0; font-size: 16px; font-weight: 800; color: #fff;">Plan de Vuelo Operacional (OFP) & Trazador VFR</h3>
+            <p style="margin: 2px 0 0 0; font-size: 11px; color: var(--text-muted);">Plantilla oficial World Aviation Flight Academy con cálculo automático CR3 (Rumbos, Deriva WCA, GS y Tiempos)</p>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+          <button type="button" onclick="toggleVFRMapView()" class="hub-tab-btn active" style="padding: 7px 14px; font-size: 12px; border-radius: 8px; background: #21262d; border: 1px solid #30363d; color: #fff; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+            <span>🗺️</span> <span id="btn-toggle-map-text">Ocultar Mapa</span>
+          </button>
+          <button type="button" onclick="exportFlightPlanToPDF()" style="padding: 7px 16px; background: #238636; border: 1px solid #2ea043; color: #fff; font-weight: 800; font-size: 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px; touch-action: manipulation;" title="Descargar e imprimir la plantilla oficial de World Aviation en A4">
+            <span>📄</span> Descargar / Imprimir PDF Oficial
+          </button>
+          <button type="button" onclick="saveFlightPlanLocally()" style="padding: 7px 12px; background: #1f6feb; border: 1px solid #388bfd; color: #fff; font-weight: 700; font-size: 12px; border-radius: 8px; cursor: pointer;">
+            💾 Guardar Plan
+          </button>
+          <button type="button" onclick="resetFlightPlanRoute()" style="padding: 7px 12px; background: rgba(248,81,73,0.15); border: 1px solid rgba(248,81,73,0.35); color: #ff7b72; font-size: 12px; font-weight: 700; border-radius: 8px; cursor: pointer;">
+            🧹 Limpiar
+          </button>
+        </div>
+      </div>
+
+      <!-- PARÁMETROS AERONÁUTICOS (CR3 / E6B) -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; background: #0d1117; border: 1px solid #30363d; border-radius: 12px; padding: 12px;">
+        <div>
+          <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">✈️ MODELO & TAS BASE</label>
+          <select id="fpl-aircraft-select" onchange="applyAircraftPreset()" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #fff; font-size: 12px; padding: 6px 8px; border-radius: 6px;">
+            <option value="P2008JC">Tecnam P2008JC (Rotax 912S · 95kt IAS · 17 L/h)</option>
+            <option value="P2006T">Tecnam P2006T (Twin Rotax · 140kt IAS · 34 L/h)</option>
+            <option value="C172">Cessna 172SP (Lycoming IO-360 · 105kt IAS · 32 L/h)</option>
+            <option value="DA40">Diamond DA40 NG (Austro Engine · 125kt IAS · 22 L/h)</option>
+          </select>
+        </div>
+
+        <div>
+          <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">⚡ VELOCIDAD CRUCERO (IAS)</label>
+          <div style="display: flex; align-items: center; gap: 4px;">
+            <input type="number" id="fpl-ias-input" value="95" min="40" max="250" onchange="recalculateFlightPlanFromParams()" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #58a6ff; font-weight: 800; font-size: 12px; padding: 6px 8px; border-radius: 6px;">
+            <span style="font-size: 11px; color: var(--text-muted);">kt</span>
+          </div>
+        </div>
+
+        <div>
+          <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">💨 VIENTO EN RUTA (DIR/KT)</label>
+          <div style="display: flex; gap: 6px;">
+            <input type="text" id="fpl-wind-input" value="240/12" placeholder="240/12" onchange="recalculateFlightPlanFromParams()" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #3fb950; font-weight: 800; font-size: 12px; padding: 6px 8px; border-radius: 6px;">
+            <button type="button" onclick="useMetarWindInFPL()" style="padding: 6px 10px; background: #21262d; border: 1px solid #30363d; color: #e3b341; font-size: 11px; border-radius: 6px; cursor: pointer; white-space: nowrap;" title="Copiar viento del METAR español activo">
+              🌬️ METAR
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">🧭 DECLINACIÓN MAGNÉTICA</label>
+          <div style="display: flex; align-items: center; gap: 4px;">
+            <input type="text" id="fpl-var-input" value="-1" onchange="recalculateFlightPlanFromParams()" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #fff; font-weight: 700; font-size: 12px; padding: 6px 8px; border-radius: 6px;">
+            <span style="font-size: 11px; color: var(--text-muted);">° W</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECCIÓN DEL MAPA VFR INTERACTIVO (LEAFLET) -->
+    <div id="vfr-map-section" class="pilot-box no-print" style="margin-bottom: 20px; background: var(--bg-card, #161b22); border: 1px solid var(--border-color, #30363d); border-radius: 16px; padding: 18px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
+        <div style="font-size: 13px; font-weight: 800; color: #58a6ff; display: flex; align-items: center; gap: 6px;">
+          <span>📍</span> Carta de Navegación Visual VFR · Haz clic en el mapa para trazar tu ruta
+        </div>
+        <div style="font-size: 11px; color: var(--text-muted);">
+          Distancia total calculada: <strong style="color: #3fb950;" id="fpl-map-total-dist">0.0 NM</strong> | Tiempo estimado: <strong style="color: #f1e05a;" id="fpl-map-total-time">00m</strong>
+        </div>
+      </div>
+
+      <!-- VISOR LEAFLET -->
+      <div id="vfr-leaflet-map" style="height: 380px; width: 100%; border-radius: 12px; border: 1px solid #30363d; background: #0d1117; z-index: 1;"></div>
+
+      <!-- PASTILLAS DE PUNTOS VFR RÁPIDOS -->
+      <div style="margin-top: 12px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+        <span style="font-size: 11px; font-weight: 700; color: var(--text-muted); margin-right: 4px;">Puntos Rápidos:</span>
+        <button type="button" class="btn-filter" onclick="addWaypointFromPreset('LECU (RWY27)', 40.3708, -3.7847, 2500)" style="font-size: 11px; padding: 4px 10px;">🛫 LECU (Cuatro Vientos)</button>
+        <button type="button" class="btn-filter" onclick="addWaypointFromPreset('PUNTO W (Villaviciosa)', 40.3583, -3.9000, 3500)" style="font-size: 11px; padding: 4px 10px;">📍 Punto W (LECU)</button>
+        <button type="button" class="btn-filter" onclick="addWaypointFromPreset('PUNTO S (Fuenlabrada)', 40.2833, -3.7833, 3000)" style="font-size: 11px; padding: 4px 10px;">📍 Punto S (LECU)</button>
+        <button type="button" class="btn-filter" onclick="addWaypointFromPreset('PUNTO N (Campamento)', 40.3950, -3.7750, 3000)" style="font-size: 11px; padding: 4px 10px;">📍 Punto N (LECU)</button>
+        <button type="button" class="btn-filter" onclick="addWaypointFromPreset('EL ESCORIAL', 40.5925, -4.1278, 5500)" style="font-size: 11px; padding: 4px 10px;">📍 El Escorial</button>
+        <button type="button" class="btn-filter" onclick="addWaypointFromPreset('PTO. LOS LEONES', 40.7167, -4.1333, 6500)" style="font-size: 11px; padding: 4px 10px;">📍 Pto. Los Leones</button>
+        <button type="button" class="btn-filter" onclick="addWaypointFromPreset('LEMT (Casarrubios)', 40.2333, -4.0333, 3000)" style="font-size: 11px; padding: 4px 10px;">🛬 LEMT (Casarrubios)</button>
+        <button type="button" class="btn-filter" onclick="addWaypointFromPreset('LEVD (Valladolid)', 41.7061, -4.8519, 4500)" style="font-size: 11px; padding: 4px 10px;">🛬 LEVD (Valladolid)</button>
+        <button type="button" class="btn-filter" onclick="addWaypointFromPreset('LESA (Salamanca)', 40.9522, -5.5019, 4500)" style="font-size: 11px; padding: 4px 10px;">🛬 LESA (Salamanca)</button>
+        <button type="button" class="btn-filter" onclick="addWaypointFromPreset('LETO (Toledo)', 39.8889, -4.0244, 3500)" style="font-size: 11px; padding: 4px 10px;">📍 Toledo</button>
+      </div>
+    </div>
+
+    <!-- CONTENEDOR OFICIAL DE LA PLANTILLA WORLD AVIATION (IDENTICA A EXCEL) -->
+    <div style="background: #e6edf3; padding: 15px; border-radius: 14px; overflow-x: auto;" class="ofp-scroll-container">
+      <div id="world-aviation-ofp-sheet" style="width: 1080px; margin: 0 auto; background: #fff; padding: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.25); color: #000; font-family: Arial, sans-serif;">
+        <table style="width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 11px; border: 1px solid #000;">
+          <colgroup>
+            <!-- 13 columnas parte izquierda (NavLog): ~56% -->
+            <col style="width: 8.5%;"> <!-- A: WP -->
+            <col style="width: 3.5%;"> <!-- B: TC -->
+            <col style="width: 3.5%;"> <!-- C: Var / MC -->
+            <col style="width: 4.5%;"> <!-- D: Wind / DIR/KT -->
+            <col style="width: 3.8%;"> <!-- E: MH -->
+            <col style="width: 4.0%;"> <!-- F: ALT -->
+            <col style="width: 4.0%;"> <!-- G: DIST -->
+            <col style="width: 4.2%;"> <!-- H: TAS / GS -->
+            <col style="width: 4.2%;"> <!-- I: ETE -->
+            <col style="width: 4.2%;"> <!-- J: ETA -->
+            <col style="width: 4.2%;"> <!-- K: ATA -->
+            <col style="width: 4.0%;"> <!-- L: Fuel Leg -->
+            <col style="width: 4.5%;"> <!-- M: Fuel Tot -->
+            <!-- Separador -->
+            <col style="width: 0.8%;"> <!-- N: Spacer -->
+            <!-- 9 columnas parte derecha (Met / Fuel / Distances): ~44% -->
+            <col style="width: 4.8%;"> <!-- O -->
+            <col style="width: 4.2%;"> <!-- P -->
+            <col style="width: 4.2%;"> <!-- Q -->
+            <col style="width: 3.8%;"> <!-- R -->
+            <col style="width: 4.8%;"> <!-- S -->
+            <col style="width: 5.5%;"> <!-- T -->
+            <col style="width: 5.5%;"> <!-- U -->
+            <col style="width: 5.5%;"> <!-- V -->
+            <col style="width: 5.8%;"> <!-- W -->
+          </colgroup>
+
+          <!-- FILA 1: TÍTULO -->
+          <tr style="height: 32px; background: #fff;">
+            <td colspan="13" style="border: 1px solid #000; font-size: 16px; font-weight: 900; letter-spacing: 1px; padding-left: 8px;">
+              OPERATIONAL FLIGHT PLAN
+            </td>
+            <td style="border: none;"></td>
+            <td colspan="9" style="border: 1px solid #000; text-align: right; padding-right: 12px; font-size: 13px; font-weight: 900; color: #1e293b;">
+              <span style="color: #2b3a4a;">WORLD AVIATION</span> FLIGHT ACADEMY
+            </td>
+          </tr>
+
+          <!-- FILA 2: DATOS GENERALES (MODEL, REGISTRATION, ARCID, DATE) & TAKE OFF DATA HEADER -->
+          <tr style="height: 22px;">
+            <td style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 9px; padding: 2px 4px;">MODEL</td>
+            <td colspan="2" style="border: 1px solid #000;"><input class="ofp-cell-input bold center" id="fpl-model" value="P2008JC"></td>
+            <td colspan="2" style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 9px; padding: 2px 4px;">REGISTRATION</td>
+            <td colspan="2" style="border: 1px solid #000;"><input class="ofp-cell-input bold center" id="fpl-reg" value="EC-XYZ"></td>
+            <td colspan="2" style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 9px; padding: 2px 4px;">ARCID</td>
+            <td><input class="ofp-cell-input center" id="fpl-arcid" value="WDA01"></td>
+            <td style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 9px; padding: 2px 4px;">DATE</td>
+            <td colspan="2" style="border: 1px solid #000;"><input class="ofp-cell-input center" id="fpl-date" value="2026-09-16"></td>
+            <td style="border: none;"></td>
+            <td colspan="9" style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 10px; text-align: center;">TAKE OFF DATA</td>
+          </tr>
+
+          <!-- FILA 3: PIC, SQUAWK & SUBHEADERS TAKE OFF DATA -->
+          <tr style="height: 20px;">
+            <td style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 9px; padding: 2px 4px;">PIC</td>
+            <td colspan="4" style="border: 1px solid #000;"><input class="ofp-cell-input bold" id="fpl-pic" value="FERNANDO CHOZAS"></td>
+            <td colspan="2" style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 9px; padding: 2px 4px;">SQUAK</td>
+            <td colspan="2" style="border: 1px solid #000;"><input class="ofp-cell-input bold center" id="fpl-squawk" value="7000"></td>
+            <td colspan="4" style="border: 1px solid #000;"></td>
+            <td style="border: none;"></td>
+            <td style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 8px; text-align: center;">INFO</td>
+            <td style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 8px; text-align: center;">TIME</td>
+            <td style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 8px; text-align: center;">RWY</td>
+            <td style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 8px; text-align: center;">TL</td>
+            <td style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 8px; text-align: center;">FIRST CALL</td>
+            <td style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 8px; text-align: center;">VISIBILITY</td>
+            <td style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 8px; text-align: center;">CLOUD</td>
+            <td style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 8px; text-align: center;">TEMP</td>
+            <td style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 8px; text-align: center;">QNH</td>
+          </tr>
+
+          <!-- FILA 4: FREQUENCIES (rowspan=4) & TAKE OFF VALUES -->
+          <tr style="height: 20px;">
+            <td colspan="13" rowspan="4" style="border: 1px solid #000; vertical-align: top; padding: 4px;">
+              <div style="font-weight: bold; font-size: 9px; margin-bottom: 2px;">FREQUENCIES:</div>
+              <textarea class="ofp-cell-area" id="fpl-frequencies" placeholder="TWR: 118.150 | GND: 121.800 | ATIS: 130.850 | MADRID INFO: 124.025 | FIS: 127.100"></textarea>
+            </td>
+            <td style="border: none;"></td>
+            <td style="border: 1px solid #000;"><input class="ofp-cell-input center" id="fpl-to-info" value="C"></td>
+            <td style="border: 1px solid #000;"><input class="ofp-cell-input center" id="fpl-to-time" value="10:00"></td>
+            <td style="border: 1px solid #000;"><input class="ofp-cell-input center bold" id="fpl-to-rwy" value="27"></td>
+            <td style="border: 1px solid #000;"><input class="ofp-cell-input center" id="fpl-to-tl" value="60"></td>
+            <td style="border: 1px solid #000;"><input class="ofp-cell-input center" id="fpl-to-firstcall" value="118.15"></td>
+            <td style="border: 1px solid #000;"><input class="ofp-cell-input center" id="fpl-to-vis" value="9999"></td>
+            <td style="border: 1px solid #000;"><input class="ofp-cell-input center" id="fpl-to-cloud" value="SCT040"></td>
+            <td style="border: 1px solid #000;"><input class="ofp-cell-input center" id="fpl-to-temp" value="18"></td>
+            <td style="border: 1px solid #000;"><input class="ofp-cell-input center bold" id="fpl-to-qnh" value="1018"></td>
+          </tr>
+
+          <!-- FILA 5: LANDING DATA HEADER -->
+          <tr style="height: 20px;">
+            <td style="border: none;"></td>
+            <td colspan="9" style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 10px; text-align: center;">LANDING DATA</td>
+          </tr>
+
+          <!-- FILA 6: SUBHEADERS LANDING DATA -->
+          <tr style="height: 20px;">
+            <td style="border: none;"></td>
+            <td style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 8px; text-align: center;">INFO</td>
+            <td style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 8px; text-align: center;">TIME</td>
+            <td style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 8px; text-align: center;">RWY</td>
+            <td style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 8px; text-align: center;">TL</td>
+            <td style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 8px; text-align: center;">FIRST CALL</td>
+            <td style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 8px; text-align: center;">VISIBILITY</td>
+            <td style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 8px; text-align: center;">CLOUD</td>
+            <td style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 8px; text-align: center;">TEMP</td>
+            <td style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 8px; text-align: center;">QNH</td>
+          </tr>
+
+          <!-- FILA 7: LANDING VALUES -->
+          <tr style="height: 20px;">
+            <td style="border: none;"></td>
+            <td style="border: 1px solid #000;"><input class="ofp-cell-input center" id="fpl-ld-info"></td>
+            <td style="border: 1px solid #000;"><input class="ofp-cell-input center" id="fpl-ld-time"></td>
+            <td style="border: 1px solid #000;"><input class="ofp-cell-input center bold" id="fpl-ld-rwy" value="27"></td>
+            <td style="border: 1px solid #000;"><input class="ofp-cell-input center" id="fpl-ld-tl" value="60"></td>
+            <td style="border: 1px solid #000;"><input class="ofp-cell-input center" id="fpl-ld-firstcall" value="118.15"></td>
+            <td style="border: 1px solid #000;"><input class="ofp-cell-input center" id="fpl-ld-vis" value="9999"></td>
+            <td style="border: 1px solid #000;"><input class="ofp-cell-input center" id="fpl-ld-cloud" value="FEW045"></td>
+            <td style="border: 1px solid #000;"><input class="ofp-cell-input center" id="fpl-ld-temp" value="20"></td>
+            <td style="border: 1px solid #000;"><input class="ofp-cell-input center bold" id="fpl-ld-qnh" value="1018"></td>
+          </tr>
+
+          <!-- FILA 8: PARKING, OFF/ON BLOCK & CLEARANCE -->
+          <tr style="height: 22px;">
+            <td style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 9px; padding: 2px 4px;">PARKING</td>
+            <td><input class="ofp-cell-input center" id="fpl-parking-1" value="A-12"></td>
+            <td colspan="2" style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 9px; padding: 2px 4px;">OFF BLOCK</td>
+            <td><input class="ofp-cell-input center bold" id="fpl-off-block" value="09:50"></td>
+            <td colspan="2" style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 9px; padding: 2px 4px;">ON BLOCK</td>
+            <td><input class="ofp-cell-input center bold" id="fpl-on-block" value="11:15"></td>
+            <td colspan="3" style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 9px; padding: 2px 4px;">BLOCK TIME</td>
+            <td colspan="2" style="border: 1px solid #000;"><input class="ofp-cell-input center bold" id="fpl-block-time" value="01h 25m"></td>
+            <td style="border: none;"></td>
+            <td colspan="9" rowspan="2" style="border: 1px solid #000; vertical-align: top; padding: 4px;">
+              <div style="font-weight: bold; font-size: 9px; margin-bottom: 2px;">CLEARANCE:</div>
+              <textarea class="ofp-cell-area" id="fpl-clearance" placeholder="Autorización ATC: Salida VFR por Punto W a 3000ft, Transponder 7000..."></textarea>
+            </td>
+          </tr>
+
+          <!-- FILA 9: PARKING, TAKE OFF, LANDING, FLIGHT TIME -->
+          <tr style="height: 22px;">
+            <td style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 9px; padding: 2px 4px;">PARKING</td>
+            <td><input class="ofp-cell-input center" id="fpl-parking-2" value="A-12"></td>
+            <td colspan="2" style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 9px; padding: 2px 4px;">TAKE OFF</td>
+            <td><input class="ofp-cell-input center bold" id="fpl-takeoff-time" value="10:00" onchange="recalculateFlightPlanTimes()"></td>
+            <td colspan="2" style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 9px; padding: 2px 4px;">LANDING</td>
+            <td><input class="ofp-cell-input center bold" id="fpl-landing-time" value="11:05"></td>
+            <td colspan="3" style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 9px; padding: 2px 4px;">FLIGHT TIME</td>
+            <td colspan="2" style="border: 1px solid #000;"><input class="ofp-cell-input center bold" id="fpl-flight-time" value="01h 05m"></td>
+            <td style="border: none;"></td>
+          </tr>
+
+          <!-- FILA 10: SEPARADOR VACÍO -->
+          <tr style="height: 6px; background: #eee;">
+            <td colspan="13" style="border: 1px solid #ccc;"></td>
+            <td style="border: none;"></td>
+            <td colspan="9" style="border: 1px solid #ccc;"></td>
+          </tr>
+
+          <!-- FILAS 11-12: CABECERAS NAVLOG (IZQUIERDA) & ALTERNATE / FUEL CALCULATION (DERECHA) -->
+          <tr style="height: 16px;">
+            <td rowspan="2" style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 9px; text-align: center;">WAYPOINT</td>
+            <td style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 8px; text-align: center;">TC</td>
+            <td style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 8px; text-align: center;">Var</td>
+            <td style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 8px; text-align: center;">WIND</td>
+            <td rowspan="2" style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 9px; text-align: center;">MH</td>
+            <td rowspan="2" style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 9px; text-align: center;">ALT</td>
+            <td rowspan="2" style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 9px; text-align: center;">DIST</td>
+            <td style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 8px; text-align: center;">TAS</td>
+            <td colspan="3" style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 9px; text-align: center;">TIME</td>
+            <td colspan="2" style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 9px; text-align: center;">TOTAL FUEL</td>
+            <td style="border: none;"></td>
+            <td colspan="9" style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 10px; padding-left: 6px;">
+              ALTERNATE: <input class="ofp-cell-input bold" id="fpl-alternate-name" style="display: inline-block; width: 65%;" value="LEVD / VALLADOLID">
+            </td>
+          </tr>
+
+          <tr style="height: 16px;">
+            <td style="border: 1px solid #000; background: #fafafa;"></td>
+            <td style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 8px; text-align: center;">MC</td>
+            <td style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 8px; text-align: center;">DIR/KT</td>
+            <td style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 8px; text-align: center;">GS</td>
+            <td style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 8px; text-align: center;">ETE</td>
+            <td style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 8px; text-align: center;">ETA</td>
+            <td style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 8px; text-align: center;">ATA</td>
+            <td style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 8px; text-align: center;">LEG</td>
+            <td style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 8px; text-align: center;">TOTAL</td>
+            <td style="border: none;"></td>
+            <td colspan="9" style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 10px; text-align: center;">FUEL CALCULATION</td>
+          </tr>
+
+          <!-- TABLA DE WAYPOINTS (12 PIERNAS, ROWS 13-36) + BLOQUES DERECHOS -->
+          <tbody id="fpl-navlog-table-body">
+            <!-- Rellenado dinámicamente -->
+          </tbody>
+
+          <!-- FILA FINAL: AIRSPACE ZONES (IZQUIERDA) & DISTANCIAS ALTERNATE (DERECHA) -->
+          <tr style="height: 18px;">
+            <td colspan="13" rowspan="5" style="border: 1px solid #000; vertical-align: top; padding: 4px;">
+              <div style="font-weight: bold; font-size: 9px; margin-bottom: 2px;">AIRSPACE ZONES:</div>
+              <textarea class="ofp-cell-area" id="fpl-airspace-zones" placeholder="Espacios y zonas cruzadas: CTR Cuatro Vientos (D), TMA Madrid (A), LER71, LED52..."></textarea>
+            </td>
+            <td style="border: none;"></td>
+            <td colspan="5" style="border: 1px solid #000; background: #f2f2f2; font-size: 9px; font-weight: bold; padding: 2px 4px;">Take off Dist. Req. Alternate</td>
+            <td colspan="4" style="border: 1px solid #000;"><input class="ofp-cell-input center" id="fpl-perf-to-req-alt" value="510 m"></td>
+          </tr>
+
+          <tr style="height: 18px;">
+            <td style="border: none;"></td>
+            <td colspan="5" style="border: 1px solid #000; background: #f2f2f2; font-size: 9px; font-weight: bold; padding: 2px 4px;">Take off Dist. Avail. Alternate</td>
+            <td colspan="4" style="border: 1px solid #000;"><input class="ofp-cell-input center" id="fpl-perf-to-avail-alt" value="3000 m (LEVD)"></td>
+          </tr>
+
+          <tr style="height: 18px;">
+            <td style="border: none;"></td>
+            <td colspan="5" style="border: 1px solid #000; background: #f2f2f2; font-size: 9px; font-weight: bold; padding: 2px 4px;">Landing Dist. Req. Alternate</td>
+            <td colspan="4" style="border: 1px solid #000;"><input class="ofp-cell-input center" id="fpl-perf-ld-req-alt" value="420 m"></td>
+          </tr>
+
+          <tr style="height: 18px;">
+            <td style="border: none;"></td>
+            <td colspan="5" style="border: 1px solid #000; background: #f2f2f2; font-size: 9px; font-weight: bold; padding: 2px 4px;">Landing Dist. Avail. Alternate</td>
+            <td colspan="4" style="border: 1px solid #000;"><input class="ofp-cell-input center" id="fpl-perf-ld-avail-alt" value="3000 m (LEVD)"></td>
+          </tr>
+
+          <tr style="height: 18px;">
+            <td style="border: none;"></td>
+            <td colspan="9" style="border: none;"></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div><!-- /view-fpl -->
+
 
 
   <!-- Script de datos offline -->
@@ -3470,7 +3916,7 @@
 
   // 1. COCKPIT HUB NAVIGATION TABS
   function switchCockpitTab(tabId) {
-    const tabs = ['estudio', 'hangar', 'herramientas', 'logbook'];
+    const tabs = ['estudio', 'hangar', 'herramientas', 'logbook', 'fpl'];
     tabs.forEach(t => {
       const view = document.getElementById('view-' + t);
       const btn = document.getElementById('cockpit-tab-' + t);
@@ -3490,6 +3936,8 @@
     } else if (tabId === 'hangar') {
       renderBlackboxList();
       initDailyChallenge();
+    } else if (tabId === 'fpl') {
+      initVFRFlightPlanner();
     }
   }
 
@@ -5380,7 +5828,496 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
       addATCMessage(`📻 <strong>ATC Torre:</strong><br>${localResponse}`, 'atc');
     }, 450 + Math.random() * 350);
   }
-  </script>
+  
+  // ═══════════════════════════════════════════════════════════════
+  // 8. MÓDULO PLAN DE VUELO OPERACIONAL (WORLD AVIATION) & VFR MAP (v1.2.0)
+  // ═══════════════════════════════════════════════════════════════
+
+  let fplMap = null;
+  let fplMarkers = [];
+  let fplPolyline = null;
+  let fplWaypoints = [
+    { name: "LECU (RWY 27)", lat: 40.3708, lon: -3.7847, alt: 2500, dist: 0, tc: 0, mc: 0, mh: 0, gs: 85, ete: "00m", eta: "10:00", ata: "", legFuel: "0.0", totFuel: "0.0" },
+    { name: "PUNTO W (Villaviciosa)", lat: 40.3583, lon: -3.9000, alt: 3500, dist: 5.3, tc: 262, mc: 263, mh: 260, gs: 81, ete: "04m", eta: "10:04", ata: "", legFuel: "1.2", totFuel: "1.2" },
+    { name: "EL ESCORIAL", lat: 40.5925, lon: -4.1278, alt: 5500, dist: 17.5, tc: 334, mc: 335, mh: 330, gs: 94, ete: "11m", eta: "10:15", ata: "", legFuel: "3.2", totFuel: "4.4" }
+  ];
+
+  // Coordenadas de referencia para puntos rápidos de navegación VFR en España
+  const VFR_KNOWN_POINTS = {
+    'LECU (RWY27)': { lat: 40.3708, lon: -3.7847, alt: 2500 },
+    'PUNTO W (Villaviciosa)': { lat: 40.3583, lon: -3.9000, alt: 3500 },
+    'PUNTO S (Fuenlabrada)': { lat: 40.2833, lon: -3.7833, alt: 3000 },
+    'PUNTO N (Campamento)': { lat: 40.3950, lon: -3.7750, alt: 3000 },
+    'EL ESCORIAL': { lat: 40.5925, lon: -4.1278, alt: 5500 },
+    'PTO. LOS LEONES': { lat: 40.7167, lon: -4.1333, alt: 6500 },
+    'LEMT (Casarrubios)': { lat: 40.2333, lon: -4.0333, alt: 3000 },
+    'LEVD (Valladolid)': { lat: 41.7061, lon: -4.8519, alt: 4500 },
+    'LESA (Salamanca)': { lat: 40.9522, lon: -5.5019, alt: 4500 },
+    'LETO (Toledo)': { lat: 39.8889, lon: -4.0244, alt: 3500 }
+  };
+
+  // Inicialización del visor cartográfico Leaflet VFR
+  function initVFRFlightPlanner() {
+    if (!fplMap && typeof L !== 'undefined') {
+      const mapEl = document.getElementById('vfr-leaflet-map');
+      if (!mapEl) return;
+
+      fplMap = L.map('vfr-leaflet-map', {
+        center: [40.37, -3.85],
+        zoom: 10,
+        minZoom: 6,
+        maxZoom: 16
+      });
+
+      // Capa base CartoDB Voyager con etiquetado claro de topografía
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> | ENAIRE Insignia VFR',
+        maxZoom: 19
+      }).addTo(fplMap);
+
+      // Evento de clic sobre la carta para añadir un nuevo Waypoint
+      fplMap.on('click', function(e) {
+        const count = fplWaypoints.length + 1;
+        const wpName = `WP ${count} (${e.latlng.lat.toFixed(2)}N, ${Math.abs(e.latlng.lng).toFixed(2)}W)`;
+        addWaypointFromPreset(wpName, e.latlng.lat, e.latlng.lng, 3500);
+      });
+    }
+
+    setTimeout(() => {
+      if (fplMap) {
+        fplMap.invalidateSize();
+        updateVFRMapDisplay();
+      }
+    }, 200);
+
+    renderNavLogTable();
+  }
+
+  function toggleVFRMapView() {
+    const sec = document.getElementById('vfr-map-section');
+    const txt = document.getElementById('btn-toggle-map-text');
+    if (!sec) return;
+    if (sec.style.display === 'none') {
+      sec.style.display = 'block';
+      if (txt) txt.textContent = 'Ocultar Mapa';
+      if (fplMap) setTimeout(() => fplMap.invalidateSize(), 150);
+    } else {
+      sec.style.display = 'none';
+      if (txt) txt.textContent = 'Mostrar Mapa';
+    }
+  }
+
+  // Fórmulas geodésicas (Haversine & Bearing) para distancias y rumbos de cartas
+  function calculateDistanceNM(lat1, lon1, lat2, lon2) {
+    const R = 3440.065; // Radio terrestre en Millas Náuticas
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+              Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return parseFloat((c * R).toFixed(1));
+  }
+
+  function calculateTrueCourse(lat1, lon1, lat2, lon2) {
+    const phi1 = lat1 * Math.PI / 180;
+    const phi2 = lat2 * Math.PI / 180;
+    const dLam = (lon2 - lon1) * Math.PI / 180;
+    const y = Math.sin(dLam) * Math.cos(phi2);
+    const x = Math.cos(phi1) * Math.sin(phi2) - Math.sin(phi1) * Math.cos(phi2) * Math.cos(dLam);
+    const b = (Math.atan2(y, x) * 180 / Math.PI + 360) % 360;
+    return Math.round(b);
+  }
+
+  // Computador de Vuelo CR3 / E6B (Triángulo del viento: WCA, MH, GS)
+  function calculateCR3(tc, ias, windDir, windSpd, varDeg = -1, alt = 3500) {
+    const tas = Math.round(ias * (1 + (alt / 1000) * 0.0175));
+    const alpha = (windDir - tc) * Math.PI / 180;
+    const crosswind = windSpd * Math.sin(alpha);
+    const headwind = windSpd * Math.cos(alpha);
+    const ratio = Math.max(-1.0, Math.min(1.0, crosswind / tas));
+    const wca = Math.asin(ratio) * 180 / Math.PI;
+
+    const th = Math.round((tc + wca + 360) % 360);
+    const mc = Math.round((tc - varDeg + 360) % 360);
+    const mh = Math.round((th - varDeg + 360) % 360);
+    const gs = Math.max(25, Math.round(tas * Math.cos(wca * Math.PI / 180) - headwind));
+
+    return { tc, mc, th, mh, tas, gs, wca: parseFloat(wca.toFixed(1)), hw: Math.round(headwind), cw: Math.round(Math.abs(crosswind)) };
+  }
+
+  // Actualizar trazado en el mapa Leaflet
+  function updateVFRMapDisplay() {
+    if (!fplMap) return;
+
+    // Limpiar marcadores y polilínea anterior
+    fplMarkers.forEach(m => fplMap.removeLayer(m));
+    fplMarkers = [];
+    if (fplPolyline) fplMap.removeLayer(fplPolyline);
+
+    const latlngs = [];
+    let totalDist = 0;
+
+    fplWaypoints.forEach((wp, idx) => {
+      if (wp.lat && wp.lon) {
+        latlngs.push([wp.lat, wp.lon]);
+
+        const markerHtml = `<div style="background:#1f6feb; color:#fff; font-weight:800; font-size:10px; width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; border:2px solid #fff; box-shadow:0 2px 6px rgba(0,0,0,0.5);">${idx + 1}</div>`;
+        const icon = L.divIcon({ className: 'fpl-wp-icon', html: markerHtml, iconSize: [22, 22], iconAnchor: [11, 11] });
+
+        const m = L.marker([wp.lat, wp.lon], { icon, draggable: true }).addTo(fplMap);
+        m.bindPopup(`<strong>[${idx + 1}] ${wp.name}</strong><br>Altitud: ${wp.alt} ft<br>Rumbo MH: ${wp.mh}° · GS: ${wp.gs} kt`);
+
+        m.on('dragend', function(e) {
+          const pos = e.target.getLatLng();
+          wp.lat = pos.lat;
+          wp.lon = pos.lon;
+          recalculateFlightPlanFromParams();
+        });
+
+        fplMarkers.push(m);
+      }
+      if (idx > 0) totalDist += wp.dist;
+    });
+
+    if (latlngs.length > 1) {
+      fplPolyline = L.polyline(latlngs, { color: '#e3b341', weight: 3, opacity: 0.85, dashArray: '6, 8' }).addTo(fplMap);
+      fplMap.fitBounds(fplPolyline.getBounds(), { padding: [40, 40] });
+    }
+
+    const distEl = document.getElementById('fpl-map-total-dist');
+    if (distEl) distEl.textContent = `${totalDist.toFixed(1)} NM`;
+  }
+
+  function addWaypointFromPreset(name, lat, lon, alt = 3500) {
+    if (fplWaypoints.length >= 12) {
+      showToastNotification('⚠️ El plan de vuelo oficial permite un máximo de 12 puntos de notificación.');
+      return;
+    }
+    fplWaypoints.push({
+      name: name,
+      lat: lat,
+      lon: lon,
+      alt: alt,
+      dist: 0,
+      tc: 0,
+      mc: 0,
+      mh: 0,
+      gs: 90,
+      ete: '00m',
+      eta: '',
+      ata: '',
+      legFuel: '1.5',
+      totFuel: '1.5'
+    });
+    recalculateFlightPlanFromParams();
+  }
+
+  function removeWaypoint(idx) {
+    if (fplWaypoints.length <= 1) {
+      showToastNotification('⚠️ Debes mantener al menos el punto de partida.');
+      return;
+    }
+    fplWaypoints.splice(idx, 1);
+    recalculateFlightPlanFromParams();
+  }
+
+  function resetFlightPlanRoute() {
+    if (!confirm('¿Deseas reiniciar la ruta del Plan de Vuelo Operacional?')) return;
+    fplWaypoints = [
+      { name: "LECU (RWY 27)", lat: 40.3708, lon: -3.7847, alt: 2500, dist: 0, tc: 0, mc: 0, mh: 0, gs: 85, ete: "00m", eta: "10:00", ata: "", legFuel: "0.0", totFuel: "0.0" }
+    ];
+    recalculateFlightPlanFromParams();
+  }
+
+  // Recalcular rumbos, distancias, WCA, MH, GS, ETE y ETA con el computador CR3
+  function recalculateFlightPlanFromParams() {
+    const ias = parseInt(document.getElementById('fpl-ias-input')?.value || '95', 10);
+    const windRaw = document.getElementById('fpl-wind-input')?.value || '240/12';
+    const varDeg = parseFloat(document.getElementById('fpl-var-input')?.value || '-1');
+
+    let windDir = 240, windSpd = 12;
+    if (windRaw.includes('/')) {
+      const parts = windRaw.split('/');
+      windDir = parseInt(parts[0], 10) || 240;
+      windSpd = parseInt(parts[1], 10) || 12;
+    }
+
+    let toTimeStr = document.getElementById('fpl-takeoff-time')?.value || '10:00';
+    let [curHour, curMin] = toTimeStr.split(':').map(x => parseInt(x, 10) || 0);
+
+    let cumulativeMinutes = 0;
+    let totalFuel = 0;
+
+    fplWaypoints.forEach((wp, idx) => {
+      if (idx === 0) {
+        wp.dist = 0;
+        wp.tc = 0;
+        wp.mc = 0;
+        wp.mh = 0;
+        wp.gs = ias;
+        wp.ete = '—';
+        wp.eta = toTimeStr;
+      } else {
+        const prev = fplWaypoints[idx - 1];
+        if (wp.lat && wp.lon && prev.lat && prev.lon) {
+          wp.dist = calculateDistanceNM(prev.lat, prev.lon, wp.lat, wp.lon);
+          wp.tc = calculateTrueCourse(prev.lat, prev.lon, wp.lat, wp.lon);
+        }
+
+        const cr3 = calculateCR3(wp.tc, ias, windDir, windSpd, varDeg, wp.alt);
+        wp.mc = cr3.mc;
+        wp.mh = cr3.mh;
+        wp.gs = cr3.gs;
+
+        const legMinutes = (wp.dist / wp.gs) * 60;
+        cumulativeMinutes += legMinutes;
+
+        const m = Math.floor(legMinutes);
+        const s = Math.round((legMinutes % 1) * 60);
+        wp.ete = `${String(m).padStart(2, '0')}m`;
+
+        const etaTotalMin = (curHour * 60) + curMin + Math.round(cumulativeMinutes);
+        const etaH = Math.floor(etaTotalMin / 60) % 24;
+        const etaM = etaTotalMin % 60;
+        wp.eta = `${String(etaH).padStart(2, '0')}:${String(etaM).padStart(2, '0')}`;
+
+        // Estimación opcional de combustible (ej. 17 L/h para Rotax)
+        const hourlyBurn = 17;
+        const legF = parseFloat(((legMinutes / 60) * hourlyBurn).toFixed(1));
+        wp.legFuel = `${legF} L`;
+        totalFuel += legF;
+        wp.totFuel = `${totalFuel.toFixed(1)} L`;
+      }
+    });
+
+    const totalTimeEl = document.getElementById('fpl-map-total-time');
+    if (totalTimeEl) {
+      const totH = Math.floor(cumulativeMinutes / 60);
+      const totM = Math.round(cumulativeMinutes % 60);
+      totalTimeEl.textContent = totH > 0 ? `${totH}h ${totM}m` : `${totM}m`;
+    }
+
+    renderNavLogTable();
+    updateVFRMapDisplay();
+  }
+
+  // Renderizado exacto de la tabla de navegación (Rows 13-36 de World Aviation)
+  function renderNavLogTable() {
+    const tbody = document.getElementById('fpl-navlog-table-body');
+    if (!tbody) return;
+
+    let html = '';
+    const windRaw = document.getElementById('fpl-wind-input')?.value || '240/12';
+
+    // Fila por cada tramo (hasta 12 tramos para coincidir con el Excel)
+    for (let i = 0; i < 12; i++) {
+      const wp = fplWaypoints[i] || null;
+      const isFilled = (wp !== null);
+
+      // Bloques de la derecha correspondientes a esta fila
+      let rightHtml = '';
+      if (i === 0) { // Rows 13-14: TRIP FUEL HEADER & CLIMB / ALTERNATE FUEL
+        rightHtml = `
+          <td colspan="5" style="border:1px solid #000; background:#f2f2f2; font-weight:bold; font-size:9px; text-align:center;">TRIP FUEL</td>
+          <td colspan="4" style="border:1px solid #000; background:#f2f2f2; font-weight:bold; font-size:9px; text-align:center;">QUANTITY REQUIRED</td>
+        `;
+      } else if (i === 1) { // Rows 15-16: CRUISE & TRIP FUEL
+        rightHtml = `
+          <td colspan="2" style="border:1px solid #000; background:#f2f2f2; font-size:9px; font-weight:bold; padding:2px 4px;">Climb</td>
+          <td colspan="3" style="border:1px solid #000;"><input class="ofp-cell-input center" id="fpl-fuel-climb" value="8.0 L"></td>
+          <td colspan="2" style="border:1px solid #000; background:#f2f2f2; font-size:9px; font-weight:bold; padding:2px 4px;">Alternate Fuel</td>
+          <td colspan="2" style="border:1px solid #000;"><input class="ofp-cell-input center" id="fpl-fuel-alt" value="15.0 L"></td>
+        `;
+      } else if (i === 2) { // Rows 17-18: DESCENT & MIN REQUIRED FUEL
+        rightHtml = `
+          <td colspan="2" style="border:1px solid #000; background:#f2f2f2; font-size:9px; font-weight:bold; padding:2px 4px;">Cruise</td>
+          <td colspan="3" style="border:1px solid #000;"><input class="ofp-cell-input center" id="fpl-fuel-cruise" value="18.5 L"></td>
+          <td colspan="2" style="border:1px solid #000; background:#f2f2f2; font-size:9px; font-weight:bold; padding:2px 4px;">Trip Fuel</td>
+          <td colspan="2" style="border:1px solid #000;"><input class="ofp-cell-input center" id="fpl-fuel-trip" value="29.0 L"></td>
+        `;
+      } else if (i === 3) { // Rows 19-20: TOTAL TRIP FUEL & FUEL ON BOARD
+        rightHtml = `
+          <td colspan="2" style="border:1px solid #000; background:#f2f2f2; font-size:9px; font-weight:bold; padding:2px 4px;">Descent</td>
+          <td colspan="3" style="border:1px solid #000;"><input class="ofp-cell-input center" id="fpl-fuel-descent" value="2.5 L"></td>
+          <td colspan="2" style="border:1px solid #000; background:#f2f2f2; font-size:9px; font-weight:bold; padding:2px 4px;">Min. Req. Fuel</td>
+          <td colspan="2" style="border:1px solid #000;"><input class="ofp-cell-input center bold" id="fpl-fuel-min-req" value="54.0 L"></td>
+        `;
+      } else if (i === 4) { // Rows 21-22: TOTAL TRIP FUEL & FUEL ON BOARD VALUES
+        rightHtml = `
+          <td colspan="2" style="border:1px solid #000; background:#f2f2f2; font-size:9px; font-weight:bold; padding:2px 4px;">Total trip Fuel</td>
+          <td colspan="3" style="border:1px solid #000;"><input class="ofp-cell-input center bold" id="fpl-fuel-total-trip" value="29.0 L"></td>
+          <td colspan="2" style="border:1px solid #000; background:#f2f2f2; font-size:9px; font-weight:bold; padding:2px 4px;">Fuel on Board</td>
+          <td colspan="2" style="border:1px solid #000;"><input class="ofp-cell-input center bold" id="fpl-fuel-fob" value="80.0 L"></td>
+        `;
+      } else if (i === 5) { // Rows 23-24: LOGO OFICIAL WORLD AVIATION
+        rightHtml = `
+          <td colspan="9" rowspan="3" style="border:1px solid #000; text-align:center; vertical-align:middle; background:#fff; padding:6px;">
+            <img src="world_aviation_logo.png" style="max-height:55px; max-width:140px; display:inline-block;" alt="World Aviation">
+          </td>
+        `;
+      } else if (i === 6 || i === 7) {
+        rightHtml = ''; // Espacio absorbido por el rowspan del logo
+      } else if (i === 8) { // Rows 29-30: TAKE OFF DIST REQ & NOTAMS
+        rightHtml = `
+          <td colspan="5" style="border:1px solid #000; background:#f2f2f2; font-size:9px; font-weight:bold; padding:2px 4px;">Take off Distance Required</td>
+          <td colspan="4" rowspan="4" style="border:1px solid #000; vertical-align:top; padding:4px;">
+            <div style="font-weight:bold; font-size:9px; margin-bottom:2px;">SIGNIFICANT NOTAMs:</div>
+            <textarea class="ofp-cell-area" id="fpl-notams" style="min-height:90px;" placeholder="NOTAMs de ruta, pistas activas, grúas, frecuencias..."></textarea>
+          </td>
+        `;
+      } else if (i === 9) { // Rows 31-32: TAKE OFF DIST AVAIL
+        rightHtml = `
+          <td colspan="5" style="border:1px solid #000; background:#f2f2f2; font-size:9px; font-weight:bold; padding:2px 4px;">Take off Distance Available</td>
+        `;
+      } else if (i === 10) { // Rows 33-34: LANDING DIST REQ
+        rightHtml = `
+          <td colspan="5" style="border:1px solid #000; background:#f2f2f2; font-size:9px; font-weight:bold; padding:2px 4px;">Landing Distance Required</td>
+        `;
+      } else if (i === 11) { // Rows 35-36: LANDING DIST AVAIL
+        rightHtml = `
+          <td colspan="5" style="border:1px solid #000; background:#f2f2f2; font-size:9px; font-weight:bold; padding:2px 4px;">Landing Distance Available</td>
+        `;
+      }
+
+      // SUB-FILA 1 DEL TRAMO
+      html += `
+        <tr style="height: 18px;">
+          <td rowspan="2" style="border:1px solid #000;">
+            <div style="display:flex; align-items:center; justify-content:space-between;">
+              <input class="ofp-cell-input bold" value="${isFilled ? wp.name : ''}" onchange="updateWaypointName(${i}, this.value)" placeholder="${i === 0 ? 'Salida' : ''}">
+              ${(isFilled && i > 0) ? `<button type="button" onclick="removeWaypoint(${i})" class="no-print" style="background:none; border:none; color:#f85149; font-size:10px; cursor:pointer; padding:0 2px;" title="Eliminar tramo">✕</button>` : ''}
+            </div>
+          </td>
+          <td style="border:1px solid #000;"><input class="ofp-cell-input center" value="${isFilled ? wp.tc : ''}" onchange="updateWaypointManualValue(${i}, 'tc', this.value)"></td>
+          <td style="border:1px solid #000;"><input class="ofp-cell-input center" value="${isFilled ? '-1' : ''}"></td>
+          <td style="border:1px solid #000;"><input class="ofp-cell-input center" value="${isFilled ? (windRaw.split('/')[0] || '') : ''}"></td>
+          <td rowspan="2" style="border:1px solid #000;"><input class="ofp-cell-input center bold" value="${isFilled ? wp.mh : ''}" onchange="updateWaypointManualValue(${i}, 'mh', this.value)"></td>
+          <td rowspan="2" style="border:1px solid #000;"><input class="ofp-cell-input center" value="${isFilled ? wp.alt : ''}" onchange="updateWaypointManualValue(${i}, 'alt', this.value)"></td>
+          <td rowspan="2" style="border:1px solid #000;"><input class="ofp-cell-input center bold" value="${isFilled ? wp.dist : ''}" onchange="updateWaypointManualValue(${i}, 'dist', this.value)"></td>
+          <td style="border:1px solid #000;"><input class="ofp-cell-input center" value="${isFilled ? (wp.tas || '95') : ''}"></td>
+          <td rowspan="2" style="border:1px solid #000;"><input class="ofp-cell-input center bold" value="${isFilled ? wp.ete : ''}"></td>
+          <td rowspan="2" style="border:1px solid #000;"><input class="ofp-cell-input center" value="${isFilled ? wp.eta : ''}"></td>
+          <td rowspan="2" style="border:1px solid #000;"><input class="ofp-cell-input center" value="${isFilled ? (wp.ata || '') : ''}"></td>
+          <td rowspan="2" style="border:1px solid #000;"><input class="ofp-cell-input center" value="${isFilled ? wp.legFuel : ''}"></td>
+          <td rowspan="2" style="border:1px solid #000;"><input class="ofp-cell-input center" value="${isFilled ? wp.totFuel : ''}"></td>
+          <td style="border:none;"></td>
+          ${rightHtml}
+        </tr>
+      `;
+
+      // SUB-FILA 2 DEL TRAMO (MC, WIND SPEED, GS)
+      let rightSubHtml = '';
+      if (i === 8) {
+        rightSubHtml = `<td colspan="5" style="border:1px solid #000;"><input class="ofp-cell-input center" id="fpl-perf-to-req" value="480 m"></td>`;
+      } else if (i === 9) {
+        rightSubHtml = `<td colspan="5" style="border:1px solid #000;"><input class="ofp-cell-input center" id="fpl-perf-to-avail" value="1500 m (LECU)"></td>`;
+      } else if (i === 10) {
+        rightSubHtml = `<td colspan="5" style="border:1px solid #000;"><input class="ofp-cell-input center" id="fpl-perf-ld-req" value="390 m"></td>`;
+      } else if (i === 11) {
+        rightSubHtml = `<td colspan="5" style="border:1px solid #000;"><input class="ofp-cell-input center" id="fpl-perf-ld-avail" value="1500 m (LECU)"></td>`;
+      }
+
+      html += `
+        <tr style="height: 18px;">
+          <td style="border:1px solid #000; background:#fafafa;"></td>
+          <td style="border:1px solid #000;"><input class="ofp-cell-input center" value="${isFilled ? wp.mc : ''}"></td>
+          <td style="border:1px solid #000;"><input class="ofp-cell-input center" value="${isFilled ? (windRaw.split('/')[1] || '') : ''}"></td>
+          <td style="border:1px solid #000;"><input class="ofp-cell-input center" value="${isFilled ? wp.gs : ''}"></td>
+          <td style="border:none;"></td>
+          ${rightSubHtml}
+        </tr>
+      `;
+    }
+
+    tbody.innerHTML = html;
+  }
+
+  function updateWaypointName(idx, val) {
+    if (fplWaypoints[idx]) {
+      fplWaypoints[idx].name = val;
+      updateVFRMapDisplay();
+    }
+  }
+
+  function updateWaypointManualValue(idx, field, val) {
+    if (fplWaypoints[idx]) {
+      fplWaypoints[idx][field] = parseFloat(val) || val;
+      recalculateFlightPlanFromParams();
+    }
+  }
+
+  // Preajustes de aeronaves habituales de World Aviation
+  function applyAircraftPreset() {
+    const sel = document.getElementById('fpl-aircraft-select');
+    const modelInput = document.getElementById('fpl-model');
+    const iasInput = document.getElementById('fpl-ias-input');
+    if (!sel) return;
+
+    if (sel.value === 'P2008JC') {
+      if (modelInput) modelInput.value = 'P2008JC';
+      if (iasInput) iasInput.value = '95';
+    } else if (sel.value === 'P2006T') {
+      if (modelInput) modelInput.value = 'P2006T';
+      if (iasInput) iasInput.value = '140';
+    } else if (sel.value === 'C172') {
+      if (modelInput) modelInput.value = 'C172SP';
+      if (iasInput) iasInput.value = '105';
+    } else if (sel.value === 'DA40') {
+      if (modelInput) modelInput.value = 'DA40 NG';
+      if (iasInput) iasInput.value = '125';
+    }
+    recalculateFlightPlanFromParams();
+  }
+
+  function useMetarWindInFPL() {
+    const metarRaw = document.getElementById('metar-raw-output')?.textContent || '';
+    const match = metarRaw.match(/(\d{3})(\d{2})KT/);
+    if (match) {
+      const dir = match[1];
+      const spd = match[2];
+      const windInput = document.getElementById('fpl-wind-input');
+      if (windInput) windInput.value = `${dir}/${spd}`;
+      showToastNotification(`🌬️ Viento ${dir}°/${spd}kt aplicado desde el METAR oficial.`);
+      recalculateFlightPlanFromParams();
+    } else {
+      showToastNotification('⚠️ Primero selecciona un aeródromo con METAR activo en la pestaña Simuladores & METAR.');
+    }
+  }
+
+  // Guardar y Cargar Plan de Vuelo en LocalStorage
+  function saveFlightPlanLocally() {
+    if (!currentPilot) return;
+    const planData = {
+      model: document.getElementById('fpl-model')?.value,
+      reg: document.getElementById('fpl-reg')?.value,
+      date: document.getElementById('fpl-date')?.value,
+      pic: document.getElementById('fpl-pic')?.value,
+      squawk: document.getElementById('fpl-squawk')?.value,
+      frequencies: document.getElementById('fpl-frequencies')?.value,
+      takeoff: document.getElementById('fpl-takeoff-time')?.value,
+      waypoints: fplWaypoints,
+      fuelClimb: document.getElementById('fpl-fuel-climb')?.value,
+      fuelCruise: document.getElementById('fpl-fuel-cruise')?.value,
+      fuelDescent: document.getElementById('fpl-fuel-descent')?.value,
+      fuelTrip: document.getElementById('fpl-fuel-trip')?.value,
+      fuelAlt: document.getElementById('fpl-fuel-alt')?.value,
+      fuelMinReq: document.getElementById('fpl-fuel-min-req')?.value,
+      fuelFob: document.getElementById('fpl-fuel-fob')?.value,
+      notams: document.getElementById('fpl-notams')?.value,
+      airspace: document.getElementById('fpl-airspace-zones')?.value
+    };
+    localStorage.setItem(`atpl_${currentPilot}_saved_ofp`, JSON.stringify(planData));
+    showToastNotification('💾 Plan de Vuelo Operacional guardado correctamente en tu dispositivo.');
+  }
+
+  function exportFlightPlanToPDF() {
+    // Al disparar window.print(), el @media print muestra exclusivamente el contenedor
+    // #world-aviation-ofp-sheet a toda página en formato A4 horizontal idéntico al Excel oficial.
+    window.print();
+  }
+
+</script>
 
   
 </body>

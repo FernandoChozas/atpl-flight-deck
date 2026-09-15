@@ -4,6 +4,38 @@ Todos los cambios notables, evoluciones y correcciones de este proyecto se regis
 
 ---
 
+## [1.3.0] - 2026-09-15
+
+### 🚀 Novedades y Mejoras Principales
+- **Descarga Directa del Archivo Excel Oficial (.XLSX) Rellenado (SheetJS)**:
+  - Integración del motor de manipulación de hojas de cálculo **SheetJS** (`xlsx.full.min.js`) local y 100% offline.
+  - Al pulsar el botón verde **"📥 Descargar Excel Oficial (.xlsx) Rellenado"**, la app carga la plantilla binaria original de World Aviation (`Plan_de_vuelo_operacional.xlsx`), inyecta en sus celdas exactas todos los datos introducidos por el alumno (aeronave, matrícula, piloto, autorización ATC, datos de despegue/aterrizaje, 12 tramos de navegación calculados con CR3, combustible reglamentario, NOTAMs y espacios aéreos) y genera la descarga del archivo `.xlsx` real.
+  - El archivo resultante mantiene la integridad total de formatos, logotipos, fuentes y fórmulas de la escuela, indistinguible del archivo oficial.
+- **Arquitectura de 3 Sub-Pestañas en el Planificador de Vuelo**:
+  1. `📋 Plan de Vuelo (World Aviation Excel)`: Edición de la hoja oficial con descarga en `.xlsx`, impresión/PDF A4 y persistencia local.
+  2. `🗺️ Trazador VFR & Carta Visual`: Visor cartográfico Leaflet VFR de alta resolución.
+  3. `🗂️ Cartas Visuales de España (VAC ENAIRE)`: Biblioteca integrada de aeródromos y cartas de aproximación visual.
+- **Carta de Navegación Visual VFR Mejorada con Espacios Aéreos Reales**:
+  - Corrección de la inicialización de Leaflet en contenedores ocultos mediante invalidación dinámica de tamaño (`fplMap.invalidateSize(true)`).
+  - Selector de capas cartográficas:
+    1. **Topográfica VFR (OpenTopoMap)**: Relieve sombreado y curvas de nivel para el cálculo de altitudes de seguridad y franqueamiento de obstáculos en VMC.
+    2. **Aeronáutica Estándar (CartoDB / OpenStreetMap)**: Identificación nítida de poblaciones, carreteras y referencias visuales.
+    3. **Vista Satelital Visual (Esri World Imagery)**: Reconocimiento fotográfico real de pistas, ríos y embalses.
+  - Capa vectorial de espacios aéreos oficiales sobre la zona centro:
+    - **CTR Cuatro Vientos (LECU)**: Espacio Clase D SFC-3000ft con frecuencias TWR (118.150) y GND (121.800).
+    - **CTR Getafe (LEGT)**: Espacio militar Clase D SFC-3000ft.
+    - **CTR Madrid-Barajas (LEMD)**: Espacio internacional Clase A SFC-FL145.
+    - **Puntos de Notificación Visual VFR**: Puntos W, S, N, E, Asperillas, El Escorial, Pto. de los Leones, Toledo, Aranjuez, San Martín de Valdeiglesias con botón interactivo de 1 clic para añadir a la ruta.
+    - **Radioayudas VOR/DME**: Perales (PDT), Navas (NVS), Colmenar (CNR), Toledo (TLD) con sus frecuencias oficiales.
+- **Biblioteca de Cartas Visuales de España (AIP & Guía VFR ENAIRE)**:
+  - Catálogo de aeródromos españoles (LECU, LEMT Casarrubios, LERM Robledillo, LEVD Valladolid, LESA Salamanca, LEBZ Badajoz, LEDS Castellón, LESB Son Bonet, LERJ Logroño, LEOC Ocaña, LEMU Muchamiel, LEAX La Axarquía, LEZL Sevilla, LEJR Jerez, LEMG Málaga, LEMD Barajas).
+  - Cada ficha incluye: clasificación de espacio aéreo, elevación, pistas (longitud y superficie), circuitos de tránsito, frecuencias (TWR, GND, ATIS, APP, FIS) y observaciones operacionales.
+  - Botones de acción: enlace directo a la **Carta VAC oficial de ENAIRE AIP / Guía VFR**, botón **"Ver en Mapa"** para centrar el visor VFR, y botón **"Cargar como Destino en Plan de Vuelo"** que añade automáticamente el aeródromo a la ruta y recalcula tiempos y rumbos.
+- **Soporte Offline 100% y Service Worker v1.3**:
+  - Se han empaquetado y añadido a la caché del Service Worker (`atpl-flightdeck-v1.3`): `xlsx.full.min.js`, `Plan_de_vuelo_operacional.xlsx`, `world_aviation_logo.png`, `leaflet/leaflet.js`, `leaflet/leaflet.css` e imágenes de marcadores.
+
+---
+
 ## [1.2.0] - 2026-09-15
 
 ### 🚀 Novedades y Mejoras Principales

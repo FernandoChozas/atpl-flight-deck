@@ -1,4 +1,4 @@
-const CACHE_NAME = 'atpl-flightdeck-v1.2';
+const CACHE_NAME = 'atpl-flightdeck-v1.3';
 const STATIC_ASSETS = [
   './',
   './index.html',

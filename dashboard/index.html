@@ -1290,9 +1290,10 @@
   }
 
 </style>
-  <!-- Leaflet VFR Map Engine -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <!-- Leaflet VFR Map Engine & SheetJS Excel Engine (100% Offline) -->
+  <link rel="stylesheet" href="leaflet/leaflet.css" />
+  <script src="leaflet/leaflet.js"></script>
+  <script src="xlsx.full.min.js"></script>
 </head>
 <body>
   <!-- ═══════════════════════════════════════════════════════════
@@ -1369,7 +1370,7 @@
       <div class="brand">
         <div class="brand-icon" style="padding: 0; overflow: hidden; border: 1px solid rgba(88, 166, 255, 0.4); background: #012349;"><img src="apple-touch-icon-180x180.png" alt="ATPL Pilot" style="width: 100%; height: 100%; object-fit: cover; border-radius: 9px; display: block;"></div>
         <div class="brand-text">
-          <h1>ATPL Flight Deck & Study Control <span class="badge-beta" id="version-badge">v1.2.0 EFB</span></h1>
+          <h1>ATPL Flight Deck & Study Control <span class="badge-beta" id="version-badge">v1.3.0 EFB</span></h1>
           <p>Preparación EASA Modular Oficial | Sistema adaptado a turnos de 12h</p>
         </div>
       </div>
@@ -1890,339 +1891,403 @@
        MODO 5: PLAN DE VUELO OPERACIONAL (WORLD AVIATION) & CARTAS VFR
   ═══════════════════════════════════════════════════════════ -->
   <div id="view-fpl" style="display: none; margin-bottom: 30px;">
-    <!-- TOOLBAR PRINCIPAL DEL PLAN DE VUELO -->
-    <div class="pilot-box no-print" style="margin-bottom: 16px; background: var(--bg-card, #161b22); border: 1px solid var(--border-color, #30363d); border-radius: 16px; padding: 18px;">
-      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px;">
-        <div style="display: flex; align-items: center; gap: 10px;">
-          <span style="font-size: 28px;">🗺️</span>
-          <div>
-            <h3 style="margin: 0; font-size: 16px; font-weight: 800; color: #fff;">Plan de Vuelo Operacional (OFP) & Trazador VFR</h3>
-            <p style="margin: 2px 0 0 0; font-size: 11px; color: var(--text-muted);">Plantilla oficial World Aviation Flight Academy con cálculo automático CR3 (Rumbos, Deriva WCA, GS y Tiempos)</p>
+    <!-- SUB-PESTAÑAS DE NAVEGACIÓN DENTRO DEL PLANIFICADOR -->
+    <div style="display: flex; gap: 8px; margin-bottom: 16px; border-bottom: 1px solid var(--border-color, #30363d); padding-bottom: 10px; flex-wrap: wrap;" class="no-print">
+      <button type="button" class="cockpit-tab-btn active" id="fpl-subtab-btn-ofp" onclick="switchFPLSubTab('ofp')" style="padding: 8px 16px; font-size: 12px;">
+        <span>📋</span> Plan de Vuelo (World Aviation Excel)
+      </button>
+      <button type="button" class="cockpit-tab-btn" id="fpl-subtab-btn-map" onclick="switchFPLSubTab('map')" style="padding: 8px 16px; font-size: 12px;">
+        <span>🗺️</span> Trazador VFR & Carta Visual
+      </button>
+      <button type="button" class="cockpit-tab-btn" id="fpl-subtab-btn-charts" onclick="switchFPLSubTab('charts')" style="padding: 8px 16px; font-size: 12px;">
+        <span>🗂️</span> Cartas Visuales de España (VAC ENAIRE)
+      </button>
+    </div>
+
+    <!-- ───────────────────────────────────────────────────────────
+         SUB-VISTA 1: PLANTILLA OFICIAL WORLD AVIATION (EXCEL REAL)
+    ─────────────────────────────────────────────────────────── -->
+    <div id="fpl-subview-ofp">
+      <!-- BARRA DE ACCIONES PRINCIPAL -->
+      <div class="pilot-box no-print" style="margin-bottom: 16px; background: var(--bg-card, #161b22); border: 1px solid var(--border-color, #30363d); border-radius: 16px; padding: 16px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 26px;">✈️</span>
+            <div>
+              <h3 style="margin: 0; font-size: 15px; font-weight: 800; color: #fff;">Operational Flight Plan · World Aviation Flight Academy</h3>
+              <p style="margin: 2px 0 0 0; font-size: 11px; color: var(--text-muted);">Plantilla oficial idéntica al archivo Excel de la escuela con cálculo automático CR3</p>
+            </div>
           </div>
-        </div>
-        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-          <button type="button" onclick="toggleVFRMapView()" class="hub-tab-btn active" style="padding: 7px 14px; font-size: 12px; border-radius: 8px; background: #21262d; border: 1px solid #30363d; color: #fff; cursor: pointer; display: flex; align-items: center; gap: 6px;">
-            <span>🗺️</span> <span id="btn-toggle-map-text">Ocultar Mapa</span>
-          </button>
-          <button type="button" onclick="exportFlightPlanToPDF()" style="padding: 7px 16px; background: #238636; border: 1px solid #2ea043; color: #fff; font-weight: 800; font-size: 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px; touch-action: manipulation;" title="Descargar e imprimir la plantilla oficial de World Aviation en A4">
-            <span>📄</span> Descargar / Imprimir PDF Oficial
-          </button>
-          <button type="button" onclick="saveFlightPlanLocally()" style="padding: 7px 12px; background: #1f6feb; border: 1px solid #388bfd; color: #fff; font-weight: 700; font-size: 12px; border-radius: 8px; cursor: pointer;">
-            💾 Guardar Plan
-          </button>
-          <button type="button" onclick="resetFlightPlanRoute()" style="padding: 7px 12px; background: rgba(248,81,73,0.15); border: 1px solid rgba(248,81,73,0.35); color: #ff7b72; font-size: 12px; font-weight: 700; border-radius: 8px; cursor: pointer;">
-            🧹 Limpiar
-          </button>
-        </div>
-      </div>
-
-      <!-- PARÁMETROS AERONÁUTICOS (CR3 / E6B) -->
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; background: #0d1117; border: 1px solid #30363d; border-radius: 12px; padding: 12px;">
-        <div>
-          <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">✈️ MODELO & TAS BASE</label>
-          <select id="fpl-aircraft-select" onchange="applyAircraftPreset()" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #fff; font-size: 12px; padding: 6px 8px; border-radius: 6px;">
-            <option value="P2008JC">Tecnam P2008JC (Rotax 912S · 95kt IAS · 17 L/h)</option>
-            <option value="P2006T">Tecnam P2006T (Twin Rotax · 140kt IAS · 34 L/h)</option>
-            <option value="C172">Cessna 172SP (Lycoming IO-360 · 105kt IAS · 32 L/h)</option>
-            <option value="DA40">Diamond DA40 NG (Austro Engine · 125kt IAS · 22 L/h)</option>
-          </select>
-        </div>
-
-        <div>
-          <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">⚡ VELOCIDAD CRUCERO (IAS)</label>
-          <div style="display: flex; align-items: center; gap: 4px;">
-            <input type="number" id="fpl-ias-input" value="95" min="40" max="250" onchange="recalculateFlightPlanFromParams()" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #58a6ff; font-weight: 800; font-size: 12px; padding: 6px 8px; border-radius: 6px;">
-            <span style="font-size: 11px; color: var(--text-muted);">kt</span>
-          </div>
-        </div>
-
-        <div>
-          <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">💨 VIENTO EN RUTA (DIR/KT)</label>
-          <div style="display: flex; gap: 6px;">
-            <input type="text" id="fpl-wind-input" value="240/12" placeholder="240/12" onchange="recalculateFlightPlanFromParams()" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #3fb950; font-weight: 800; font-size: 12px; padding: 6px 8px; border-radius: 6px;">
-            <button type="button" onclick="useMetarWindInFPL()" style="padding: 6px 10px; background: #21262d; border: 1px solid #30363d; color: #e3b341; font-size: 11px; border-radius: 6px; cursor: pointer; white-space: nowrap;" title="Copiar viento del METAR español activo">
-              🌬️ METAR
+          <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+            <!-- BOTÓN CLAVE: DESCARGAR ARCHIVO EXCEL ORIGINAL RELLENADO -->
+            <button type="button" onclick="downloadFilledOfficialExcel()" style="padding: 8px 16px; background: #238636; border: 1px solid #2ea043; color: #fff; font-weight: 800; font-size: 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 2px 6px rgba(46,160,67,0.3);" title="Descarga el archivo Excel original .xlsx de World Aviation rellenado con todos tus datos">
+              <span>📥</span> Descargar Excel Oficial (.xlsx) Rellenado
+            </button>
+            <button type="button" onclick="exportFlightPlanToPDF()" style="padding: 8px 14px; background: #21262d; border: 1px solid #30363d; color: #fff; font-weight: 700; font-size: 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px;" title="Imprimir o guardar en PDF en formato A4 horizontal">
+              <span>📄</span> Imprimir / PDF (A4)
+            </button>
+            <button type="button" onclick="saveFlightPlanLocally()" style="padding: 8px 12px; background: #1f6feb; border: 1px solid #388bfd; color: #fff; font-weight: 700; font-size: 12px; border-radius: 8px; cursor: pointer;">
+              💾 Guardar
+            </button>
+            <button type="button" onclick="resetFlightPlanRoute()" style="padding: 8px 12px; background: rgba(248,81,73,0.15); border: 1px solid rgba(248,81,73,0.35); color: #ff7b72; font-size: 12px; font-weight: 700; border-radius: 8px; cursor: pointer;">
+              🧹 Limpiar
             </button>
           </div>
         </div>
 
-        <div>
-          <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">🧭 DECLINACIÓN MAGNÉTICA</label>
-          <div style="display: flex; align-items: center; gap: 4px;">
-            <input type="text" id="fpl-var-input" value="-1" onchange="recalculateFlightPlanFromParams()" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #fff; font-weight: 700; font-size: 12px; padding: 6px 8px; border-radius: 6px;">
-            <span style="font-size: 11px; color: var(--text-muted);">° W</span>
+        <!-- PARÁMETROS AERONÁUTICOS (CR3 / E6B) -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; background: #0d1117; border: 1px solid #30363d; border-radius: 12px; padding: 12px;">
+          <div>
+            <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">✈️ MODELO & TAS</label>
+            <select id="fpl-aircraft-select" onchange="applyAircraftPreset()" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #fff; font-size: 11px; padding: 6px 8px; border-radius: 6px;">
+              <option value="P2008JC">Tecnam P2008JC (95kt IAS · 17 L/h)</option>
+              <option value="P2006T">Tecnam P2006T (140kt IAS · 34 L/h)</option>
+              <option value="C172">Cessna 172SP (105kt IAS · 32 L/h)</option>
+              <option value="DA40">Diamond DA40 NG (125kt IAS · 22 L/h)</option>
+            </select>
+          </div>
+
+          <div>
+            <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">⚡ VELOCIDAD (IAS)</label>
+            <div style="display: flex; align-items: center; gap: 4px;">
+              <input type="number" id="fpl-ias-input" value="95" min="40" max="250" onchange="recalculateFlightPlanFromParams()" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #58a6ff; font-weight: 800; font-size: 12px; padding: 6px 8px; border-radius: 6px;">
+              <span style="font-size: 11px; color: var(--text-muted);">kt</span>
+            </div>
+          </div>
+
+          <div>
+            <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">💨 VIENTO (DIR/KT)</label>
+            <div style="display: flex; gap: 4px;">
+              <input type="text" id="fpl-wind-input" value="240/12" placeholder="240/12" onchange="recalculateFlightPlanFromParams()" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #3fb950; font-weight: 800; font-size: 12px; padding: 6px 8px; border-radius: 6px;">
+              <button type="button" onclick="useMetarWindInFPL()" style="padding: 6px 8px; background: #21262d; border: 1px solid #30363d; color: #e3b341; font-size: 11px; border-radius: 6px; cursor: pointer; white-space: nowrap;" title="Copiar viento del METAR de salida">
+                🌬️ METAR
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">🧭 DECLINACIÓN (VAR)</label>
+            <div style="display: flex; align-items: center; gap: 4px;">
+              <input type="text" id="fpl-var-input" value="-1" onchange="recalculateFlightPlanFromParams()" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #fff; font-weight: 700; font-size: 12px; padding: 6px 8px; border-radius: 6px;">
+              <span style="font-size: 11px; color: var(--text-muted);">° W</span>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- SECCIÓN DEL MAPA VFR INTERACTIVO (LEAFLET) -->
-    <div id="vfr-map-section" class="pilot-box no-print" style="margin-bottom: 20px; background: var(--bg-card, #161b22); border: 1px solid var(--border-color, #30363d); border-radius: 16px; padding: 18px;">
-      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
-        <div style="font-size: 13px; font-weight: 800; color: #58a6ff; display: flex; align-items: center; gap: 6px;">
-          <span>📍</span> Carta de Navegación Visual VFR · Haz clic en el mapa para trazar tu ruta
-        </div>
-        <div style="font-size: 11px; color: var(--text-muted);">
-          Distancia total calculada: <strong style="color: #3fb950;" id="fpl-map-total-dist">0.0 NM</strong> | Tiempo estimado: <strong style="color: #f1e05a;" id="fpl-map-total-time">00m</strong>
+      <!-- CONTENEDOR DE LA HOJA OFICIAL (REPLICANDO PLAN+DE+VUELO+OPERACIONAL.XLSX) -->
+      <div style="background: #e6edf3; padding: 15px; border-radius: 14px; overflow-x: auto;" class="ofp-scroll-container">
+        <div id="world-aviation-ofp-sheet" style="width: 1080px; margin: 0 auto; background: #fff; padding: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.25); color: #000; font-family: Arial, sans-serif;">
+          <table style="width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 11px; border: 1px solid #000;">
+            <colgroup>
+              <!-- 13 columnas parte izquierda (NavLog): ~56% -->
+              <col style="width: 8.5%;"> <!-- A: WP -->
+              <col style="width: 3.5%;"> <!-- B: TC -->
+              <col style="width: 3.5%;"> <!-- C: Var / MC -->
+              <col style="width: 4.5%;"> <!-- D: Wind / DIR/KT -->
+              <col style="width: 3.8%;"> <!-- E: MH -->
+              <col style="width: 4.0%;"> <!-- F: ALT -->
+              <col style="width: 4.0%;"> <!-- G: DIST -->
+              <col style="width: 4.2%;"> <!-- H: TAS / GS -->
+              <col style="width: 4.2%;"> <!-- I: ETE -->
+              <col style="width: 4.2%;"> <!-- J: ETA -->
+              <col style="width: 4.2%;"> <!-- K: ATA -->
+              <col style="width: 4.0%;"> <!-- L: Fuel Leg -->
+              <col style="width: 4.5%;"> <!-- M: Fuel Tot -->
+              <!-- Separador Col N -->
+              <col style="width: 0.8%;">
+              <!-- 9 columnas parte derecha (Met / Fuel / Distances): ~44% -->
+              <col style="width: 4.8%;"> <!-- O -->
+              <col style="width: 4.2%;"> <!-- P -->
+              <col style="width: 4.2%;"> <!-- Q -->
+              <col style="width: 3.8%;"> <!-- R -->
+              <col style="width: 4.8%;"> <!-- S -->
+              <col style="width: 5.5%;"> <!-- T -->
+              <col style="width: 5.5%;"> <!-- U -->
+              <col style="width: 5.5%;"> <!-- V -->
+              <col style="width: 5.8%;"> <!-- W -->
+            </colgroup>
+
+            <!-- FILA 1: TÍTULO -->
+            <tr style="height: 32px; background: #fff;">
+              <td colspan="13" style="border: 1px solid #000; font-size: 16px; font-weight: 900; letter-spacing: 1px; padding-left: 8px;">
+                OPERATIONAL FLIGHT PLAN
+              </td>
+              <td style="border: none;"></td>
+              <td colspan="9" style="border: 1px solid #000; text-align: right; padding-right: 12px; font-size: 13px; font-weight: 900; color: #1e293b;">
+                <span style="color: #2b3a4a;">WORLD AVIATION</span> FLIGHT ACADEMY
+              </td>
+            </tr>
+
+            <!-- FILA 2: DATOS GENERALES & TAKE OFF DATA -->
+            <tr style="height: 22px;">
+              <td style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 9px; padding: 2px 4px;">MODEL</td>
+              <td colspan="2" style="border: 1px solid #000;"><input class="ofp-cell-input bold center" id="fpl-model" value="P2008JC"></td>
+              <td colspan="2" style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 9px; padding: 2px 4px;">REGISTRATION</td>
+              <td colspan="2" style="border: 1px solid #000;"><input class="ofp-cell-input bold center" id="fpl-reg" value="EC-XYZ"></td>
+              <td colspan="2" style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 9px; padding: 2px 4px;">ARCID</td>
+              <td><input class="ofp-cell-input center" id="fpl-arcid" value="WDA01"></td>
+              <td style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 9px; padding: 2px 4px;">DATE</td>
+              <td colspan="2" style="border: 1px solid #000;"><input class="ofp-cell-input center" id="fpl-date" value="2026-09-16"></td>
+              <td style="border: none;"></td>
+              <td colspan="9" style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 10px; text-align: center;">TAKE OFF DATA</td>
+            </tr>
+
+            <!-- FILA 3: PIC, SQUAWK & SUBHEADERS TAKE OFF -->
+            <tr style="height: 20px;">
+              <td style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 9px; padding: 2px 4px;">PIC</td>
+              <td colspan="4" style="border: 1px solid #000;"><input class="ofp-cell-input bold" id="fpl-pic" value="FERNANDO CHOZAS"></td>
+              <td colspan="2" style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 9px; padding: 2px 4px;">SQUAK</td>
+              <td colspan="2" style="border: 1px solid #000;"><input class="ofp-cell-input bold center" id="fpl-squawk" value="7000"></td>
+              <td colspan="4" style="border: 1px solid #000;"></td>
+              <td style="border: none;"></td>
+              <td style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 8px; text-align: center;">INFO</td>
+              <td style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 8px; text-align: center;">TIME</td>
+              <td style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 8px; text-align: center;">RWY</td>
+              <td style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 8px; text-align: center;">TL</td>
+              <td style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 8px; text-align: center;">FIRST CALL</td>
+              <td style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 8px; text-align: center;">VISIBILITY</td>
+              <td style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 8px; text-align: center;">CLOUD</td>
+              <td style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 8px; text-align: center;">TEMP</td>
+              <td style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 8px; text-align: center;">QNH</td>
+            </tr>
+
+            <!-- FILA 4: FREQUENCIES (rowspan=4) & TAKE OFF VALUES -->
+            <tr style="height: 20px;">
+              <td colspan="13" rowspan="4" style="border: 1px solid #000; vertical-align: top; padding: 4px;">
+                <div style="font-weight: bold; font-size: 9px; margin-bottom: 2px;">FREQUENCIES:</div>
+                <textarea class="ofp-cell-area" id="fpl-frequencies" placeholder="TWR: 118.150 | GND: 121.800 | ATIS: 130.850 | MADRID INFO: 124.025 | FIS: 127.100"></textarea>
+              </td>
+              <td style="border: none;"></td>
+              <td style="border: 1px solid #000;"><input class="ofp-cell-input center" id="fpl-to-info" value="C"></td>
+              <td style="border: 1px solid #000;"><input class="ofp-cell-input center" id="fpl-to-time" value="10:00"></td>
+              <td style="border: 1px solid #000;"><input class="ofp-cell-input center bold" id="fpl-to-rwy" value="27"></td>
+              <td style="border: 1px solid #000;"><input class="ofp-cell-input center" id="fpl-to-tl" value="60"></td>
+              <td style="border: 1px solid #000;"><input class="ofp-cell-input center" id="fpl-to-firstcall" value="118.15"></td>
+              <td style="border: 1px solid #000;"><input class="ofp-cell-input center" id="fpl-to-vis" value="9999"></td>
+              <td style="border: 1px solid #000;"><input class="ofp-cell-input center" id="fpl-to-cloud" value="SCT040"></td>
+              <td style="border: 1px solid #000;"><input class="ofp-cell-input center" id="fpl-to-temp" value="18"></td>
+              <td style="border: 1px solid #000;"><input class="ofp-cell-input center bold" id="fpl-to-qnh" value="1018"></td>
+            </tr>
+
+            <!-- FILA 5: LANDING DATA HEADER -->
+            <tr style="height: 20px;">
+              <td style="border: none;"></td>
+              <td colspan="9" style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 10px; text-align: center;">LANDING DATA</td>
+            </tr>
+
+            <!-- FILA 6: SUBHEADERS LANDING DATA -->
+            <tr style="height: 20px;">
+              <td style="border: none;"></td>
+              <td style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 8px; text-align: center;">INFO</td>
+              <td style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 8px; text-align: center;">TIME</td>
+              <td style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 8px; text-align: center;">RWY</td>
+              <td style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 8px; text-align: center;">TL</td>
+              <td style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 8px; text-align: center;">FIRST CALL</td>
+              <td style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 8px; text-align: center;">VISIBILITY</td>
+              <td style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 8px; text-align: center;">CLOUD</td>
+              <td style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 8px; text-align: center;">TEMP</td>
+              <td style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 8px; text-align: center;">QNH</td>
+            </tr>
+
+            <!-- FILA 7: LANDING VALUES -->
+            <tr style="height: 20px;">
+              <td style="border: none;"></td>
+              <td style="border: 1px solid #000;"><input class="ofp-cell-input center" id="fpl-ld-info"></td>
+              <td style="border: 1px solid #000;"><input class="ofp-cell-input center" id="fpl-ld-time"></td>
+              <td style="border: 1px solid #000;"><input class="ofp-cell-input center bold" id="fpl-ld-rwy" value="27"></td>
+              <td style="border: 1px solid #000;"><input class="ofp-cell-input center" id="fpl-ld-tl" value="60"></td>
+              <td style="border: 1px solid #000;"><input class="ofp-cell-input center" id="fpl-ld-firstcall" value="118.15"></td>
+              <td style="border: 1px solid #000;"><input class="ofp-cell-input center" id="fpl-ld-vis" value="9999"></td>
+              <td style="border: 1px solid #000;"><input class="ofp-cell-input center" id="fpl-ld-cloud" value="FEW045"></td>
+              <td style="border: 1px solid #000;"><input class="ofp-cell-input center" id="fpl-ld-temp" value="20"></td>
+              <td style="border: 1px solid #000;"><input class="ofp-cell-input center bold" id="fpl-ld-qnh" value="1018"></td>
+            </tr>
+
+            <!-- FILA 8: PARKING, OFF/ON BLOCK & CLEARANCE -->
+            <tr style="height: 22px;">
+              <td style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 9px; padding: 2px 4px;">PARKING</td>
+              <td><input class="ofp-cell-input center" id="fpl-parking-1" value="A-12"></td>
+              <td colspan="2" style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 9px; padding: 2px 4px;">OFF BLOCK</td>
+              <td><input class="ofp-cell-input center bold" id="fpl-off-block" value="09:50"></td>
+              <td colspan="2" style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 9px; padding: 2px 4px;">ON BLOCK</td>
+              <td><input class="ofp-cell-input center bold" id="fpl-on-block" value="11:15"></td>
+              <td colspan="3" style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 9px; padding: 2px 4px;">BLOCK TIME</td>
+              <td colspan="2" style="border: 1px solid #000;"><input class="ofp-cell-input center bold" id="fpl-block-time" value="01h 25m"></td>
+              <td style="border: none;"></td>
+              <td colspan="9" rowspan="2" style="border: 1px solid #000; vertical-align: top; padding: 4px;">
+                <div style="font-weight: bold; font-size: 9px; margin-bottom: 2px;">CLEARANCE:</div>
+                <textarea class="ofp-cell-area" id="fpl-clearance" placeholder="Autorización ATC: Salida VFR por Punto W a 3000ft, Transponder 7000..."></textarea>
+              </td>
+            </tr>
+
+            <!-- FILA 9: PARKING, TAKE OFF, LANDING, FLIGHT TIME -->
+            <tr style="height: 22px;">
+              <td style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 9px; padding: 2px 4px;">PARKING</td>
+              <td><input class="ofp-cell-input center" id="fpl-parking-2" value="A-12"></td>
+              <td colspan="2" style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 9px; padding: 2px 4px;">TAKE OFF</td>
+              <td><input class="ofp-cell-input center bold" id="fpl-takeoff-time" value="10:00" onchange="recalculateFlightPlanTimes()"></td>
+              <td colspan="2" style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 9px; padding: 2px 4px;">LANDING</td>
+              <td><input class="ofp-cell-input center bold" id="fpl-landing-time" value="11:05"></td>
+              <td colspan="3" style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 9px; padding: 2px 4px;">FLIGHT TIME</td>
+              <td colspan="2" style="border: 1px solid #000;"><input class="ofp-cell-input center bold" id="fpl-flight-time" value="01h 05m"></td>
+              <td style="border: none;"></td>
+            </tr>
+
+            <!-- FILA 10: SEPARADOR VACÍO -->
+            <tr style="height: 6px; background: #eee;">
+              <td colspan="13" style="border: 1px solid #ccc;"></td>
+              <td style="border: none;"></td>
+              <td colspan="9" style="border: 1px solid #ccc;"></td>
+            </tr>
+
+            <!-- FILAS 11-12: CABECERAS NAVLOG & ALTERNATE / FUEL -->
+            <tr style="height: 16px;">
+              <td rowspan="2" style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 9px; text-align: center;">WAYPOINT</td>
+              <td style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 8px; text-align: center;">TC</td>
+              <td style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 8px; text-align: center;">Var</td>
+              <td style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 8px; text-align: center;">WIND</td>
+              <td rowspan="2" style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 9px; text-align: center;">MH</td>
+              <td rowspan="2" style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 9px; text-align: center;">ALT</td>
+              <td rowspan="2" style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 9px; text-align: center;">DIST</td>
+              <td style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 8px; text-align: center;">TAS</td>
+              <td colspan="3" style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 9px; text-align: center;">TIME</td>
+              <td colspan="2" style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 9px; text-align: center;">TOTAL FUEL</td>
+              <td style="border: none;"></td>
+              <td colspan="9" style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 10px; padding-left: 6px;">
+                ALTERNATE: <input class="ofp-cell-input bold" id="fpl-alternate-name" style="display: inline-block; width: 65%;" value="LEVD / VALLADOLID">
+              </td>
+            </tr>
+
+            <tr style="height: 16px;">
+              <td style="border: 1px solid #000; background: #fafafa;"></td>
+              <td style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 8px; text-align: center;">MC</td>
+              <td style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 8px; text-align: center;">DIR/KT</td>
+              <td style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 8px; text-align: center;">GS</td>
+              <td style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 8px; text-align: center;">ETE</td>
+              <td style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 8px; text-align: center;">ETA</td>
+              <td style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 8px; text-align: center;">ATA</td>
+              <td style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 8px; text-align: center;">LEG</td>
+              <td style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 8px; text-align: center;">TOTAL</td>
+              <td style="border: none;"></td>
+              <td colspan="9" style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 10px; text-align: center;">FUEL CALCULATION</td>
+            </tr>
+
+            <!-- TABLA DE WAYPOINTS (12 PIERNAS, ROWS 13-36) -->
+            <tbody id="fpl-navlog-table-body">
+              <!-- Rellenado dinámicamente -->
+            </tbody>
+
+            <!-- FILA FINAL: AIRSPACE ZONES & DISTANCIAS ALTERNATE -->
+            <tr style="height: 18px;">
+              <td colspan="13" rowspan="5" style="border: 1px solid #000; vertical-align: top; padding: 4px;">
+                <div style="font-weight: bold; font-size: 9px; margin-bottom: 2px;">AIRSPACE ZONES:</div>
+                <textarea class="ofp-cell-area" id="fpl-airspace-zones" placeholder="Espacios y zonas cruzadas: CTR Cuatro Vientos (D), TMA Madrid (A), LER71, LED52..."></textarea>
+              </td>
+              <td style="border: none;"></td>
+              <td colspan="5" style="border: 1px solid #000; background: #f2f2f2; font-size: 9px; font-weight: bold; padding: 2px 4px;">Take off Dist. Req. Alternate</td>
+              <td colspan="4" style="border: 1px solid #000;"><input class="ofp-cell-input center" id="fpl-perf-to-req-alt" value="510 m"></td>
+            </tr>
+
+            <tr style="height: 18px;">
+              <td style="border: none;"></td>
+              <td colspan="5" style="border: 1px solid #000; background: #f2f2f2; font-size: 9px; font-weight: bold; padding: 2px 4px;">Take off Dist. Avail. Alternate</td>
+              <td colspan="4" style="border: 1px solid #000;"><input class="ofp-cell-input center" id="fpl-perf-to-avail-alt" value="3000 m (LEVD)"></td>
+            </tr>
+
+            <tr style="height: 18px;">
+              <td style="border: none;"></td>
+              <td colspan="5" style="border: 1px solid #000; background: #f2f2f2; font-size: 9px; font-weight: bold; padding: 2px 4px;">Landing Dist. Req. Alternate</td>
+              <td colspan="4" style="border: 1px solid #000;"><input class="ofp-cell-input center" id="fpl-perf-ld-req-alt" value="420 m"></td>
+            </tr>
+
+            <tr style="height: 18px;">
+              <td style="border: none;"></td>
+              <td colspan="5" style="border: 1px solid #000; background: #f2f2f2; font-size: 9px; font-weight: bold; padding: 2px 4px;">Landing Dist. Avail. Alternate</td>
+              <td colspan="4" style="border: 1px solid #000;"><input class="ofp-cell-input center" id="fpl-perf-ld-avail-alt" value="3000 m (LEVD)"></td>
+            </tr>
+
+            <tr style="height: 18px;">
+              <td style="border: none;"></td>
+              <td colspan="9" style="border: none;"></td>
+            </tr>
+          </table>
         </div>
       </div>
+    </div>
 
-      <!-- VISOR LEAFLET -->
-      <div id="vfr-leaflet-map" style="height: 380px; width: 100%; border-radius: 12px; border: 1px solid #30363d; background: #0d1117; z-index: 1;"></div>
+    <!-- ───────────────────────────────────────────────────────────
+         SUB-VISTA 2: TRAZADOR VFR & CARTA VISUAL INTERACTIVA
+    ─────────────────────────────────────────────────────────── -->
+    <div id="fpl-subview-map" style="display: none;">
+      <div class="pilot-box no-print" style="margin-bottom: 16px; background: var(--bg-card, #161b22); border: 1px solid var(--border-color, #30363d); border-radius: 16px; padding: 16px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 12px;">
+          <div>
+            <h3 style="margin: 0; font-size: 15px; font-weight: 800; color: #fff;">Carta de Navegación Visual VFR · Trazador de Ruta</h3>
+            <p style="margin: 2px 0 0 0; font-size: 11px; color: var(--text-muted);">Espacios aéreos CTR/TMA, puntos de notificación VFR y cálculo de distancias</p>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+            <!-- SELECTOR DE CAPA CARTOGRÁFICA -->
+            <select id="vfr-map-layer-select" onchange="changeVFRMapBaseLayer(this.value)" style="background: #21262d; border: 1px solid #30363d; color: #fff; font-size: 11px; padding: 6px 10px; border-radius: 6px; font-weight: 700;">
+              <option value="topo">⛰️ Topográfica VFR (Curvas de Nivel / OpenTopoMap)</option>
+              <option value="osm">🗺️ Mapa Aeronáutico Estándar (OSM / Carto)</option>
+              <option value="satellite">🛰️ Vista Satelital Visual (Esri World Imagery)</option>
+            </select>
+            <a href="https://insignia.enaire.es/" target="_blank" rel="noopener" style="text-decoration: none; padding: 6px 12px; background: rgba(56,139,253,0.15); border: 1px solid #388bfd; color: #58a6ff; font-size: 11px; font-weight: 700; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">
+              <span>🌐</span> Abrir ENAIRE Insignia VFR Oficial
+            </a>
+          </div>
+        </div>
 
-      <!-- PASTILLAS DE PUNTOS VFR RÁPIDOS -->
-      <div style="margin-top: 12px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
-        <span style="font-size: 11px; font-weight: 700; color: var(--text-muted); margin-right: 4px;">Puntos Rápidos:</span>
-        <button type="button" class="btn-filter" onclick="addWaypointFromPreset('LECU (RWY27)', 40.3708, -3.7847, 2500)" style="font-size: 11px; padding: 4px 10px;">🛫 LECU (Cuatro Vientos)</button>
-        <button type="button" class="btn-filter" onclick="addWaypointFromPreset('PUNTO W (Villaviciosa)', 40.3583, -3.9000, 3500)" style="font-size: 11px; padding: 4px 10px;">📍 Punto W (LECU)</button>
-        <button type="button" class="btn-filter" onclick="addWaypointFromPreset('PUNTO S (Fuenlabrada)', 40.2833, -3.7833, 3000)" style="font-size: 11px; padding: 4px 10px;">📍 Punto S (LECU)</button>
-        <button type="button" class="btn-filter" onclick="addWaypointFromPreset('PUNTO N (Campamento)', 40.3950, -3.7750, 3000)" style="font-size: 11px; padding: 4px 10px;">📍 Punto N (LECU)</button>
-        <button type="button" class="btn-filter" onclick="addWaypointFromPreset('EL ESCORIAL', 40.5925, -4.1278, 5500)" style="font-size: 11px; padding: 4px 10px;">📍 El Escorial</button>
-        <button type="button" class="btn-filter" onclick="addWaypointFromPreset('PTO. LOS LEONES', 40.7167, -4.1333, 6500)" style="font-size: 11px; padding: 4px 10px;">📍 Pto. Los Leones</button>
-        <button type="button" class="btn-filter" onclick="addWaypointFromPreset('LEMT (Casarrubios)', 40.2333, -4.0333, 3000)" style="font-size: 11px; padding: 4px 10px;">🛬 LEMT (Casarrubios)</button>
-        <button type="button" class="btn-filter" onclick="addWaypointFromPreset('LEVD (Valladolid)', 41.7061, -4.8519, 4500)" style="font-size: 11px; padding: 4px 10px;">🛬 LEVD (Valladolid)</button>
-        <button type="button" class="btn-filter" onclick="addWaypointFromPreset('LESA (Salamanca)', 40.9522, -5.5019, 4500)" style="font-size: 11px; padding: 4px 10px;">🛬 LESA (Salamanca)</button>
-        <button type="button" class="btn-filter" onclick="addWaypointFromPreset('LETO (Toledo)', 39.8889, -4.0244, 3500)" style="font-size: 11px; padding: 4px 10px;">📍 Toledo</button>
+        <!-- VISOR LEAFLET VFR -->
+        <div id="vfr-leaflet-map" style="height: 480px; width: 100%; border-radius: 12px; border: 1px solid #30363d; background: #0d1117; z-index: 1;"></div>
+
+        <!-- PASTILLAS DE ACCESO RÁPIDO A PUNTOS VFR Y AERÓDROMOS -->
+        <div style="margin-top: 14px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+          <span style="font-size: 11px; font-weight: 700; color: var(--text-muted); margin-right: 4px;">Añadir Puntos VFR:</span>
+          <button type="button" class="btn-filter" onclick="addWaypointFromPreset('LECU (RWY27)', 40.3708, -3.7847, 2500)" style="font-size: 11px; padding: 4px 10px;">🛫 LECU (Cuatro Vientos)</button>
+          <button type="button" class="btn-filter" onclick="addWaypointFromPreset('PUNTO W (Villaviciosa)', 40.3583, -3.9000, 3500)" style="font-size: 11px; padding: 4px 10px;">📍 Punto W (LECU)</button>
+          <button type="button" class="btn-filter" onclick="addWaypointFromPreset('PUNTO S (Fuenlabrada)', 40.2833, -3.7833, 3000)" style="font-size: 11px; padding: 4px 10px;">📍 Punto S (LECU)</button>
+          <button type="button" class="btn-filter" onclick="addWaypointFromPreset('PUNTO N (Campamento)', 40.3950, -3.7750, 3000)" style="font-size: 11px; padding: 4px 10px;">📍 Punto N (LECU)</button>
+          <button type="button" class="btn-filter" onclick="addWaypointFromPreset('EL ESCORIAL', 40.5925, -4.1278, 5500)" style="font-size: 11px; padding: 4px 10px;">📍 El Escorial</button>
+          <button type="button" class="btn-filter" onclick="addWaypointFromPreset('PTO. LOS LEONES', 40.7167, -4.1333, 6500)" style="font-size: 11px; padding: 4px 10px;">📍 Pto. Los Leones</button>
+          <button type="button" class="btn-filter" onclick="addWaypointFromPreset('LEMT (Casarrubios)', 40.2333, -4.0333, 3000)" style="font-size: 11px; padding: 4px 10px;">🛬 LEMT (Casarrubios)</button>
+          <button type="button" class="btn-filter" onclick="addWaypointFromPreset('LETO (Toledo)', 39.8889, -4.0244, 3500)" style="font-size: 11px; padding: 4px 10px;">📍 Toledo</button>
+          <button type="button" class="btn-filter" onclick="addWaypointFromPreset('LEVD (Valladolid)', 41.7061, -4.8519, 4500)" style="font-size: 11px; padding: 4px 10px;">🛬 LEVD (Valladolid)</button>
+          <button type="button" class="btn-filter" onclick="addWaypointFromPreset('LESA (Salamanca)', 40.9522, -5.5019, 4500)" style="font-size: 11px; padding: 4px 10px;">🛬 LESA (Salamanca)</button>
+        </div>
       </div>
     </div>
 
-    <!-- CONTENEDOR OFICIAL DE LA PLANTILLA WORLD AVIATION (IDENTICA A EXCEL) -->
-    <div style="background: #e6edf3; padding: 15px; border-radius: 14px; overflow-x: auto;" class="ofp-scroll-container">
-      <div id="world-aviation-ofp-sheet" style="width: 1080px; margin: 0 auto; background: #fff; padding: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.25); color: #000; font-family: Arial, sans-serif;">
-        <table style="width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 11px; border: 1px solid #000;">
-          <colgroup>
-            <!-- 13 columnas parte izquierda (NavLog): ~56% -->
-            <col style="width: 8.5%;"> <!-- A: WP -->
-            <col style="width: 3.5%;"> <!-- B: TC -->
-            <col style="width: 3.5%;"> <!-- C: Var / MC -->
-            <col style="width: 4.5%;"> <!-- D: Wind / DIR/KT -->
-            <col style="width: 3.8%;"> <!-- E: MH -->
-            <col style="width: 4.0%;"> <!-- F: ALT -->
-            <col style="width: 4.0%;"> <!-- G: DIST -->
-            <col style="width: 4.2%;"> <!-- H: TAS / GS -->
-            <col style="width: 4.2%;"> <!-- I: ETE -->
-            <col style="width: 4.2%;"> <!-- J: ETA -->
-            <col style="width: 4.2%;"> <!-- K: ATA -->
-            <col style="width: 4.0%;"> <!-- L: Fuel Leg -->
-            <col style="width: 4.5%;"> <!-- M: Fuel Tot -->
-            <!-- Separador -->
-            <col style="width: 0.8%;"> <!-- N: Spacer -->
-            <!-- 9 columnas parte derecha (Met / Fuel / Distances): ~44% -->
-            <col style="width: 4.8%;"> <!-- O -->
-            <col style="width: 4.2%;"> <!-- P -->
-            <col style="width: 4.2%;"> <!-- Q -->
-            <col style="width: 3.8%;"> <!-- R -->
-            <col style="width: 4.8%;"> <!-- S -->
-            <col style="width: 5.5%;"> <!-- T -->
-            <col style="width: 5.5%;"> <!-- U -->
-            <col style="width: 5.5%;"> <!-- V -->
-            <col style="width: 5.8%;"> <!-- W -->
-          </colgroup>
+    <!-- ───────────────────────────────────────────────────────────
+         SUB-VISTA 3: BIBLIOTECA DE CARTAS VISUALES DE ESPAÑA (VAC ENAIRE)
+    ─────────────────────────────────────────────────────────── -->
+    <div id="fpl-subview-charts" style="display: none;">
+      <div class="pilot-box no-print" style="margin-bottom: 16px; background: var(--bg-card, #161b22); border: 1px solid var(--border-color, #30363d); border-radius: 16px; padding: 18px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px;">
+          <div>
+            <h3 style="margin: 0; font-size: 16px; font-weight: 800; color: #fff;">🗂️ Biblioteca de Cartas Visuales de España (AIP & VAC ENAIRE)</h3>
+            <p style="margin: 2px 0 0 0; font-size: 11px; color: var(--text-muted);">Cartas de aproximación visual (VAC), planos de aeródromo (ADC), frecuencias y circuitos de tráfico oficiales</p>
+          </div>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <a href="https://guiavfr.enaire.es/" target="_blank" rel="noopener" style="text-decoration: none; padding: 7px 14px; background: rgba(46,160,67,0.15); border: 1px solid #2ea043; color: #56d364; font-size: 11px; font-weight: 700; border-radius: 8px; display: inline-flex; align-items: center; gap: 4px;">
+              <span>🌐</span> Guía VFR ENAIRE Oficial
+            </a>
+            <a href="https://aip.enaire.es/AIP/" target="_blank" rel="noopener" style="text-decoration: none; padding: 7px 14px; background: #21262d; border: 1px solid #30363d; color: #58a6ff; font-size: 11px; font-weight: 700; border-radius: 8px; display: inline-flex; align-items: center; gap: 4px;">
+              <span>📖</span> Portal AIP España (AD 2)
+            </a>
+          </div>
+        </div>
 
-          <!-- FILA 1: TÍTULO -->
-          <tr style="height: 32px; background: #fff;">
-            <td colspan="13" style="border: 1px solid #000; font-size: 16px; font-weight: 900; letter-spacing: 1px; padding-left: 8px;">
-              OPERATIONAL FLIGHT PLAN
-            </td>
-            <td style="border: none;"></td>
-            <td colspan="9" style="border: 1px solid #000; text-align: right; padding-right: 12px; font-size: 13px; font-weight: 900; color: #1e293b;">
-              <span style="color: #2b3a4a;">WORLD AVIATION</span> FLIGHT ACADEMY
-            </td>
-          </tr>
+        <!-- BUSCADOR DE CARTAS VISUALES -->
+        <div style="display: flex; gap: 10px; margin-bottom: 16px;">
+          <input type="text" id="vac-search-input" oninput="filterVacChartsList()" placeholder="🔍 Buscar por nombre de aeródromo o código OACI (ej: LECU, Casarrubios, LEVD, LESA, LEBZ, LEDS)..." style="width: 100%; background: #0d1117; border: 1px solid #30363d; color: #fff; font-size: 12px; padding: 10px 14px; border-radius: 10px;">
+        </div>
 
-          <!-- FILA 2: DATOS GENERALES (MODEL, REGISTRATION, ARCID, DATE) & TAKE OFF DATA HEADER -->
-          <tr style="height: 22px;">
-            <td style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 9px; padding: 2px 4px;">MODEL</td>
-            <td colspan="2" style="border: 1px solid #000;"><input class="ofp-cell-input bold center" id="fpl-model" value="P2008JC"></td>
-            <td colspan="2" style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 9px; padding: 2px 4px;">REGISTRATION</td>
-            <td colspan="2" style="border: 1px solid #000;"><input class="ofp-cell-input bold center" id="fpl-reg" value="EC-XYZ"></td>
-            <td colspan="2" style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 9px; padding: 2px 4px;">ARCID</td>
-            <td><input class="ofp-cell-input center" id="fpl-arcid" value="WDA01"></td>
-            <td style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 9px; padding: 2px 4px;">DATE</td>
-            <td colspan="2" style="border: 1px solid #000;"><input class="ofp-cell-input center" id="fpl-date" value="2026-09-16"></td>
-            <td style="border: none;"></td>
-            <td colspan="9" style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 10px; text-align: center;">TAKE OFF DATA</td>
-          </tr>
-
-          <!-- FILA 3: PIC, SQUAWK & SUBHEADERS TAKE OFF DATA -->
-          <tr style="height: 20px;">
-            <td style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 9px; padding: 2px 4px;">PIC</td>
-            <td colspan="4" style="border: 1px solid #000;"><input class="ofp-cell-input bold" id="fpl-pic" value="FERNANDO CHOZAS"></td>
-            <td colspan="2" style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 9px; padding: 2px 4px;">SQUAK</td>
-            <td colspan="2" style="border: 1px solid #000;"><input class="ofp-cell-input bold center" id="fpl-squawk" value="7000"></td>
-            <td colspan="4" style="border: 1px solid #000;"></td>
-            <td style="border: none;"></td>
-            <td style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 8px; text-align: center;">INFO</td>
-            <td style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 8px; text-align: center;">TIME</td>
-            <td style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 8px; text-align: center;">RWY</td>
-            <td style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 8px; text-align: center;">TL</td>
-            <td style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 8px; text-align: center;">FIRST CALL</td>
-            <td style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 8px; text-align: center;">VISIBILITY</td>
-            <td style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 8px; text-align: center;">CLOUD</td>
-            <td style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 8px; text-align: center;">TEMP</td>
-            <td style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 8px; text-align: center;">QNH</td>
-          </tr>
-
-          <!-- FILA 4: FREQUENCIES (rowspan=4) & TAKE OFF VALUES -->
-          <tr style="height: 20px;">
-            <td colspan="13" rowspan="4" style="border: 1px solid #000; vertical-align: top; padding: 4px;">
-              <div style="font-weight: bold; font-size: 9px; margin-bottom: 2px;">FREQUENCIES:</div>
-              <textarea class="ofp-cell-area" id="fpl-frequencies" placeholder="TWR: 118.150 | GND: 121.800 | ATIS: 130.850 | MADRID INFO: 124.025 | FIS: 127.100"></textarea>
-            </td>
-            <td style="border: none;"></td>
-            <td style="border: 1px solid #000;"><input class="ofp-cell-input center" id="fpl-to-info" value="C"></td>
-            <td style="border: 1px solid #000;"><input class="ofp-cell-input center" id="fpl-to-time" value="10:00"></td>
-            <td style="border: 1px solid #000;"><input class="ofp-cell-input center bold" id="fpl-to-rwy" value="27"></td>
-            <td style="border: 1px solid #000;"><input class="ofp-cell-input center" id="fpl-to-tl" value="60"></td>
-            <td style="border: 1px solid #000;"><input class="ofp-cell-input center" id="fpl-to-firstcall" value="118.15"></td>
-            <td style="border: 1px solid #000;"><input class="ofp-cell-input center" id="fpl-to-vis" value="9999"></td>
-            <td style="border: 1px solid #000;"><input class="ofp-cell-input center" id="fpl-to-cloud" value="SCT040"></td>
-            <td style="border: 1px solid #000;"><input class="ofp-cell-input center" id="fpl-to-temp" value="18"></td>
-            <td style="border: 1px solid #000;"><input class="ofp-cell-input center bold" id="fpl-to-qnh" value="1018"></td>
-          </tr>
-
-          <!-- FILA 5: LANDING DATA HEADER -->
-          <tr style="height: 20px;">
-            <td style="border: none;"></td>
-            <td colspan="9" style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 10px; text-align: center;">LANDING DATA</td>
-          </tr>
-
-          <!-- FILA 6: SUBHEADERS LANDING DATA -->
-          <tr style="height: 20px;">
-            <td style="border: none;"></td>
-            <td style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 8px; text-align: center;">INFO</td>
-            <td style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 8px; text-align: center;">TIME</td>
-            <td style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 8px; text-align: center;">RWY</td>
-            <td style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 8px; text-align: center;">TL</td>
-            <td style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 8px; text-align: center;">FIRST CALL</td>
-            <td style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 8px; text-align: center;">VISIBILITY</td>
-            <td style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 8px; text-align: center;">CLOUD</td>
-            <td style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 8px; text-align: center;">TEMP</td>
-            <td style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 8px; text-align: center;">QNH</td>
-          </tr>
-
-          <!-- FILA 7: LANDING VALUES -->
-          <tr style="height: 20px;">
-            <td style="border: none;"></td>
-            <td style="border: 1px solid #000;"><input class="ofp-cell-input center" id="fpl-ld-info"></td>
-            <td style="border: 1px solid #000;"><input class="ofp-cell-input center" id="fpl-ld-time"></td>
-            <td style="border: 1px solid #000;"><input class="ofp-cell-input center bold" id="fpl-ld-rwy" value="27"></td>
-            <td style="border: 1px solid #000;"><input class="ofp-cell-input center" id="fpl-ld-tl" value="60"></td>
-            <td style="border: 1px solid #000;"><input class="ofp-cell-input center" id="fpl-ld-firstcall" value="118.15"></td>
-            <td style="border: 1px solid #000;"><input class="ofp-cell-input center" id="fpl-ld-vis" value="9999"></td>
-            <td style="border: 1px solid #000;"><input class="ofp-cell-input center" id="fpl-ld-cloud" value="FEW045"></td>
-            <td style="border: 1px solid #000;"><input class="ofp-cell-input center" id="fpl-ld-temp" value="20"></td>
-            <td style="border: 1px solid #000;"><input class="ofp-cell-input center bold" id="fpl-ld-qnh" value="1018"></td>
-          </tr>
-
-          <!-- FILA 8: PARKING, OFF/ON BLOCK & CLEARANCE -->
-          <tr style="height: 22px;">
-            <td style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 9px; padding: 2px 4px;">PARKING</td>
-            <td><input class="ofp-cell-input center" id="fpl-parking-1" value="A-12"></td>
-            <td colspan="2" style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 9px; padding: 2px 4px;">OFF BLOCK</td>
-            <td><input class="ofp-cell-input center bold" id="fpl-off-block" value="09:50"></td>
-            <td colspan="2" style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 9px; padding: 2px 4px;">ON BLOCK</td>
-            <td><input class="ofp-cell-input center bold" id="fpl-on-block" value="11:15"></td>
-            <td colspan="3" style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 9px; padding: 2px 4px;">BLOCK TIME</td>
-            <td colspan="2" style="border: 1px solid #000;"><input class="ofp-cell-input center bold" id="fpl-block-time" value="01h 25m"></td>
-            <td style="border: none;"></td>
-            <td colspan="9" rowspan="2" style="border: 1px solid #000; vertical-align: top; padding: 4px;">
-              <div style="font-weight: bold; font-size: 9px; margin-bottom: 2px;">CLEARANCE:</div>
-              <textarea class="ofp-cell-area" id="fpl-clearance" placeholder="Autorización ATC: Salida VFR por Punto W a 3000ft, Transponder 7000..."></textarea>
-            </td>
-          </tr>
-
-          <!-- FILA 9: PARKING, TAKE OFF, LANDING, FLIGHT TIME -->
-          <tr style="height: 22px;">
-            <td style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 9px; padding: 2px 4px;">PARKING</td>
-            <td><input class="ofp-cell-input center" id="fpl-parking-2" value="A-12"></td>
-            <td colspan="2" style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 9px; padding: 2px 4px;">TAKE OFF</td>
-            <td><input class="ofp-cell-input center bold" id="fpl-takeoff-time" value="10:00" onchange="recalculateFlightPlanTimes()"></td>
-            <td colspan="2" style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 9px; padding: 2px 4px;">LANDING</td>
-            <td><input class="ofp-cell-input center bold" id="fpl-landing-time" value="11:05"></td>
-            <td colspan="3" style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 9px; padding: 2px 4px;">FLIGHT TIME</td>
-            <td colspan="2" style="border: 1px solid #000;"><input class="ofp-cell-input center bold" id="fpl-flight-time" value="01h 05m"></td>
-            <td style="border: none;"></td>
-          </tr>
-
-          <!-- FILA 10: SEPARADOR VACÍO -->
-          <tr style="height: 6px; background: #eee;">
-            <td colspan="13" style="border: 1px solid #ccc;"></td>
-            <td style="border: none;"></td>
-            <td colspan="9" style="border: 1px solid #ccc;"></td>
-          </tr>
-
-          <!-- FILAS 11-12: CABECERAS NAVLOG (IZQUIERDA) & ALTERNATE / FUEL CALCULATION (DERECHA) -->
-          <tr style="height: 16px;">
-            <td rowspan="2" style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 9px; text-align: center;">WAYPOINT</td>
-            <td style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 8px; text-align: center;">TC</td>
-            <td style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 8px; text-align: center;">Var</td>
-            <td style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 8px; text-align: center;">WIND</td>
-            <td rowspan="2" style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 9px; text-align: center;">MH</td>
-            <td rowspan="2" style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 9px; text-align: center;">ALT</td>
-            <td rowspan="2" style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 9px; text-align: center;">DIST</td>
-            <td style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 8px; text-align: center;">TAS</td>
-            <td colspan="3" style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 9px; text-align: center;">TIME</td>
-            <td colspan="2" style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 9px; text-align: center;">TOTAL FUEL</td>
-            <td style="border: none;"></td>
-            <td colspan="9" style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 10px; padding-left: 6px;">
-              ALTERNATE: <input class="ofp-cell-input bold" id="fpl-alternate-name" style="display: inline-block; width: 65%;" value="LEVD / VALLADOLID">
-            </td>
-          </tr>
-
-          <tr style="height: 16px;">
-            <td style="border: 1px solid #000; background: #fafafa;"></td>
-            <td style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 8px; text-align: center;">MC</td>
-            <td style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 8px; text-align: center;">DIR/KT</td>
-            <td style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 8px; text-align: center;">GS</td>
-            <td style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 8px; text-align: center;">ETE</td>
-            <td style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 8px; text-align: center;">ETA</td>
-            <td style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 8px; text-align: center;">ATA</td>
-            <td style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 8px; text-align: center;">LEG</td>
-            <td style="border: 1px solid #000; font-weight: bold; background: #f2f2f2; font-size: 8px; text-align: center;">TOTAL</td>
-            <td style="border: none;"></td>
-            <td colspan="9" style="border: 1px solid #000; background: #f2f2f2; font-weight: bold; font-size: 10px; text-align: center;">FUEL CALCULATION</td>
-          </tr>
-
-          <!-- TABLA DE WAYPOINTS (12 PIERNAS, ROWS 13-36) + BLOQUES DERECHOS -->
-          <tbody id="fpl-navlog-table-body">
-            <!-- Rellenado dinámicamente -->
-          </tbody>
-
-          <!-- FILA FINAL: AIRSPACE ZONES (IZQUIERDA) & DISTANCIAS ALTERNATE (DERECHA) -->
-          <tr style="height: 18px;">
-            <td colspan="13" rowspan="5" style="border: 1px solid #000; vertical-align: top; padding: 4px;">
-              <div style="font-weight: bold; font-size: 9px; margin-bottom: 2px;">AIRSPACE ZONES:</div>
-              <textarea class="ofp-cell-area" id="fpl-airspace-zones" placeholder="Espacios y zonas cruzadas: CTR Cuatro Vientos (D), TMA Madrid (A), LER71, LED52..."></textarea>
-            </td>
-            <td style="border: none;"></td>
-            <td colspan="5" style="border: 1px solid #000; background: #f2f2f2; font-size: 9px; font-weight: bold; padding: 2px 4px;">Take off Dist. Req. Alternate</td>
-            <td colspan="4" style="border: 1px solid #000;"><input class="ofp-cell-input center" id="fpl-perf-to-req-alt" value="510 m"></td>
-          </tr>
-
-          <tr style="height: 18px;">
-            <td style="border: none;"></td>
-            <td colspan="5" style="border: 1px solid #000; background: #f2f2f2; font-size: 9px; font-weight: bold; padding: 2px 4px;">Take off Dist. Avail. Alternate</td>
-            <td colspan="4" style="border: 1px solid #000;"><input class="ofp-cell-input center" id="fpl-perf-to-avail-alt" value="3000 m (LEVD)"></td>
-          </tr>
-
-          <tr style="height: 18px;">
-            <td style="border: none;"></td>
-            <td colspan="5" style="border: 1px solid #000; background: #f2f2f2; font-size: 9px; font-weight: bold; padding: 2px 4px;">Landing Dist. Req. Alternate</td>
-            <td colspan="4" style="border: 1px solid #000;"><input class="ofp-cell-input center" id="fpl-perf-ld-req-alt" value="420 m"></td>
-          </tr>
-
-          <tr style="height: 18px;">
-            <td style="border: none;"></td>
-            <td colspan="5" style="border: 1px solid #000; background: #f2f2f2; font-size: 9px; font-weight: bold; padding: 2px 4px;">Landing Dist. Avail. Alternate</td>
-            <td colspan="4" style="border: 1px solid #000;"><input class="ofp-cell-input center" id="fpl-perf-ld-avail-alt" value="3000 m (LEVD)"></td>
-          </tr>
-
-          <tr style="height: 18px;">
-            <td style="border: none;"></td>
-            <td colspan="9" style="border: none;"></td>
-          </tr>
-        </table>
+        <!-- GRID DE AERÓDROMOS Y CARTAS VAC -->
+        <div id="vac-charts-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 14px;">
+          <!-- Rellenado dinámicamente -->
+        </div>
       </div>
     </div>
   </div><!-- /view-fpl -->
@@ -5830,52 +5895,443 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
   }
   
   // ═══════════════════════════════════════════════════════════════
-  // 8. MÓDULO PLAN DE VUELO OPERACIONAL (WORLD AVIATION) & VFR MAP (v1.2.0)
+  // 8. MÓDULO PLAN DE VUELO OPERACIONAL (WORLD AVIATION) & CARTAS VFR (v1.3.0)
   // ═══════════════════════════════════════════════════════════════
 
   let fplMap = null;
   let fplMarkers = [];
   let fplPolyline = null;
+  let fplAirspaceLayerGroup = null;
+  let fplCurrentBaseTile = null;
+
   let fplWaypoints = [
     { name: "LECU (RWY 27)", lat: 40.3708, lon: -3.7847, alt: 2500, dist: 0, tc: 0, mc: 0, mh: 0, gs: 85, ete: "00m", eta: "10:00", ata: "", legFuel: "0.0", totFuel: "0.0" },
     { name: "PUNTO W (Villaviciosa)", lat: 40.3583, lon: -3.9000, alt: 3500, dist: 5.3, tc: 262, mc: 263, mh: 260, gs: 81, ete: "04m", eta: "10:04", ata: "", legFuel: "1.2", totFuel: "1.2" },
     { name: "EL ESCORIAL", lat: 40.5925, lon: -4.1278, alt: 5500, dist: 17.5, tc: 334, mc: 335, mh: 330, gs: 94, ete: "11m", eta: "10:15", ata: "", legFuel: "3.2", totFuel: "4.4" }
   ];
 
-  // Coordenadas de referencia para puntos rápidos de navegación VFR en España
-  const VFR_KNOWN_POINTS = {
-    'LECU (RWY27)': { lat: 40.3708, lon: -3.7847, alt: 2500 },
-    'PUNTO W (Villaviciosa)': { lat: 40.3583, lon: -3.9000, alt: 3500 },
-    'PUNTO S (Fuenlabrada)': { lat: 40.2833, lon: -3.7833, alt: 3000 },
-    'PUNTO N (Campamento)': { lat: 40.3950, lon: -3.7750, alt: 3000 },
-    'EL ESCORIAL': { lat: 40.5925, lon: -4.1278, alt: 5500 },
-    'PTO. LOS LEONES': { lat: 40.7167, lon: -4.1333, alt: 6500 },
-    'LEMT (Casarrubios)': { lat: 40.2333, lon: -4.0333, alt: 3000 },
-    'LEVD (Valladolid)': { lat: 41.7061, lon: -4.8519, alt: 4500 },
-    'LESA (Salamanca)': { lat: 40.9522, lon: -5.5019, alt: 4500 },
-    'LETO (Toledo)': { lat: 39.8889, lon: -4.0244, alt: 3500 }
-  };
+  // ─────────────────────────────────────────────────────────────
+  // GESTIÓN DE SUB-PESTAÑAS DENTRO DEL PLANIFICADOR DE VUELO
+  // ─────────────────────────────────────────────────────────────
+  function switchFPLSubTab(subTabId) {
+    const tabs = ['ofp', 'map', 'charts'];
+    tabs.forEach(t => {
+      const view = document.getElementById('fpl-subview-' + t);
+      const btn = document.getElementById('fpl-subtab-btn-' + t);
+      if (t === subTabId) {
+        if (view) view.style.display = 'block';
+        if (btn) btn.classList.add('active');
+      } else {
+        if (view) view.style.display = 'none';
+        if (btn) btn.classList.remove('active');
+      }
+    });
 
-  // Inicialización del visor cartográfico Leaflet VFR
+    if (subTabId === 'map') {
+      initVFRFlightPlanner();
+      setTimeout(() => {
+        if (fplMap) {
+          fplMap.invalidateSize(true);
+          updateVFRMapDisplay();
+        }
+      }, 150);
+    } else if (subTabId === 'charts') {
+      renderVacChartsGrid();
+    }
+  }
+
+  // ─────────────────────────────────────────────────────────────
+  // BASE DE DATOS DE CARTAS VISUALES DE ESPAÑA (AIP & GUÍA VFR ENAIRE)
+  // ─────────────────────────────────────────────────────────────
+  const SPANISH_VAC_DATABASE = [
+    {
+      icao: "LECU",
+      name: "Madrid / Cuatro Vientos",
+      city: "Madrid",
+      type: "Controlado (CTR D)",
+      elev: "2.270 ft",
+      runways: "09/27 (1.500m Asf.) · 14/32 (1.000m Tie.)",
+      freqs: { twr: "118.150", gnd: "121.800", atis: "130.850", fis: "127.100" },
+      circuit: "2.500 ft (Sur para RWY 27/09) / 2.700 ft",
+      lat: 40.3708,
+      lon: -3.7847,
+      aipUrl: "https://guiavfr.enaire.es/",
+      insigniaUrl: "https://insignia.enaire.es/",
+      notes: "Sede de World Aviation Flight Academy. Salidas y llegadas visuales obligatorias por Puntos W, S, N o E."
+    },
+    {
+      icao: "LEMT",
+      name: "Casarrubios del Monte",
+      city: "Toledo",
+      type: "No Controlado (GA / ULM)",
+      elev: "2.050 ft",
+      runways: "08/26 (1.000m Asfalto)",
+      freqs: { twr: "—", gnd: "—", atis: "—", fis: "123.500 / 130.125" },
+      circuit: "2.800 ft (Norte y Sur según pista)",
+      lat: 40.2333,
+      lon: -4.0333,
+      aipUrl: "https://guiavfr.enaire.es/",
+      insigniaUrl: "https://insignia.enaire.es/",
+      notes: "Aeródromo no controlado muy transitado por vuelos de escuela y privados en el suroeste de Madrid."
+    },
+    {
+      icao: "LERM",
+      name: "Robledillo de Mohernando",
+      city: "Guadalajara",
+      type: "No Controlado (GA / Velas)",
+      elev: "3.090 ft",
+      runways: "01/19 (1.000m Asfalto)",
+      freqs: { twr: "—", gnd: "—", atis: "—", fis: "123.500" },
+      circuit: "3.900 ft",
+      lat: 40.8653,
+      lon: -3.2483,
+      aipUrl: "https://guiavfr.enaire.es/",
+      insigniaUrl: "https://insignia.enaire.es/",
+      notes: "Base de vuelo a vela y ultraligeros al noreste de Madrid, fuera del CTR de Barajas."
+    },
+    {
+      icao: "LEVD",
+      name: "Valladolid / Villanubla",
+      city: "Valladolid",
+      type: "Controlado (CTR D / Militar)",
+      elev: "2.775 ft",
+      runways: "05/23 (3.000m Asf.) · 15/33 (900m Asf.)",
+      freqs: { twr: "122.200", gnd: "121.750", atis: "124.325", app: "118.000" },
+      circuit: "3.600 ft",
+      lat: 41.7061,
+      lon: -4.8519,
+      aipUrl: "https://guiavfr.enaire.es/",
+      insigniaUrl: "https://insignia.enaire.es/",
+      notes: "Aeropuerto alternativo habitual de la zona centro con pista de 3.000m y procedimientos ILS/VFR."
+    },
+    {
+      icao: "LESA",
+      name: "Salamanca / Matacán",
+      city: "Salamanca",
+      type: "Controlado (CTR D / Base Aérea)",
+      elev: "2.595 ft",
+      runways: "03/21 (2.500m Asf.) · 08/26 (1.950m Tie.)",
+      freqs: { twr: "118.300", gnd: "121.700", atis: "128.075", app: "119.200" },
+      circuit: "3.400 ft",
+      lat: 40.9522,
+      lon: -5.5019,
+      aipUrl: "https://guiavfr.enaire.es/",
+      insigniaUrl: "https://insignia.enaire.es/",
+      notes: "Centro neurálgico de formación de pilotos en Castilla y León. Puntos visuales N, S, E, W."
+    },
+    {
+      icao: "LEBZ",
+      name: "Badajoz / Talavera la Real",
+      city: "Badajoz",
+      type: "Controlado (CTR D / Base Aérea)",
+      elev: "610 ft",
+      runways: "13/31 (2.850m Asfalto)",
+      freqs: { twr: "122.100", gnd: "121.900", atis: "119.325", app: "119.000" },
+      circuit: "1.600 ft",
+      lat: 38.8911,
+      lon: -6.8214,
+      aipUrl: "https://guiavfr.enaire.es/",
+      insigniaUrl: "https://insignia.enaire.es/",
+      notes: "Base mixta civil-militar en Extremadura, amplio espacio aéreo para travesías de navegación."
+    },
+    {
+      icao: "LEDS",
+      name: "Castellón-Costa Azahar",
+      city: "Castellón",
+      type: "AFIS / Controlado",
+      elev: "1.145 ft",
+      runways: "06/24 (2.700m Asfalto)",
+      freqs: { twr: "120.450", gnd: "—", atis: "—", fis: "122.250 (AFIS)" },
+      circuit: "2.100 ft",
+      lat: 40.2139,
+      lon: 0.0733,
+      aipUrl: "https://guiavfr.enaire.es/",
+      insigniaUrl: "https://insignia.enaire.es/",
+      notes: "Frecuentado por vuelos de entrenamiento IFR y VFR de travesía en la costa este."
+    },
+    {
+      icao: "LESB",
+      name: "Mallorca / Son Bonet",
+      city: "Palma de Mallorca",
+      type: "AFIS / Aviación General",
+      elev: "135 ft",
+      runways: "05/23 (1.000m Asfalto)",
+      freqs: { twr: "123.000 (AFIS)", gnd: "—", atis: "—", fis: "119.400" },
+      circuit: "1.100 ft",
+      lat: 39.5989,
+      lon: 2.7028,
+      aipUrl: "https://guiavfr.enaire.es/",
+      insigniaUrl: "https://insignia.enaire.es/",
+      notes: "Aeródromo histórico de aviación general en Baleares, muy próximo a Palma-Son Sant Joan."
+    },
+    {
+      icao: "LERJ",
+      name: "Logroño-Agoncillo",
+      city: "Logroño",
+      type: "AFIS",
+      elev: "1.160 ft",
+      runways: "11/29 (2.000m Asfalto)",
+      freqs: { twr: "118.450 (AFIS)", gnd: "—", atis: "—", fis: "129.825" },
+      circuit: "2.100 ft",
+      lat: 42.4611,
+      lon: -2.3211,
+      aipUrl: "https://guiavfr.enaire.es/",
+      insigniaUrl: "https://insignia.enaire.es/",
+      notes: "Ideal para travesías al valle del Ebro y norte de la península con servicio AFIS."
+    },
+    {
+      icao: "LEOC",
+      name: "Ocaña",
+      city: "Toledo",
+      type: "No Controlado (Planeadores)",
+      elev: "2.410 ft",
+      runways: "13/31 (1.200m Asfalto) · 13/31 (800m Tierra)",
+      freqs: { twr: "—", gnd: "—", atis: "—", fis: "123.500" },
+      circuit: "3.200 ft",
+      lat: 39.9392,
+      lon: -3.5036,
+      aipUrl: "https://guiavfr.enaire.es/",
+      insigniaUrl: "https://insignia.enaire.es/",
+      notes: "Referencia nacional del vuelo sin motor y aviación general deportiva al sur de Madrid."
+    },
+    {
+      icao: "LEMU",
+      name: "Muchamiel (Mutxamel)",
+      city: "Alicante",
+      type: "No Controlado (GA / Heli)",
+      elev: "430 ft",
+      runways: "12/30 (1.000m Asfalto)",
+      freqs: { twr: "—", gnd: "—", atis: "—", fis: "123.500" },
+      circuit: "1.400 ft",
+      lat: 38.4319,
+      lon: -0.4744,
+      aipUrl: "https://guiavfr.enaire.es/",
+      insigniaUrl: "https://insignia.enaire.es/",
+      notes: "Principal aeródromo de aviación general y helicópteros en la provincia de Alicante."
+    },
+    {
+      icao: "LEAX",
+      name: "La Axarquía / Vélez-Málaga",
+      city: "Málaga",
+      type: "No Controlado (GA / Escuelas)",
+      elev: "120 ft",
+      runways: "12/30 (1.000m Asfalto)",
+      freqs: { twr: "—", gnd: "—", atis: "—", fis: "123.500" },
+      circuit: "1.100 ft",
+      lat: 36.7589,
+      lon: -4.1333,
+      aipUrl: "https://guiavfr.enaire.es/",
+      insigniaUrl: "https://insignia.enaire.es/",
+      notes: "Base de escuelas de vuelo en la Costa del Sol fuera del congestionado espacio de Málaga-LEMG."
+    },
+    {
+      icao: "LEZL",
+      name: "Sevilla / San Pablo",
+      city: "Sevilla",
+      type: "Controlado (CTR D)",
+      elev: "112 ft",
+      runways: "09/27 (3.360m Asfalto)",
+      freqs: { twr: "118.100", gnd: "121.700", atis: "125.725", app: "128.500" },
+      circuit: "1.100 ft",
+      lat: 37.4180,
+      lon: -5.8931,
+      aipUrl: "https://guiavfr.enaire.es/",
+      insigniaUrl: "https://insignia.enaire.es/",
+      notes: "Aeropuerto internacional con intensa actividad civil y planta de ensamblaje Airbus A400M."
+    },
+    {
+      icao: "LEJR",
+      name: "Jerez de la Frontera",
+      city: "Cádiz",
+      type: "Controlado (CTR D)",
+      elev: "93 ft",
+      runways: "02/20 (2.300m Asfalto)",
+      freqs: { twr: "119.000", gnd: "121.900", atis: "128.575", app: "128.500" },
+      circuit: "1.100 ft",
+      lat: 36.7447,
+      lon: -6.0600,
+      aipUrl: "https://guiavfr.enaire.es/",
+      insigniaUrl: "https://insignia.enaire.es/",
+      notes: "Sede de academias internacionales de vuelo como FTEJerez. Gran volumen de tráfico VFR/IFR."
+    },
+    {
+      icao: "LEMG",
+      name: "Málaga-Costa del Sol",
+      city: "Málaga",
+      type: "Controlado (CTR D)",
+      elev: "52 ft",
+      runways: "13/31 (3.200m) · 12/30 (2.750m)",
+      freqs: { twr: "118.150", gnd: "121.700", atis: "120.375", app: "118.450" },
+      circuit: "1.100 ft (Restringido)",
+      lat: 36.6749,
+      lon: -4.4991,
+      aipUrl: "https://guiavfr.enaire.es/",
+      insigniaUrl: "https://insignia.enaire.es/",
+      notes: "Puntos VFR de notificación sobre la costa (Torremolinos, Fuengirola, Rincón de la Victoria)."
+    },
+    {
+      icao: "LEMD",
+      name: "Madrid-Barajas Adolfo Suárez",
+      city: "Madrid",
+      type: "Controlado (CTR A)",
+      elev: "2.000 ft",
+      runways: "18R/36L (4.100m) · 14L/32R (3.500m)",
+      freqs: { twr: "118.075", gnd: "121.700", atis: "130.775", app: "124.025" },
+      circuit: "Prohibido VFR estándar",
+      lat: 40.4936,
+      lon: -3.5668,
+      aipUrl: "https://guiavfr.enaire.es/",
+      insigniaUrl: "https://insignia.enaire.es/",
+      notes: "Espacio Aéreo Clase A. Tráfico VFR no autorizado salvo emergencias o autorizaciones ATC expresas."
+    }
+  ];
+
+  // Renderizado dinámico de la biblioteca de cartas VAC
+  function renderVacChartsGrid(filterText = '') {
+    const grid = document.getElementById('vac-charts-grid');
+    if (!grid) return;
+
+    const term = filterText.toLowerCase().trim();
+    const filtered = SPANISH_VAC_DATABASE.filter(ad => {
+      if (!term) return true;
+      return ad.icao.toLowerCase().includes(term) ||
+             ad.name.toLowerCase().includes(term) ||
+             ad.city.toLowerCase().includes(term) ||
+             ad.type.toLowerCase().includes(term);
+    });
+
+    if (filtered.length === 0) {
+      grid.innerHTML = `
+        <div style="grid-column: 1 / -1; padding: 30px; text-align: center; color: var(--text-muted); background: #0d1117; border-radius: 12px; border: 1px dashed #30363d;">
+          <span style="font-size: 32px; display: block; margin-bottom: 8px;">🔍</span>
+          No se encontraron aeródromos ni cartas VAC para "<strong>${filterText}</strong>". Prueba con LECU, Casarrubios, LEVD, LESA o LEMG.
+        </div>
+      `;
+      return;
+    }
+
+    let html = '';
+    filtered.forEach(ad => {
+      const isControlled = ad.type.includes('Controlado');
+      const badgeBg = isControlled ? 'rgba(56,139,253,0.15)' : 'rgba(238,169,44,0.15)';
+      const badgeBorder = isControlled ? '#388bfd' : '#d29922';
+      const badgeColor = isControlled ? '#58a6ff' : '#f1e05a';
+
+      html += `
+        <div class="pilot-box" style="background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 14px; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.15s ease, border-color 0.15s ease;">
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+              <div>
+                <span style="font-family: monospace; font-size: 16px; font-weight: 900; color: #58a6ff; letter-spacing: 1px;">${ad.icao}</span>
+                <h4 style="margin: 2px 0 0 0; font-size: 13px; font-weight: 800; color: #fff;">${ad.name}</h4>
+                <span style="font-size: 11px; color: var(--text-muted);">📍 ${ad.city} · Elev: ${ad.elev}</span>
+              </div>
+              <span style="font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 12px; background: ${badgeBg}; border: 1px solid ${badgeBorder}; color: ${badgeColor}; white-space: nowrap;">
+                ${ad.type}
+              </span>
+            </div>
+
+            <!-- DATOS OPERACIONALES -->
+            <div style="background: #0d1117; border-radius: 8px; padding: 8px 10px; margin-bottom: 10px; font-size: 11px;">
+              <div style="margin-bottom: 4px; display: flex; justify-content: space-between;">
+                <span style="color: var(--text-muted);">🛫 Pistas:</span>
+                <span style="font-weight: 700; color: #e6edf3;">${ad.runways}</span>
+              </div>
+              <div style="margin-bottom: 4px; display: flex; justify-content: space-between;">
+                <span style="color: var(--text-muted);">🔄 Circuito:</span>
+                <span style="font-weight: 700; color: #e6edf3;">${ad.circuit}</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px; margin-top: 6px; padding-top: 6px; border-top: 1px solid #21262d;">
+                <span style="color: var(--text-muted);">📻 Frecuencias:</span>
+                <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                  ${ad.freqs.twr !== '—' ? `<span style="background: #21262d; padding: 2px 6px; border-radius: 4px; font-family: monospace; color: #3fb950; font-weight: 700;">TWR ${ad.freqs.twr}</span>` : ''}
+                  ${ad.freqs.gnd && ad.freqs.gnd !== '—' ? `<span style="background: #21262d; padding: 2px 6px; border-radius: 4px; font-family: monospace; color: #58a6ff; font-weight: 700;">GND ${ad.freqs.gnd}</span>` : ''}
+                  ${ad.freqs.fis && ad.freqs.fis !== '—' ? `<span style="background: #21262d; padding: 2px 6px; border-radius: 4px; font-family: monospace; color: #e3b341; font-weight: 700;">FIS ${ad.freqs.fis}</span>` : ''}
+                </div>
+              </div>
+            </div>
+
+            <p style="font-size: 11px; color: var(--text-muted); margin: 0 0 12px 0; line-height: 1.4;">
+              ${ad.notes}
+            </p>
+          </div>
+
+          <!-- BOTONES DE ACCIÓN RÁPIDA -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+            <a href="${ad.aipUrl}" target="_blank" rel="noopener" style="text-decoration: none; padding: 6px 8px; background: #21262d; border: 1px solid #30363d; color: #58a6ff; font-size: 11px; font-weight: 700; border-radius: 6px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 4px;">
+              <span>📄</span> Ver Carta VAC
+            </a>
+            <button type="button" onclick="focusAirportOnMap(${ad.lat}, ${ad.lon}, '${ad.icao}')" style="padding: 6px 8px; background: rgba(56,139,253,0.15); border: 1px solid #388bfd; color: #58a6ff; font-size: 11px; font-weight: 700; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px;">
+              <span>🗺️</span> Ver en Mapa
+            </button>
+            <button type="button" onclick="setAirportAsDestination('${ad.icao}', '${ad.name}', ${ad.lat}, ${ad.lon}, ${parseInt(ad.elev) + 1000})" style="grid-column: 1 / -1; padding: 7px 8px; background: #238636; border: 1px solid #2ea043; color: #fff; font-size: 11px; font-weight: 800; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px;">
+              <span>📋</span> Cargar como Destino en Plan de Vuelo
+            </button>
+          </div>
+        </div>
+      `;
+    });
+
+    grid.innerHTML = html;
+  }
+
+  function filterVacChartsList() {
+    const input = document.getElementById('vac-search-input');
+    renderVacChartsGrid(input ? input.value : '');
+  }
+
+  function focusAirportOnMap(lat, lon, icao) {
+    switchFPLSubTab('map');
+    setTimeout(() => {
+      if (fplMap) {
+        fplMap.setView([lat, lon], 12);
+        showToastNotification(`🗺️ Mapa centrado en el aeródromo ${icao}`);
+      }
+    }, 200);
+  }
+
+  function setAirportAsDestination(icao, name, lat, lon, alt = 3500) {
+    // Si ya existe en la lista, no duplicar innecesariamente
+    const fullName = `${icao} (${name.split('/')[0].trim()})`;
+    addWaypointFromPreset(fullName, lat, lon, alt);
+    
+    // Si no hay alternate fijado, sugerirlo como alternate en el FPL
+    const altInput = document.getElementById('fpl-alternate-name');
+    if (altInput && (!altInput.value || altInput.value === 'LEVD / VALLADOLID')) {
+      if (icao !== 'LEVD') {
+        altInput.value = `${icao} / ${name.toUpperCase()}`;
+      }
+    }
+
+    switchFPLSubTab('ofp');
+    showToastNotification(`🎯 ${icao} añadido como punto de llegada en el Plan de Vuelo.`);
+  }
+
+  // ─────────────────────────────────────────────────────────────
+  // INICIALIZACIÓN CARTOGRÁFICA VFR & ESPACIOS AÉREOS (LEAFLET)
+  // ─────────────────────────────────────────────────────────────
   function initVFRFlightPlanner() {
     if (!fplMap && typeof L !== 'undefined') {
       const mapEl = document.getElementById('vfr-leaflet-map');
       if (!mapEl) return;
 
       fplMap = L.map('vfr-leaflet-map', {
-        center: [40.37, -3.85],
+        center: [40.3708, -3.8500],
         zoom: 10,
         minZoom: 6,
         maxZoom: 16
       });
 
-      // Capa base CartoDB Voyager con etiquetado claro de topografía
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> | ENAIRE Insignia VFR',
-        maxZoom: 19
+      // Capa base por defecto: Topográfica VFR OpenTopoMap
+      fplCurrentBaseTile = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenTopoMap (CC-BY-SA) | ENAIRE Insignia VFR',
+        maxZoom: 17
       }).addTo(fplMap);
 
-      // Evento de clic sobre la carta para añadir un nuevo Waypoint
+      // Dibujar espacios aéreos VFR vectoriales y ayudas a la navegación
+      drawAeronauticalAirspaceOverlays();
+
+      // Evento de clic en mapa para trazar waypoints visuales
       fplMap.on('click', function(e) {
         const count = fplWaypoints.length + 1;
         const wpName = `WP ${count} (${e.latlng.lat.toFixed(2)}N, ${Math.abs(e.latlng.lng).toFixed(2)}W)`;
@@ -5885,7 +6341,7 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
 
     setTimeout(() => {
       if (fplMap) {
-        fplMap.invalidateSize();
+        fplMap.invalidateSize(true);
         updateVFRMapDisplay();
       }
     }, 200);
@@ -5893,23 +6349,160 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
     renderNavLogTable();
   }
 
-  function toggleVFRMapView() {
-    const sec = document.getElementById('vfr-map-section');
-    const txt = document.getElementById('btn-toggle-map-text');
-    if (!sec) return;
-    if (sec.style.display === 'none') {
-      sec.style.display = 'block';
-      if (txt) txt.textContent = 'Ocultar Mapa';
-      if (fplMap) setTimeout(() => fplMap.invalidateSize(), 150);
-    } else {
-      sec.style.display = 'none';
-      if (txt) txt.textContent = 'Mostrar Mapa';
+  // Cambiador dinámico de capa base cartográfica
+  function changeVFRMapBaseLayer(layerType) {
+    if (!fplMap) return;
+    if (fplCurrentBaseTile) {
+      fplMap.removeLayer(fplCurrentBaseTile);
+    }
+
+    if (layerType === 'topo') {
+      fplCurrentBaseTile = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenTopoMap (CC-BY-SA) | Cartografía VFR Curvas de Nivel',
+        maxZoom: 17
+      }).addTo(fplMap);
+    } else if (layerType === 'osm') {
+      fplCurrentBaseTile = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; CartoDB & OpenStreetMap contributors',
+        maxZoom: 19
+      }).addTo(fplMap);
+    } else if (layerType === 'satellite') {
+      fplCurrentBaseTile = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        attribution: 'Tiles &copy; Esri, Earthstar Geographics',
+        maxZoom: 18
+      }).addTo(fplMap);
     }
   }
 
-  // Fórmulas geodésicas (Haversine & Bearing) para distancias y rumbos de cartas
+  // Capas vectoriales aeronáuticas oficiales: CTR Cuatro Vientos, Getafe, Barajas y Puntos VFR
+  function drawAeronauticalAirspaceOverlays() {
+    if (!fplMap) return;
+    if (fplAirspaceLayerGroup) {
+      fplMap.removeLayer(fplAirspaceLayerGroup);
+    }
+    fplAirspaceLayerGroup = L.layerGroup();
+
+    // 1. CTR CUATRO VIENTOS (LECU) - Clase D SFC-3000ft
+    const ctrCuatroVientos = L.polygon([
+      [40.420, -3.880],
+      [40.420, -3.720],
+      [40.320, -3.720],
+      [40.320, -3.880]
+    ], {
+      color: '#388bfd',
+      weight: 2,
+      dashArray: '5, 5',
+      fillColor: '#388bfd',
+      fillOpacity: 0.12
+    }).addTo(fplAirspaceLayerGroup);
+    ctrCuatroVientos.bindPopup('<strong>CTR CUATRO VIENTOS (LECU)</strong><br>Clase D · SFC a 3.000 ft ALT<br>TWR: 118.150 MHz · GND: 121.800 MHz');
+
+    // 2. CTR GETAFE (LEGT) - Militar Clase D SFC-3000ft
+    const ctrGetafe = L.polygon([
+      [40.330, -3.760],
+      [40.330, -3.640],
+      [40.255, -3.640],
+      [40.255, -3.760]
+    ], {
+      color: '#f85149',
+      weight: 2,
+      dashArray: '5, 5',
+      fillColor: '#f85149',
+      fillOpacity: 0.12
+    }).addTo(fplAirspaceLayerGroup);
+    ctrGetafe.bindPopup('<strong>CTR GETAFE (LEGT) - Base Aérea Militar</strong><br>Clase D · SFC a 3.000 ft ALT<br>TWR: 122.100 MHz');
+
+    // 3. CTR MADRID-BARAJAS (LEMD) - Clase A SFC-FL145
+    const ctrBarajas = L.polygon([
+      [40.580, -3.650],
+      [40.580, -3.440],
+      [40.410, -3.440],
+      [40.410, -3.650]
+    ], {
+      color: '#a371f7',
+      weight: 2,
+      dashArray: '6, 6',
+      fillColor: '#a371f7',
+      fillOpacity: 0.15
+    }).addTo(fplAirspaceLayerGroup);
+    ctrBarajas.bindPopup('<strong>CTR MADRID-BARAJAS (LEMD)</strong><br>Clase A · Prohibido VFR salvo autorización especial<br>TWR: 118.075 MHz');
+
+    // 4. PUNTOS VISUALES NOTIFICACIÓN VFR EN MADRID
+    const vfrPointsMadrid = [
+      { name: "PUNTO W (Villaviciosa de Odón)", lat: 40.3583, lon: -3.9000, desc: "Punto W Cuatro Vientos · Max 3.000ft", type: "VFR Visual Point" },
+      { name: "PUNTO S (Fuenlabrada)", lat: 40.2833, lon: -3.7833, desc: "Punto S Cuatro Vientos · Max 3.000ft", type: "VFR Visual Point" },
+      { name: "PUNTO N (Campamento)", lat: 40.3950, lon: -3.7750, desc: "Punto N Cuatro Vientos · Max 3.000ft", type: "VFR Visual Point" },
+      { name: "PUNTO E (Alcorcón)", lat: 40.3450, lon: -3.8300, desc: "Punto E Cuatro Vientos · Max 2.500ft", type: "VFR Visual Point" },
+      { name: "ASPERILLAS", lat: 40.2000, lon: -3.9833, desc: "Punto SW de entrada/salida zona suroeste", type: "VFR Entry Point" },
+      { name: "EL ESCORIAL", lat: 40.5925, lon: -4.1278, desc: "Monasterio de El Escorial · Sierra de Guadarrama", type: "Visual Nav Aid" },
+      { name: "PTO. LOS LEONES", lat: 40.7167, lon: -4.1333, desc: "Paso de montaña hacia Segovia / Meseta Norte", type: "Mountain Pass" },
+      { name: "TOLEDO", lat: 39.8889, lon: -4.0244, desc: "Ciudad de Toledo / Valle del Tajo", type: "Visual Nav Aid" },
+      { name: "ARANJUEZ", lat: 40.0333, lon: -3.6000, desc: "Palacio Real de Aranjuez / Río Tajo", type: "Visual Nav Aid" },
+      { name: "SAN MARTÍN VALDEIGLESIAS", lat: 40.3622, lon: -4.4022, desc: "Pantano de San Juan / Entrada a Ávila", type: "Visual Nav Aid" }
+    ];
+
+    vfrPointsMadrid.forEach(pt => {
+      const vfrMarker = L.circleMarker([pt.lat, pt.lon], {
+        radius: 6,
+        color: '#e3b341',
+        fillColor: '#f1e05a',
+        fillOpacity: 0.9,
+        weight: 2
+      }).addTo(fplAirspaceLayerGroup);
+
+      const popHtml = `
+        <div style="font-size: 11px;">
+          <strong style="color: #e3b341;">📍 ${pt.name}</strong><br>
+          <span style="color: #666;">${pt.desc}</span><br>
+          <div style="margin-top: 6px;">
+            <button type="button" onclick="addWaypointFromPreset('${pt.name}', ${pt.lat}, ${pt.lon}, 3500)" style="padding: 4px 8px; background: #238636; border: 1px solid #2ea043; color: #fff; font-size: 10px; font-weight: 800; border-radius: 4px; cursor: pointer;">
+              ➕ Añadir al Plan de Vuelo
+            </button>
+          </div>
+        </div>
+      `;
+      vfrMarker.bindPopup(popHtml);
+    });
+
+    // 5. RADIOAYUDAS VOR / DME EN LA ZONA CENTRO
+    const vorsCentro = [
+      { id: "PDT", name: "Perales de Tajuña", freq: "115.35 MHz", lat: 40.2528, lon: -3.3469 },
+      { id: "NVS", name: "Navas del Rey", freq: "112.30 MHz", lat: 40.4072, lon: -4.2981 },
+      { id: "CNR", name: "Colmenar Viejo", freq: "117.30 MHz", lat: 40.6972, lon: -3.7519 },
+      { id: "TLD", name: "Toledo VOR", freq: "114.70 MHz", lat: 39.8894, lon: -4.0411 }
+    ];
+
+    vorsCentro.forEach(vor => {
+      const vorMarker = L.circleMarker([vor.lat, vor.lon], {
+        radius: 7,
+        color: '#388bfd',
+        fillColor: '#1f6feb',
+        fillOpacity: 0.9,
+        weight: 2
+      }).addTo(fplAirspaceLayerGroup);
+
+      const vorPop = `
+        <div style="font-size: 11px;">
+          <strong style="color: #58a6ff;">🧭 VOR/DME ${vor.id} · ${vor.name}</strong><br>
+          <span>Frecuencia: <strong>${vor.freq}</strong></span><br>
+          <div style="margin-top: 6px;">
+            <button type="button" onclick="addWaypointFromPreset('VOR ${vor.id} (${vor.freq})', ${vor.lat}, ${vor.lon}, 4000)" style="padding: 4px 8px; background: #1f6feb; border: 1px solid #388bfd; color: #fff; font-size: 10px; font-weight: 800; border-radius: 4px; cursor: pointer;">
+              ➕ Añadir VOR a Ruta
+            </button>
+          </div>
+        </div>
+      `;
+      vorMarker.bindPopup(vorPop);
+    });
+
+    fplAirspaceLayerGroup.addTo(fplMap);
+  }
+
+  // ─────────────────────────────────────────────────────────────
+  // FÓRMULAS GEODÉSICAS & COMPUTADOR CR3
+  // ─────────────────────────────────────────────────────────────
   function calculateDistanceNM(lat1, lon1, lat2, lon2) {
-    const R = 3440.065; // Radio terrestre en Millas Náuticas
+    const R = 3440.065; // Radio terrestre en NM
     const dLat = (lat2 - lat1) * Math.PI / 180;
     const dLon = (lon2 - lon1) * Math.PI / 180;
     const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
@@ -5929,7 +6522,6 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
     return Math.round(b);
   }
 
-  // Computador de Vuelo CR3 / E6B (Triángulo del viento: WCA, MH, GS)
   function calculateCR3(tc, ias, windDir, windSpd, varDeg = -1, alt = 3500) {
     const tas = Math.round(ias * (1 + (alt / 1000) * 0.0175));
     const alpha = (windDir - tc) * Math.PI / 180;
@@ -5946,11 +6538,10 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
     return { tc, mc, th, mh, tas, gs, wca: parseFloat(wca.toFixed(1)), hw: Math.round(headwind), cw: Math.round(Math.abs(crosswind)) };
   }
 
-  // Actualizar trazado en el mapa Leaflet
+  // Actualizar la ruta y los waypoints sobre el mapa interactivo Leaflet
   function updateVFRMapDisplay() {
     if (!fplMap) return;
 
-    // Limpiar marcadores y polilínea anterior
     fplMarkers.forEach(m => fplMap.removeLayer(m));
     fplMarkers = [];
     if (fplPolyline) fplMap.removeLayer(fplPolyline);
@@ -5966,7 +6557,7 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
         const icon = L.divIcon({ className: 'fpl-wp-icon', html: markerHtml, iconSize: [22, 22], iconAnchor: [11, 11] });
 
         const m = L.marker([wp.lat, wp.lon], { icon, draggable: true }).addTo(fplMap);
-        m.bindPopup(`<strong>[${idx + 1}] ${wp.name}</strong><br>Altitud: ${wp.alt} ft<br>Rumbo MH: ${wp.mh}° · GS: ${wp.gs} kt`);
+        m.bindPopup(`<strong>[${idx + 1}] ${wp.name}</strong><br>Altitud: ${wp.alt} ft<br>Rumbo MH: ${wp.mh}° · GS: ${wp.gs} kt · Dist: ${wp.dist} NM`);
 
         m.on('dragend', function(e) {
           const pos = e.target.getLatLng();
@@ -5981,12 +6572,9 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
     });
 
     if (latlngs.length > 1) {
-      fplPolyline = L.polyline(latlngs, { color: '#e3b341', weight: 3, opacity: 0.85, dashArray: '6, 8' }).addTo(fplMap);
-      fplMap.fitBounds(fplPolyline.getBounds(), { padding: [40, 40] });
+      fplPolyline = L.polyline(latlngs, { color: '#e3b341', weight: 4, opacity: 0.9, dashArray: '6, 8' }).addTo(fplMap);
+      fplMap.fitBounds(fplPolyline.getBounds(), { padding: [50, 50] });
     }
-
-    const distEl = document.getElementById('fpl-map-total-dist');
-    if (distEl) distEl.textContent = `${totalDist.toFixed(1)} NM`;
   }
 
   function addWaypointFromPreset(name, lat, lon, alt = 3500) {
@@ -6011,6 +6599,7 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
       totFuel: '1.5'
     });
     recalculateFlightPlanFromParams();
+    showToastNotification(`➕ Añadido ${name} al plan de vuelo.`);
   }
 
   function removeWaypoint(idx) {
@@ -6030,7 +6619,6 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
     recalculateFlightPlanFromParams();
   }
 
-  // Recalcular rumbos, distancias, WCA, MH, GS, ETE y ETA con el computador CR3
   function recalculateFlightPlanFromParams() {
     const ias = parseInt(document.getElementById('fpl-ias-input')?.value || '95', 10);
     const windRaw = document.getElementById('fpl-wind-input')?.value || '240/12';
@@ -6074,7 +6662,6 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
         cumulativeMinutes += legMinutes;
 
         const m = Math.floor(legMinutes);
-        const s = Math.round((legMinutes % 1) * 60);
         wp.ete = `${String(m).padStart(2, '0')}m`;
 
         const etaTotalMin = (curHour * 60) + curMin + Math.round(cumulativeMinutes);
@@ -6082,7 +6669,6 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
         const etaM = etaTotalMin % 60;
         wp.eta = `${String(etaH).padStart(2, '0')}:${String(etaM).padStart(2, '0')}`;
 
-        // Estimación opcional de combustible (ej. 17 L/h para Rotax)
         const hourlyBurn = 17;
         const legF = parseFloat(((legMinutes / 60) * hourlyBurn).toFixed(1));
         wp.legFuel = `${legF} L`;
@@ -6091,18 +6677,13 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
       }
     });
 
-    const totalTimeEl = document.getElementById('fpl-map-total-time');
-    if (totalTimeEl) {
-      const totH = Math.floor(cumulativeMinutes / 60);
-      const totM = Math.round(cumulativeMinutes % 60);
-      totalTimeEl.textContent = totH > 0 ? `${totH}h ${totM}m` : `${totM}m`;
-    }
-
     renderNavLogTable();
     updateVFRMapDisplay();
   }
 
-  // Renderizado exacto de la tabla de navegación (Rows 13-36 de World Aviation)
+  // ─────────────────────────────────────────────────────────────
+  // RENDERIZADO DE LA TABLA EXACTA DEL PLAN DE VUELO OPERACIONAL
+  // ─────────────────────────────────────────────────────────────
   function renderNavLogTable() {
     const tbody = document.getElementById('fpl-navlog-table-body');
     if (!tbody) return;
@@ -6110,55 +6691,53 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
     let html = '';
     const windRaw = document.getElementById('fpl-wind-input')?.value || '240/12';
 
-    // Fila por cada tramo (hasta 12 tramos para coincidir con el Excel)
     for (let i = 0; i < 12; i++) {
       const wp = fplWaypoints[i] || null;
       const isFilled = (wp !== null);
 
-      // Bloques de la derecha correspondientes a esta fila
       let rightHtml = '';
-      if (i === 0) { // Rows 13-14: TRIP FUEL HEADER & CLIMB / ALTERNATE FUEL
+      if (i === 0) {
         rightHtml = `
           <td colspan="5" style="border:1px solid #000; background:#f2f2f2; font-weight:bold; font-size:9px; text-align:center;">TRIP FUEL</td>
           <td colspan="4" style="border:1px solid #000; background:#f2f2f2; font-weight:bold; font-size:9px; text-align:center;">QUANTITY REQUIRED</td>
         `;
-      } else if (i === 1) { // Rows 15-16: CRUISE & TRIP FUEL
+      } else if (i === 1) {
         rightHtml = `
           <td colspan="2" style="border:1px solid #000; background:#f2f2f2; font-size:9px; font-weight:bold; padding:2px 4px;">Climb</td>
           <td colspan="3" style="border:1px solid #000;"><input class="ofp-cell-input center" id="fpl-fuel-climb" value="8.0 L"></td>
           <td colspan="2" style="border:1px solid #000; background:#f2f2f2; font-size:9px; font-weight:bold; padding:2px 4px;">Alternate Fuel</td>
           <td colspan="2" style="border:1px solid #000;"><input class="ofp-cell-input center" id="fpl-fuel-alt" value="15.0 L"></td>
         `;
-      } else if (i === 2) { // Rows 17-18: DESCENT & MIN REQUIRED FUEL
+      } else if (i === 2) {
         rightHtml = `
           <td colspan="2" style="border:1px solid #000; background:#f2f2f2; font-size:9px; font-weight:bold; padding:2px 4px;">Cruise</td>
           <td colspan="3" style="border:1px solid #000;"><input class="ofp-cell-input center" id="fpl-fuel-cruise" value="18.5 L"></td>
           <td colspan="2" style="border:1px solid #000; background:#f2f2f2; font-size:9px; font-weight:bold; padding:2px 4px;">Trip Fuel</td>
           <td colspan="2" style="border:1px solid #000;"><input class="ofp-cell-input center" id="fpl-fuel-trip" value="29.0 L"></td>
         `;
-      } else if (i === 3) { // Rows 19-20: TOTAL TRIP FUEL & FUEL ON BOARD
+      } else if (i === 3) {
         rightHtml = `
           <td colspan="2" style="border:1px solid #000; background:#f2f2f2; font-size:9px; font-weight:bold; padding:2px 4px;">Descent</td>
           <td colspan="3" style="border:1px solid #000;"><input class="ofp-cell-input center" id="fpl-fuel-descent" value="2.5 L"></td>
           <td colspan="2" style="border:1px solid #000; background:#f2f2f2; font-size:9px; font-weight:bold; padding:2px 4px;">Min. Req. Fuel</td>
           <td colspan="2" style="border:1px solid #000;"><input class="ofp-cell-input center bold" id="fpl-fuel-min-req" value="54.0 L"></td>
         `;
-      } else if (i === 4) { // Rows 21-22: TOTAL TRIP FUEL & FUEL ON BOARD VALUES
+      } else if (i === 4) {
         rightHtml = `
           <td colspan="2" style="border:1px solid #000; background:#f2f2f2; font-size:9px; font-weight:bold; padding:2px 4px;">Total trip Fuel</td>
           <td colspan="3" style="border:1px solid #000;"><input class="ofp-cell-input center bold" id="fpl-fuel-total-trip" value="29.0 L"></td>
           <td colspan="2" style="border:1px solid #000; background:#f2f2f2; font-size:9px; font-weight:bold; padding:2px 4px;">Fuel on Board</td>
           <td colspan="2" style="border:1px solid #000;"><input class="ofp-cell-input center bold" id="fpl-fuel-fob" value="80.0 L"></td>
         `;
-      } else if (i === 5) { // Rows 23-24: LOGO OFICIAL WORLD AVIATION
+      } else if (i === 5) {
         rightHtml = `
           <td colspan="9" rowspan="3" style="border:1px solid #000; text-align:center; vertical-align:middle; background:#fff; padding:6px;">
             <img src="world_aviation_logo.png" style="max-height:55px; max-width:140px; display:inline-block;" alt="World Aviation">
           </td>
         `;
       } else if (i === 6 || i === 7) {
-        rightHtml = ''; // Espacio absorbido por el rowspan del logo
-      } else if (i === 8) { // Rows 29-30: TAKE OFF DIST REQ & NOTAMS
+        rightHtml = '';
+      } else if (i === 8) {
         rightHtml = `
           <td colspan="5" style="border:1px solid #000; background:#f2f2f2; font-size:9px; font-weight:bold; padding:2px 4px;">Take off Distance Required</td>
           <td colspan="4" rowspan="4" style="border:1px solid #000; vertical-align:top; padding:4px;">
@@ -6166,21 +6745,20 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
             <textarea class="ofp-cell-area" id="fpl-notams" style="min-height:90px;" placeholder="NOTAMs de ruta, pistas activas, grúas, frecuencias..."></textarea>
           </td>
         `;
-      } else if (i === 9) { // Rows 31-32: TAKE OFF DIST AVAIL
+      } else if (i === 9) {
         rightHtml = `
           <td colspan="5" style="border:1px solid #000; background:#f2f2f2; font-size:9px; font-weight:bold; padding:2px 4px;">Take off Distance Available</td>
         `;
-      } else if (i === 10) { // Rows 33-34: LANDING DIST REQ
+      } else if (i === 10) {
         rightHtml = `
           <td colspan="5" style="border:1px solid #000; background:#f2f2f2; font-size:9px; font-weight:bold; padding:2px 4px;">Landing Distance Required</td>
         `;
-      } else if (i === 11) { // Rows 35-36: LANDING DIST AVAIL
+      } else if (i === 11) {
         rightHtml = `
           <td colspan="5" style="border:1px solid #000; background:#f2f2f2; font-size:9px; font-weight:bold; padding:2px 4px;">Landing Distance Available</td>
         `;
       }
 
-      // SUB-FILA 1 DEL TRAMO
       html += `
         <tr style="height: 18px;">
           <td rowspan="2" style="border:1px solid #000;">
@@ -6206,7 +6784,6 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
         </tr>
       `;
 
-      // SUB-FILA 2 DEL TRAMO (MC, WIND SPEED, GS)
       let rightSubHtml = '';
       if (i === 8) {
         rightSubHtml = `<td colspan="5" style="border:1px solid #000;"><input class="ofp-cell-input center" id="fpl-perf-to-req" value="480 m"></td>`;
@@ -6247,7 +6824,6 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
     }
   }
 
-  // Preajustes de aeronaves habituales de World Aviation
   function applyAircraftPreset() {
     const sel = document.getElementById('fpl-aircraft-select');
     const modelInput = document.getElementById('fpl-model');
@@ -6285,6 +6861,175 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
     }
   }
 
+  // ─────────────────────────────────────────────────────────────
+  // DESCARGA DEL ARCHIVO EXCEL OFICIAL (.XLSX) RELLENADO (SHEETJS)
+  // ─────────────────────────────────────────────────────────────
+  async function downloadFilledOfficialExcel() {
+    if (typeof XLSX === 'undefined') {
+      showToastNotification('⚠️ El motor Excel SheetJS aún se está cargando. Por favor, espera un segundo.');
+      return;
+    }
+    showToastNotification('⏳ Generando archivo Excel oficial de World Aviation...');
+
+    try {
+      // 1. Cargar la plantilla oficial original .xlsx de World Aviation
+      const response = await fetch('Plan_de_vuelo_operacional.xlsx');
+      if (!response.ok) {
+        throw new Error('No se pudo cargar la plantilla oficial Plan_de_vuelo_operacional.xlsx');
+      }
+      const arrayBuffer = await response.arrayBuffer();
+      const wb = XLSX.read(arrayBuffer, { type: 'array', cellStyles: true });
+      const sheetName = wb.SheetNames[0];
+      const ws = wb.Sheets[sheetName];
+
+      function setCell(cellRef, val) {
+        if (val === undefined || val === null) return;
+        const str = String(val).trim();
+        ws[cellRef] = { t: 's', v: str };
+      }
+
+      // Datos de aeronave y tripulación
+      const model = document.getElementById('fpl-model')?.value || 'P2008JC';
+      const reg = document.getElementById('fpl-reg')?.value || 'EC-XYZ';
+      const arcid = document.getElementById('fpl-arcid')?.value || 'WDA01';
+      const dateVal = document.getElementById('fpl-date')?.value || new Date().toISOString().split('T')[0];
+      const pic = document.getElementById('fpl-pic')?.value || (currentPilot || 'PILOTO');
+      const squawk = document.getElementById('fpl-squawk')?.value || '7000';
+      const freqs = document.getElementById('fpl-frequencies')?.value || '';
+
+      setCell('A2', `MODEL:  ${model}`);
+      setCell('C2', `REGISTRATION:  ${reg}`);
+      setCell('F2', `ARCID:  ${arcid}`);
+      setCell('J2', `DATE:  ${dateVal}`);
+      setCell('A3', `PIC:  ${pic}`);
+      setCell('F3', `SQUAWK:  ${squawk}`);
+      if (freqs) setCell('A4', `FREQUENCIES:\n${freqs}`);
+
+      // Bloque Take Off (Fila 4)
+      setCell('O4', document.getElementById('fpl-to-info')?.value || 'C');
+      setCell('P4', document.getElementById('fpl-to-time')?.value || '10:00');
+      setCell('Q4', document.getElementById('fpl-to-rwy')?.value || '27');
+      setCell('R4', document.getElementById('fpl-to-tl')?.value || '60');
+      setCell('S4', document.getElementById('fpl-to-firstcall')?.value || '118.15');
+      setCell('T4', document.getElementById('fpl-to-vis')?.value || '9999');
+      setCell('U4', document.getElementById('fpl-to-cloud')?.value || 'SCT040');
+      setCell('V4', document.getElementById('fpl-to-temp')?.value || '18');
+      setCell('W4', document.getElementById('fpl-to-qnh')?.value || '1018');
+
+      // Bloque Landing (Fila 7)
+      setCell('O7', document.getElementById('fpl-ld-info')?.value || '');
+      setCell('P7', document.getElementById('fpl-ld-time')?.value || '');
+      setCell('Q7', document.getElementById('fpl-ld-rwy')?.value || '27');
+      setCell('R7', document.getElementById('fpl-ld-tl')?.value || '60');
+      setCell('S7', document.getElementById('fpl-ld-firstcall')?.value || '118.15');
+      setCell('T7', document.getElementById('fpl-ld-vis')?.value || '9999');
+      setCell('U7', document.getElementById('fpl-ld-cloud')?.value || 'FEW045');
+      setCell('V7', document.getElementById('fpl-ld-temp')?.value || '20');
+      setCell('W7', document.getElementById('fpl-ld-qnh')?.value || '1018');
+
+      // Parking y horas de calzos (Filas 8 y 9)
+      setCell('A8', `PARKING:  ${document.getElementById('fpl-parking-1')?.value || 'A-12'}`);
+      setCell('C8', `OFF BLOCK:  ${document.getElementById('fpl-off-block')?.value || '09:50'}`);
+      setCell('F8', `ON BLOCK:  ${document.getElementById('fpl-on-block')?.value || '11:15'}`);
+      setCell('J8', `BLOCK TIME:  ${document.getElementById('fpl-block-time')?.value || '01h 25m'}`);
+      
+      const clr = document.getElementById('fpl-clearance')?.value || '';
+      if (clr) setCell('O8', `CLEARANCE:\n${clr}`);
+
+      setCell('A9', `PARKING:  ${document.getElementById('fpl-parking-2')?.value || 'A-12'}`);
+      setCell('C9', `TAKE OFF:  ${document.getElementById('fpl-takeoff-time')?.value || '10:00'}`);
+      setCell('F9', `LANDING:  ${document.getElementById('fpl-landing-time')?.value || '11:05'}`);
+      setCell('J9', `FLIGHT TIME:  ${document.getElementById('fpl-flight-time')?.value || '01h 05m'}`);
+
+      // Alternate (Fila 11)
+      setCell('O11', `ALTERNATE:  ${document.getElementById('fpl-alternate-name')?.value || 'LEVD / VALLADOLID'}`);
+
+      // Combustible (Filas 18, 20, 22, 24)
+      setCell('Q18', document.getElementById('fpl-fuel-climb')?.value || '8.0 L');
+      setCell('V18', document.getElementById('fpl-fuel-alt')?.value || '15.0 L');
+      setCell('Q20', document.getElementById('fpl-fuel-cruise')?.value || '18.5 L');
+      setCell('V20', document.getElementById('fpl-fuel-trip')?.value || '29.0 L');
+      setCell('Q22', document.getElementById('fpl-fuel-descent')?.value || '2.5 L');
+      setCell('V22', document.getElementById('fpl-fuel-min-req')?.value || '54.0 L');
+      setCell('Q24', document.getElementById('fpl-fuel-total-trip')?.value || '29.0 L');
+      setCell('V24', document.getElementById('fpl-fuel-fob')?.value || '80.0 L');
+
+      // Performance (Filas 30, 32, 34, 36)
+      setCell('Q30', document.getElementById('fpl-perf-to-req')?.value || '480 m');
+      setCell('Q32', document.getElementById('fpl-perf-to-avail')?.value || '1500 m');
+      setCell('Q34', document.getElementById('fpl-perf-ld-req')?.value || '390 m');
+      setCell('Q36', document.getElementById('fpl-perf-ld-avail')?.value || '1500 m');
+      
+      const notams = document.getElementById('fpl-notams')?.value || '';
+      if (notams) setCell('T32', notams);
+
+      // Espacios aéreos y Alternativo
+      const airspace = document.getElementById('fpl-airspace-zones')?.value || '';
+      if (airspace) setCell('A37', `AIRSPACE ZONES:\n${airspace}`);
+      setCell('Q39', document.getElementById('fpl-perf-to-req-alt')?.value || '510 m');
+      setCell('Q41', document.getElementById('fpl-perf-to-avail-alt')?.value || '3000 m (LEVD)');
+      setCell('Q43', document.getElementById('fpl-perf-ld-req-alt')?.value || '420 m');
+      setCell('Q45', document.getElementById('fpl-perf-ld-avail-alt')?.value || '3000 m (LEVD)');
+
+      // Tramos / Waypoints (Filas 13 a 36, hasta 12 piernas)
+      const windRaw = document.getElementById('fpl-wind-input')?.value || '240/12';
+      const windDir = windRaw.split('/')[0] || '240';
+      const windSpd = windRaw.split('/')[1] || '12';
+
+      for (let i = 0; i < 12; i++) {
+        const r1 = 13 + (i * 2);
+        const r2 = r1 + 1;
+        const wp = fplWaypoints[i];
+
+        if (wp) {
+          setCell(`A${r1}`, wp.name || '');
+          setCell(`B${r1}`, wp.tc !== undefined && wp.tc !== '' ? wp.tc : '');
+          setCell(`B${r2}`, wp.mc !== undefined && wp.mc !== '' ? wp.mc : '');
+          setCell(`C${r1}`, '-1');
+          setCell(`D${r1}`, windDir);
+          setCell(`D${r2}`, windSpd);
+          setCell(`E${r1}`, wp.mh !== undefined && wp.mh !== '' ? wp.mh : '');
+          setCell(`F${r1}`, wp.alt !== undefined && wp.alt !== '' ? wp.alt : '');
+          setCell(`G${r1}`, wp.dist !== undefined && wp.dist !== '' ? wp.dist : '');
+          setCell(`H${r1}`, wp.tas || '95');
+          setCell(`H${r2}`, wp.gs !== undefined && wp.gs !== '' ? wp.gs : '');
+          setCell(`I${r1}`, wp.ete || '');
+          setCell(`J${r1}`, wp.eta || '');
+          setCell(`K${r1}`, wp.ata || '');
+          setCell(`L${r1}`, wp.legFuel || '');
+          setCell(`M${r1}`, wp.totFuel || '');
+        } else {
+          setCell(`A${r1}`, '');
+          setCell(`B${r1}`, '');
+          setCell(`B${r2}`, '');
+          setCell(`C${r1}`, '');
+          setCell(`D${r1}`, '');
+          setCell(`D${r2}`, '');
+          setCell(`E${r1}`, '');
+          setCell(`F${r1}`, '');
+          setCell(`G${r1}`, '');
+          setCell(`H${r1}`, '');
+          setCell(`H${r2}`, '');
+          setCell(`I${r1}`, '');
+          setCell(`J${r1}`, '');
+          setCell(`K${r1}`, '');
+          setCell(`L${r1}`, '');
+          setCell(`M${r1}`, '');
+        }
+      }
+
+      // Descargar el archivo Excel oficial resultante
+      const cleanArcid = arcid.replace(/[^a-zA-Z0-9_-]/g, '');
+      const filename = `Plan_de_vuelo_operacional_${cleanArcid}_${dateVal}.xlsx`;
+
+      XLSX.writeFile(wb, filename);
+      showToastNotification(`✅ Archivo Excel oficial "${filename}" descargado con éxito.`);
+    } catch (err) {
+      console.error('Error al exportar Excel oficial:', err);
+      showToastNotification('❌ Error al exportar archivo Excel: ' + err.message);
+    }
+  }
+
   // Guardar y Cargar Plan de Vuelo en LocalStorage
   function saveFlightPlanLocally() {
     if (!currentPilot) return;
@@ -6312,11 +7057,8 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
   }
 
   function exportFlightPlanToPDF() {
-    // Al disparar window.print(), el @media print muestra exclusivamente el contenedor
-    // #world-aviation-ofp-sheet a toda página en formato A4 horizontal idéntico al Excel oficial.
     window.print();
   }
-
 </script>
 
   

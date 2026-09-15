@@ -266,7 +266,7 @@
       position: relative;
     }
     .kpi-title { font-size: 12px; text-transform: uppercase; color: var(--text-muted); font-weight: 600; }
-    .kpi-value { font-size: 24px; font-weight: 700; color: #fff; margin: 8px 0 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .kpi-value { font-size: 24px; font-weight: 700; color: var(--text-title); margin: 8px 0 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .kpi-sub { font-size: 12px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
     /* Progress bar */
@@ -698,6 +698,9 @@
         justify-content: center !important;
         box-sizing: border-box !important;
       }
+      .cr3-iframe-wrapper {
+        height: 480px !important;
+      }
     }
     #quiz-modal {
       max-height: 90vh;
@@ -857,14 +860,17 @@
        OPCIÓN E — ATC Chatbot (Radio VHF Panel)
      ═══════════════════════════════════════════════════════════ */
     #atc-fab {
-      position: fixed; bottom: 80px; right: 20px;
+      position: fixed; bottom: 20px; right: 20px;
       width: 54px; height: 54px; border-radius: 50%;
       background: linear-gradient(135deg, #1f6feb, #0d4bab);
       border: 2px solid #388bfd;
       box-shadow: 0 4px 20px rgba(31,111,235,0.5);
       cursor: pointer; display: flex; align-items: center; justify-content: center;
-      font-size: 22px; z-index: 1100; transition: all 0.2s;
+      font-size: 22px; z-index: 1100; transition: all 0.25s ease;
       animation: radarPulse 2.5s infinite;
+    }
+    body.player-active #atc-fab {
+      bottom: 85px;
     }
     #atc-fab:hover { transform: scale(1.08); box-shadow: 0 6px 26px rgba(31,111,235,0.7); }
     @keyframes radarPulse {
@@ -872,12 +878,15 @@
       50% { box-shadow: 0 4px 30px rgba(31,111,235,0.85); }
     }
     #atc-panel {
-      position: fixed; bottom: 142px; right: 20px;
+      position: fixed; bottom: 85px; right: 20px;
       width: 380px; max-width: calc(100vw - 32px); max-height: 520px;
       background: var(--modal-bg); border: 1px solid var(--border-color);
       border-radius: 16px; box-shadow: 0 16px 50px rgba(0,0,0,0.6);
       z-index: 1099; display: none; flex-direction: column;
       overflow: hidden; animation: slideUp 0.25s ease;
+    }
+    body.player-active #atc-panel {
+      bottom: 145px;
     }
     @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     #atc-panel.open { display: flex; }
@@ -953,6 +962,22 @@
 
     /* Padding bottom to avoid content hiding behind player */
     body.player-active { padding-bottom: 80px; }
+
+    .fpl-atis-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+    }
+    .cr3-iframe-wrapper {
+      position: relative;
+      width: 100%;
+      height: 840px;
+      border-radius: 14px;
+      overflow: hidden;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    }
   
     /* ═══════════════════════════════════════════════════════════
        RESPONSIVE MOBILE STYLES (≤ 768px) — ESCRITORIO PERMANECE INTACTO
@@ -968,11 +993,41 @@
     }
 
     @media (max-width: 768px) {
-      .container { padding: 12px 14px !important; }
-      .header {
+      body { padding: 12px !important; }
+      body.player-active { padding-bottom: 125px !important; }
+      .container { padding: 0 !important; }
+      header, .header {
         flex-direction: column !important;
         align-items: flex-start !important;
         gap: 12px !important;
+      }
+      #atc-fab {
+        bottom: 18px !important;
+        right: 16px !important;
+        width: 50px !important;
+        height: 50px !important;
+        font-size: 20px !important;
+      }
+      body.player-active #atc-fab {
+        bottom: 122px !important;
+        right: 16px !important;
+      }
+      #atc-panel {
+        bottom: 0 !important;
+        right: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        max-height: 82vh !important;
+        border-radius: 20px 20px 0 0 !important;
+        z-index: 2500 !important;
+        box-shadow: 0 -10px 40px rgba(0,0,0,0.5) !important;
+      }
+      .fpl-atis-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+      }
+      .cr3-iframe-wrapper {
+        height: 560px !important;
       }
       .header-controls {
         width: 100% !important;
@@ -1045,7 +1100,7 @@
         width: auto !important;
         font-size: 13px !important;
         font-weight: 800 !important;
-        color: #fff !important;
+        color: var(--text-title) !important;
         margin-right: 6px !important;
       }
       .table-container td.col-code {
@@ -1069,7 +1124,7 @@
         width: 100% !important;
         font-size: 14px !important;
         font-weight: 700 !important;
-        color: #ffffff !important;
+        color: var(--text-title) !important;
         line-height: 1.4 !important;
         margin: 8px 0 6px 0 !important;
       }
@@ -1516,7 +1571,7 @@
       <div class="brand">
         <div class="brand-icon" style="padding: 0; overflow: hidden; border: 1px solid rgba(88, 166, 255, 0.4); background: #012349;"><img src="apple-touch-icon-180x180.png" alt="ATPL Pilot" style="width: 100%; height: 100%; object-fit: cover; border-radius: 9px; display: block;"></div>
         <div class="brand-text">
-          <h1>ATPL Flight Deck & Study Control <span class="badge-beta" id="version-badge" onclick="forceCheckAppUpdate(true)" style="cursor:pointer;" title="Versión v1.5.1 EFB — Clic para forzar actualización limpia">v1.5.1 EFB</span></h1>
+          <h1>ATPL Flight Deck & Study Control <span class="badge-beta" id="version-badge" onclick="forceCheckAppUpdate(true)" style="cursor:pointer;" title="Versión v1.5.2 EFB — Clic para forzar actualización limpia">v1.5.2 EFB</span></h1>
           <p>Preparación EASA Modular Oficial | Sistema adaptado a turnos de 12h</p>
         </div>
       </div>
@@ -1991,7 +2046,7 @@
 
       <!-- SECCIÓN 1: COMPUTADOR EMBEBIDO OFICIAL DIRECTO DE AEROTESTPPL.ES/CR3 -->
       <div id="cr3-section-embed" style="display: block;">
-        <div style="position: relative; width: 100%; height: 840px; border-radius: 14px; overflow: hidden; background: var(--bg-card); border: 1px solid var(--border-color); box-shadow: 0 8px 24px rgba(0,0,0,0.15);">
+        <div class="cr3-iframe-wrapper">
           <iframe id="cr3-official-iframe" src="https://aerotestppl.es/cr3/" style="width: 100%; height: 100%; border: none; display: block;" allowfullscreen loading="lazy" title="Computador de Vuelo CR3 Oficial AerotestPPL"></iframe>
         </div>
         <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px; font-size: 11px; color: var(--text-muted); flex-wrap: wrap; gap: 8px;">
@@ -2426,7 +2481,7 @@
           </div>
         </div>
         <!-- CONTENEDOR TABLA CON SCROLL SUAVE Y COLUMNAS ESPACIOSAS -->
-        <div style="overflow-x: auto; border-radius: 10px; border: 1px solid #30363d;">
+        <div style="overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 10px; border: 1px solid var(--border-color);">
           <table style="width: 100%; min-width: 1040px; border-collapse: collapse; font-size: 12px; text-align: left;">
             <thead>
               <tr style="background: var(--table-header-bg); color: var(--text-muted); border-bottom: 2px solid var(--border-color); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">
@@ -2560,7 +2615,7 @@
           <!-- TAKE OFF ATIS -->
           <div style="background: var(--bg-subbox); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px;">
             <div style="font-size: 11px; font-weight: 800; color: #58a6ff; margin-bottom: 8px;">🛫 TAKE OFF DATA (DATOS DESPEGUE)</div>
-            <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px;">
+            <div class="fpl-atis-grid">
               <div>
                 <label style="font-size: 9px; color: var(--text-muted); display: block;">INFO</label>
                 <input id="fpl-to-info" value="C" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-main); text-align: center; font-size: 11px; padding: 4px; border-radius: 6px;">
@@ -2603,7 +2658,7 @@
           <!-- LANDING ATIS -->
           <div style="background: var(--bg-subbox); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px;">
             <div style="font-size: 11px; font-weight: 800; color: #3fb950; margin-bottom: 8px;">🛬 LANDING DATA (DATOS ATERRIZAJE)</div>
-            <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px;">
+            <div class="fpl-atis-grid">
               <div>
                 <label style="font-size: 9px; color: var(--text-muted); display: block;">INFO</label>
                 <input id="fpl-ld-info" value="" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-main); text-align: center; font-size: 11px; padding: 4px; border-radius: 6px;">
@@ -3133,7 +3188,7 @@
     function exportProgressToICloud() {
       const data = {
         application: "ATPL Flight Deck",
-        version: "v1.5.0",
+        version: "v1.5.2",
         pilot: currentPilot,
         exportedAt: new Date().toISOString(),
         topics: studiedTopics,
@@ -5278,7 +5333,7 @@
           if (newWorker) {
             newWorker.addEventListener('statechange', () => {
               if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                showToastNotification('🚀 ¡Nueva versión v1.4.1 lista! Pulsa el distintivo de versión para aplicar.');
+                showToastNotification('🚀 ¡Nueva versión v1.5.2 lista! Pulsa el distintivo de versión para aplicar.');
               }
             });
           }
@@ -5313,7 +5368,7 @@
         await Promise.all(keys.map(k => caches.delete(k)));
       }
       if (interactive) {
-        showToastNotification('✅ Versión v1.4.1 aplicada. Reiniciando cabina...');
+        showToastNotification('✅ Versión v1.5.2 aplicada. Reiniciando cabina...');
         setTimeout(() => {
           window.location.reload(true);
         }, 600);
@@ -5332,7 +5387,7 @@
 
     try {
       if ('caches' in window) {
-        const cache = await caches.open('atpl-flightdeck-v1.5.0');
+        const cache = await caches.open('atpl-flightdeck-v1.5.2');
         await cache.addAll([
           './',
           './index.html',
@@ -5540,14 +5595,14 @@
         <!-- Sección 5: Versión del Sistema y Forzar Actualización PWA -->
         <div class="pilot-box" style="margin-top: 12px; background: rgba(56,139,253,0.06); border: 1px solid rgba(56,139,253,0.25);">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-            <strong style="color:var(--text-title); font-size:12px;">🚀 Versión del Sistema: <span style="color:#58a6ff;">v1.5.1 EFB</span></strong>
+            <strong style="color:var(--text-title); font-size:12px;">🚀 Versión del Sistema: <span style="color:#58a6ff;">v1.5.2 EFB</span></strong>
             <span style="font-size:10px; background:rgba(46,160,67,0.2); color:#56d364; padding:2px 8px; border-radius:10px; font-weight:700;">PRODUCCIÓN</span>
           </div>
           <p style="font-size:11px; color:var(--text-muted); margin-bottom:8px; line-height:1.4;">
             Si has añadido la app a la pantalla de inicio o tu navegador mantiene una versión anterior en caché, puedes forzar la recarga limpia instantánea:
           </p>
           <button type="button" class="btn-sync-action" onclick="forceCheckAppUpdate(true)" style="width:100%; padding:9px 12px; background:rgba(56,139,253,0.2); border:1px solid #388bfd; color:#79c0ff; font-weight:700; font-size:12px; border-radius:8px; display:flex; align-items:center; justify-content:center; gap:8px; cursor:pointer;">
-            🔄 Forzar Actualización a v1.4.1 (Limpiar Caché PWA)
+            🔄 Forzar Actualización a v1.5.2 (Limpiar Caché PWA)
           </button>
         </div>
 <!-- Botón inferior eliminado para evitar duplicados -->
@@ -6494,7 +6549,7 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
   }
   
   // ═══════════════════════════════════════════════════════════════
-  // 8. MÓDULO PLAN DE VUELO OPERACIONAL (WORLD AVIATION) & CARTAS VFR (v1.4.1)
+  // 8. MÓDULO PLAN DE VUELO OPERACIONAL (WORLD AVIATION) & CARTAS VFR (v1.5.2)
   // ═══════════════════════════════════════════════════════════════
 
   let fplMap = null;

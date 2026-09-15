@@ -2,6 +2,32 @@
 
 Todos los cambios notables, evoluciones y correcciones de este proyecto se registran de forma cronológica en este documento, siguiendo las directrices de [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/) y versionado semántico [SemVer](https://semver.org/lang/es/).
 
+## [1.5.2] - 2026-09-16
+
+### 🛡️ Auditoría Integral, Adaptabilidad Móvil & Resolución de Solapamientos
+- **Auditoría de Integridad Funcional (100% Cobertura)**:
+  - Verificadas las 163 funciones de JavaScript y los 185 manejadores de eventos inline: 0 errores lógicos, 0 funciones faltantes.
+  - Validación de compatibilidad con Safari iOS / WebKit y motores V8/Chromium.
+- **Sistema Anti-Colisión Dinámico (Reproductor de Audio & Copiloto ATC)**:
+  - **Botón Flotante ATC (`#atc-fab`)**: Posicionado a `bottom: 20px` por defecto y elevado automáticamente a `bottom: 85px` en escritorio y `bottom: 122px` en móvil cuando el reproductor de audio está activo (`body.player-active`).
+  - **Panel Copiloto ATC Móvil en Modo Bottom Sheet**: En pantallas móviles (≤ 768px), el panel pasa a ser una hoja inferior deslizante moderna (`inset: auto 0 0 0`, bordes redondeados superiores, `z-index: 2500` y `max-height: 82vh`), eliminando desbordamientos fuera de pantalla y solapamientos con la cabecera.
+  - **Margen de Seguridad Inferior del Body**: `body.player-active` ahora aplica `padding-bottom: 125px` en móvil para que los controles de audio de 2 filas nunca tapen botones o tablas.
+- **Corrección de Encabezado en Móvil (`header` semántico)**:
+  - Corregido el selector CSS de `@media (max-width: 768px)` de `.header` a `header, .header`, permitiendo que la cabecera se apile en columna con alineación fluida en teléfonos móviles.
+- **Optimización de Margen Útil en Móvil**:
+  - `body` en móvil ajustado a `padding: 12px !important` y `.container` a `padding: 0 !important`, recuperando más de 45px de anchura horizontal para las tablas y tarjetas.
+- **Cuadrícula ATIS Adaptable (Tarjeta 4)**:
+  - Introducida la clase `.fpl-atis-grid`, que distribuye los datos de despegue y aterrizaje en 5 columnas en escritorio y se adapta a 3 columnas espaciosas en móviles (≤ 600px).
+- **Legibilidad de Capítulos y KPIs en Modo Claro**:
+  - Corregido `td.col-ch` y `td.col-title` para utilizar `var(--text-title)` en lugar de blanco forzado en la vista de tarjetas móviles del temario.
+  - Corregido `.kpi-value` para heredar `var(--text-title)` en lugar de blanco fijo.
+- **Contenedor Responsivo del Computador CR-3**:
+  - Clase `.cr3-iframe-wrapper` con altura adaptativa: 840px en escritorio, 560px en tablet y 480px en smartphone para un manejo táctil sin desplazamientos excesivos.
+- **Scroll Táctil NavLog**:
+  - Habilitado `-webkit-overflow-scrolling: touch` y variables de borde adaptadas al tema.
+
+---
+
 ## [1.5.1] - 2026-09-16
 
 ### 🎨 Corrección Integral del Modo Claro (Light Mode Engine)

@@ -4,6 +4,33 @@ Todos los cambios notables, evoluciones y correcciones de este proyecto se regis
 
 ---
 
+## [1.3.1] - 2026-09-15
+
+### 🚀 Novedades y Correcciones Solicitadas
+- **Rediseño Friendly del Plan de Vuelo Operacional**:
+  - Reemplazada la tabla rígida y apretada de 1080px por una **suite operacional moderna y espaciosa**, perfectamente integrada con el tema oscuro de cabina (`#0d1117` / `#161b22`).
+  - **Eliminado el error de cursor negro / texto invisible al seleccionar celdas**: todos los campos de entrada cuentan ahora con contraste nítido, fondos oscuros explícitos, tipografía blanca y borde activo en azul aeronáutico (`#388bfd`).
+  - **Columnas amplias y auto-ajustables en el NavLog**:
+    - Altitud con espacio holgado (ej. `3.500 ft`), sin cortes ni truncamiento de información.
+    - Waypoints de longitud suficiente para visualizar nombres completos (`PUNTO W (Villaviciosa)`, `LECU (Cuatro Vientos)`).
+    - Fila de totales en el pie de tabla (Distancia total en NM, Tiempo total ETE, Combustible total estimado).
+  - Tarjetas dedicadas y limpias para: Datos Generales de la Aeronave, Computador CR3, Desglose de Combustible con indicador de margen de seguridad en tiempo real, Meteorología ATIS, Calzos y Tiempos de Vuelo, Rendimiento de Pista (TO/LD Distances), NOTAMs y Espacios Aéreos.
+  - Se mantiene la **exportación oficial a Excel (.xlsx)** que sigue rellenando automáticamente la plantilla de World Aviation para pasar a limpio, así como la impresión limpia en PDF.
+- **Corrección de Coordenadas Oficiales AIP de Puntos VFR en Cuatro Vientos (LECU)**:
+  - **Punto W (Villaviciosa de Odón)**: Corregido a coordenadas oficiales exactas del AIP ENAIRE `40°21'00"N 003°56'00"W` (`lat: 40.3500, lon: -3.9333`), altitud estándar 3.500 ft.
+  - **Punto S (Residencial Miraflores)**: Corregido a `40°18'50"N 003°50'29"W` (`lat: 40.3139, lon: -3.8414`), altitud estándar 3.000 ft.
+  - **Punto N (Boadilla del Monte)**: Corregido a `40°24'16"N 003°52'45"W` (`lat: 40.4044, lon: -3.8792`), altitud estándar 3.000 ft.
+  - Actualizados todos los presets, botones de inserción rápida y marcadores interactivos sobre el mapa.
+- **Corrección de la Capa de Mapa Aeronáutico Estándar**:
+  - Migrada la capa base estándar al servidor oficial y ultra-fiable de OpenStreetMap (`https://tile.openstreetmap.org/{z}/{x}/{y}.png`), asegurando carga inmediata y nítida de carreteras, núcleos urbanos y referencias visuales.
+  - Asignación estricta de `pane: 'tilePane'` e invalidación de tamaño forzada al conmutar para evitar solapamientos o capas grises.
+- **Enlaces Directos a las Cartas VAC Oficiales Concretas de Cada Aeródromo**:
+  - Para aeropuertos públicos y controlados (LECU, LEVD, LESA, LEBZ, LEDS, LESB, LERJ, LEZL, LEMG, LEJR, LEMD), el botón **"Carta VAC"** enlaza directamente a la sección específica del aeródromo en el portal **AIP España AD 2** (`https://aip.enaire.es/AIP/#LECU/LEVS`, `https://aip.enaire.es/AIP/#LEVD`, etc.).
+  - Para aeródromos no controlados y privados (LEMT Casarrubios, LERM Robledillo, LEOC Ocaña, LEMU Muchamiel, LEAX La Axarquía), enlaza directamente a su ficha en la **Guía VFR** (`https://guiavfr.enaire.es/#LEMT`, etc.).
+  - Añadido botón secundario **"Insignia VFR"** en cada ficha para abrir el visor cartográfico interactivo de ENAIRE.
+
+---
+
 ## [1.3.0] - 2026-09-15
 
 ### 🚀 Novedades y Mejoras Principales

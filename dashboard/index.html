@@ -1379,7 +1379,7 @@
       <div class="brand">
         <div class="brand-icon" style="padding: 0; overflow: hidden; border: 1px solid rgba(88, 166, 255, 0.4); background: #012349;"><img src="apple-touch-icon-180x180.png" alt="ATPL Pilot" style="width: 100%; height: 100%; object-fit: cover; border-radius: 9px; display: block;"></div>
         <div class="brand-text">
-          <h1>ATPL Flight Deck & Study Control <span class="badge-beta" id="version-badge">v1.3.0 EFB</span></h1>
+          <h1>ATPL Flight Deck & Study Control <span class="badge-beta" id="version-badge" onclick="forceCheckAppUpdate(true)" style="cursor:pointer;" title="Versión v1.4.1 EFB — Clic para forzar actualización limpia">v1.4.1 EFB</span></h1>
           <p>Preparación EASA Modular Oficial | Sistema adaptado a turnos de 12h</p>
         </div>
       </div>
@@ -2808,7 +2808,7 @@
     function exportProgressToICloud() {
       const data = {
         application: "ATPL Flight Deck",
-        version: "Beta v0.8.2",
+        version: "v1.4.1",
         pilot: currentPilot,
         exportedAt: new Date().toISOString(),
         topics: studiedTopics,
@@ -4942,13 +4942,62 @@
   }
   setInterval(pollFleetCommands, 30000);
 
-  // 7. DESCARGA 100% OFFLINE PARA MODO AVIÓN (SERVICE WORKER)
+  // 7. DESCARGA 100% OFFLINE PARA MODO AVIÓN (SERVICE WORKER) Y CICLO DE VIDA PWA
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('sw.js').then(reg => {
         console.log('Service Worker registrado:', reg.scope);
+        // Comprobar actualización automáticamente
+        reg.update().catch(() => {});
+        reg.addEventListener('updatefound', () => {
+          const newWorker = reg.installing;
+          if (newWorker) {
+            newWorker.addEventListener('statechange', () => {
+              if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                showToastNotification('🚀 ¡Nueva versión v1.4.1 lista! Pulsa el distintivo de versión para aplicar.');
+              }
+            });
+          }
+        });
       }).catch(err => console.log('SW error:', err));
     });
+
+    let swRefreshing = false;
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (!swRefreshing) {
+        swRefreshing = true;
+        window.location.reload();
+      }
+    });
+  }
+
+  // Forzar actualización y limpieza profunda de caché PWA
+  async function forceCheckAppUpdate(interactive = false) {
+    if (interactive) showToastNotification('🔄 Comprobando actualizaciones y limpiando caché...');
+    try {
+      if ('serviceWorker' in navigator) {
+        const registrations = await navigator.serviceWorker.getRegistrations();
+        for (const reg of registrations) {
+          await reg.update().catch(() => {});
+          if (reg.waiting) {
+            reg.waiting.postMessage({ action: 'SKIP_WAITING' });
+          }
+        }
+      }
+      if ('caches' in window) {
+        const keys = await caches.keys();
+        await Promise.all(keys.map(k => caches.delete(k)));
+      }
+      if (interactive) {
+        showToastNotification('✅ Versión v1.4.1 aplicada. Reiniciando cabina...');
+        setTimeout(() => {
+          window.location.reload(true);
+        }, 600);
+      }
+    } catch (err) {
+      console.error('Error forzando actualización:', err);
+      window.location.reload(true);
+    }
   }
 
   async function downloadSyllabusForOffline() {
@@ -4959,7 +5008,7 @@
 
     try {
       if ('caches' in window) {
-        const cache = await caches.open('atpl-flightdeck-v1.0');
+        const cache = await caches.open('atpl-flightdeck-v1.4.1');
         await cache.addAll([
           './',
           './index.html',
@@ -5164,6 +5213,19 @@
           </div>
         </div>
 
+        <!-- Sección 5: Versión del Sistema y Forzar Actualización PWA -->
+        <div class="pilot-box" style="margin-top: 12px; background: rgba(56,139,253,0.06); border: 1px solid rgba(56,139,253,0.25);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <strong style="color:var(--text-title); font-size:12px;">🚀 Versión del Sistema: <span style="color:#58a6ff;">v1.4.1 EFB</span></strong>
+            <span style="font-size:10px; background:rgba(46,160,67,0.2); color:#56d364; padding:2px 8px; border-radius:10px; font-weight:700;">PRODUCCIÓN</span>
+          </div>
+          <p style="font-size:11px; color:var(--text-muted); margin-bottom:8px; line-height:1.4;">
+            Si has añadido la app a la pantalla de inicio o tu navegador mantiene una versión anterior en caché, puedes forzar la recarga limpia instantánea:
+          </p>
+          <button type="button" class="btn-sync-action" onclick="forceCheckAppUpdate(true)" style="width:100%; padding:9px 12px; background:rgba(56,139,253,0.2); border:1px solid #388bfd; color:#79c0ff; font-weight:700; font-size:12px; border-radius:8px; display:flex; align-items:center; justify-content:center; gap:8px; cursor:pointer;">
+            🔄 Forzar Actualización a v1.4.1 (Limpiar Caché PWA)
+          </button>
+        </div>
 <!-- Botón inferior eliminado para evitar duplicados -->
       </div>
     </div>
@@ -6108,7 +6170,7 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
   }
   
   // ═══════════════════════════════════════════════════════════════
-  // 8. MÓDULO PLAN DE VUELO OPERACIONAL (WORLD AVIATION) & CARTAS VFR (v1.3.1)
+  // 8. MÓDULO PLAN DE VUELO OPERACIONAL (WORLD AVIATION) & CARTAS VFR (v1.4.1)
   // ═══════════════════════════════════════════════════════════════
 
   let fplMap = null;

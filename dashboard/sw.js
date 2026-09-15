@@ -33,12 +33,34 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
 
-  // External APIs (ntfy telemetry, live METAR, etc.) bypass cache
+  // External APIs (ntfy telemetry, live METAR, Open-Meteo, etc.) bypass cache
   if (url.origin !== location.origin) {
     return;
   }
 
-  // Local assets: Cache-First with Network Fallback
+  // HTML Navigation: Network-First with Cache Fallback (guarantees latest version on load)
+  if (event.request.mode === 'navigate' || url.pathname.endsWith('.html') || url.pathname.endsWith('/')) {
+    event.respondWith(
+      fetch(event.request)
+        .then((networkResponse) => {
+          if (networkResponse && networkResponse.status === 200) {
+            const responseToCache = networkResponse.clone();
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(event.request, responseToCache);
+            });
+          }
+          return networkResponse;
+        })
+        .catch(() => {
+          return caches.match(event.request).then((cached) => {
+            return cached || caches.match('./index.html');
+          });
+        })
+    );
+    return;
+  }
+
+  // Local static assets: Cache-First with background revalidation
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       if (cachedResponse) {
@@ -61,31 +83,31 @@ self.addEventListener('fetch', (event) => {
           cache.put(event.request, responseToCache);
         });
         return networkResponse;
-      }).catch(() => {
-        if (event.request.mode === 'navigate') {
-          return caches.match('./index.html');
-        }
       });
     })
   );
 });
 
 self.addEventListener('message', (event) => {
-  if (event.data && event.data.action === 'CACHE_URLS') {
-    const urlsToCache = event.data.urls || [];
-    caches.open(CACHE_NAME).then((cache) => {
-      return Promise.all(
-        urlsToCache.map((u) => {
-          return fetch(u).then((res) => {
-            if (res.ok) return cache.put(u, res);
-          }).catch(() => {});
-        })
-      );
-    }).then(() => {
-      if (event.source && event.source.postMessage) {
-        event.source.postMessage({ action: 'CACHE_URLS_COMPLETE', success: true });
-      }
-    });
+  if (event.data) {
+    if (event.data.action === 'SKIP_WAITING') {
+      self.skipWaiting();
+    } else if (event.data.action === 'CACHE_URLS') {
+      const urlsToCache = event.data.urls || [];
+      caches.open(CACHE_NAME).then((cache) => {
+        return Promise.all(
+          urlsToCache.map((u) => {
+            return fetch(u).then((res) => {
+              if (res.ok) return cache.put(u, res);
+            }).catch(() => {});
+          })
+        );
+      }).then(() => {
+        if (event.source && event.source.postMessage) {
+          event.source.postMessage({ action: 'CACHE_URLS_COMPLETE', success: true });
+        }
+      });
+    }
   }
 });
 

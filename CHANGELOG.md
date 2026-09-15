@@ -4,6 +4,28 @@ Todos los cambios notables, evoluciones y correcciones de este proyecto se regis
 
 ---
 
+## [1.4.0] - 2026-09-15
+
+### 🚀 Novedades y Correcciones Solicitadas
+- **Configuración de Rendimiento de Aeronave (Cessna 172 · 8 Gal/h · 90 kt)**:
+  - Establecida la **Cessna 172** como preset predeterminado con **90 kt de crucero** y **8.0 Gal/h** (30.3 L/h).
+  - Selector flexible de unidades de consumo horario (**Gal/h ⇄ L/h**) con indicador en directo de equivalencia (`= 30.3 L/h`).
+  - Posibilidad de editar en cualquier momento el crucero IAS, el consumo o el modelo, recalculando dinámicamente todo el consumo del vuelo y el desglose de combustible.
+- **Reordenación Estricta del NavLog según el Flujo Aeronáutico**:
+  - Las columnas de la tabla operacional siguen ahora con exactitud el orden pedido:
+    `#` · `Waypoint` · **`TC`** · **`VAR`** · **`MC`** · **`Viento`** · **`MH`** · **`Alt`** · **`Dist`** · **`TAS`** · **`GS`** · **`ETE`** · `ETA` · `ATA` · `Fuel` · `Acción`.
+  - Destacados visualmente los rumbos de pilotaje (**MC** en cian `#79c0ff`, **MH** en lila de cabina `#d2a8ff`) y los tiempos de avance (**GS** y **ETE** en ámbar `#f1e05a`).
+- **Viento en Altura por Waypoint & Pronóstico Temporal (Hora del Plan de Vuelo)**:
+  - Cada tramo del NavLog cuenta con su propia casilla de **Viento (Dir/kt)** editable de manera individual (ej. LECU a `240/12`, Escorial a `260/15`, Valladolid a `290/20`).
+  - Nuevo botón **"🌬️ Obtener Pronóstico Vientos en Altura (Hora Vuelo)"** que consulta la API abierta de Open-Meteo para cada waypoint geolocalizado en los niveles de presión adecuados (850 hPa a ~5.000 ft, 700 hPa a ~10.000 ft o 925 hPa en superficie) a la hora estimada de paso de cada tramo (`fpl-date` + `ETA`).
+  - Fallback inteligente sin conexión para mantener una estimación orográfica coherente con la altitud.
+- **Estabilidad Total en la Edición Manual (Sin Datos "Locos" ni Pérdida de Foco)**:
+  - Implementada arquitectura reactiva no destructiva: las modificaciones en las casillas del NavLog actualizan el modelo en memoria y actualizan selectores puntuales del DOM sin destruir el `<tbody>`.
+  - Se puede editar cualquier casilla (distancia, altitud, rumbo TC, viento, velocidad TAS, ATA) de forma fluida y consecutiva sin perder el cursor ni reiniciar valores.
+  - La exportación oficial a Excel `.xlsx` traslada fielmente los vientos independientes por tramo a las columnas `D${r1}` (Dir) y `D${r2}` (Velocidad).
+
+---
+
 ## [1.3.1] - 2026-09-15
 
 ### 🚀 Novedades y Correcciones Solicitadas

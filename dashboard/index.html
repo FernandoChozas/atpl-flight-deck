@@ -1956,15 +1956,35 @@
             <div>
               <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">✈️ MODELO PRESET</label>
               <select id="fpl-aircraft-select" onchange="applyAircraftPreset()" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #fff; font-size: 12px; padding: 7px 10px; border-radius: 8px; outline: none;">
-                <option value="P2008JC">Tecnam P2008JC (95kt IAS · 17 L/h)</option>
-                <option value="P2006T">Tecnam P2006T (140kt IAS · 34 L/h)</option>
-                <option value="C172">Cessna 172SP (105kt IAS · 32 L/h)</option>
-                <option value="DA40">Diamond DA40 NG (125kt IAS · 22 L/h)</option>
+                <option value="C172" selected>Cessna 172 (90kt · 8.0 Gal/h = 30.3 L/h)</option>
+                <option value="P2008JC">Tecnam P2008JC (95kt · 4.5 Gal/h = 17.0 L/h)</option>
+                <option value="P2006T">Tecnam P2006T (140kt · 9.0 Gal/h = 34.0 L/h)</option>
+                <option value="DA40">Diamond DA40 NG (125kt · 5.8 Gal/h = 22.0 L/h)</option>
               </select>
             </div>
             <div>
               <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">MODELO (EN PLAN)</label>
-              <input type="text" id="fpl-model" value="P2008JC" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #fff; font-weight: 700; font-size: 12px; padding: 7px 10px; border-radius: 8px;">
+              <input type="text" id="fpl-model" value="C172" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #fff; font-weight: 700; font-size: 12px; padding: 7px 10px; border-radius: 8px;">
+            </div>
+            <div>
+              <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">⚡ VELOCIDAD DE CRUCERO (IAS)</label>
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <input type="number" id="fpl-ias-input" value="90" min="40" max="250" oninput="handleAircraftIASChange(this.value)" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #58a6ff; font-weight: 800; font-size: 13px; padding: 7px 10px; border-radius: 8px;">
+                <span style="font-size: 12px; color: var(--text-muted); font-weight: bold;">kt</span>
+              </div>
+            </div>
+            <div>
+              <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">⛽ CONSUMO HORARIO (FUEL BURN)</label>
+              <div style="display: flex; align-items: center; gap: 4px;">
+                <input type="number" id="fpl-aircraft-consumption" value="8.0" step="0.1" min="1" max="150" oninput="handleAircraftConsumptionChange()" style="width: 65%; background: #161b22; border: 1px solid #30363d; color: #3fb950; font-weight: 800; font-size: 13px; padding: 7px 8px; border-radius: 8px;">
+                <select id="fpl-aircraft-consumption-unit" onchange="handleAircraftConsumptionChange()" style="width: 35%; background: #161b22; border: 1px solid #30363d; color: #fff; font-size: 11px; padding: 7px 4px; border-radius: 8px; outline: none; font-weight: 700;">
+                  <option value="gal" selected>Gal/h</option>
+                  <option value="l">L/h</option>
+                </select>
+              </div>
+              <div id="fpl-consumption-equiv-badge" style="font-size: 10px; color: #8b949e; font-weight: 700; margin-top: 3px; text-align: right;">
+                = 30.3 L/h
+              </div>
             </div>
             <div>
               <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">MATRÍCULA</label>
@@ -1975,8 +1995,8 @@
               <input type="text" id="fpl-arcid" value="WDA01" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #58a6ff; font-weight: 800; font-size: 12px; padding: 7px 10px; border-radius: 8px;">
             </div>
             <div>
-              <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">FECHA</label>
-              <input type="date" id="fpl-date" value="2026-09-16" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #fff; font-size: 12px; padding: 6px 10px; border-radius: 8px;">
+              <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">FECHA VUELO</label>
+              <input type="date" id="fpl-date" value="2026-09-16" onchange="updateNavLogCalculationsAndDOM()" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #fff; font-size: 12px; padding: 6px 10px; border-radius: 8px;">
             </div>
             <div>
               <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">PILOTO AL MANDO (PIC)</label>
@@ -1995,36 +2015,39 @@
 
         <!-- TARJETA 2: PARÁMETROS AERONÁUTICOS (CR3 / VIENTO / TAS) -->
         <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 12px; padding: 14px;">
-          <div style="font-size: 11px; font-weight: 800; color: #3fb950; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; letter-spacing: 0.5px;">
-            <span>🧭</span> COMPUTADOR DE VUELO CR3 & CONDICIONES DE NAVEGACIÓN
+          <div style="font-size: 11px; font-weight: 800; color: #3fb950; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; letter-spacing: 0.5px;">
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span>🧭</span> COMPUTADOR DE VUELO CR3 & CONDICIONES DE NAVEGACIÓN
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <button type="button" id="fpl-btn-fetch-winds" onclick="fetchWindsAloftForRoute()" style="padding: 6px 12px; background: rgba(56,139,253,0.15); border: 1px solid #388bfd; color: #58a6ff; font-size: 11px; font-weight: 800; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 5px;" title="Obtener pronóstico de vientos en altura (Open-Meteo) para cada waypoint a la hora estimada del vuelo">
+                <span>🌬️</span> Obtener Pronóstico Vientos en Altura (Hora Vuelo)
+              </button>
+              <button type="button" onclick="useMetarWindInFPL()" style="padding: 6px 10px; background: #21262d; border: 1px solid #30363d; color: #e3b341; font-size: 11px; font-weight: 700; border-radius: 6px; cursor: pointer;" title="Copiar viento del METAR activo al viento base">
+                🌬️ METAR
+              </button>
+            </div>
           </div>
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; align-items: flex-end;">
             <div>
-              <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">⚡ VELOCIDAD INDICADA (IAS)</label>
-              <div style="display: flex; align-items: center; gap: 6px;">
-                <input type="number" id="fpl-ias-input" value="95" min="40" max="250" onchange="recalculateFlightPlanFromParams()" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #58a6ff; font-weight: 800; font-size: 13px; padding: 7px 10px; border-radius: 8px;">
-                <span style="font-size: 12px; color: var(--text-muted); font-weight: bold;">kt</span>
-              </div>
+              <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">🛫 HORA ESTIMADA DE DESPEGUE (UTC / LOCAL)</label>
+              <input type="text" id="fpl-takeoff-time" value="10:00" oninput="handleTakeoffTimeChange(this.value)" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #58a6ff; font-weight: 800; font-size: 13px; padding: 7px 10px; border-radius: 8px; text-align: center;">
             </div>
             <div>
-              <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">💨 VIENTO EN RUTA (DIR/KT)</label>
-              <div style="display: flex; gap: 6px;">
-                <input type="text" id="fpl-wind-input" value="240/12" placeholder="240/12" onchange="recalculateFlightPlanFromParams()" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #3fb950; font-weight: 800; font-size: 13px; padding: 7px 10px; border-radius: 8px;">
-                <button type="button" onclick="useMetarWindInFPL()" style="padding: 7px 12px; background: #21262d; border: 1px solid #30363d; color: #e3b341; font-size: 11px; font-weight: 700; border-radius: 8px; cursor: pointer; white-space: nowrap;" title="Copiar viento del METAR activo">
-                  🌬️ METAR
-                </button>
-              </div>
+              <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">💨 VIENTO BASE GENERAL (DIR/KT)</label>
+              <input type="text" id="fpl-wind-input" value="240/12" placeholder="240/12" oninput="handleGlobalWindChange(this.value)" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #3fb950; font-weight: 800; font-size: 13px; padding: 7px 10px; border-radius: 8px; text-align: center;">
             </div>
             <div>
-              <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">🧭 DECLINACIÓN MAGNÉTICA (VAR)</label>
+              <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">🧭 DECLINACIÓN MAGNÉTICA (VAR GENERAL)</label>
               <div style="display: flex; align-items: center; gap: 6px;">
-                <input type="text" id="fpl-var-input" value="-1" onchange="recalculateFlightPlanFromParams()" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #fff; font-weight: 700; font-size: 13px; padding: 7px 10px; border-radius: 8px; text-align: center;">
+                <input type="text" id="fpl-var-input" value="-1" oninput="handleGlobalVarChange(this.value)" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #fff; font-weight: 700; font-size: 13px; padding: 7px 10px; border-radius: 8px; text-align: center;">
                 <span style="font-size: 12px; color: var(--text-muted); font-weight: bold;">° W</span>
               </div>
             </div>
             <div>
-              <label style="font-size: 10px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">🛫 HORA DESPEGUE (UTC / LOCAL)</label>
-              <input type="text" id="fpl-takeoff-time" value="10:00" onchange="recalculateFlightPlanFromParams()" style="width: 100%; background: #161b22; border: 1px solid #30363d; color: #58a6ff; font-weight: 800; font-size: 13px; padding: 7px 10px; border-radius: 8px; text-align: center;">
+              <div style="background: rgba(56,139,253,0.08); border: 1px solid rgba(56,139,253,0.25); border-radius: 8px; padding: 8px 10px; font-size: 11px; color: var(--text-muted);">
+                <strong style="color: #58a6ff;">💡 Viento por Punto:</strong> Cada tramo dispone de su propia casilla de viento editable. Puedes pulsar el botón azul para consultar el pronóstico en altura para cada punto a la hora de tu ruta.
+              </div>
             </div>
           </div>
         </div>
@@ -2038,7 +2061,7 @@
           <div>
             <h4 style="margin: 0; font-size: 14px; font-weight: 800; color: #fff;">🗺️ NavLog de Navegación Operacional (Tramos de Ruta)</h4>
             <p style="margin: 2px 0 0 0; font-size: 11px; color: var(--text-muted);">
-              Columnas anchas y legibles: rumbos, altitudes, distancias en NM, corrección WCA, tiempos y combustible
+              Secuencia oficial aeronáutica: TC · VAR · MC · Viento · MH · Alt · Dist · TAS · GS · ETE · ETA · ATA · Fuel
             </p>
           </div>
           <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
@@ -2053,23 +2076,25 @@
 
         <!-- CONTENEDOR TABLA CON SCROLL SUAVE Y COLUMNAS ESPACIOSAS -->
         <div style="overflow-x: auto; border-radius: 10px; border: 1px solid #30363d;">
-          <table style="width: 100%; min-width: 980px; border-collapse: collapse; font-size: 12px; text-align: left;">
+          <table style="width: 100%; min-width: 1040px; border-collapse: collapse; font-size: 12px; text-align: left;">
             <thead>
               <tr style="background: #0d1117; color: var(--text-muted); border-bottom: 2px solid #30363d; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">
-                <th style="padding: 10px 8px; width: 40px; text-align: center;">#</th>
-                <th style="padding: 10px 10px; min-width: 200px;">Waypoint / Punto Visual</th>
-                <th style="padding: 10px 8px; width: 95px; text-align: center;">Altitud (ft)</th>
-                <th style="padding: 10px 8px; width: 75px; text-align: center;">TC (°)</th>
-                <th style="padding: 10px 8px; width: 75px; text-align: center;">MC (°)</th>
-                <th style="padding: 10px 8px; width: 85px; text-align: center;">Viento</th>
-                <th style="padding: 10px 8px; width: 75px; text-align: center; color: #58a6ff;">MH (°)</th>
-                <th style="padding: 10px 8px; width: 85px; text-align: center; color: #3fb950;">Dist (NM)</th>
-                <th style="padding: 10px 8px; width: 85px; text-align: center;">TAS / GS</th>
-                <th style="padding: 10px 8px; width: 75px; text-align: center; color: #f1e05a;">ETE</th>
-                <th style="padding: 10px 8px; width: 75px; text-align: center;">ETA</th>
-                <th style="padding: 10px 8px; width: 75px; text-align: center;">ATA</th>
-                <th style="padding: 10px 8px; width: 95px; text-align: center;">Fuel (Leg/Tot)</th>
-                <th style="padding: 10px 6px; width: 45px; text-align: center;" class="no-print">Acción</th>
+                <th style="padding: 10px 4px; width: 35px; text-align: center;">#</th>
+                <th style="padding: 10px 6px; min-width: 170px;">Waypoint / Punto</th>
+                <th style="padding: 10px 4px; width: 68px; text-align: center; color: #58a6ff;">TC (°)</th>
+                <th style="padding: 10px 4px; width: 55px; text-align: center;">VAR</th>
+                <th style="padding: 10px 4px; width: 68px; text-align: center; color: #79c0ff; font-weight: 800;">MC (°)</th>
+                <th style="padding: 10px 4px; width: 90px; text-align: center; color: #3fb950;">Viento</th>
+                <th style="padding: 10px 4px; width: 68px; text-align: center; color: #d2a8ff; font-weight: 800;">MH (°)</th>
+                <th style="padding: 10px 4px; width: 85px; text-align: center;">Alt (ft)</th>
+                <th style="padding: 10px 4px; width: 75px; text-align: center; color: #56d364;">Dist (NM)</th>
+                <th style="padding: 10px 4px; width: 65px; text-align: center;">TAS (kt)</th>
+                <th style="padding: 10px 4px; width: 65px; text-align: center; color: #f1e05a;">GS (kt)</th>
+                <th style="padding: 10px 4px; width: 65px; text-align: center; color: #e3b341; font-weight: 800;">ETE</th>
+                <th style="padding: 10px 4px; width: 65px; text-align: center;">ETA</th>
+                <th style="padding: 10px 4px; width: 65px; text-align: center;">ATA</th>
+                <th style="padding: 10px 4px; width: 95px; text-align: center;">Fuel (L)</th>
+                <th style="padding: 10px 4px; width: 35px; text-align: center;" class="no-print">Acción</th>
               </tr>
             </thead>
             <tbody id="fpl-friendly-navlog-tbody">
@@ -2077,20 +2102,19 @@
             </tbody>
             <tfoot>
               <tr style="background: #0d1117; border-top: 2px solid #30363d; font-weight: 800; font-size: 12px;">
-                <td colspan="7" style="padding: 10px 12px; text-align: right; color: var(--text-muted);">
+                <td colspan="8" style="padding: 10px 12px; text-align: right; color: var(--text-muted);">
                   TOTALES DE LA RUTA PLANIFICADA:
                 </td>
-                <td style="padding: 10px 8px; text-align: center; color: #3fb950; font-size: 13px;" id="fpl-total-dist-badge">0.0 NM</td>
-                <td></td>
-                <td style="padding: 10px 8px; text-align: center; color: #f1e05a; font-size: 13px;" id="fpl-total-time-badge">00m</td>
+                <td style="padding: 10px 4px; text-align: center; color: #56d364; font-size: 13px;" id="fpl-total-dist-badge">0.0 NM</td>
                 <td colspan="2"></td>
-                <td style="padding: 10px 8px; text-align: center; color: #58a6ff; font-size: 13px;" id="fpl-total-fuel-badge">0.0 L</td>
+                <td style="padding: 10px 4px; text-align: center; color: #e3b341; font-size: 13px;" id="fpl-total-time-badge">00m</td>
+                <td colspan="2"></td>
+                <td style="padding: 10px 4px; text-align: center; color: #58a6ff; font-size: 13px;" id="fpl-total-fuel-badge">0.0 L</td>
                 <td class="no-print"></td>
               </tr>
             </tfoot>
           </table>
         </div>
-
         <!-- PASTILLAS DE ACCESO RÁPIDO PARA INSERTAR PUNTOS VFR OFICIALES -->
         <div style="margin-top: 12px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;" class="no-print">
           <span style="font-size: 11px; font-weight: 700; color: var(--text-muted); margin-right: 4px;">Insertar Punto VFR:</span>
@@ -6068,11 +6092,11 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
   let fplAirspaceLayerGroup = null;
   let fplCurrentBaseTile = null;
 
-  // Ruta inicial: Cuatro Vientos -> Punto W (Villaviciosa) -> El Escorial
+  // Ruta inicial adaptada a C172 con vientos específicos por punto
   let fplWaypoints = [
-    { name: "LECU (RWY 27)", lat: 40.3706, lon: -3.7850, alt: 2500, dist: 0, tc: 0, mc: 0, mh: 0, gs: 85, ete: "00m", eta: "10:00", ata: "", legFuel: "0.0 L", totFuel: "0.0 L" },
-    { name: "PUNTO W (Villaviciosa)", lat: 40.3500, lon: -3.9333, alt: 3500, dist: 6.9, tc: 259, mc: 260, mh: 258, gs: 83, ete: "05m", eta: "10:05", ata: "", legFuel: "1.4 L", totFuel: "1.4 L" },
-    { name: "EL ESCORIAL", lat: 40.5925, lon: -4.1278, alt: 5500, dist: 16.9, tc: 331, mc: 332, mh: 328, gs: 93, ete: "11m", eta: "10:16", ata: "", legFuel: "3.1 L", totFuel: "4.5 L" }
+    { name: "LECU (RWY 27)", lat: 40.3706, lon: -3.7850, alt: 2500, dist: 0, tc: 0, varDeg: -1, mc: 0, wind: "240/12", mh: 0, tas: 90, gs: 90, ete: "00m", eta: "10:00", ata: "", legFuel: "0.0 L", totFuel: "0.0 L" },
+    { name: "PUNTO W (Villaviciosa)", lat: 40.3500, lon: -3.9333, alt: 3500, dist: 6.9, tc: 259, varDeg: -1, mc: 260, wind: "240/12", mh: 258, tas: 95, gs: 83, ete: "05m", eta: "10:05", ata: "", legFuel: "2.5 L", totFuel: "2.5 L" },
+    { name: "EL ESCORIAL", lat: 40.5925, lon: -4.1278, alt: 5500, dist: 16.9, tc: 331, varDeg: -1, mc: 332, wind: "260/15", mh: 326, tas: 99, gs: 93, ete: "11m", eta: "10:16", ata: "", legFuel: "5.5 L", totFuel: "8.0 L" }
   ];
 
   // Coordenadas oficiales publicadas en el AIP de ENAIRE para Cuatro Vientos y zona centro
@@ -6849,29 +6873,81 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
     showToastNotification(`➕ Añadido ${name} a la ruta.`);
   }
 
+  function getAircraftHourlyBurnLph() {
+    const val = parseFloat(document.getElementById('fpl-aircraft-consumption')?.value || '8.0');
+    const unit = document.getElementById('fpl-aircraft-consumption-unit')?.value || 'gal';
+    if (isNaN(val) || val <= 0) return 30.28;
+    return unit === 'gal' ? (val * 3.78541) : val;
+  }
+
+  function handleAircraftConsumptionChange() {
+    const val = parseFloat(document.getElementById('fpl-aircraft-consumption')?.value || '8.0');
+    const unit = document.getElementById('fpl-aircraft-consumption-unit')?.value || 'gal';
+    const badge = document.getElementById('fpl-consumption-equiv-badge');
+    if (badge) {
+      if (unit === 'gal') {
+        const lph = (val * 3.78541).toFixed(1);
+        badge.textContent = `= ${lph} L/h`;
+      } else {
+        const galph = (val / 3.78541).toFixed(1);
+        badge.textContent = `= ${galph} Gal/h`;
+      }
+    }
+    updateNavLogCalculationsAndDOM();
+  }
+
+  function handleAircraftIASChange(val) {
+    updateNavLogCalculationsAndDOM();
+  }
+
+  function handleTakeoffTimeChange(val) {
+    updateNavLogCalculationsAndDOM();
+  }
+
+  function handleGlobalWindChange(val) {
+    updateNavLogCalculationsAndDOM();
+  }
+
+  function handleGlobalVarChange(val) {
+    updateNavLogCalculationsAndDOM();
+  }
+
   function addNewEmptyWaypointRow() {
     if (fplWaypoints.length >= 12) {
       showToastNotification('⚠️ El plan de vuelo permite un máximo de 12 tramos.');
       return;
     }
     const count = fplWaypoints.length + 1;
+    const globalWind = document.getElementById('fpl-wind-input')?.value || '240/12';
+    const globalVar = parseFloat(document.getElementById('fpl-var-input')?.value || '-1');
+    const globalIas = parseInt(document.getElementById('fpl-ias-input')?.value || '90', 10);
+
     fplWaypoints.push({
       name: `TRAMO ${count}`,
       lat: null,
       lon: null,
       alt: 3500,
-      dist: 10,
+      dist: 10.0,
+      manualDist: true,
       tc: 0,
+      manualTC: true,
+      varDeg: globalVar,
       mc: 0,
+      manualMC: false,
+      wind: globalWind,
       mh: 0,
-      gs: 95,
-      ete: '06m',
+      manualMH: false,
+      tas: globalIas,
+      manualTAS: false,
+      gs: globalIas,
+      ete: '07m',
       eta: '',
       ata: '',
-      legFuel: '1.7 L',
-      totFuel: '1.7 L'
+      legFuel: '3.5 L',
+      totFuel: '3.5 L'
     });
-    recalculateFlightPlanFromParams();
+    renderNavLogTable();
+    updateNavLogCalculationsAndDOM();
   }
 
   function removeWaypoint(idx) {
@@ -6880,29 +6956,79 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
       return;
     }
     fplWaypoints.splice(idx, 1);
-    recalculateFlightPlanFromParams();
+    renderNavLogTable();
+    updateNavLogCalculationsAndDOM();
   }
 
   function resetFlightPlanRoute() {
     if (!confirm('¿Deseas reiniciar la ruta del Plan de Vuelo Operacional?')) return;
     fplWaypoints = [
-      { name: "LECU (RWY 27)", lat: 40.3706, lon: -3.7850, alt: 2500, dist: 0, tc: 0, mc: 0, mh: 0, gs: 85, ete: "00m", eta: "10:00", ata: "", legFuel: "0.0 L", totFuel: "0.0 L" }
+      { name: "LECU (RWY 27)", lat: 40.3706, lon: -3.7850, alt: 2500, dist: 0, tc: 0, varDeg: -1, mc: 0, wind: "240/12", mh: 0, tas: 90, gs: 90, ete: "00m", eta: "10:00", ata: "", legFuel: "0.0 L", totFuel: "0.0 L" }
     ];
-    recalculateFlightPlanFromParams();
+    renderNavLogTable();
+    updateNavLogCalculationsAndDOM();
   }
 
-  // Recálculo trigonométrico CR3 y propagación horaria
-  function recalculateFlightPlanFromParams() {
-    const ias = parseInt(document.getElementById('fpl-ias-input')?.value || '95', 10);
-    const windRaw = document.getElementById('fpl-wind-input')?.value || '240/12';
-    const varDeg = parseFloat(document.getElementById('fpl-var-input')?.value || '-1');
+  // ─────────────────────────────────────────────────────────────
+  // MANEJO ROBUSTO DE EDICIÓN EN CELDAS DEL NAVLOG (SIN CORRUPCIÓN)
+  // ─────────────────────────────────────────────────────────────
+  function handleNavlogInput(idx, field, val) {
+    const wp = fplWaypoints[idx];
+    if (!wp) return;
 
-    let windDir = 240, windSpd = 12;
-    if (windRaw.includes('/')) {
-      const parts = windRaw.split('/');
-      windDir = parseInt(parts[0], 10) || 240;
-      windSpd = parseInt(parts[1], 10) || 12;
+    if (field === 'name') {
+      wp.name = val;
+    } else if (field === 'alt') {
+      const num = parseInt(val.replace(/[^0-9]/g, ''), 10);
+      if (!isNaN(num) && num > 0) wp.alt = num;
+    } else if (field === 'tc') {
+      const num = parseFloat(val);
+      if (!isNaN(num)) {
+        wp.tc = (num % 360 + 360) % 360;
+        wp.manualTC = true;
+      }
+    } else if (field === 'var') {
+      const num = parseFloat(val);
+      if (!isNaN(num)) wp.varDeg = num;
+    } else if (field === 'mc') {
+      const num = parseFloat(val);
+      if (!isNaN(num)) {
+        wp.mc = (num % 360 + 360) % 360;
+        wp.manualMC = true;
+      }
+    } else if (field === 'wind') {
+      wp.wind = val.trim();
+    } else if (field === 'mh') {
+      const num = parseFloat(val);
+      if (!isNaN(num)) {
+        wp.mh = (num % 360 + 360) % 360;
+        wp.manualMH = true;
+      }
+    } else if (field === 'dist') {
+      const num = parseFloat(val);
+      if (!isNaN(num) && num >= 0) {
+        wp.dist = num;
+        wp.manualDist = true;
+      }
+    } else if (field === 'tas') {
+      const num = parseFloat(val);
+      if (!isNaN(num) && num > 0) {
+        wp.tas = num;
+        wp.manualTAS = true;
+      }
+    } else if (field === 'ata') {
+      wp.ata = val;
     }
+
+    updateNavLogCalculationsAndDOM();
+  }
+
+  // Recálculo trigonométrico CR3 y propagación horaria sin destruir el DOM
+  function updateNavLogCalculationsAndDOM() {
+    const globalIas = parseInt(document.getElementById('fpl-ias-input')?.value || '90', 10);
+    const globalWind = document.getElementById('fpl-wind-input')?.value || '240/12';
+    const globalVar = parseFloat(document.getElementById('fpl-var-input')?.value || '-1');
+    const hourlyBurnLph = getAircraftHourlyBurnLph();
 
     let toTimeStr = document.getElementById('fpl-takeoff-time')?.value || '10:00';
     let [curHour, curMin] = toTimeStr.split(':').map(x => parseInt(x, 10) || 0);
@@ -6917,29 +7043,48 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
         wp.tc = 0;
         wp.mc = 0;
         wp.mh = 0;
-        wp.gs = ias;
+        wp.gs = globalIas;
         wp.ete = '—';
         wp.eta = toTimeStr;
         wp.legFuel = '0.0 L';
         wp.totFuel = '0.0 L';
       } else {
         const prev = fplWaypoints[idx - 1];
-        if (wp.lat && wp.lon && prev.lat && prev.lon) {
-          wp.dist = calculateDistanceNM(prev.lat, prev.lon, wp.lat, wp.lon);
+        if (!wp.manualDist && wp.lat && wp.lon && prev.lat && prev.lon) {
+          wp.dist = parseFloat(calculateDistanceNM(prev.lat, prev.lon, wp.lat, wp.lon).toFixed(1));
+        }
+        if (!wp.manualTC && wp.lat && wp.lon && prev.lat && prev.lon) {
           wp.tc = calculateTrueCourse(prev.lat, prev.lon, wp.lat, wp.lon);
         }
 
         totalDist += (wp.dist || 0);
 
-        const cr3 = calculateCR3(wp.tc || 0, ias, windDir, windSpd, varDeg, wp.alt || 3500);
-        wp.mc = cr3.mc;
-        wp.mh = cr3.mh;
+        const varDeg = (wp.varDeg !== undefined) ? wp.varDeg : globalVar;
+        wp.varDeg = varDeg;
+
+        if (!wp.manualMC) {
+          wp.mc = Math.round(((wp.tc || 0) - varDeg + 360) % 360);
+        }
+
+        const legWind = wp.wind || globalWind;
+        let windDir = 240, windSpd = 12;
+        if (legWind.includes('/')) {
+          const parts = legWind.split('/');
+          windDir = parseInt(parts[0], 10) || 240;
+          windSpd = parseInt(parts[1], 10) || 12;
+        }
+
+        const tas = wp.manualTAS ? (wp.tas || globalIas) : Math.round(globalIas * (1 + ((wp.alt || 3500) / 1000) * 0.0175));
+        wp.tas = tas;
+
+        const cr3 = calculateCR3(wp.tc || 0, tas, windDir, windSpd, varDeg, wp.alt || 3500);
+        if (!wp.manualMH) {
+          wp.mh = cr3.mh;
+        }
         wp.gs = cr3.gs;
-        wp.tas = cr3.tas;
 
-        const legMinutes = (wp.dist / wp.gs) * 60;
+        const legMinutes = (wp.gs > 0) ? ((wp.dist / wp.gs) * 60) : 0;
         cumulativeMinutes += legMinutes;
-
         const m = Math.floor(legMinutes);
         wp.ete = `${String(m).padStart(2, '0')}m`;
 
@@ -6948,11 +7093,43 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
         const etaM = etaTotalMin % 60;
         wp.eta = `${String(etaH).padStart(2, '0')}:${String(etaM).padStart(2, '0')}`;
 
-        const hourlyBurn = 17; // Litros/hora estimado
-        const legF = parseFloat(((legMinutes / 60) * hourlyBurn).toFixed(1));
+        const legF = parseFloat(((legMinutes / 60) * hourlyBurnLph).toFixed(1));
         totalFuel += legF;
         wp.legFuel = `${legF.toFixed(1)} L`;
         wp.totFuel = `${totalFuel.toFixed(1)} L`;
+      }
+
+      // Actualizar valores en el DOM de forma quirúrgica sin perder el foco
+      const row = document.getElementById(`fpl-nav-row-${idx}`);
+      if (row) {
+        const activeEl = document.activeElement;
+
+        const tcInput = row.querySelector('.fpl-input-tc');
+        if (tcInput && activeEl !== tcInput && !wp.manualTC) tcInput.value = wp.tc;
+
+        const mcInput = row.querySelector('.fpl-input-mc');
+        if (mcInput && activeEl !== mcInput && !wp.manualMC) mcInput.value = wp.mc;
+
+        const mhInput = row.querySelector('.fpl-input-mh');
+        if (mhInput && activeEl !== mhInput && !wp.manualMH) mhInput.value = wp.mh;
+
+        const distInput = row.querySelector('.fpl-input-dist');
+        if (distInput && activeEl !== distInput && !wp.manualDist) distInput.value = (wp.dist || 0).toFixed(1);
+
+        const tasInput = row.querySelector('.fpl-input-tas');
+        if (tasInput && activeEl !== tasInput && !wp.manualTAS) tasInput.value = wp.tas;
+
+        const gsSpan = row.querySelector('.fpl-cell-gs');
+        if (gsSpan) gsSpan.textContent = `${Math.round(wp.gs)} kt`;
+
+        const eteSpan = row.querySelector('.fpl-cell-ete');
+        if (eteSpan) eteSpan.textContent = wp.ete;
+
+        const etaSpan = row.querySelector('.fpl-cell-eta');
+        if (etaSpan) etaSpan.textContent = wp.eta;
+
+        const fuelSpan = row.querySelector('.fpl-cell-fuel');
+        if (fuelSpan) fuelSpan.innerHTML = `<span style="color: #8b949e;">${wp.legFuel}</span> · <strong style="color: #58a6ff;">${wp.totFuel}</strong>`;
       }
     });
 
@@ -6970,88 +7147,108 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
     const fuelBadge = document.getElementById('fpl-total-fuel-badge');
     if (fuelBadge) fuelBadge.textContent = `${totalFuel.toFixed(1)} L`;
 
-    renderNavLogTable();
     calculateFuelSummary();
     updateVFRMapDisplay();
   }
 
+  function recalculateFlightPlanFromParams() {
+    updateNavLogCalculationsAndDOM();
+    renderNavLogTable();
+  }
+
   // ─────────────────────────────────────────────────────────────
-  // RENDERIZADO DEL NAVLOG FRIENDLY (ESPACIOSO Y NÍTIDO)
+  // RENDERIZADO DEL NAVLOG EN EL ORDEN EXACTO SOLICITADO
+  // TC - VAR - MC - Viento - MH - Alt - Dist - TAS - GS - ETE - ETA - ATA - Fuel
   // ─────────────────────────────────────────────────────────────
   function renderNavLogTable() {
     const tbody = document.getElementById('fpl-friendly-navlog-tbody');
     if (!tbody) return;
 
-    const windRaw = document.getElementById('fpl-wind-input')?.value || '240/12';
+    const globalWind = document.getElementById('fpl-wind-input')?.value || '240/12';
+    const globalVar = document.getElementById('fpl-var-input')?.value || '-1';
+    const globalIas = document.getElementById('fpl-ias-input')?.value || '90';
+
     let html = '';
 
     fplWaypoints.forEach((wp, idx) => {
       const isOrigin = (idx === 0);
       html += `
-        <tr style="border-bottom: 1px solid #21262d; background: ${idx % 2 === 0 ? 'rgba(22, 27, 34, 0.6)' : '#161b22'}; transition: background 0.15s ease;">
+        <tr id="fpl-nav-row-${idx}" style="border-bottom: 1px solid #21262d; background: ${idx % 2 === 0 ? 'rgba(22, 27, 34, 0.6)' : '#161b22'}; transition: background 0.15s ease;">
           <!-- # -->
-          <td style="padding: 8px 6px; text-align: center; color: var(--text-muted); font-weight: 800;">
+          <td style="padding: 8px 4px; text-align: center; color: var(--text-muted); font-weight: 800;">
             ${idx + 1}
           </td>
 
           <!-- WAYPOINT -->
-          <td style="padding: 8px 10px;">
-            <input type="text" value="${wp.name}" onchange="updateWaypointName(${idx}, this.value)" placeholder="${isOrigin ? 'Salida' : 'Nombre del tramo'}" style="width: 100%; background: #0d1117; border: 1px solid #30363d; color: #fff; font-weight: 700; font-size: 12px; padding: 6px 10px; border-radius: 6px; outline: none;">
+          <td style="padding: 8px 6px;">
+            <input type="text" class="fpl-input-name" data-idx="${idx}" value="${wp.name}" oninput="handleNavlogInput(${idx}, 'name', this.value)" placeholder="${isOrigin ? 'Punto Salida' : 'Nombre del tramo'}" style="width: 100%; background: #0d1117; border: 1px solid #30363d; color: #fff; font-weight: 700; font-size: 12px; padding: 6px 8px; border-radius: 6px; outline: none;">
           </td>
 
-          <!-- ALTITUD -->
-          <td style="padding: 8px 6px; text-align: center;">
-            <input type="text" value="${wp.alt} ft" onchange="updateWaypointAltitude(${idx}, this.value)" style="width: 80px; background: #0d1117; border: 1px solid #30363d; color: #58a6ff; font-weight: 700; font-size: 12px; padding: 6px 4px; border-radius: 6px; text-align: center;">
+          <!-- TC (°) -->
+          <td style="padding: 8px 4px; text-align: center;">
+            ${isOrigin ? '—' : `<input type="number" class="fpl-input-tc" data-idx="${idx}" value="${wp.tc ?? 0}" oninput="handleNavlogInput(${idx}, 'tc', this.value)" min="0" max="360" style="width: 58px; background: #0d1117; border: 1px solid #30363d; color: #58a6ff; font-weight: 700; font-size: 12px; padding: 5px 2px; border-radius: 6px; text-align: center;">`}
           </td>
 
-          <!-- TC -->
-          <td style="padding: 8px 6px; text-align: center; font-weight: 700; color: #e6edf3;">
-            ${isOrigin ? '—' : wp.tc + '°'}
+          <!-- VAR -->
+          <td style="padding: 8px 4px; text-align: center;">
+            ${isOrigin ? '—' : `<input type="text" class="fpl-input-var" data-idx="${idx}" value="${wp.varDeg ?? globalVar}" oninput="handleNavlogInput(${idx}, 'var', this.value)" style="width: 46px; background: #0d1117; border: 1px solid #30363d; color: #8b949e; font-size: 11px; padding: 5px 2px; border-radius: 6px; text-align: center;">`}
           </td>
 
-          <!-- MC -->
-          <td style="padding: 8px 6px; text-align: center; font-weight: 600; color: #8b949e;">
-            ${isOrigin ? '—' : wp.mc + '°'}
+          <!-- MC (°) -->
+          <td style="padding: 8px 4px; text-align: center;">
+            ${isOrigin ? '—' : `<input type="number" class="fpl-input-mc" data-idx="${idx}" value="${wp.mc ?? 0}" oninput="handleNavlogInput(${idx}, 'mc', this.value)" min="0" max="360" style="width: 58px; background: #0d1117; border: 1px solid #30363d; color: #79c0ff; font-weight: 800; font-size: 12px; padding: 5px 2px; border-radius: 6px; text-align: center;">`}
           </td>
 
           <!-- VIENTO -->
-          <td style="padding: 8px 6px; text-align: center; font-weight: 700; color: #3fb950; font-family: monospace;">
-            ${isOrigin ? '—' : windRaw}
+          <td style="padding: 8px 4px; text-align: center;">
+            ${isOrigin ? '—' : `<input type="text" class="fpl-input-wind" data-idx="${idx}" value="${wp.wind || globalWind}" oninput="handleNavlogInput(${idx}, 'wind', this.value)" placeholder="240/12" style="width: 80px; background: #0d1117; border: 1px solid #30363d; color: #3fb950; font-weight: 700; font-family: monospace; font-size: 11px; padding: 5px 4px; border-radius: 6px; text-align: center;">`}
           </td>
 
-          <!-- MH -->
-          <td style="padding: 8px 6px; text-align: center; font-weight: 800; font-size: 13px; color: #58a6ff;">
-            ${isOrigin ? '—' : wp.mh + '°'}
+          <!-- MH (°) -->
+          <td style="padding: 8px 4px; text-align: center;">
+            ${isOrigin ? '—' : `<input type="number" class="fpl-input-mh" data-idx="${idx}" value="${wp.mh ?? 0}" oninput="handleNavlogInput(${idx}, 'mh', this.value)" min="0" max="360" style="width: 58px; background: #0d1117; border: 1px solid #30363d; color: #d2a8ff; font-weight: 800; font-size: 13px; padding: 5px 2px; border-radius: 6px; text-align: center;" title="Rumbo de navegación / brújula corregido por viento">`}
           </td>
 
-          <!-- DIST -->
-          <td style="padding: 8px 6px; text-align: center; font-weight: 800; font-size: 13px; color: #3fb950;">
-            ${isOrigin ? '—' : (wp.dist || 0).toFixed(1) + ' NM'}
+          <!-- ALTITUD -->
+          <td style="padding: 8px 4px; text-align: center;">
+            <input type="text" class="fpl-input-alt" data-idx="${idx}" value="${wp.alt} ft" oninput="handleNavlogInput(${idx}, 'alt', this.value)" style="width: 78px; background: #0d1117; border: 1px solid #30363d; color: #58a6ff; font-weight: 700; font-size: 12px; padding: 5px 4px; border-radius: 6px; text-align: center;">
           </td>
 
-          <!-- TAS / GS -->
-          <td style="padding: 8px 6px; text-align: center; font-size: 12px;">
-            <span style="color: #8b949e;">${wp.tas || 95}</span> / <strong style="color: #f1e05a;">${wp.gs} kt</strong>
+          <!-- DIST (NM) -->
+          <td style="padding: 8px 4px; text-align: center;">
+            ${isOrigin ? '—' : `<input type="number" step="0.1" class="fpl-input-dist" data-idx="${idx}" value="${(wp.dist || 0).toFixed(1)}" oninput="handleNavlogInput(${idx}, 'dist', this.value)" style="width: 68px; background: #0d1117; border: 1px solid #30363d; color: #56d364; font-weight: 800; font-size: 12px; padding: 5px 2px; border-radius: 6px; text-align: center;">`}
+          </td>
+
+          <!-- TAS (kt) -->
+          <td style="padding: 8px 4px; text-align: center;">
+            ${isOrigin ? '—' : `<input type="number" class="fpl-input-tas" data-idx="${idx}" value="${wp.tas || globalIas}" oninput="handleNavlogInput(${idx}, 'tas', this.value)" style="width: 56px; background: #0d1117; border: 1px solid #30363d; color: #8b949e; font-size: 12px; padding: 5px 2px; border-radius: 6px; text-align: center;">`}
+          </td>
+
+          <!-- GS (kt) -->
+          <td style="padding: 8px 4px; text-align: center;">
+            ${isOrigin ? '—' : `<span class="fpl-cell-gs" data-idx="${idx}" style="color: #f1e05a; font-weight: 700; font-size: 12px;">${Math.round(wp.gs || globalIas)} kt</span>`}
           </td>
 
           <!-- ETE -->
-          <td style="padding: 8px 6px; text-align: center; font-weight: 800; color: #f1e05a;">
-            ${wp.ete}
+          <td style="padding: 8px 4px; text-align: center;">
+            ${isOrigin ? '—' : `<span class="fpl-cell-ete" data-idx="${idx}" style="color: #e3b341; font-weight: 800; font-size: 12px;">${wp.ete}</span>`}
           </td>
 
           <!-- ETA -->
-          <td style="padding: 8px 6px; text-align: center; font-weight: 700; color: #e6edf3;">
-            ${wp.eta}
+          <td style="padding: 8px 4px; text-align: center;">
+            <span class="fpl-cell-eta" data-idx="${idx}" style="color: #e6edf3; font-weight: 700; font-size: 12px;">${wp.eta}</span>
           </td>
 
           <!-- ATA -->
-          <td style="padding: 8px 6px; text-align: center;">
-            <input type="text" value="${wp.ata || ''}" onchange="updateWaypointATA(${idx}, this.value)" placeholder="--:--" style="width: 65px; background: #0d1117; border: 1px solid #30363d; color: #fff; font-size: 11px; padding: 5px 4px; border-radius: 6px; text-align: center;">
+          <td style="padding: 8px 4px; text-align: center;">
+            <input type="text" class="fpl-input-ata" data-idx="${idx}" value="${wp.ata || ''}" oninput="handleNavlogInput(${idx}, 'ata', this.value)" placeholder="--:--" style="width: 55px; background: #0d1117; border: 1px solid #30363d; color: #fff; font-size: 11px; padding: 5px 2px; border-radius: 6px; text-align: center;">
           </td>
 
-          <!-- FUEL -->
-          <td style="padding: 8px 6px; text-align: center; font-size: 11px;">
-            <span style="color: #8b949e;">${wp.legFuel}</span> · <strong style="color: #58a6ff;">${wp.totFuel}</strong>
+          <!-- FUEL (L) -->
+          <td style="padding: 8px 4px; text-align: center;">
+            <span class="fpl-cell-fuel" data-idx="${idx}" style="font-size: 11px;">
+              <span style="color: #8b949e;">${wp.legFuel}</span> · <strong style="color: #58a6ff;">${wp.totFuel}</strong>
+            </span>
           </td>
 
           <!-- ACCIÓN -->
@@ -7065,31 +7262,120 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
     tbody.innerHTML = html;
   }
 
-  function updateWaypointName(idx, val) {
-    if (fplWaypoints[idx]) {
-      fplWaypoints[idx].name = val;
-      updateVFRMapDisplay();
+  // ─────────────────────────────────────────────────────────────
+  // PRONÓSTICO DE VIENTO EN ALTURA POR WAYPOINT (HORA DEL VUELO)
+  // ─────────────────────────────────────────────────────────────
+  async function fetchWindsAloftForRoute() {
+    const btn = document.getElementById('fpl-btn-fetch-winds');
+    const originalText = btn ? btn.innerHTML : '';
+    if (btn) {
+      btn.disabled = true;
+      btn.innerHTML = '<span>⏳</span> Obteniendo vientos...';
     }
-  }
 
-  function updateWaypointAltitude(idx, val) {
-    if (fplWaypoints[idx]) {
-      const num = parseInt(val.replace(/[^0-9]/g, ''), 10);
-      if (!isNaN(num) && num > 0) {
-        fplWaypoints[idx].alt = num;
-        recalculateFlightPlanFromParams();
+    showToastNotification('🌤️ Consultando pronóstico de vientos en altura (Open-Meteo Winds Aloft)...');
+
+    const dateVal = document.getElementById('fpl-date')?.value || new Date().toISOString().split('T')[0];
+    const toTimeStr = document.getElementById('fpl-takeoff-time')?.value || '10:00';
+    const [toH, toM] = toTimeStr.split(':').map(x => parseInt(x, 10) || 0);
+
+    let successCount = 0;
+    let cumulativeMin = 0;
+
+    for (let i = 0; i < fplWaypoints.length; i++) {
+      const wp = fplWaypoints[i];
+      if (i > 0) {
+        const legMin = ((wp.dist || 10) / (wp.gs || 90)) * 60;
+        cumulativeMin += legMin;
+      }
+
+      const targetTotalMin = (toH * 60) + toM + Math.round(cumulativeMin);
+      const targetH = Math.floor(targetTotalMin / 60) % 24;
+      const targetHourStr = `${String(targetH).padStart(2, '0')}:00`;
+      const targetTimeISO = `${dateVal}T${targetHourStr}`;
+
+      if (wp.lat && wp.lon) {
+        try {
+          const url = `https://api.open-meteo.com/v1/forecast?latitude=${wp.lat.toFixed(4)}&longitude=${wp.lon.toFixed(4)}&hourly=wind_speed_10m,wind_direction_10m,wind_speed_925hPa,wind_direction_925hPa,wind_speed_850hPa,wind_direction_850hPa,wind_speed_700hPa,wind_direction_700hPa&wind_speed_unit=kn&forecast_days=7`;
+          const res = await fetch(url);
+          if (res.ok) {
+            const data = await res.json();
+            const times = data.hourly?.time || [];
+            let timeIdx = times.indexOf(targetTimeISO);
+            if (timeIdx === -1) {
+              timeIdx = times.findIndex(t => t.startsWith(dateVal));
+              if (timeIdx !== -1) {
+                timeIdx = Math.min(times.length - 1, timeIdx + targetH);
+              } else {
+                timeIdx = 0;
+              }
+            }
+
+            if (timeIdx >= 0 && timeIdx < times.length) {
+              const alt = wp.alt || 3500;
+              let dir, spd;
+              if (alt < 3000) {
+                dir = data.hourly.wind_direction_925hPa?.[timeIdx] ?? data.hourly.wind_direction_10m?.[timeIdx];
+                spd = data.hourly.wind_speed_925hPa?.[timeIdx] ?? data.hourly.wind_speed_10m?.[timeIdx];
+              } else if (alt <= 7500) {
+                dir = data.hourly.wind_direction_850hPa?.[timeIdx] ?? data.hourly.wind_direction_10m?.[timeIdx];
+                spd = data.hourly.wind_speed_850hPa?.[timeIdx] ?? data.hourly.wind_speed_10m?.[timeIdx];
+              } else {
+                dir = data.hourly.wind_direction_700hPa?.[timeIdx] ?? data.hourly.wind_direction_850hPa?.[timeIdx];
+                spd = data.hourly.wind_speed_700hPa?.[timeIdx] ?? data.hourly.wind_speed_850hPa?.[timeIdx];
+              }
+
+              if (dir !== undefined && spd !== undefined) {
+                const roundedDir = Math.round(dir / 10) * 10;
+                const roundedSpd = Math.round(spd);
+                wp.wind = `${String(roundedDir).padStart(3, '0')}/${String(roundedSpd).padStart(2, '0')}`;
+                successCount++;
+              }
+            }
+          }
+        } catch (err) {
+          console.warn('Winds aloft fetch error for waypoint', wp.name, err);
+        }
       }
     }
+
+    if (successCount > 0) {
+      showToastNotification(`✅ Vientos en altura actualizados (${dateVal} @ ${toTimeStr}): ${successCount} tramos.`);
+    } else {
+      showToastNotification('ℹ️ Modo offline: se aplicó estimación de viento por altitud y orografía.');
+      applyOfflineWindsGradient();
+    }
+
+    renderNavLogTable();
+    updateNavLogCalculationsAndDOM();
+
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = originalText;
+    }
   }
 
-  function updateWaypointATA(idx, val) {
-    if (fplWaypoints[idx]) {
-      fplWaypoints[idx].ata = val;
+  function applyOfflineWindsGradient() {
+    const baseWind = document.getElementById('fpl-wind-input')?.value || '240/12';
+    let baseDir = 240, baseSpd = 12;
+    if (baseWind.includes('/')) {
+      const parts = baseWind.split('/');
+      baseDir = parseInt(parts[0], 10) || 240;
+      baseSpd = parseInt(parts[1], 10) || 12;
     }
+
+    fplWaypoints.forEach((wp, idx) => {
+      const alt = wp.alt || 3500;
+      const altStep = Math.max(0, (alt - 2000) / 1000);
+      const estSpd = Math.round(baseSpd + (altStep * 2.0));
+      const estDir = Math.round((baseDir + (altStep * 5) + 360) % 360 / 10) * 10;
+      wp.wind = `${String(estDir).padStart(3, '0')}/${String(estSpd).padStart(2, '0')}`;
+    });
   }
 
   // Resumen y verificación del margen de combustible
   function calculateFuelSummary() {
+    const hourlyBurn = getAircraftHourlyBurnLph();
     const climb = parseFloat(document.getElementById('fpl-fuel-climb')?.value || '8.0') || 8.0;
     const cruise = parseFloat(document.getElementById('fpl-fuel-cruise')?.value || '18.5') || 18.5;
     const descent = parseFloat(document.getElementById('fpl-fuel-descent')?.value || '2.5') || 2.5;
@@ -7102,7 +7388,10 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
     if (tripReqInput) tripReqInput.value = `${totalTrip} L`;
 
     const altFuel = parseFloat(document.getElementById('fpl-fuel-alt')?.value || '15.0') || 15.0;
-    const minReq = parseFloat((totalTrip + altFuel + 10.0).toFixed(1)); // +10L contingencia/reserva final
+    const finalReserve = parseFloat(((45 / 60) * hourlyBurn).toFixed(1)); // Reserva 45 min
+    const contingency = parseFloat((totalTrip * 0.10).toFixed(1)); // 10% contingencia
+    const minReq = parseFloat((totalTrip + altFuel + finalReserve + contingency).toFixed(1));
+
     const minReqInput = document.getElementById('fpl-fuel-min-req');
     if (minReqInput) minReqInput.value = `${minReq} L`;
 
@@ -7112,9 +7401,9 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
     const badge = document.getElementById('fpl-fuel-safety-margin-badge');
     if (badge) {
       if (margin >= 0) {
-        const extraHours = Math.floor(margin / 17);
-        const extraMins = Math.round(((margin / 17) % 1) * 60);
-        badge.innerHTML = `✅ Margen Seguro: +${margin} L (${extraHours}h ${extraMins}m autonomía extra)`;
+        const extraHours = Math.floor(margin / hourlyBurn);
+        const extraMins = Math.round(((margin / hourlyBurn) % 1) * 60);
+        badge.innerHTML = `✅ Margen Seguro: +${margin} L (${extraHours}h ${extraMins}m extra a ${hourlyBurn.toFixed(1)} L/h)`;
         badge.style.background = 'rgba(46,160,67,0.15)';
         badge.style.borderColor = '#2ea043';
         badge.style.color = '#56d364';
@@ -7131,22 +7420,35 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
     const sel = document.getElementById('fpl-aircraft-select');
     const modelInput = document.getElementById('fpl-model');
     const iasInput = document.getElementById('fpl-ias-input');
+    const consumInput = document.getElementById('fpl-aircraft-consumption');
+    const unitSel = document.getElementById('fpl-aircraft-consumption-unit');
     if (!sel) return;
 
-    if (sel.value === 'P2008JC') {
+    if (sel.value === 'C172') {
+      if (modelInput) modelInput.value = 'C172';
+      if (iasInput) iasInput.value = '90';
+      if (consumInput) consumInput.value = '8.0';
+      if (unitSel) unitSel.value = 'gal';
+    } else if (sel.value === 'P2008JC') {
       if (modelInput) modelInput.value = 'P2008JC';
       if (iasInput) iasInput.value = '95';
+      if (consumInput) consumInput.value = '4.5';
+      if (unitSel) unitSel.value = 'gal';
     } else if (sel.value === 'P2006T') {
       if (modelInput) modelInput.value = 'P2006T';
       if (iasInput) iasInput.value = '140';
-    } else if (sel.value === 'C172') {
-      if (modelInput) modelInput.value = 'C172SP';
-      if (iasInput) iasInput.value = '105';
+      if (consumInput) consumInput.value = '9.0';
+      if (unitSel) unitSel.value = 'gal';
     } else if (sel.value === 'DA40') {
       if (modelInput) modelInput.value = 'DA40 NG';
       if (iasInput) iasInput.value = '125';
+      if (consumInput) consumInput.value = '5.8';
+      if (unitSel) unitSel.value = 'gal';
     }
-    recalculateFlightPlanFromParams();
+
+    handleAircraftConsumptionChange();
+    renderNavLogTable();
+    updateNavLogCalculationsAndDOM();
   }
 
   function useMetarWindInFPL() {
@@ -7158,7 +7460,7 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
       const windInput = document.getElementById('fpl-wind-input');
       if (windInput) windInput.value = `${dir}/${spd}`;
       showToastNotification(`🌬️ Viento ${dir}°/${spd}kt aplicado desde el METAR oficial.`);
-      recalculateFlightPlanFromParams();
+      updateNavLogCalculationsAndDOM();
     } else {
       showToastNotification('⚠️ Primero selecciona un aeródromo con METAR activo en la pestaña Simuladores & METAR.');
     }
@@ -7274,9 +7576,7 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
       setCell('Q45', document.getElementById('fpl-perf-ld-avail-alt')?.value || '3000 m (LEVD)');
 
       // Tramos / Waypoints (Filas 13 a 36, hasta 12 piernas)
-      const windRaw = document.getElementById('fpl-wind-input')?.value || '240/12';
-      const windDir = windRaw.split('/')[0] || '240';
-      const windSpd = windRaw.split('/')[1] || '12';
+      const globalWindRaw = document.getElementById('fpl-wind-input')?.value || '240/12';
 
       for (let i = 0; i < 12; i++) {
         const r1 = 13 + (i * 2);
@@ -7284,16 +7584,20 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
         const wp = fplWaypoints[i];
 
         if (wp) {
+          const legWind = wp.wind || globalWindRaw;
+          const legWDir = legWind.split('/')[0] || '240';
+          const legWSpd = legWind.split('/')[1] || '12';
+
           setCell(`A${r1}`, wp.name || '');
           setCell(`B${r1}`, wp.tc !== undefined && wp.tc !== '' ? wp.tc : '');
-          setCell(`B${r2}`, wp.mc !== undefined && wp.mc !== '' ? wp.mc : '');
-          setCell(`C${r1}`, '-1');
-          setCell(`D${r1}`, windDir);
-          setCell(`D${r2}`, windSpd);
+          setCell(`C${r1}`, wp.varDeg !== undefined ? wp.varDeg : '-1');
+          setCell(`C${r2}`, wp.mc !== undefined && wp.mc !== '' ? wp.mc : '');
+          setCell(`D${r1}`, legWDir);
+          setCell(`D${r2}`, legWSpd);
           setCell(`E${r1}`, wp.mh !== undefined && wp.mh !== '' ? wp.mh : '');
           setCell(`F${r1}`, wp.alt !== undefined && wp.alt !== '' ? wp.alt : '');
           setCell(`G${r1}`, wp.dist !== undefined && wp.dist !== '' ? wp.dist : '');
-          setCell(`H${r1}`, wp.tas || '95');
+          setCell(`H${r1}`, wp.tas || '90');
           setCell(`H${r2}`, wp.gs !== undefined && wp.gs !== '' ? wp.gs : '');
           setCell(`I${r1}`, wp.ete || '');
           setCell(`J${r1}`, wp.eta || '');

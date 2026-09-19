@@ -1,4 +1,4 @@
-const CACHE_NAME = 'atpl-flightdeck-v1.5.3';
+const CACHE_NAME = 'atpl-flightdeck-v1.6.0'; // [FIX] Bumped: v1.5.3 → v1.6.0 (security audit)
 const STATIC_ASSETS = [
   './',
   './index.html',
@@ -56,6 +56,26 @@ self.addEventListener('fetch', (event) => {
             return cached || caches.match('./index.html');
           });
         })
+    );
+    return;
+  }
+
+  // [FIX] data.js y data.json: Network-First para que el progreso del piloto
+  // sea siempre el más reciente (no datos obsoletos de caché tras exportar-dashboard).
+  const isProgressData = url.pathname.endsWith('/data.js') || url.pathname.endsWith('/data.json');
+  if (isProgressData) {
+    event.respondWith(
+      fetch(event.request)
+        .then((networkResponse) => {
+          if (networkResponse && networkResponse.status === 200) {
+            const responseToCache = networkResponse.clone();
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(event.request, responseToCache);
+            });
+          }
+          return networkResponse;
+        })
+        .catch(() => caches.match(event.request))
     );
     return;
   }

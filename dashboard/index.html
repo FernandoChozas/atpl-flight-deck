@@ -3036,7 +3036,10 @@
         if (isMaster) {
           headerPilot.innerHTML = `EC-CHOZAS <span class="master-crown-badge">👑 MASTER</span>`;
         } else {
-          headerPilot.innerHTML = `${currentPilot} <span class="guest-role-badge">👨‍✈️ CADETE</span>`;
+          // [FIX] Sanitizar currentPilot para evitar XSS
+          const safePilot = document.createElement('div');
+          safePilot.textContent = currentPilot;
+          headerPilot.innerHTML = `${safePilot.innerHTML} <span class="guest-role-badge">👨‍✈️ CADETE</span>`;
         }
       }
       

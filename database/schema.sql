@@ -85,3 +85,7 @@ CREATE TABLE IF NOT EXISTS study_logs (
     questions_completed INTEGER DEFAULT 0,
     reflection TEXT
 );
+
+-- Índices para optimizar consultas frecuentes
+CREATE INDEX IF NOT EXISTS idx_topics_status_review ON topics(status, next_review);
+CREATE INDEX IF NOT EXISTS idx_topics_subject_chapter ON topics(subject_code, chapter_num);

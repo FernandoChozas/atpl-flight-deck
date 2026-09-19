@@ -45,6 +45,7 @@ def que_estudio_hoy(args):
 
     bloques = []
     tiempo_acumulado = 0.0
+    tema_consolidacion = None  # [FIX] Inicialización explícita: elimina el anti-patrón locals()
 
     # 1. Verificar si hay temas con repetición espaciada vencida
     today_str = datetime.now().strftime("%Y-%m-%d")
@@ -117,8 +118,8 @@ def que_estudio_hoy(args):
     """)
     punto_debil = c.fetchone()
 
-    bloques = [] if not ('tema_consolidacion' in locals() and tema_consolidacion) else bloques
-    tiempo_acumulado = 0.0 if not ('tema_consolidacion' in locals() and tema_consolidacion) else tiempo_acumulado
+    bloques = [] if not tema_consolidacion else bloques
+    tiempo_acumulado = 0.0 if not tema_consolidacion else tiempo_acumulado
 
     # Si hay repaso espaciado urgente
     if repaso:

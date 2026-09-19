@@ -34,19 +34,17 @@ def merge_pdf_pages(pdf_files, output_path):
 
     current_obj_id = 1
     # We will build a unified PDF
-    # First, let's extract raw objects from each PDF
-    pdf_docs = []
+    # Extract raw objects from each PDF sequentially to save memory
+    print(f"Merging {len(pdf_files)} chapter PDFs into {output_path}...")
+
+    # For each document, parse page objects
+    page_objs_data = []
     for fpath in pdf_files:
         if not os.path.exists(fpath):
             continue
         with open(fpath, "rb") as f:
-            pdf_docs.append(f.read())
+            doc = f.read()
 
-    print(f"Merging {len(pdf_docs)} chapter PDFs into {output_path}...")
-
-    # For each document, parse page objects
-    page_objs_data = []
-    for doc in pdf_docs:
         # find pages
         m_pages = re.search(rb'/Type\s*/Pages\s*/Kids\s*\[([^\]]+)\]', doc)
         if not m_pages:

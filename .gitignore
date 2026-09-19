@@ -2,11 +2,17 @@
 *.pdf
 !resumenes/**/*.pdf
 !notebooklm_pilot/**/*.pdf
+!docs/*.pdf
 notebooklm_pilot/_archive_pilot_v1/
 libros_oxford_fuente/
 scratch/
 __pycache__/
 *.pyc
 *.py
+!scripts/generate_audit_report.py
+!scripts/pdf_builder.py
+!scripts/compile_*.py
+!scripts/super_audit_verification.py
+!database/*.py
 *.db
 .netlify/

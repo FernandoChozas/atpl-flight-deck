@@ -64,6 +64,8 @@ class PDFBuilder:
         }
         for k, v in replacements.items():
             text = text.replace(k, v)
+        # [MEJORA] Eliminar caracteres no imprimibles que corrompen el stream PDF
+        text = ''.join(ch if ord(ch) < 256 else '?' for ch in text)
         return text
 
     # --- Drawing Primitives ---
@@ -248,7 +250,7 @@ class PDFBuilder:
             max_lines = 1
             for c_idx, cell in enumerate(row):
                 w_pts = col_widths[c_idx] - 10.0
-                chars_per_line = max(10, int(w_pts / 4.7))
+                chars_per_line = max(5, int(w_pts / 4.7))  # [FIX] mínimo 5 evita bucle infinito con columnas muy estrechas
                 lines = self.wrap_text(str(cell), chars_per_line)
                 wrapped_cells.append(lines)
                 if len(lines) > max_lines:
@@ -366,7 +368,9 @@ class PDFBuilder:
         trailer = f"trailer\n<< /Size {total_objs + 1} /Root {catalog_id} 0 R >>\nstartxref\n{xref_pos}\n%%EOF\n"
         out.extend(trailer.encode("latin1"))
 
-        os.makedirs(os.path.dirname(os.path.abspath(output_path)), exist_ok=True)
+        dirname = os.path.dirname(os.path.abspath(output_path))
+        if dirname:
+            os.makedirs(dirname, exist_ok=True)
         with open(output_path, "wb") as f:
             f.write(out)
 

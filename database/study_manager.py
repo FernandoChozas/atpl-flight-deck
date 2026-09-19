@@ -10,13 +10,16 @@ import os
 import sqlite3
 import argparse
 import json
+import re  # movido aquí desde importación diferida en exportar_dashboard_interno
 from datetime import datetime, timedelta
+from contextlib import closing
 
 DB_PATH = os.path.join(os.path.dirname(__file__), "atpl.db")
 DASHBOARD_JSON = os.path.join(os.path.dirname(os.path.dirname(__file__)), "dashboard", "data.json")
 
 def get_db():
     conn = sqlite3.connect(DB_PATH)
+    conn.execute("PRAGMA foreign_keys = ON")  # [CRÍTICO FIX] FK estaban deshabilitadas en runtime
     conn.row_factory = sqlite3.Row
     return conn
 
@@ -165,44 +168,53 @@ def que_estudio_hoy(args):
     conn.close()
 
 def registrar_test(args):
-    conn = get_db()
-    c = conn.cursor()
-
-    c.execute("SELECT subject_code, title, chapter_num FROM topics WHERE id = ?", (args.tema,))
-    row = c.fetchone()
-    if not row:
-        print(f"❌ Error: No se encontró ningún tema con ID {args.tema}")
-        conn.close()
+    # [CRÍTICO FIX] Validación de entrada: evitar ZeroDivisionError y valores imposibles
+    if args.total <= 0:
+        print(f"❌ Error: --total debe ser un número positivo (recibido: {args.total})")
+        return
+    if args.aciertos < 0 or args.aciertos > args.total:
+        print(f"❌ Error: --aciertos ({args.aciertos}) debe estar entre 0 y --total ({args.total})")
         return
 
-    subject_code = row["subject_code"]
-    pct = round((args.aciertos * 100.0) / args.total, 1)
+    conn = get_db()
+    try:
+        c = conn.cursor()
 
-    c.execute("""
-        INSERT INTO question_sessions 
-        (subject_code, topic_id, session_date, platform, mode, total_questions, correct_answers, duration_minutes, notes)
-        VALUES (?, ?, date('now'), 'AviationExam', ?, ?, ?, ?, ?)
-    """, (subject_code, args.tema, args.modo, args.total, args.aciertos, args.tiempo, args.notas))
+        c.execute("SELECT subject_code, title, chapter_num FROM topics WHERE id = ?", (args.tema,))
+        row = c.fetchone()
+        if not row:
+            print(f"❌ Error: No se encontró ningún tema con ID {args.tema}")
+            return
 
-    # Actualizar estado del tema y calcular repetición espaciada
-    status = "completed" if pct >= 75.0 else "studying"
-    stars = 5 if pct >= 90 else (4 if pct >= 85 else (3 if pct >= 75 else 2))
-    
-    # Próximo repaso: 3 días si aprobado, 1 día si suspenso
-    interval_days = 3 if pct >= 75 else 1
-    next_rev = (datetime.now() + timedelta(days=interval_days)).strftime("%Y-%m-%d")
+        subject_code = row["subject_code"]
+        pct = round((args.aciertos * 100.0) / args.total, 1)
 
-    c.execute("""
-        UPDATE topics
-        SET status = ?,
-            understanding_level = ?,
-            last_studied = date('now'),
-            next_review = ?
-        WHERE id = ?
-    """, (status, stars, next_rev, args.tema))
+        c.execute("""
+            INSERT INTO question_sessions 
+            (subject_code, topic_id, session_date, platform, mode, total_questions, correct_answers, duration_minutes, notes)
+            VALUES (?, ?, date('now'), 'AviationExam', ?, ?, ?, ?, ?)
+        """, (subject_code, args.tema, args.modo, args.total, args.aciertos, args.tiempo, args.notas))
 
-    conn.commit()
-    conn.close()
+        # Actualizar estado del tema y calcular repetición espaciada
+        status = "completed" if pct >= 75.0 else "studying"
+        stars = 5 if pct >= 90 else (4 if pct >= 85 else (3 if pct >= 75 else 2))
+        
+        # Próximo repaso: 3 días si aprobado, 1 día si suspenso
+        interval_days = 3 if pct >= 75 else 1
+        next_rev = (datetime.now() + timedelta(days=interval_days)).strftime("%Y-%m-%d")
+
+        c.execute("""
+            UPDATE topics
+            SET status = ?,
+                understanding_level = ?,
+                last_studied = date('now'),
+                next_review = ?
+            WHERE id = ?
+        """, (status, stars, next_rev, args.tema))
+
+        conn.commit()
+    finally:
+        conn.close()  # [CRÍTICO FIX] Garantiza cierre del recurso en cualquier ruta de ejecución
 
     # Feedback semáforo
     color = "🟢" if pct >= 90 else ("🟡" if pct >= 85 else ("🟠" if pct >= 75 else "🔴"))
@@ -289,45 +301,46 @@ def ver_estado(args):
 
 def exportar_dashboard_interno():
     conn = get_db()
-    c = conn.cursor()
+    try:
+        c = conn.cursor()
 
-    # 1. Sittings
-    c.execute("SELECT * FROM sittings ORDER BY number ASC")
-    sittings = [dict(row) for row in c.fetchall()]
+        # 1. Sittings
+        c.execute("SELECT * FROM sittings ORDER BY number ASC")
+        sittings = [dict(row) for row in c.fetchall()]
 
-    # 2. Subjects
-    c.execute("SELECT * FROM subjects ORDER BY sitting_id, code ASC")
-    subjects = [dict(row) for row in c.fetchall()]
+        # 2. Subjects
+        c.execute("SELECT * FROM subjects ORDER BY sitting_id, code ASC")
+        subjects = [dict(row) for row in c.fetchall()]
 
-    # 3. Topics
-    c.execute("SELECT * FROM topics ORDER BY subject_code, chapter_num ASC")
-    topics = [dict(row) for row in c.fetchall()]
+        # 3. Topics
+        c.execute("SELECT * FROM topics ORDER BY subject_code, chapter_num ASC")
+        topics = [dict(row) for row in c.fetchall()]
 
-    import os
-    import re
-    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    
-    for t in topics:
-        t["summary_pages"] = 0
-        if t.get("summary_file"):
-            pdf_path = os.path.join(base_dir, t["summary_file"])
-            if os.path.exists(pdf_path):
-                try:
-                    with open(pdf_path, "rb") as f:
-                        content = f.read()
-                        pages = len(re.findall(rb'/Type\s*/Page\b', content))
-                        t["summary_pages"] = pages if pages > 0 else 1
-                except Exception:
-                    pass
+        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        
+        for t in topics:
+            t["summary_pages"] = 0
+            if t.get("summary_file"):
+                pdf_path = os.path.join(base_dir, t["summary_file"])
+                if os.path.exists(pdf_path):
+                    try:
+                        with open(pdf_path, "rb") as f:
+                            content = f.read()
+                            pages = len(re.findall(rb'/Type\s*/Page\b', content))
+                            t["summary_pages"] = pages if pages > 0 else 1
+                    except Exception:
+                        pass
 
-    # 4. Recent tests
-    c.execute("""
-        SELECT qs.*, t.title as topic_title
-        FROM question_sessions qs
-        LEFT JOIN topics t ON qs.topic_id = t.id
-        ORDER BY qs.id DESC LIMIT 20
-    """)
-    tests = [dict(row) for row in c.fetchall()]
+        # 4. Recent tests
+        c.execute("""
+            SELECT qs.*, t.title as topic_title
+            FROM question_sessions qs
+            LEFT JOIN topics t ON qs.topic_id = t.id
+            ORDER BY qs.id DESC LIMIT 20
+        """)
+        tests = [dict(row) for row in c.fetchall()]
+    finally:
+        conn.close()  # [FIX] Cerrar conexión antes de operaciones de disco
 
     # Estadísticas globales
     total_topics_c1 = len([t for t in topics if t["subject_code"] in ["010", "040", "090"]])
@@ -384,8 +397,6 @@ def exportar_dashboard_interno():
     js_path = os.path.join(os.path.dirname(DASHBOARD_JSON), "data.js")
     with open(js_path, "w", encoding="utf-8") as f:
         f.write("window.ATPL_DATA = " + json.dumps(data, indent=2, ensure_ascii=False) + ";\n")
-
-    conn.close()
 
 def exportar_dashboard_cmd(args):
     exportar_dashboard_interno()

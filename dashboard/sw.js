@@ -1,4 +1,4 @@
-const CACHE_NAME = 'atpl-flightdeck-v1.6.0'; // [FIX] Bumped: v1.5.3 → v1.6.0 (security audit)
+const CACHE_NAME = 'atpl-flightdeck-v1.6.1'; // [FIX] Bumped: v1.5.3 → v1.6.0 (security audit)
 const STATIC_ASSETS = [
   './',
   './index.html',

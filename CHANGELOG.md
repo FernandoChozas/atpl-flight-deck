@@ -2,6 +2,33 @@
 
 Todos los cambios notables, evoluciones y correcciones de este proyecto se registran de forma cronológica en este documento, siguiendo las directrices de [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/) y versionado semántico [SemVer](https://semver.org/lang/es/).
 
+## [1.6.1] - 2026-09-19
+
+### 🛡️ Optimizaciones y Consolidación de Seguridad
+- **Saneamiento contra XSS Almacenado**: Saneada la inyección de la variable `currentPilot` en el DOM de la cabecera para prevenir ataques de Cross-Site Scripting mediante almacenamiento local.
+- **Estrategia Network-First en Datos de Progreso**: El Service Worker ahora fuerza la obtención desde la red de `data.js` y `data.json` antes de consultar la caché, garantizando que el progreso de estudio del cadete nunca muestre datos obsoletos tras exportar.
+- **Indexación de Base de Datos SQLite**: Añadidos índices optimizados en `topics(status, next_review)` y `topics(subject_code, chapter_num)` en `schema.sql` y `atpl.db` para acelerar las consultas de repetición espaciada.
+- **Optimización de Memoria en Generador de PDFs**: Procesamiento secuencial de fuentes en `compile_air_law_master.py` para prevenir picos de memoria RAM.
+- **Actualización de CSP (Content Security Policy)**: Compatibilidad total con el iframe oficial del computador CR-3 (`aerotestppl.es`) y las capas de satélite/topográficas de Leaflet (`opentopomap.org`, `openstreetmap.org`, `arcgisonline.com`).
+- **Versión del Sistema Unificada**: Actualizado el distintivo visual y el Service Worker a **v1.6.1 EFB**.
+
+---
+
+## [1.6.0] - 2026-09-19
+
+### 🔒 Auditoría Exhaustiva de Seguridad y Calidad de Código
+- **Normalización de Codificación Unicode en PDFs**: Corregido el fallo de normalización de caracteres (>255) que provocaba `UnicodeEncodeError` silenciosos y streams corruptos en la exportación de manuales.
+- **Prevención de Bucles Infinitos en Tablas PDF**: Establecido un límite mínimo de 5 caracteres por línea en `pdf_builder.py` para evitar bucles con columnas estrechas.
+- **Robustez de Conexiones SQLite**:
+  - Corrección de `ZeroDivisionError` y fugas de conexión en `registrar-test` con `--total=0`.
+  - Activación obligatoria de `PRAGMA foreign_keys = ON` en cada llamada a `get_db()`.
+  - Bloques `try/finally` exhaustivos para garantizar el cierre (`conn.close()`) en el 100% de las rutas de ejecución.
+- **Cabeceras de Seguridad HTTP (`_headers`)**:
+  - Implementación de Content Security Policy (CSP), HTTP Strict Transport Security (HSTS 1 año), X-Content-Type-Options y Referrer-Policy.
+- **Informe Oficial de Auditoría**: Generado el documento `docs/ATPL_FlightDeck_Security_Audit_Report_v1.0.pdf` (7 páginas).
+
+---
+
 ## [1.5.3] - 2026-09-16
 
 ### 🏷️ Corrección de Solapamiento de Letras en Pestañas Móviles (Tabs Anti-Collision)

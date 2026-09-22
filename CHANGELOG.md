@@ -2,6 +2,29 @@
 
 Todos los cambios notables, evoluciones y correcciones de este proyecto se registran de forma cronológica en este documento, siguiendo las directrices de [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/) y versionado semántico [SemVer](https://semver.org/lang/es/).
 
+## [1.6.2] - 2026-09-22
+
+### 🛸 Botón IA Arrastrable, Tiempos Exactos al Segundo y Vientos en Altura Precisos
+- **Botón ATC Copiloto IA Móvil y Arrastrable (`#atc-fab`)**:
+  - Soporte completo para arrastrar y soltar tanto con ratón como táctil en dispositivos móviles y tablets (`mousedown`/`touchstart`, `mousemove`/`touchmove`, `mouseup`/`touchend`).
+  - Detección inteligente de arrastre vs toque mediante umbral cinético (`fabJustDragged` > 5px), garantizando que mover el botón no abra involuntariamente el transceptor ATC.
+  - Persistencia de la posición elegida por el piloto en `localStorage` (`atc_fab_position`) con restricción de límites dinámicos en pantalla para no tapar información crítica.
+- **Cálculo Exacto de Tiempos en NavLog (Sin Desfase de Minutos y Segundos)**:
+  - Sustituido el truncado entero (`Math.floor`) por cálculo al segundo exacto ($\text{segundos} = (\text{distancia} / \text{GS}) \times 3600$).
+  - ETE formateado en minutos y segundos reales (`XXm YYs`), permitiendo una precisión estricta en tramos cortos y de navegación visual.
+  - ETA y hora estimada de toma de tierra calculadas al segundo (`HH:MM:SS`), sincronizadas con la tarjeta de Calzos y Tiempos de Vuelo (`fpl-flight-time`, `fpl-ld-time`).
+  - *Forward-Chaining* reactivo desde la hora real de paso (ATA): al registrar el paso sobre cualquier waypoint, todos los tramos sucesivos y el aterrizaje recalculan instantáneamente sus horas estimadas.
+- **Modelo de Vientos en Altura Fiel a Windy (Open-Meteo ECMWF)**:
+  - Eliminado el desfase de 2 horas introduciendo `&timezone=auto` en las peticiones API, consultando el viento a la hora local prevista de paso de cada punto.
+  - Consulta multi-nivel barométrica de capas de presión atmosférica completas: 10m (30 ft), 975hPa (1.050 ft), 950hPa (1.770 ft), 925hPa (2.500 ft), 900hPa (3.250 ft), 850hPa (4.920 ft), 800hPa (6.400 ft), 750hPa (8.000 ft) y 700hPa (9.880 ft).
+  - Interpolación vectorial continua ($u, v$) para cualquier altitud de vuelo (ej. 3.500 ft, 5.500 ft, 6.500 ft), resolviendo discontinuidades angulares al cruzar el norte (360°/000°).
+  - Reactividad inmediata: la edición manual de la altitud de crucero en la tabla del NavLog actualiza al instante el vector de viento del tramo.
+  - Asignación de coordenadas por estima (*Dead Reckoning*) para tramos manuales introducidos sin lat/lon.
+- **Versionado EFB y PWA**:
+  - Actualizado el distintivo a **v1.6.2 EFB** y la caché del Service Worker a `atpl-flightdeck-v1.6.2`.
+
+---
+
 ## [1.6.1] - 2026-09-19
 
 ### 🛡️ Optimizaciones y Consolidación de Seguridad

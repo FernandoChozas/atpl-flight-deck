@@ -866,14 +866,24 @@
       background: linear-gradient(135deg, #1f6feb, #0d4bab);
       border: 2px solid #388bfd;
       box-shadow: 0 4px 20px rgba(31,111,235,0.5);
-      cursor: pointer; display: flex; align-items: center; justify-content: center;
-      font-size: 22px; z-index: 1100; transition: all 0.25s ease;
+      cursor: grab; display: flex; align-items: center; justify-content: center;
+      font-size: 22px; z-index: 2100; transition: box-shadow 0.2s ease, transform 0.2s ease;
       animation: radarPulse 2.5s infinite;
+      touch-action: none; user-select: none; -webkit-user-select: none;
     }
-    body.player-active #atc-fab {
+    body.player-active #atc-fab:not(.custom-pos) {
       bottom: 85px;
     }
-    #atc-fab:hover { transform: scale(1.08); box-shadow: 0 6px 26px rgba(31,111,235,0.7); }
+    #atc-fab.custom-pos {
+      bottom: auto !important;
+      right: auto !important;
+    }
+    #atc-fab.dragging, #atc-fab:active {
+      cursor: grabbing !important;
+      box-shadow: 0 8px 32px rgba(31,111,235,0.85) !important;
+      animation: none !important;
+    }
+    #atc-fab:hover { transform: scale(1.06); box-shadow: 0 6px 26px rgba(31,111,235,0.7); }
     @keyframes radarPulse {
       0%, 100% { box-shadow: 0 4px 20px rgba(31,111,235,0.5); }
       50% { box-shadow: 0 4px 30px rgba(31,111,235,0.85); }
@@ -1003,13 +1013,15 @@
         gap: 12px !important;
       }
       #atc-fab {
-        bottom: 18px !important;
-        right: 16px !important;
         width: 50px !important;
         height: 50px !important;
         font-size: 20px !important;
       }
-      body.player-active #atc-fab {
+      #atc-fab:not(.custom-pos) {
+        bottom: 18px !important;
+        right: 16px !important;
+      }
+      body.player-active #atc-fab:not(.custom-pos) {
         bottom: 122px !important;
         right: 16px !important;
       }
@@ -1215,7 +1227,7 @@
 
 
     /* ═══════════════════════════════════════════════════════════
-       COCKPIT EFB HUB NAVIGATION & MODULAR TABS (v1.6.1 Anti-Solapamiento)
+       COCKPIT EFB HUB NAVIGATION & MODULAR TABS (v1.6.2 Anti-Solapamiento)
     ═══════════════════════════════════════════════════════════ */
     .tab-label-short { display: none; }
     .tab-label-full { display: inline; }
@@ -1625,7 +1637,7 @@
       <div class="brand">
         <div class="brand-icon" style="padding: 0; overflow: hidden; border: 1px solid rgba(88, 166, 255, 0.4); background: #012349;"><img src="apple-touch-icon-180x180.png" alt="ATPL Pilot" style="width: 100%; height: 100%; object-fit: cover; border-radius: 9px; display: block;"></div>
         <div class="brand-text">
-          <h1>ATPL Flight Deck & Study Control <span class="badge-beta" id="version-badge" onclick="forceCheckAppUpdate(true)" style="cursor:pointer;" title="Versión v1.6.1 EFB — Clic para forzar actualización limpia">v1.6.1 EFB</span></h1>
+          <h1>ATPL Flight Deck & Study Control <span class="badge-beta" id="version-badge" onclick="forceCheckAppUpdate(true)" style="cursor:pointer;" title="Versión v1.6.2 EFB — Clic para forzar actualización limpia">v1.6.2 EFB</span></h1>
           <p>Preparación EASA Modular Oficial | Sistema adaptado a turnos de 12h</p>
         </div>
       </div>
@@ -2536,7 +2548,7 @@
         </div>
         <!-- CONTENEDOR TABLA CON SCROLL SUAVE Y COLUMNAS ESPACIOSAS -->
         <div style="overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 10px; border: 1px solid var(--border-color);">
-          <table style="width: 100%; min-width: 1040px; border-collapse: collapse; font-size: 12px; text-align: left;">
+          <table style="width: 100%; min-width: 1070px; border-collapse: collapse; font-size: 12px; text-align: left;">
             <thead>
               <tr style="background: var(--table-header-bg); color: var(--text-muted); border-bottom: 2px solid var(--border-color); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">
                 <th style="padding: 10px 4px; width: 35px; text-align: center;">#</th>
@@ -2550,8 +2562,8 @@
                 <th style="padding: 10px 4px; width: 75px; text-align: center; color: #56d364;">Dist (NM)</th>
                 <th style="padding: 10px 4px; width: 65px; text-align: center;">TAS (kt)</th>
                 <th style="padding: 10px 4px; width: 65px; text-align: center; color: #f1e05a;">GS (kt)</th>
-                <th style="padding: 10px 4px; width: 65px; text-align: center; color: #e3b341; font-weight: 800;">ETE</th>
-                <th style="padding: 10px 4px; width: 65px; text-align: center;">ETA</th>
+                <th style="padding: 10px 4px; width: 80px; text-align: center; color: #e3b341; font-weight: 800;">ETE</th>
+                <th style="padding: 10px 4px; width: 80px; text-align: center;">ETA</th>
                 <th style="padding: 10px 4px; width: 65px; text-align: center;">ATA</th>
                 <th style="padding: 10px 4px; width: 95px; text-align: center; color: #58a6ff;">Fuel (Gal)</th>
                 <th style="padding: 10px 4px; width: 35px; text-align: center;" class="no-print">Acción</th>
@@ -3245,7 +3257,7 @@
     function exportProgressToICloud() {
       const data = {
         application: "ATPL Flight Deck",
-        version: "v1.6.1",
+        version: "v1.6.2",
         pilot: currentPilot,
         exportedAt: new Date().toISOString(),
         topics: studiedTopics,
@@ -5390,7 +5402,7 @@
           if (newWorker) {
             newWorker.addEventListener('statechange', () => {
               if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                showToastNotification('🚀 ¡Nueva versión v1.6.1 lista! Pulsa el distintivo de versión para aplicar.');
+                showToastNotification('🚀 ¡Nueva versión v1.6.2 lista! Pulsa el distintivo de versión para aplicar.');
               }
             });
           }
@@ -5425,7 +5437,7 @@
         await Promise.all(keys.map(k => caches.delete(k)));
       }
       if (interactive) {
-        showToastNotification('✅ Versión v1.6.1 aplicada. Reiniciando cabina...');
+        showToastNotification('✅ Versión v1.6.2 aplicada. Reiniciando cabina...');
         setTimeout(() => {
           window.location.reload(true);
         }, 600);
@@ -5444,7 +5456,7 @@
 
     try {
       if ('caches' in window) {
-        const cache = await caches.open('atpl-flightdeck-v1.6.1');
+        const cache = await caches.open('atpl-flightdeck-v1.6.2');
         await cache.addAll([
           './',
           './index.html',
@@ -5652,14 +5664,14 @@
         <!-- Sección 5: Versión del Sistema y Forzar Actualización PWA -->
         <div class="pilot-box" style="margin-top: 12px; background: rgba(56,139,253,0.06); border: 1px solid rgba(56,139,253,0.25);">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-            <strong style="color:var(--text-title); font-size:12px;">🚀 Versión del Sistema: <span style="color:#58a6ff;">v1.6.1 EFB</span></strong>
+            <strong style="color:var(--text-title); font-size:12px;">🚀 Versión del Sistema: <span style="color:#58a6ff;">v1.6.2 EFB</span></strong>
             <span style="font-size:10px; background:rgba(46,160,67,0.2); color:#56d364; padding:2px 8px; border-radius:10px; font-weight:700;">PRODUCCIÓN</span>
           </div>
           <p style="font-size:11px; color:var(--text-muted); margin-bottom:8px; line-height:1.4;">
             Si has añadido la app a la pantalla de inicio o tu navegador mantiene una versión anterior en caché, puedes forzar la recarga limpia instantánea:
           </p>
           <button type="button" class="btn-sync-action" onclick="forceCheckAppUpdate(true)" style="width:100%; padding:9px 12px; background:rgba(56,139,253,0.2); border:1px solid #388bfd; color:#79c0ff; font-weight:700; font-size:12px; border-radius:8px; display:flex; align-items:center; justify-content:center; gap:8px; cursor:pointer;">
-            🔄 Forzar Actualización a v1.6.1 (Limpiar Caché PWA)
+            🔄 Forzar Actualización a v1.6.2 (Limpiar Caché PWA)
           </button>
         </div>
 <!-- Botón inferior eliminado para evitar duplicados -->
@@ -5714,7 +5726,7 @@
   <!-- ═══════════════════════════════════════════════════════
        OPCIÓN E — ATC Chatbot (Copiloto Virtual IA)
   ═══════════════════════════════════════════════════════════ -->
-  <button id="atc-fab" onclick="toggleATC()" title="ATC IA — Copiloto Virtual">🤖</button>
+  <button id="atc-fab" onclick="handleATCFabClick(event)" title="ATC IA — Copiloto Virtual (Arrastrable)">🤖</button>
 
   <div id="atc-panel">
     <div class="atc-header">
@@ -6606,7 +6618,7 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
   }
   
   // ═══════════════════════════════════════════════════════════════
-  // 8. MÓDULO PLAN DE VUELO OPERACIONAL (WORLD AVIATION) & CARTAS VFR (v1.6.1)
+  // 8. MÓDULO PLAN DE VUELO OPERACIONAL (WORLD AVIATION) & CARTAS VFR (v1.6.2)
   // ═══════════════════════════════════════════════════════════════
 
   let fplMap = null;
@@ -7696,6 +7708,9 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
       if (!isNaN(num) && num >= 0) {
         wp.alt = num;
         wp.manualAlt = true;
+        if (typeof updateWpWindForAltitude === 'function') {
+          updateWpWindForAltitude(idx);
+        }
       }
     } else if (field === 'tc') {
       const num = parseFloat(val);
@@ -7744,6 +7759,229 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
   }
 
   // ─────────────────────────────────────────────────────────────
+  // BOTÓN ATC IA FLOTANTE Y ARRASTRABLE (DRAGGABLE FAB v1.6.2)
+  // ─────────────────────────────────────────────────────────────
+  let fabJustDragged = false;
+  function handleATCFabClick(e) {
+    if (fabJustDragged) {
+      fabJustDragged = false;
+      if (e) { e.preventDefault(); e.stopPropagation(); }
+      return;
+    }
+    toggleATC();
+  }
+
+  function makeATCFabDraggable() {
+    const fab = document.getElementById('atc-fab');
+    if (!fab) return;
+
+    let isDragging = false;
+    let hasMoved = false;
+    let startX = 0, startY = 0;
+    let initialLeft = 0, initialTop = 0;
+
+    // Restaurar posición previa guardada
+    try {
+      const saved = JSON.parse(localStorage.getItem('atc_fab_position') || 'null');
+      if (saved && typeof saved.left === 'number' && typeof saved.top === 'number') {
+        const maxL = Math.max(10, window.innerWidth - 65);
+        const maxT = Math.max(10, window.innerHeight - 65);
+        const safeL = Math.min(Math.max(10, saved.left), maxL);
+        const safeT = Math.min(Math.max(10, saved.top), maxT);
+        fab.classList.add('custom-pos');
+        fab.style.left = `${safeL}px`;
+        fab.style.top = `${safeT}px`;
+      }
+    } catch (e) {}
+
+    function onStart(e) {
+      if (e.button !== undefined && e.button !== 0) return;
+      isDragging = true;
+      hasMoved = false;
+      const pt = e.touches ? e.touches[0] : e;
+      startX = pt.clientX;
+      startY = pt.clientY;
+
+      const rect = fab.getBoundingClientRect();
+      initialLeft = rect.left;
+      initialTop = rect.top;
+      fab.classList.add('dragging');
+    }
+
+    function onMove(e) {
+      if (!isDragging) return;
+      const pt = e.touches ? e.touches[0] : e;
+      const dx = pt.clientX - startX;
+      const dy = pt.clientY - startY;
+
+      if (!hasMoved && (Math.abs(dx) > 5 || Math.abs(dy) > 5)) {
+        hasMoved = true;
+        fabJustDragged = true;
+      }
+
+      if (hasMoved) {
+        if (e.cancelable) e.preventDefault();
+        fab.classList.add('custom-pos');
+        let newL = initialLeft + dx;
+        let newT = initialTop + dy;
+
+        const maxL = Math.max(10, window.innerWidth - fab.offsetWidth - 10);
+        const maxT = Math.max(10, window.innerHeight - fab.offsetHeight - 10);
+        newL = Math.max(10, Math.min(maxL, newL));
+        newT = Math.max(10, Math.min(maxT, newT));
+
+        fab.style.left = `${newL}px`;
+        fab.style.top = `${newT}px`;
+      }
+    }
+
+    function onEnd(e) {
+      if (!isDragging) return;
+      isDragging = false;
+      fab.classList.remove('dragging');
+
+      if (hasMoved) {
+        setTimeout(() => { fabJustDragged = false; }, 100);
+        const rect = fab.getBoundingClientRect();
+        try {
+          localStorage.setItem('atc_fab_position', JSON.stringify({
+            left: Math.round(rect.left),
+            top: Math.round(rect.top)
+          }));
+        } catch (err) {}
+      }
+    }
+
+    fab.addEventListener('mousedown', onStart);
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('mouseup', onEnd);
+
+    fab.addEventListener('touchstart', onStart, { passive: false });
+    window.addEventListener('touchmove', onMove, { passive: false });
+    window.addEventListener('touchend', onEnd);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', makeATCFabDraggable);
+  } else {
+    makeATCFabDraggable();
+  }
+
+  // ─────────────────────────────────────────────────────────────
+  // MODELO ATMOSFÉRICO DE VIENTOS EN ALTURA (WINDS ALOFT OPEN-METEO)
+  // ─────────────────────────────────────────────────────────────
+  const PRESSURE_LEVELS = [
+    { level: '10m',    altFt: 30 },
+    { level: '975hPa', altFt: 1050 },
+    { level: '950hPa', altFt: 1770 },
+    { level: '925hPa', altFt: 2500 },
+    { level: '900hPa', altFt: 3250 },
+    { level: '850hPa', altFt: 4920 },
+    { level: '800hPa', altFt: 6400 },
+    { level: '750hPa', altFt: 8000 },
+    { level: '700hPa', altFt: 9880 }
+  ];
+
+  let cachedRouteWinds = {};
+
+  function ensureWaypointCoordinates(idx) {
+    const wp = fplWaypoints[idx];
+    if (!wp) return;
+    if (wp.lat && wp.lon) return;
+
+    if (idx === 0) {
+      const depIcao = document.getElementById('fpl-departure-select')?.value || 'LECU';
+      const depAp = SPANISH_AIRPORTS_DATA[depIcao] || SPANISH_VAC_DATABASE[depIcao];
+      wp.lat = depAp?.lat || 40.3706;
+      wp.lon = depAp?.lon || -3.7800;
+      return;
+    }
+
+    const prev = fplWaypoints[idx - 1];
+    ensureWaypointCoordinates(idx - 1);
+    if (prev && prev.lat && prev.lon) {
+      const tcRad = ((wp.tc || 0) * Math.PI) / 180;
+      const distNM = wp.dist || 10;
+      const dLat = (distNM * Math.cos(tcRad)) / 60;
+      const meanLatRad = ((prev.lat + dLat / 2) * Math.PI) / 180;
+      const dLon = (distNM * Math.sin(tcRad)) / (60 * Math.cos(meanLatRad));
+      wp.lat = prev.lat + dLat;
+      wp.lon = prev.lon + dLon;
+    }
+  }
+
+  function interpolateWindFromHourly(hourly, timeIdx, altFt) {
+    if (!hourly || timeIdx === undefined || timeIdx < 0) return null;
+
+    const lvlWinds = {};
+    for (const pl of PRESSURE_LEVELS) {
+      const spd = hourly[`wind_speed_${pl.level}`]?.[timeIdx];
+      const dir = hourly[`wind_direction_${pl.level}`]?.[timeIdx];
+      if (spd !== undefined && dir !== undefined) {
+        lvlWinds[pl.level] = { spd, dir, altFt: pl.altFt };
+      }
+    }
+
+    const validLevels = PRESSURE_LEVELS.filter(pl => lvlWinds[pl.level]);
+    if (validLevels.length === 0) return null;
+
+    if (altFt <= validLevels[0].altFt) {
+      const w = lvlWinds[validLevels[0].level];
+      return { dir: Math.round(w.dir), spd: Math.round(w.spd) };
+    }
+    if (altFt >= validLevels[validLevels.length - 1].altFt) {
+      const w = lvlWinds[validLevels[validLevels.length - 1].level];
+      return { dir: Math.round(w.dir), spd: Math.round(w.spd) };
+    }
+
+    for (let i = 0; i < validLevels.length - 1; i++) {
+      const l1 = validLevels[i];
+      const l2 = validLevels[i + 1];
+      if (l1.altFt <= altFt && altFt <= l2.altFt) {
+        const t = (altFt - l1.altFt) / (l2.altFt - l1.altFt);
+        const w1 = lvlWinds[l1.level];
+        const w2 = lvlWinds[l2.level];
+
+        const r1 = (w1.dir * Math.PI) / 180;
+        const u1 = -w1.spd * Math.sin(r1);
+        const v1 = -w1.spd * Math.cos(r1);
+
+        const r2 = (w2.dir * Math.PI) / 180;
+        const u2 = -w2.spd * Math.sin(r2);
+        const v2 = -w2.spd * Math.cos(r2);
+
+        const u = u1 + t * (u2 - u1);
+        const v = v1 + t * (v2 - v1);
+
+        let d = (Math.atan2(-u, -v) * 180 / Math.PI + 360) % 360;
+        let s = Math.hypot(u, v);
+        return { dir: Math.round(d), spd: Math.round(s) };
+      }
+    }
+
+    return null;
+  }
+
+  function updateWpWindForAltitude(idx) {
+    const wp = fplWaypoints[idx];
+    if (!wp) return;
+    const cached = cachedRouteWinds[idx];
+    if (cached && cached.hourly) {
+      const interp = interpolateWindFromHourly(cached.hourly, cached.timeIdx, wp.alt || 3500);
+      if (interp) {
+        wp.wind = `${String(interp.dir).padStart(3, '0')}/${String(interp.spd).padStart(2, '0')}`;
+        const row = document.getElementById(`fpl-nav-row-${idx}`);
+        if (row) {
+          const windInput = row.querySelector('.fpl-input-wind');
+          if (windInput && document.activeElement !== windInput) {
+            windInput.value = wp.wind;
+          }
+        }
+      }
+    }
+  }
+
+  // ─────────────────────────────────────────────────────────────
   // RECÁLCULO TRIGONOMÉTRICO CR3 & PROPAGACIÓN DE TIEMPOS Y FUEL (GALONES)
   // ─────────────────────────────────────────────────────────────
   function updateNavLogCalculationsAndDOM() {
@@ -7752,14 +7990,18 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
     const globalVar = parseFloat(document.getElementById('fpl-var-input')?.value || '-1');
     const hourlyBurnGal = getAircraftHourlyBurnGal();
 
-    let toTimeStr = document.getElementById('fpl-takeoff-time')?.value || '10:00';
-    let [curHour, curMin] = toTimeStr.split(':').map(x => parseInt(x, 10) || 0);
+    const toTimeStr = document.getElementById('fpl-takeoff-time')?.value || '10:00';
+    const toParts = toTimeStr.split(':').map(x => parseInt(x, 10) || 0);
+    const takeoffSec = (toParts[0] * 3600) + (toParts[1] * 60) + (toParts[2] || 0);
 
-    let cumulativeMinutes = 0;
+    let currentBaseSec = takeoffSec;
+    let totalFlightSeconds = 0;
     let totalFuelGal = 0;
     let totalDist = 0;
 
     fplWaypoints.forEach((wp, idx) => {
+      ensureWaypointCoordinates(idx);
+
       if (idx === 0) {
         wp.dist = 0;
         wp.tc = 0;
@@ -7767,9 +8009,16 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
         wp.mh = 0;
         wp.gs = globalIas;
         wp.ete = '—';
-        wp.eta = toTimeStr;
+        wp.eta = formatSecondsToHHMMSS(takeoffSec);
+        wp.cumSec = 0;
+        wp.cumMin = 0;
         wp.legFuel = '0.0 Gal';
         wp.totFuel = '0.0 Gal';
+
+        if (wp.ata && wp.ata.trim() !== '' && wp.ata.includes(':')) {
+          const ataParts = wp.ata.trim().split(':').map(x => parseInt(x, 10) || 0);
+          currentBaseSec = (ataParts[0] * 3600) + (ataParts[1] * 60) + (ataParts[2] || 0);
+        }
       } else {
         const prev = fplWaypoints[idx - 1];
         if (!wp.manualDist && wp.lat && wp.lon && prev.lat && prev.lon) {
@@ -7805,17 +8054,29 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
         }
         wp.gs = cr3.gs;
 
-        const legMinutes = (wp.gs > 0) ? ((wp.dist / wp.gs) * 60) : 0;
-        cumulativeMinutes += legMinutes;
-        const m = Math.floor(legMinutes);
-        wp.ete = `${String(m).padStart(2, '0')}m`;
+        // CÁLCULO EXACTO DE TIEMPOS (SIN ERRORES DE REDONDEO ACUMULATIVOS)
+        const legSec = (wp.gs > 0) ? Math.round(((wp.dist || 0) / wp.gs) * 3600) : 0;
+        totalFlightSeconds += legSec;
 
-        const etaTotalMin = (curHour * 60) + curMin + Math.round(cumulativeMinutes);
-        const etaH = Math.floor(etaTotalMin / 60) % 24;
-        const etaM = etaTotalMin % 60;
-        wp.eta = `${String(etaH).padStart(2, '0')}:${String(etaM).padStart(2, '0')}`;
+        const legM = Math.floor(legSec / 60);
+        const legS = legSec % 60;
+        wp.ete = `${String(legM).padStart(2, '0')}m ${String(legS).padStart(2, '0')}s`;
+        wp.legSeconds = legSec;
+        wp.cumSec = totalFlightSeconds;
+        wp.cumMin = totalFlightSeconds / 60;
 
-        const legF = parseFloat(((legMinutes / 60) * hourlyBurnGal).toFixed(1));
+        const legEtaSec = currentBaseSec + legSec;
+        wp.eta = formatSecondsToHHMMSS(legEtaSec);
+
+        // Forward-chaining desde ATA si el piloto ha registrado hora real de paso
+        if (wp.ata && wp.ata.trim() !== '' && wp.ata.includes(':')) {
+          const ataParts = wp.ata.trim().split(':').map(x => parseInt(x, 10) || 0);
+          currentBaseSec = (ataParts[0] * 3600) + (ataParts[1] * 60) + (ataParts[2] || 0);
+        } else {
+          currentBaseSec = legEtaSec;
+        }
+
+        const legF = parseFloat(((legSec / 3600) * hourlyBurnGal).toFixed(2));
         totalFuelGal += legF;
         wp.legFuel = `${legF.toFixed(1)} Gal`;
         wp.totFuel = `${totalFuelGal.toFixed(1)} Gal`;
@@ -7845,7 +8106,10 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
         if (gsSpan) gsSpan.textContent = `${Math.round(wp.gs)} kt`;
 
         const eteSpan = row.querySelector('.fpl-cell-ete');
-        if (eteSpan) eteSpan.textContent = wp.ete;
+        if (eteSpan) {
+          eteSpan.textContent = wp.ete;
+          eteSpan.title = `${((wp.dist || 0) / (wp.gs || 90) * 60).toFixed(2)} min (${wp.legSeconds || 0}s)`;
+        }
 
         const etaSpan = row.querySelector('.fpl-cell-eta');
         if (etaSpan) etaSpan.textContent = wp.eta;
@@ -7855,26 +8119,53 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
       }
     });
 
-    // Actualizar badges de totales
+    // Actualizar badges de totales con segundos exactos
     const distBadge = document.getElementById('fpl-total-dist-badge');
     if (distBadge) distBadge.textContent = `${totalDist.toFixed(1)} NM`;
 
     const timeBadge = document.getElementById('fpl-total-time-badge');
     if (timeBadge) {
-      const totH = Math.floor(cumulativeMinutes / 60);
-      const totM = Math.round(cumulativeMinutes % 60);
-      timeBadge.textContent = totH > 0 ? `${totH}h ${totM}m` : `${totM}m`;
+      const totH = Math.floor(totalFlightSeconds / 3600);
+      const totM = Math.floor((totalFlightSeconds % 3600) / 60);
+      const totS = totalFlightSeconds % 60;
+      timeBadge.textContent = totH > 0 ? `${totH}h ${totM}m ${totS}s` : `${totM}m ${totS}s`;
     }
 
     const fuelBadge = document.getElementById('fpl-total-fuel-badge');
     if (fuelBadge) fuelBadge.textContent = `${totalFuelGal.toFixed(1)} Gal`;
 
-    // Sincronizar combustible de crucero
     const cruiseFuelInput = document.getElementById('fpl-fuel-cruise');
     if (cruiseFuelInput) cruiseFuelInput.value = `${totalFuelGal.toFixed(1)} Gal`;
 
+    // Sincronizar Tarjeta 4 de Calzos con segundos exactos
+    const flightTimeInput = document.getElementById('fpl-flight-time');
+    if (flightTimeInput) {
+      const totH = Math.floor(totalFlightSeconds / 3600);
+      const totM = Math.floor((totalFlightSeconds % 3600) / 60);
+      const totS = totalFlightSeconds % 60;
+      flightTimeInput.value = totH > 0
+        ? `${String(totH).padStart(2, '0')}h ${String(totM).padStart(2, '0')}m ${String(totS).padStart(2, '0')}s`
+        : `${String(totM).padStart(2, '0')}m ${String(totS).padStart(2, '0')}s`;
+    }
+
+    const ldTimeInput = document.getElementById('fpl-ld-time') || document.getElementById('fpl-landing-time');
+    if (ldTimeInput) {
+      const destWp = fplWaypoints[fplWaypoints.length - 1];
+      if (destWp && destWp.eta) {
+        ldTimeInput.value = destWp.eta;
+      }
+    }
+
     syncLowerTablesWithFlightPlan();
     updateVFRMapDisplay();
+  }
+
+  function formatSecondsToHHMMSS(totalSeconds) {
+    const safeSec = (totalSeconds % (24 * 3600) + (24 * 3600)) % (24 * 3600);
+    const h = Math.floor(safeSec / 3600);
+    const m = Math.floor((safeSec % 3600) / 60);
+    const s = Math.round(safeSec % 60);
+    return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
   }
 
   function recalculateFlightPlanFromParams() {
@@ -7954,19 +8245,19 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
             ${isOrigin ? '—' : `<span class="fpl-cell-gs" data-idx="${idx}" style="color: var(--warn-yellow); font-weight: 700; font-size: 12px;">${Math.round(wp.gs || globalIas)} kt</span>`}
           </td>
 
-          <!-- ETE -->
+          <!-- ETE (Minutos y Segundos) -->
           <td style="padding: 8px 4px; text-align: center;">
-            ${isOrigin ? '—' : `<span class="fpl-cell-ete" data-idx="${idx}" style="color: var(--warn-yellow); font-weight: 800; font-size: 12px;">${wp.ete}</span>`}
+            ${isOrigin ? '—' : `<span class="fpl-cell-ete" data-idx="${idx}" style="color: var(--warn-yellow); font-weight: 800; font-size: 12px; font-family: monospace;">${wp.ete}</span>`}
           </td>
 
-          <!-- ETA -->
+          <!-- ETA (HH:MM:SS) -->
           <td style="padding: 8px 4px; text-align: center;">
-            <span class="fpl-cell-eta" data-idx="${idx}" style="color: var(--text-main); font-weight: 700; font-size: 12px;">${wp.eta}</span>
+            <span class="fpl-cell-eta" data-idx="${idx}" style="color: var(--text-main); font-weight: 700; font-size: 12px; font-family: monospace;">${wp.eta}</span>
           </td>
 
           <!-- ATA -->
           <td style="padding: 8px 4px; text-align: center;">
-            <input type="text" class="fpl-input-ata" data-idx="${idx}" value="${wp.ata || ''}" oninput="handleNavlogInput(${idx}, 'ata', this.value)" onchange="handleNavlogChange(${idx}, 'ata', this.value)" placeholder="--:--" style="width: 55px; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-main); font-size: 11px; padding: 5px 2px; border-radius: 6px; text-align: center;">
+            <input type="text" class="fpl-input-ata" data-idx="${idx}" value="${wp.ata || ''}" oninput="handleNavlogInput(${idx}, 'ata', this.value)" onchange="handleNavlogChange(${idx}, 'ata', this.value)" placeholder="--:--" style="width: 65px; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-main); font-size: 11px; padding: 5px 2px; border-radius: 6px; text-align: center; font-family: monospace;">
           </td>
 
           <!-- FUEL (Gal) -->
@@ -7995,33 +8286,35 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
     const originalText = btn ? btn.innerHTML : '';
     if (btn) {
       btn.disabled = true;
-      btn.innerHTML = '<span>⏳</span> Consultando...';
+      btn.innerHTML = '<span>⏳</span> Obteniendo vientos...';
     }
 
-    showToastNotification('🌤️ Obteniendo pronóstico de vientos en altura (Open-Meteo Winds Aloft)...');
+    showToastNotification('🌤️ Consultando modelo atmosférico en altura (Open-Meteo / Windy ECMWF)...');
 
     const dateVal = document.getElementById('fpl-date')?.value || new Date().toISOString().split('T')[0];
     const toTimeStr = document.getElementById('fpl-takeoff-time')?.value || '10:00';
     const [toH, toM] = toTimeStr.split(':').map(x => parseInt(x, 10) || 0);
 
     let successCount = 0;
-    let cumulativeMin = 0;
+    let cumulativeSec = 0;
 
     for (let i = 0; i < fplWaypoints.length; i++) {
       const wp = fplWaypoints[i];
+      ensureWaypointCoordinates(i);
+
       if (i > 0) {
-        const legMin = ((wp.dist || 10) / (wp.gs || 90)) * 60;
-        cumulativeMin += legMin;
+        const legSec = (wp.gs > 0) ? Math.round(((wp.dist || 10) / wp.gs) * 3600) : 400;
+        cumulativeSec += legSec;
       }
 
-      const targetTotalMin = (toH * 60) + toM + Math.round(cumulativeMin);
-      const targetH = Math.floor(targetTotalMin / 60) % 24;
+      const targetTotalSec = (toH * 3600) + (toM * 60) + cumulativeSec;
+      const targetH = Math.floor(targetTotalSec / 3600) % 24;
       const targetHourStr = `${String(targetH).padStart(2, '0')}:00`;
       const targetTimeISO = `${dateVal}T${targetHourStr}`;
 
       if (wp.lat && wp.lon) {
         try {
-          const url = `https://api.open-meteo.com/v1/forecast?latitude=${wp.lat.toFixed(4)}&longitude=${wp.lon.toFixed(4)}&hourly=wind_speed_10m,wind_direction_10m,wind_speed_925hPa,wind_direction_925hPa,wind_speed_850hPa,wind_direction_850hPa,wind_speed_700hPa,wind_direction_700hPa&wind_speed_unit=kn&forecast_days=7`;
+          const url = `https://api.open-meteo.com/v1/forecast?latitude=${wp.lat.toFixed(4)}&longitude=${wp.lon.toFixed(4)}&hourly=wind_speed_10m,wind_direction_10m,wind_speed_975hPa,wind_direction_975hPa,wind_speed_950hPa,wind_direction_950hPa,wind_speed_925hPa,wind_direction_925hPa,wind_speed_900hPa,wind_direction_900hPa,wind_speed_850hPa,wind_direction_850hPa,wind_speed_800hPa,wind_direction_800hPa,wind_speed_750hPa,wind_direction_750hPa,wind_speed_700hPa,wind_direction_700hPa&wind_speed_unit=kn&timezone=auto&forecast_days=7`;
           const res = await fetch(url);
           if (res.ok) {
             const data = await res.json();
@@ -8037,23 +8330,16 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
             }
 
             if (timeIdx >= 0 && timeIdx < times.length) {
-              const alt = wp.alt || 3500;
-              let dir, spd;
-              if (alt < 3000) {
-                dir = data.hourly.wind_direction_925hPa?.[timeIdx] ?? data.hourly.wind_direction_10m?.[timeIdx];
-                spd = data.hourly.wind_speed_925hPa?.[timeIdx] ?? data.hourly.wind_speed_10m?.[timeIdx];
-              } else if (alt <= 7500) {
-                dir = data.hourly.wind_direction_850hPa?.[timeIdx] ?? data.hourly.wind_direction_10m?.[timeIdx];
-                spd = data.hourly.wind_speed_850hPa?.[timeIdx] ?? data.hourly.wind_speed_10m?.[timeIdx];
-              } else {
-                dir = data.hourly.wind_direction_700hPa?.[timeIdx] ?? data.hourly.wind_direction_850hPa?.[timeIdx];
-                spd = data.hourly.wind_speed_700hPa?.[timeIdx] ?? data.hourly.wind_speed_850hPa?.[timeIdx];
-              }
+              cachedRouteWinds[i] = {
+                hourly: data.hourly,
+                timeIdx: timeIdx,
+                lat: wp.lat,
+                lon: wp.lon
+              };
 
-              if (dir !== undefined && spd !== undefined) {
-                const roundedDir = Math.round(dir / 10) * 10;
-                const roundedSpd = Math.round(spd);
-                wp.wind = `${String(roundedDir).padStart(3, '0')}/${String(roundedSpd).padStart(2, '0')}`;
+              const interp = interpolateWindFromHourly(data.hourly, timeIdx, wp.alt || 3500);
+              if (interp) {
+                wp.wind = `${String(interp.dir).padStart(3, '0')}/${String(interp.spd).padStart(2, '0')}`;
                 successCount++;
               }
             }
@@ -8065,7 +8351,7 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
     }
 
     if (successCount > 0) {
-      showToastNotification(`✅ Vientos en altura actualizados (${dateVal} @ ${toTimeStr}): ${successCount} tramos.`);
+      showToastNotification(`✅ Vientos en altura actualizados (${dateVal} @ ${toTimeStr}): ${successCount} tramos con modelo ECMWF / Windy.`);
     } else {
       showToastNotification('ℹ️ Modo offline: se aplicó estimación orográfica por altitud.');
       applyOfflineWindsGradient();
@@ -8079,6 +8365,7 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
       btn.innerHTML = originalText;
     }
   }
+
 
   function applyOfflineWindsGradient() {
     const baseWind = document.getElementById('fpl-wind-input')?.value || '240/12';
@@ -8276,48 +8563,55 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
     const toTimeInput = document.getElementById('fpl-to-time');
     if (toTimeInput) toTimeInput.value = takeoffTimeStr;
 
-    // Minutos totales acumulados de la ruta
-    let totalMinutes = 0;
+    // Segundos y minutos totales acumulados de la ruta con exactitud
+    let totalSeconds = 0;
     if (fplWaypoints && fplWaypoints.length > 1) {
       const lastWp = fplWaypoints[fplWaypoints.length - 1];
-      totalMinutes = lastWp.cumMin || 0;
+      totalSeconds = lastWp.cumSec || Math.round((lastWp.cumMin || 0) * 60);
     }
 
-    const flightHours = Math.floor(totalMinutes / 60);
-    const flightMins = Math.round(totalMinutes % 60);
-    const flightTimeFormatted = `${String(flightHours).padStart(2, '0')}h ${String(flightMins).padStart(2, '0')}m`;
+    const flightHours = Math.floor(totalSeconds / 3600);
+    const flightMins = Math.floor((totalSeconds % 3600) / 60);
+    const flightSecs = totalSeconds % 60;
+    const flightTimeFormatted = flightHours > 0
+      ? `${String(flightHours).padStart(2, '0')}h ${String(flightMins).padStart(2, '0')}m ${String(flightSecs).padStart(2, '0')}s`
+      : `${String(flightMins).padStart(2, '0')}m ${String(flightSecs).padStart(2, '0')}s`;
 
     const flightTimeInput = document.getElementById('fpl-flight-time');
     if (flightTimeInput) flightTimeInput.value = flightTimeFormatted;
 
-    // Calcular Landing Time (Takeoff + Total Minutes)
-    const [toH, toM] = takeoffTimeStr.split(':').map(n => parseInt(n, 10) || 0);
-    const totalLandingMin = (toH * 60 + toM + totalMinutes) % 1440;
-    const ldH = Math.floor(totalLandingMin / 60);
-    const ldM = Math.round(totalLandingMin % 60);
-    const landingTimeFormatted = `${String(ldH).padStart(2, '0')}:${String(ldM).padStart(2, '0')}`;
+    // Calcular Landing Time sincronizado al segundo con el último WP
+    const toParts = takeoffTimeStr.split(':').map(n => parseInt(n, 10) || 0);
+    const toSec = (toParts[0] * 3600) + (toParts[1] * 60) + (toParts[2] || 0);
+    const destWp = fplWaypoints[fplWaypoints.length - 1];
+    const landingTimeFormatted = (destWp && destWp.eta) ? destWp.eta : formatSecondsToHHMMSS(toSec + totalSeconds);
 
     const ldTimeInput = document.getElementById('fpl-ld-time');
     if (ldTimeInput) ldTimeInput.value = landingTimeFormatted;
 
     // Off block (-10 min) y On block (+10 min)
-    const offBlockMin = (toH * 60 + toM - 10 + 1440) % 1440;
-    const offH = Math.floor(offBlockMin / 60);
-    const offM = Math.round(offBlockMin % 60);
+    const offBlockSec = (toSec - 600 + 86400) % 86400;
+    const offH = Math.floor(offBlockSec / 3600);
+    const offM = Math.floor((offBlockSec % 3600) / 60);
     const offBlockInput = document.getElementById('fpl-off-block');
     if (offBlockInput) offBlockInput.value = `${String(offH).padStart(2, '0')}:${String(offM).padStart(2, '0')}`;
 
-    const onBlockMin = (totalLandingMin + 10) % 1440;
-    const onH = Math.floor(onBlockMin / 60);
-    const onM = Math.round(onBlockMin % 60);
+    const destEtaParts = landingTimeFormatted.split(':').map(n => parseInt(n, 10) || 0);
+    const landSec = (destEtaParts[0] * 3600) + (destEtaParts[1] * 60) + (destEtaParts[2] || 0);
+    const onBlockSec = (landSec + 600) % 86400;
+    const onH = Math.floor(onBlockSec / 3600);
+    const onM = Math.floor((onBlockSec % 3600) / 60);
     const onBlockInput = document.getElementById('fpl-on-block');
     if (onBlockInput) onBlockInput.value = `${String(onH).padStart(2, '0')}:${String(onM).padStart(2, '0')}`;
 
-    const blockMinutes = totalMinutes + 20; // 10 rodaje salida + 10 rodaje llegada
-    const bH = Math.floor(blockMinutes / 60);
-    const bM = Math.round(blockMinutes % 60);
+    const blockSec = totalSeconds + 1200; // 10 min rodaje salida + 10 min rodaje llegada
+    const bH = Math.floor(blockSec / 3600);
+    const bM = Math.floor((blockSec % 3600) / 60);
+    const bS = blockSec % 60;
     const blockTimeInput = document.getElementById('fpl-block-time');
-    if (blockTimeInput) blockTimeInput.value = `${String(bH).padStart(2, '0')}h ${String(bM).padStart(2, '0')}m`;
+    if (blockTimeInput) blockTimeInput.value = bH > 0
+      ? `${String(bH).padStart(2, '0')}h ${String(bM).padStart(2, '0')}m ${String(bS).padStart(2, '0')}s`
+      : `${String(bM).padStart(2, '0')}m ${String(bS).padStart(2, '0')}s`;
 
     // 3. Sincronizar Tarjeta 3: Gestión de Combustible
     const climbFuel = parseFloat((hourlyBurnGal * 0.18).toFixed(1));
@@ -8561,7 +8855,8 @@ Utiliza formato HTML conciso (usa <strong>, <code>, <br>, • viñetas).`;
 
       setCell('A9', `PARKING:  ${document.getElementById('fpl-parking-2')?.value || 'A-12'}`);
       setCell('C9', `TAKE OFF:  ${document.getElementById('fpl-takeoff-time')?.value || '10:00'}`);
-      setCell('F9', `LANDING:  ${document.getElementById('fpl-landing-time')?.value || '11:05'}`);
+      const ldVal = document.getElementById('fpl-ld-time')?.value || document.getElementById('fpl-landing-time')?.value || '11:05';
+      setCell('F9', `LANDING:  ${ldVal}`);
       setCell('J9', `FLIGHT TIME:  ${document.getElementById('fpl-flight-time')?.value || '01h 05m'}`);
 
       // Alternate (Fila 11)
